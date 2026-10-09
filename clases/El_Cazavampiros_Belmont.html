@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Cazavampiros – Linaje Belmont (Ecos de Barovia)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #7A6230;
+    --crimson: #8B1A1A;
+    --bone: #F4EDD8;
+    --ink: #1C1410;
+    --ink-soft: #5A4A38;
+    --ice-blue: #A8C8E0;
+    --fire-orange: #C46A1A;
+    --lightning: #8B7EC8;
+    --mist: #7C8A94;
+    --mist-light: #AEBBC2;
+    --sonia: #9B6FB3;
+    --sonia-light: #C7A3DC;
+    --border: rgba(201,168,76,0.35);
+    --border-strong: rgba(201,168,76,0.65);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background-color: #110B08;
+    color: var(--bone);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .page-bg {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(74,127,160,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 15%, rgba(124,138,148,0.10) 0%, transparent 55%),
+      #110B08;
+    min-height: 100vh;
+  }
+  .container { max-width:860px; margin:0 auto; padding:0 2rem 4rem; }
+
+  /* HEADER */
+  .class-header { text-align:center; padding:3.5rem 2rem 2.5rem; border-bottom:1px solid var(--border-strong); }
+  .class-header::before { content:''; display:block; width:80px; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:0 auto 1.5rem; }
+  .class-eyebrow { font-family:'IM Fell English SC',serif; font-size:11px; letter-spacing:.35em; color:var(--gold-dim); text-transform:uppercase; margin-bottom:.75rem; }
+  .class-title { font-family:'IM Fell English SC',serif; font-size:3.2rem; font-weight:700; color:var(--gold); line-height:1.15; text-shadow:0 0 40px rgba(201,168,76,.3); margin-bottom:.4rem; }
+  .class-subtitle { font-family:'IM Fell English SC',serif; font-size:1rem; color:var(--gold-dim); letter-spacing:.12em; margin-bottom:1.5rem; }
+  .class-flavour { font-style:italic; font-size:1.05rem; opacity:.75; max-width:580px; margin:0 auto; }
+
+  /* STAT ROW */
+  .stat-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; padding:1.8rem 0 1.5rem; border-bottom:1px solid var(--border); }
+  .stat-badge { display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .stat-label { font-family:'IM Fell English SC',serif; font-size:9px; letter-spacing:.25em; color:var(--gold-dim); text-transform:uppercase; }
+  .stat-value { font-family:'Crimson Text',serif; font-size:1.1rem; font-weight:600; }
+
+  /* TABS */
+  .tab-nav { display:flex; justify-content:center; gap:.4rem; flex-wrap:wrap; padding:1.5rem 0 0; }
+  .tab-btn {
+    font-family:'IM Fell English SC',serif; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--gold-dim); background:rgba(201,168,76,.06); border:1px solid var(--border);
+    padding:.55rem 1.1rem; border-radius:3px; cursor:pointer; transition:all .2s;
+  }
+  .tab-btn:hover { background:rgba(201,168,76,.14); color:var(--gold-light); }
+  .tab-btn.active { background:rgba(201,168,76,.22); color:var(--gold-light); border-color:var(--border-strong); }
+  .tab-panel { display:none; animation:fadeIn .25s ease; }
+  .tab-panel.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+  .sub-tab-nav { display:flex; gap:.4rem; flex-wrap:wrap; margin:1rem 0 0; }
+  .sub-tab-btn {
+    font-family:'IM Fell English SC',serif; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+    padding:.4rem .85rem; border-radius:3px; cursor:pointer; border:1px solid var(--border);
+    background:rgba(255,255,255,.02); color:var(--ink-soft);
+  }
+  .sub-tab-btn.llamas.active { color:var(--fire-orange); border-color:rgba(196,106,26,.6); background:rgba(196,106,26,.08); }
+  .sub-tab-btn.hielo.active { color:var(--ice-blue); border-color:rgba(168,200,224,.6); background:rgba(168,200,224,.08); }
+  .sub-tab-btn.relampago.active { color:var(--lightning); border-color:rgba(139,126,200,.6); background:rgba(139,126,200,.08); }
+  .sub-tab-btn.niebla.active { color:var(--mist-light); border-color:rgba(124,138,148,.6); background:rgba(124,138,148,.1); }
+  .sub-tab-btn.sonia.active { color:var(--sonia-light); border-color:rgba(155,111,179,.6); background:rgba(155,111,179,.1); }
+  .sub-panel { display:none; }
+  .sub-panel.active { display:block; }
+
+  /* SECCIONES */
+  .section { margin-top:2.5rem; }
+  .tab-panel > .section:first-child { margin-top:2rem; }
+  .section-title { font-family:'IM Fell English SC',serif; font-size:1.25rem; font-weight:600; color:var(--gold); letter-spacing:.06em; padding-bottom:.5rem; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }
+  .section-title.ice { color:var(--ice-blue); border-color:rgba(168,200,224,.35); }
+  .section-title.mist { color:var(--mist-light); border-color:rgba(124,138,148,.35); }
+  p { margin-bottom:.9rem; }
+  p:last-child { margin-bottom:0; }
+
+  /* FEATURES */
+  .feature { margin-bottom:1.5rem; padding-left:1rem; border-left:2px solid var(--border); }
+  .feature-name { font-family:'IM Fell English SC',serif; font-size:1rem; font-weight:600; color:var(--gold-light); margin-bottom:.3rem; }
+  .feature-name .level-tag { font-family:'Crimson Text',serif; font-size:.85rem; font-weight:400; color:var(--gold-dim); margin-left:.6rem; font-style:italic; }
+  .feature.ice-feature { border-left-color:rgba(168,200,224,.45); }
+  .feature.fire-feature { border-left-color:rgba(196,106,26,.45); }
+  .feature.lightning-feature { border-left-color:rgba(139,126,200,.45); }
+  .feature.mist-feature { border-left-color:rgba(124,138,148,.5); }
+  .feature.sonia-feature { border-left-color:rgba(155,111,179,.5); }
+
+  /* TABLA DE NIVELES */
+  .level-table { width:100%; border-collapse:collapse; font-size:.9rem; margin-top:.5rem; }
+  .level-table th { font-family:'IM Fell English SC',serif; font-size:.75rem; letter-spacing:.1em; color:var(--gold-dim); text-transform:uppercase; border-bottom:1px solid var(--border-strong); padding:.5rem .65rem; text-align:left; white-space:nowrap; }
+  .level-table td { padding:.42rem .65rem; border-bottom:1px solid rgba(201,168,76,.1); vertical-align:top; }
+  .level-table tr:hover td { background:rgba(201,168,76,.05); }
+  .level-table .milestone { color:var(--gold-light); font-weight:600; }
+  .level-table .sub-row td { color:#A8C8E0; }
+  .level-table .asi-row td { color:#A0BC78; }
+
+  /* RESOURCE BOX */
+  .resource-box { background:rgba(201,168,76,.07); border:1px solid var(--border); border-radius:3px; padding:1rem 1.25rem; margin:1rem 0; }
+  .resource-box .resource-title { font-family:'IM Fell English SC',serif; font-size:.82rem; color:var(--gold); letter-spacing:.15em; text-transform:uppercase; margin-bottom:.5rem; }
+
+  /* LISTAS */
+  ul.class-list { list-style:none; padding-left:0; }
+  ul.class-list li { padding:.2rem 0 .2rem 1.4rem; position:relative; }
+  ul.class-list li::before { content:'✦'; position:absolute; left:0; color:var(--gold-dim); font-size:.7rem; top:.45rem; }
+
+  /* SUBCLASES */
+  .subclass-block { margin-top:1.5rem; padding:1.5rem 1.75rem; border:1px solid var(--border); border-radius:4px; background:rgba(255,255,255,.02); position:relative; }
+  .subclass-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; border-radius:4px 4px 0 0; }
+  .subclass-block.llamas::before { background:linear-gradient(90deg,transparent,var(--fire-orange),transparent); }
+  .subclass-block.hielo::before { background:linear-gradient(90deg,transparent,var(--ice-blue),transparent); }
+  .subclass-block.relampago::before { background:linear-gradient(90deg,transparent,var(--lightning),transparent); }
+  .subclass-block.niebla::before { background:linear-gradient(90deg,transparent,var(--mist-light),transparent); }
+  .subclass-block.sonia::before { background:linear-gradient(90deg,transparent,var(--sonia),transparent); }
+  .subclass-name { font-family:'IM Fell English SC',serif; font-size:1.5rem; font-weight:700; margin-bottom:.25rem; }
+  .subclass-name.llamas { color:var(--fire-orange); }
+  .subclass-name.hielo { color:var(--ice-blue); }
+  .subclass-name.relampago { color:var(--lightning); }
+  .subclass-name.niebla { color:var(--mist-light); }
+  .subclass-name.sonia { color:var(--sonia-light); }
+  .subclass-tagline { font-style:italic; font-size:.95rem; opacity:.65; margin-bottom:1.2rem; }
+
+  /* SPELL TABLE */
+  .spell-table { width:100%; border-collapse:collapse; font-size:.88rem; margin-top:.5rem; }
+  .spell-table th { font-family:'IM Fell English SC',serif; font-size:.73rem; letter-spacing:.12em; color:var(--gold-dim); text-transform:uppercase; border-bottom:1px solid var(--border); padding:.4rem .6rem; text-align:left; }
+  .spell-table td { padding:.38rem .6rem; border-bottom:1px solid rgba(201,168,76,.08); }
+  .spell-name { color:var(--ice-blue); }
+  .spell-name.fire { color:#D4834A; }
+  .spell-name.lightning { color:#9B8FD4; }
+  .spell-name.niebla { color:var(--mist-light); }
+
+  /* TRUCOS */
+  .trick-card { border:1px solid var(--border); border-radius:4px; padding:.8rem 1.1rem; margin-bottom:.8rem; background:rgba(255,255,255,.015); }
+  .trick-name { font-family:'IM Fell English SC',serif; font-size:.98rem; color:var(--sonia-light); font-weight:600; margin-bottom:.1rem; }
+  .trick-cost { font-family:'Crimson Text',serif; font-size:.8rem; color:var(--gold-dim); font-style:italic; margin-bottom:.3rem; }
+
+  /* DIVIDER */
+  .divider { display:flex; align-items:center; gap:1rem; margin:2.5rem 0; opacity:.4; }
+  .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--gold); }
+  .divider-symbol { font-family:'IM Fell English SC',serif; font-size:1rem; color:var(--gold); }
+
+  /* CALLOUT */
+  .callout { border-left:3px solid var(--gold-dim); padding:.8rem 1.2rem; background:rgba(201,168,76,.05); margin:1rem 0; font-style:italic; font-size:.95rem; opacity:.85; }
+  .callout.mist { border-left-color:var(--mist-light); background:rgba(124,138,148,.06); }
+
+  /* ITEM CARD */
+  .item-card { border:1px solid rgba(201,168,76,.5); border-radius:4px; padding:1.2rem 1.5rem; margin:1.2rem 0; background:rgba(201,168,76,.04); }
+  .item-card .item-name { font-family:'IM Fell English SC',serif; font-size:1.05rem; color:var(--gold); font-weight:600; margin-bottom:.3rem; }
+  .item-card .item-rarity { font-family:'IM Fell English SC',serif; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold-dim); margin-bottom:.7rem; }
+
+  /* TRACKER */
+  .tracker-box { border:1px solid var(--border-strong); border-radius:6px; padding:1.3rem 1.5rem; margin:1.5rem 0; background:rgba(201,168,76,.05); }
+  .tracker-title { font-family:'IM Fell English SC',serif; font-size:.85rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:.9rem; }
+  .tracker-row { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:.8rem; }
+  .tracker-row label { font-family:'IM Fell English SC',serif; font-size:.72rem; letter-spacing:.08em; color:var(--gold-dim); }
+  .tracker-row input[type="number"] { width:56px; background:#1C1410; border:1px solid var(--border); color:var(--bone); font-family:'Crimson Text',serif; font-size:.95rem; padding:.25rem .4rem; border-radius:3px; }
+  .pip-row { display:flex; gap:.5rem; flex-wrap:wrap; margin:.6rem 0; }
+  .pip {
+    width:30px; height:30px; border-radius:50%; border:2px solid var(--gold-dim);
+    background:var(--gold); cursor:pointer; transition:all .15s;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pip.spent { background:transparent; border-color:rgba(201,168,76,.3); }
+  .pip:hover { transform:scale(1.1); }
+  .tracker-btn {
+    font-family:'IM Fell English SC',serif; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase;
+    background:rgba(201,168,76,.15); border:1px solid var(--border-strong); color:var(--gold-light);
+    padding:.4rem .9rem; border-radius:3px; cursor:pointer;
+  }
+  .tracker-btn:hover { background:rgba(201,168,76,.28); }
+  .tracker-note { font-size:.82rem; opacity:.65; margin-top:.5rem; }
+
+  /* FOOTER */
+  .doc-footer { text-align:center; margin-top:4rem; padding-top:1.5rem; border-top:1px solid var(--border); font-family:'IM Fell English SC',serif; font-size:.73rem; letter-spacing:.2em; color:var(--gold-dim); opacity:.6; }
+
+  @media(max-width:600px){
+    .class-title{font-size:2.1rem;}
+    .container{padding:0 1rem 3rem;}
+    .stat-row{gap:1rem;}
+    .level-table{font-size:.78rem;}
+    .level-table th,.level-table td{padding:.38rem .35rem;}
+    .tab-btn{font-size:.65rem; padding:.45rem .7rem;}
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style id="tema-ambientacion">
+
+/* Tema Castlevania: luna, rosetón de vidriera y murciélagos */
+body{background:radial-gradient(circle at 84% 9%,rgba(235,228,210,.16) 0 54px,rgba(235,228,210,.05) 55px,transparent 140px),radial-gradient(ellipse 80% 45% at 50% 0%,rgba(139,26,26,.28),transparent 70%),#0d0807;}
+.cv-rosa{position:absolute;top:-180px;left:50%;width:620px;height:620px;transform:translateX(-50%);border-radius:50%;z-index:0;pointer-events:none;opacity:.10;
+ background:repeating-conic-gradient(from 0deg,#8b1a1a 0 10deg,#1a0f0a 10deg 12deg,#3b2a5a 12deg 22deg,#1a0f0a 22deg 24deg),radial-gradient(circle,#000 0 22%,transparent 23%);
+ -webkit-mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);}
+.cv-murcielagos{position:absolute;top:40px;right:60px;width:420px;height:260px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cg fill='%23c9a84c' opacity='.35'%3E%3Cpath d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(250 30) scale(.7)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(330 150) scale(.5)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3C/g%3E%3C/svg%3E") no-repeat;z-index:0;pointer-events:none;opacity:.8;}
+.class-title{font-family:'UnifrakturCook',serif !important;font-weight:700;letter-spacing:.01em;text-shadow:0 0 28px rgba(139,26,26,.28),0 2px 0 #000;}
+@media (max-width:700px){.cv-rosa{width:420px;height:420px;top:-140px;}.cv-murcielagos{right:0;transform:scale(.6);transform-origin:top right;}}
+
+</style>
+</head>
+<body>
+<div class="page-bg">
+<div class="container">
+
+<!-- CABECERA -->
+<header class="class-header">
+  <p class="class-eyebrow">Clase de Personaje · Homebrew D&D 5e · Revisión v3</p>
+  <h1 class="class-title">El Cazavampiros</h1>
+  <p class="class-subtitle">Linaje Belmont · Sangre de Belnades · Ecos de Barovia · Legado de Sonia</p>
+  <p class="class-flavour">
+    "No es el arma lo que hace al cazador. Es la generación de caza grabada en los huesos, la magia que arde —o se enfría, o maldice— en la sangre, y la voluntad de enfrentarse a la oscuridad cuando el resto del mundo cierra los ojos y la niebla no deja salir a nadie."
+  </p>
+</header>
+
+<!-- STATS -->
+<div class="stat-row">
+  <div class="stat-badge"><span class="stat-label">Dado de Golpe</span><span class="stat-value">d10</span></div>
+  <div class="stat-badge"><span class="stat-label">Caract. Principal</span><span class="stat-value">FUE o DES</span></div>
+  <div class="stat-badge"><span class="stat-label">Tiradas de Salvación</span><span class="stat-value">FUE, CON</span></div>
+  <div class="stat-badge"><span class="stat-label">Armadura</span><span class="stat-value">Todas + escudos</span></div>
+  <div class="stat-badge"><span class="stat-label">Armas</span><span class="stat-value">Todas</span></div>
+  <div class="stat-badge"><span class="stat-label">Tipo</span><span class="stat-value">Marcial / Mágico</span></div>
+</div>
+
+<!-- TABS -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="general">Visión General</button>
+  <button class="tab-btn" data-tab="progresion">Progresión</button>
+  <button class="tab-btn" data-tab="rasgos">Rasgos</button>
+  <button class="tab-btn" data-tab="tradiciones">Tradiciones</button>
+  <button class="tab-btn" data-tab="reliquia">Reliquias &amp; Trasfondo</button>
+</nav>
+
+<!-- ============ TAB: GENERAL ============ -->
+<div class="tab-panel active" id="tab-general">
+
+<section class="section">
+  <h2 class="section-title">El Linaje</h2>
+  <p>Los Belmont han cazado a las criaturas de la noche durante siglos. No son soldados, no son paladines, no son magos: son cazadores. Aprenden a matar desde niños, memorizan las debilidades de cada monstruo, improvisan armas y tácticas en mitad de castillos que desafían la lógica. Un Belmont puede empuñar una hacha, una lanza, una ballesta, un cuchillo de plata o sus propios puños, y ser igualmente letal con cada uno de ellos.</p>
+  <p>Cuando <strong>Sypha Belnades</strong>, hechicera de los Hablantes, se unió al linaje, algo cambió para siempre. Su magia elemental —el fuego que consume, el hielo que paraliza, el relámpago que aniquila— quedó entretejida en la sangre de sus descendientes. Los cazadores de esta línea no solo dominan el combate: <em>canalizan tormentas</em>.</p>
+  <p>No todos los descendientes se quedaron en las tierras que conocían. Se cuenta que algunas ramas del linaje, persiguiendo a un no muerto que huía hacia el este, se internaron en una niebla que no debía cruzarse — y salieron de ella (cuando salieron) sirviendo a una magia distinta: no la del fuego o el hielo de Sypha, sino la de la maldición misma, la que un señor de la noche impone sobre su dominio para que nadie escape jamás.</p>
+  <p>Y otros descendientes rechazaron la magia y la armadura pesada por completo. <strong>Sonia Belmont</strong> cazó a Drácula un siglo antes que Trevor, sin más armadura que su ingenio y una cruz que siempre volvía a su mano. Su rama del linaje vive de la velocidad, la utilería y la sorpresa: es la Tradición de la <strong>Caza Ligera</strong>.</p>
+
+  <div class="resource-box">
+    <p class="resource-title">Filosofía de la Clase: Versatilidad de Armas</p>
+    <p style="font-size:.92rem; margin:0;">El Cazavampiros no está ligado a ningún arma concreta. Sus rasgos de clase hablan de <em>el arma que empuñas</em> o <em>tu arma</em>. Látigos, espadas, hachas, ballestas, lanzas: todos funcionan. Los artefactos legendarios del linaje (como el Vampire Killer) son objetos mágicos opcionales que el DM puede conceder, no requisitos de la clase.</p>
+  </div>
+
+  <div class="callout mist">
+    Nota de diseño (v3): esta revisión absorbe a El Renard como quinta Tradición — Caza Ligera — para quien prefiera el estilo de Sonia (velocidad, trucos y trampas) a la magia elemental. Sigue la fusión de Sellos Sagrados y Golpe Consagrado en un único recurso escalonado, la elección de estilo de combate al nivel 3 y la Tradición de Niebla de Barovia, que tiende un puente hacia Curse of Strahd.
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Competencias de Clase</h2>
+  <div class="feature">
+    <p class="feature-name">Armadura</p>
+    <p>Todas las armaduras, escudos.</p>
+  </div>
+  <div class="feature">
+    <p class="feature-name">Armas</p>
+    <p>Armas simples, armas marciales. El Cazavampiros también tiene competencia con látigos y con armas de plata (cualquier arma recubierta de plata).</p>
+  </div>
+  <div class="feature">
+    <p class="feature-name">Herramientas</p>
+    <p>Kit de herborista, kit de herramientas de ladrón (para infiltrarse en los dominios del enemigo).</p>
+  </div>
+  <div class="feature">
+    <p class="feature-name">Habilidades</p>
+    <p>Elige 3 entre: Atletismo, Acrobacias, Historia, Intuición, Investigación, Percepción, Religión, Sigilo, Supervivencia, Trato con Animales.</p>
+  </div>
+  <div class="feature">
+    <p class="feature-name">Equipamiento Inicial</p>
+    <ul class="class-list">
+      <li>Cualquier arma marcial de tu elección (tu arma de caza principal)</li>
+      <li>Una armadura de malla <em>o</em> armadura de cuero tachonado y dos dagas</li>
+      <li>Una ballesta ligera y 20 virotes <em>o</em> un arco corto y 20 flechas</li>
+      <li>Un pack de explorador y un kit de herborista</li>
+      <li>Un símbolo del linaje Belmont (relicario, sello grabado, etc.)</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<!-- ============ TAB: PROGRESION ============ -->
+<div class="tab-panel" id="tab-progresion">
+
+<section class="section">
+  <h2 class="section-title">Progresión de Clase</h2>
+  <table class="level-table">
+    <thead>
+      <tr>
+        <th>Nv.</th>
+        <th>Bon.</th>
+        <th>Sellos (d6)</th>
+        <th>Magia de Tradición</th>
+        <th>Rasgos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>+2</td><td>—</td><td>—</td><td class="milestone">Arte del Cazador, Ojo del Cazador, Resistencia del Linaje</td></tr>
+      <tr><td>2</td><td>+2</td><td>2</td><td>—</td><td class="milestone">Sellos Sagrados</td></tr>
+      <tr><td>3</td><td>+2</td><td>3</td><td>Trucos ×2 · 1º×3</td><td class="milestone">Tradición del Cazador (subclase), Camino de Combate</td></tr>
+      <tr class="asi-row"><td>4</td><td>+2</td><td>3</td><td>1º×3</td><td>Mejora de Característica</td></tr>
+      <tr><td>5</td><td>+3</td><td>4</td><td>1º×4 · 2º×2</td><td class="milestone">Ataque Extra</td></tr>
+      <tr><td>6</td><td>+3</td><td>4</td><td>1º×4 · 2º×2</td><td class="milestone">Rasgo de Tradición, Caza Implacable</td></tr>
+      <tr><td>7</td><td>+3</td><td>5</td><td>1º×4 · 2º×3</td><td class="milestone">Instinto de Caza, Sangre Sagrada</td></tr>
+      <tr class="asi-row"><td>8</td><td>+3</td><td>5</td><td>1º×4 · 2º×3</td><td>Mejora de Característica</td></tr>
+      <tr><td>9</td><td>+4</td><td>6</td><td>1º×4 · 2º×3 · 3º×2</td><td class="milestone">Arma Consagrada, Nombre Temido</td></tr>
+      <tr><td>10</td><td>+4</td><td>6</td><td>1º×4 · 2º×3 · 3º×2</td><td class="milestone">Rasgo de Tradición, Tormenta Interior</td></tr>
+      <tr><td>11</td><td>+4</td><td>7</td><td>1º×4 · 2º×3 · 3º×3</td><td class="milestone">Golpes Imparables</td></tr>
+      <tr class="asi-row"><td>12</td><td>+4</td><td>7</td><td>1º×4 · 2º×3 · 3º×3</td><td>Mejora de Característica</td></tr>
+      <tr><td>13</td><td>+5</td><td>8</td><td>… 3º×3 · 4º×1</td><td class="milestone">Reliquia del Linaje</td></tr>
+      <tr><td>14</td><td>+5</td><td>8</td><td>… 3º×3 · 4º×1</td><td class="milestone">Rasgo de Tradición</td></tr>
+      <tr><td>15</td><td>+5</td><td>9</td><td>… 3º×3 · 4º×2</td><td class="milestone">Defensa de Linaje</td></tr>
+      <tr class="asi-row"><td>16</td><td>+5</td><td>9</td><td>… 3º×3 · 4º×2</td><td>Mejora de Característica</td></tr>
+      <tr><td>17</td><td>+6</td><td>10</td><td>… 4º×3 · 5º×1</td><td class="milestone">Última Cacería</td></tr>
+      <tr><td>18</td><td>+6</td><td>10</td><td>… 4º×3 · 5º×1</td><td class="milestone">Velo del Linaje</td></tr>
+      <tr class="asi-row"><td>19</td><td>+6</td><td>11</td><td>… 4º×3 · 5º×2</td><td>Mejora de Característica</td></tr>
+      <tr><td>20</td><td>+6</td><td>12</td><td>… 4º×3 · 5º×2</td><td class="milestone">⚡ Tormenta Belmont</td></tr>
+    </tbody>
+  </table>
+
+  <div class="resource-box" style="margin-top:1rem;">
+    <p class="resource-title">Magia de Tradición — Conjuración</p>
+    <p style="font-size:.9rem;margin:0;">Característica de conjuración: <strong>Sabiduría</strong>. CD de salvación = 8 + bonif. comp. + mod. SAB. Bonif. de ataque = bonif. comp. + mod. SAB. Eres un semiconjurador desde el nivel 3: la columna «Magia de Tradición» indica tus espacios por nivel de conjuro (con «…» se mantienen los de niveles inferiores: 1º×4 · 2º×3). Conoces los hechizos de tu Tradición según su tabla. Las ranuras se recuperan con un descanso largo. Los cantrips se lanzan a voluntad. <strong>Excepción:</strong> la Tradición de Caza Ligera no usa esta columna (sin conjuros ni ranuras); a cambio tiene Sellos adicionales y Trucos de Cazador.</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Rastreador de Sellos Sagrados</h2>
+  <div class="tracker-box">
+    <p class="tracker-title">Recurso de Sesión</p>
+    <div class="tracker-row">
+      <label for="maxSellos">Sellos máximos:</label>
+      <input type="number" id="maxSellos" value="4" min="1" max="14" onchange="rebuildPips()">
+      <button class="tracker-btn" onclick="resetPips()">Descanso (recuperar todos)</button>
+    </div>
+    <div class="pip-row" id="pipRow"></div>
+    <p class="tracker-note">Haz clic en un sello para gastarlo/recuperarlo. Ajusta el máximo según tu nivel de personaje (ver tabla de progresión; +2 si eres de Caza Ligera).</p>
+  </div>
+</section>
+
+</div>
+
+<!-- ============ TAB: RASGOS ============ -->
+<div class="tab-panel" id="tab-rasgos">
+
+<section class="section">
+  <h2 class="section-title">Rasgos de Clase</h2>
+
+  <div class="feature">
+    <p class="feature-name">Arte del Cazador <span class="level-tag">Nivel 1</span></p>
+    <p>Siglos de técnica de caza residen en tu sangre y en tu entrenamiento. Ganas los siguientes beneficios permanentes con cualquier arma que empuñes:</p>
+    <ul class="class-list" style="margin-top:.5rem;">
+      <li><strong>Golpe Preciso:</strong> Cuando realizas un ataque, puedes usar tu reacción para añadir tu bonificador de competencia al resultado de la tirada de ataque si hubiera fallado. Puedes usar esto un número de veces igual a tu bonificador de competencia por descanso corto.</li>
+      <li><strong>Adaptación de Arma:</strong> Tratas los dados de daño de las armas marciales con las que tienes competencia como si fueran un valor superior al habitual cuando obtienes un 1 o un 2 (puedes volver a tirar, tomando el nuevo resultado).</li>
+      <li><strong>Maestría de Alcance:</strong> Con un arma con la propiedad alcance (como el látigo), una criatura que entre en tu alcance provoca un ataque de oportunidad tuyo.</li>
+    </ul>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Ojo del Cazador <span class="level-tag">Nivel 1</span></p>
+    <p>Tienes ventaja en las pruebas de Percepción y Supervivencia para rastrear o detectar no muertos, demonios y criaturas de la oscuridad. Nunca eres sorprendido por estas criaturas mientras estés consciente. Como acción adicional, puedes identificar el tipo exacto de criatura sobrenatural que percibes (aunque no la veas directamente) y sus resistencias e inmunidades conocidas, sin tirada.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Resistencia del Linaje <span class="level-tag">Nivel 1</span></p>
+    <p>La sangre Belmont te endurece frente a los poderes de la oscuridad — sean los de un señor de la noche que reina sobre un castillo en ruinas, o los de uno que reina sobre una niebla que no te deja marchar. Tienes ventaja en las tiradas de salvación contra Miedo, Posesión, Aterrorizar y hechizos de la escuela de Necromancia. El veneno de criaturas no muertas no puede paralizarte. Además, el daño necrótico que recibes se reduce en tu modificador de Constitución (mínimo 1).</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Sellos Sagrados <span class="level-tag">Nivel 2</span></p>
+    <div class="resource-box">
+      <p class="resource-title">Recurso: Sellos Sagrados</p>
+      <p style="font-size:.9rem;margin:0;">Tienes un número de <strong>Sellos Sagrados</strong> según tu nivel (ver tabla). Cada Sello es un dado d6. Se recuperan todos al terminar un descanso corto o largo. Representan la energía sagrada latente en tu linaje, activable en momentos clave del combate.</p>
+    </div>
+    <p>Una vez por turno, cuando impactas con un arma a un no muerto, infernal o aberración, tu golpe añade automáticamente 1d6 de daño radiante <strong>sin gastar Sellos</strong> (2d6 al nivel 9 y 3d6 al nivel 14). Ese es tu golpe consagrado de base. Cuando quieras más, puedes gastar Sellos:</p>
+    <ul class="class-list" style="margin-top:.4rem;">
+      <li><strong>Golpe Potenciado (1 Sello, acción adicional):</strong> Tu próximo ataque con arma este turno inflige daño adicional igual al resultado del dado d6 de Sello, de tipo radiante (se suma al golpe consagrado de base).</li>
+      <li><strong>Explosión Sagrada (2 Sellos, acción adicional):</strong> Tu próximo ataque inflige 2d6 de daño radiante adicional. Si el objetivo es un no muerto o demonio, queda Aturdido hasta el final de tu siguiente turno (TS de CON, CD 8 + bonif. comp. + mod. FUE/DES para negar).</li>
+      <li><strong>Escudo de Linaje (1 Sello, reacción):</strong> Al recibir daño, tiras el dado d6 y reduces el daño recibido en ese valor.</li>
+    </ul>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Tradición del Cazador y Camino de Combate <span class="level-tag">Nivel 3</span></p>
+    <p>Tu sangre despierta del todo. Eliges una <strong>Tradición</strong> (Llamas, Hielo, Relámpago, Niebla de Barovia o Caza Ligera — ver pestaña Tradiciones), que te da acceso a cantrips y hechizos según la tabla (o, en Caza Ligera, a Trucos de Cazador), y rasgos adicionales en los niveles 3, 6, 10 y 14.</p>
+    <p>Al mismo tiempo, defines tu <strong>Camino de Combate</strong> — tu estilo de caza preferido. Elige uno; puedes cambiarlo cada vez que subes de nivel de personaje:</p>
+    <ul class="class-list" style="margin-top:.5rem;">
+      <li><strong>Caza de Alcance (látigos, lanzas, armas con alcance):</strong> El alcance de tus armas con la propiedad Alcance aumenta en 1,5 m. Puedes usar armas de alcance para agarrar o desenganchar objetos de criaturas (prueba de Atletismo) y para interactuar con el entorno sin moverte.</li>
+      <li><strong>Caza de Impacto (mazas, hachas, martillos):</strong> Cuando impactas, puedes empujar al objetivo 1,5 m o hacerlo caer Derribado (TS de FUE, CD 8 + bonif. comp. + mod. FUE). Una vez por turno.</li>
+      <li><strong>Caza del Mandoble (espadas largas, mandobles, armas a dos manos):</strong> el peso del linaje Belmont. Una vez por turno, cuando reduces a 0 PV a un no muerto o infernal con un arma a dos manos, puedes hacer un ataque contra otra criatura a tu alcance como parte de la misma acción.</li>
+      <li><strong>Caza de Distancia (ballestas, arcos, armas arrojadizas):</strong> Ignoras la cobertura media. El rango normal de tus armas a distancia aumenta en 9 metros. No sufres desventaja en ataques a distancia cuando hay un enemigo adyacente.</li>
+      <li><strong>Caza Ligera (estoques, dagas, látigos, armas arrojadizas ligeras):</strong> el estilo de Sonia. Elige un arma ligera y arrojadiza (o un objeto con forma de cruz o disco) como tu <strong>Arma Errante</strong>: tiene la propiedad Arrojadiza (9/18 m) y regresa a tu mano tras cada ataque. Con ella, o con cualquier arma con la propiedad Sutil, puedes sumar tu mod. DES en lugar de FUE y, cuando fallas un ataque con ella, puedes moverte 3 m sin provocar ataques de oportunidad (una vez por turno).</li>
+    </ul>
+    <p style="margin-top:.6rem; font-size:.88rem; opacity:.7;">La Tradición no condiciona el Camino de Combate: cualquier cazador de cualquier Tradición puede elegir cualquier estilo.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Ataque Extra <span class="level-tag">Nivel 5</span></p>
+    <p>Puedes atacar dos veces cuando realizas la acción de Atacar en tu turno.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Caza Implacable <span class="level-tag">Nivel 6</span></p>
+    <p>Cuando reduces a 0 PV a un no muerto o demonio, recuperas Sellos Sagrados iguales a tu modificador de Sabiduría (mínimo 1). Ocurre una vez por turno.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Instinto de Caza <span class="level-tag">Nivel 7</span></p>
+    <p>Tu velocidad de movimiento aumenta en 3 metros. Cuando una criatura dentro de tu alcance de arma se mueve, puedes realizar un ataque de oportunidad aunque ya hayas usado tu reacción este turno, una vez por turno.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Sangre Sagrada <span class="level-tag">Nivel 7</span></p>
+    <p>Cuando gastas Sellos Sagrados, la energía residual te protege: ganas PV temporales iguales al número de Sellos gastados × 3 hasta el inicio de tu siguiente turno.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Arma Consagrada <span class="level-tag">Nivel 9</span></p>
+    <p>Como ritual de 1 hora, puedes consagrar un arma con la que tengas competencia. El arma consagrada gana los siguientes beneficios mientras la empuñas tú:</p>
+    <ul class="class-list" style="margin-top:.5rem;">
+      <li>Cuenta como mágica y plateada a efectos de resistencias.</li>
+      <li>Añade +1 a las tiradas de ataque y daño (o +2 si el arma ya es mágica y no tiene este bonificador).</li>
+      <li>Cuando impactas a un no muerto con ella, la criatura no puede recuperar PV durante 1 minuto (no acumulable).</li>
+    </ul>
+    <p style="margin-top:.6rem;">Solo puedes tener un arma consagrada a la vez. Si consagras otra, la anterior pierde sus beneficios. Puedes reconsagrar el arma de forma gratuita si pierdes el arma y la recuperas.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Nombre Temido <span class="level-tag">Nivel 9</span></p>
+    <p>Tu reputación precede a tus acciones. Los no muertos, demonios e infernales que perciban tu presencia (olfato, visión o conocimiento previo) deben superar una TS de Sabiduría CD 15 al inicio de su primer turno en combate o quedan Asustados de ti durante 1 minuto. Una vez superada la tirada, son inmunes durante 24 horas.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Tormenta Interior <span class="level-tag">Nivel 10</span></p>
+    <p>Una vez por descanso corto, como acción, desencadenas una explosión de tu Tradición en un radio de 6 metros centrada en ti. Las criaturas en el área sufren 6d6 de daño del tipo de tu Tradición (TS de DES para la mitad, CD de conjuración). Tú y tus aliados no sois afectados. Si eres de Caza Ligera, la explosión es una lluvia de estacas y frascos: infliges daño radiante o perforante a tu elección (TS de DES, CD de Trucos).</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Golpes Imparables <span class="level-tag">Nivel 11</span></p>
+    <p>Tus ataques con tu arma consagrada (o con cualquier arma mágica) ignoran la resistencia al daño físico de criaturas no mágicas. Una vez por turno, cuando fallas un ataque, puedes gastar 1 Sello para volver a tirar el dado de ataque y quedarte con el segundo resultado.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Reliquia del Linaje <span class="level-tag">Nivel 13</span></p>
+    <p>Has recuperado o heredado una reliquia del linaje Belmont-Belnades. Elige una:</p>
+    <ul class="class-list" style="margin-top:.5rem;">
+      <li><strong>El Agua de Belnades:</strong> Una vez por descanso largo, como acción, lanzas un orbe de energía pura de tu Tradición (ataque de hechizo a distancia, alcance 18 m). Al impactar: 8d10 de daño del tipo de tu Tradición. Un no muerto impactado debe superar una TS de CON (CD de conjuración) o queda aturdido hasta el final de su siguiente turno.</li>
+      <li><strong>El Medallón del Linaje:</strong> Tienes ventaja en las tiradas de salvación contra ser encantado o asustado y contra efectos de no muertos. Una vez por descanso largo puedes convertir un fallo en una salvación en un éxito.</li>
+      <li><strong>El Libro de los Hablantes:</strong> Puedes lanzar <em>Comunicar con los Muertos</em> sin ranura una vez por descanso largo. Además, añades un hechizo de nivel ≤5 de cualquier lista, de tipo acorde a tu Tradición, a tu lista de Tradición.</li>
+      <li><strong>La Cruz Voltereta:</strong> la reliquia de Sonia (ver pestaña Reliquias). Pensada para la Tradición de Caza Ligera.</li>
+    </ul>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Defensa de Linaje <span class="level-tag">Nivel 15</span></p>
+    <p>Eres inmune al drenaje de nivel y a la reducción de puntuaciones de característica causados por no muertos. El daño necrótico que recibes se reduce ahora en tu nivel de clase (en lugar de tu modificador de CON). Cuando recibes daño necrótico que te reduciría a 0 PV, puedes gastar 3 Sellos para quedarte en 1 PV en su lugar; una vez por turno.</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Última Cacería <span class="level-tag">Nivel 17</span></p>
+    <p>Una vez por descanso largo, como acción adicional, designas a una criatura visible como tu Presa Final. Durante 1 hora (o hasta que la criatura muera), tienes ventaja en todos los ataques contra ella, tus daños ignoran su resistencia e inmunidad, y si la criatura te reduciría a 0 PV puedes gastar una reacción para quedarte en 1 PV (una vez por activación de este rasgo).</p>
+  </div>
+
+  <div class="feature">
+    <p class="feature-name">Velo del Linaje <span class="level-tag">Nivel 18</span></p>
+    <p>Eres inmune al daño necrótico. Cuando caes a 0 PV sin morir en el acto, puedes gastar todos tus Sellos restantes: en lugar de caer, recuperas PV iguales al total de Sellos gastados × 5. Una vez por descanso largo.</p>
+  </div>
+
+  <div class="feature" style="border-left:3px solid var(--gold);">
+    <p class="feature-name" style="font-size:1.15rem; color:var(--gold);">⚡ Tormenta Belmont — Cúspide del Linaje <span class="level-tag">Nivel 20</span></p>
+    <p>El poder combinado de generaciones de caza y la magia plena de tu Tradición se manifiesta en ti. Ganas los siguientes beneficios permanentes:</p>
+    <ul class="class-list" style="margin-top:.6rem;">
+      <li>Tu arma consagrada pasa a ser +3 y sus críticos causan el daño máximo posible.</li>
+      <li>Una vez por descanso largo, como acción, fusionas el combate marcial con tu magia de Tradición: durante 1 minuto, cada ataque con arma añade 3d10 de daño de tu Tradición, ignora toda resistencia e inmunidad, y el daño rebota al objetivo más cercano en 6 metros (mitad del daño).</li>
+      <li>Tu máximo de Sellos Sagrados aumenta en 4.</li>
+      <li>Al activar este rasgo, recuperas todos los Sellos gastados.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<!-- ============ TAB: TRADICIONES ============ -->
+<div class="tab-panel" id="tab-tradiciones">
+
+<section class="section">
+  <h2 class="section-title ice">Tradiciones de Belnades</h2>
+  <p>Al nivel 3, eliges la Tradición que despierta en tu sangre. Define tus cantrips, tus hechizos y rasgos adicionales en los niveles 3, 6, 10 y 14 (la Caza Ligera sustituye la magia por Trucos de Cazador). La Tradición no afecta qué arma usas: cualquier cazador puede ser de cualquier Tradición.</p>
+
+  <div class="sub-tab-nav">
+    <button class="sub-tab-btn llamas active" data-sub="llamas">Llamas</button>
+    <button class="sub-tab-btn hielo" data-sub="hielo">Hielo</button>
+    <button class="sub-tab-btn relampago" data-sub="relampago">Relámpago</button>
+    <button class="sub-tab-btn niebla" data-sub="niebla">Niebla de Barovia</button>
+    <button class="sub-tab-btn sonia" data-sub="sonia">Caza Ligera</button>
+  </div>
+
+  <!-- LLAMAS -->
+  <div class="sub-panel active" id="sub-llamas">
+  <div class="subclass-block llamas">
+    <h3 class="subclass-name llamas">Tradición de las Llamas</h3>
+    <p class="subclass-tagline">"El fuego que vio Sypha devorar al ejército de Drácula también arde en ti."</p>
+    <p>Especialistas en daño en área y presión constante. El fuego de Belnades no distingue: lo consume todo.</p>
+
+    <div class="feature fire-feature" style="margin-top:1.2rem;">
+      <p class="feature-name">Cantrips de Llamas <span class="level-tag">Nivel 3</span></p>
+      <p><em>Control de Llamas</em> y <em>Toque de Fuego</em>. Cuando usas Toque de Fuego contra un objetivo que ya está ardiendo, el daño aumenta en 1d8.</p>
+    </div>
+
+    <div class="feature fire-feature">
+      <p class="feature-name">Golpe Potenciado de Tradición: Llamas <span class="level-tag">Nivel 3</span></p>
+      <p>Cuando gastas Sellos para un Golpe Potenciado o Explosión Sagrada, puedes sustituir el daño radiante por daño de fuego. Además, como acción adicional (sin gastar Sellos), puedes envolver tu arma en llamas durante 1 minuto: cada golpe añade 1d6 de fuego y el objetivo debe superar una TS de DES (CD de conjuración) o quedar ardiendo (1d6 de fuego al inicio de sus turnos hasta apagarse).</p>
+    </div>
+
+    <table class="spell-table" style="margin-top:1rem;">
+      <thead><tr><th>Nv. clase</th><th>Hechizos de Tradición</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td><span class="spell-name fire">Manos ardientes, Represión infernal</span></td></tr>
+        <tr><td>5</td><td><span class="spell-name fire">Esfera llameante, Rayo abrasador</span></td></tr>
+        <tr><td>9</td><td><span class="spell-name fire">Bola de fuego, Arma elemental</span></td></tr>
+        <tr><td>13</td><td><span class="spell-name fire">Muro de fuego, Escudo de fuego</span></td></tr>
+        <tr><td>17</td><td><span class="spell-name fire">Golpe flamígero, Inmolación</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.83rem; opacity:.6; margin-top:.4rem;">* Sypha dominaba todos los elementos; este hechizo representa esa versatilidad a nivel avanzado.</p>
+
+    <div class="feature fire-feature" style="margin-top:1rem;">
+      <p class="feature-name">Maestría del Fuego <span class="level-tag">Nivel 6</span></p>
+      <p>Resistente al daño de fuego. Cuando lanzas un hechizo de fuego que cause daño, puedes gastar 1 Sello para añadir 1d6 de fuego por nivel de ranura usado.</p>
+    </div>
+
+    <div class="feature fire-feature">
+      <p class="feature-name">Tormenta de Cenizas <span class="level-tag">Nivel 10</span></p>
+      <p>Al activar Tormenta Interior, el área queda envuelta en cenizas ardientes 1 minuto. Las criaturas que entren o inicien turno en el área sufren 2d6 de fuego adicional.</p>
+    </div>
+
+    <div class="feature fire-feature">
+      <p class="feature-name">Corazón de la Llama <span class="level-tag">Nivel 14</span></p>
+      <p>Inmune al daño de fuego. Una vez por descanso largo, al lanzar un hechizo de fuego de nivel 3+, duplicas el daño total. Los objetivos que fallen la salvación quedan Asustados de ti 1 minuto.</p>
+    </div>
+  </div>
+  </div>
+
+  <!-- HIELO -->
+  <div class="sub-panel" id="sub-hielo">
+  <div class="subclass-block hielo">
+    <h3 class="subclass-name hielo">Tradición del Hielo</h3>
+    <p class="subclass-tagline">"El frío que paralizó el ejército en las noches de invierno era su creación más elegante."</p>
+    <p>Control y dominio del campo de batalla. Ralentizan, congelan, paralizan. Donde los de Llamas queman, los de Hielo detienen el tiempo.</p>
+
+    <div class="feature ice-feature" style="margin-top:1.2rem;">
+      <p class="feature-name">Cantrips de Hielo <span class="level-tag">Nivel 3</span></p>
+      <p><em>Ráfaga de Escarcha</em> y <em>Rayo de Escarcha</em>. Cuando impactas con Ráfaga de Escarcha, reduces la velocidad del objetivo en 3 metros hasta el final de tu siguiente turno.</p>
+    </div>
+
+    <div class="feature ice-feature">
+      <p class="feature-name">Golpe Potenciado de Tradición: Hielo <span class="level-tag">Nivel 3</span></p>
+      <p>Cuando gastas Sellos para un Golpe Potenciado o Explosión Sagrada, puedes sustituir el daño radiante por frío. Además, como reacción cuando impactas con un ataque de arma, puedes cubrir la herida con escarcha: el objetivo queda Ralentizado (velocidad a la mitad, −2 CA, sin reacciones) hasta el final de tu siguiente turno. Una vez por turno.</p>
+    </div>
+
+    <table class="spell-table" style="margin-top:1rem;">
+      <thead><tr><th>Nv. clase</th><th>Hechizos de Tradición</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td><span class="spell-name">Armadura de Agathys, Cuchillo de hielo</span></td></tr>
+        <tr><td>5</td><td><span class="spell-name">Inmovilizar persona, Paso brumoso</span></td></tr>
+        <tr><td>9</td><td><span class="spell-name">Ralentizar, Tormenta de aguanieve</span></td></tr>
+        <tr><td>13</td><td><span class="spell-name">Tormenta de hielo, Libertad de movimiento</span></td></tr>
+        <tr><td>17</td><td><span class="spell-name">Cono de frío, Inmovilizar monstruo</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="feature ice-feature" style="margin-top:1rem;">
+      <p class="feature-name">Dominio del Frío <span class="level-tag">Nivel 6</span></p>
+      <p>Resistente al daño de frío. Las criaturas que fallen una TS contra tus hechizos de frío sufren desventaja en sus ataques contra ti hasta el inicio de tu siguiente turno. Ignoras el terreno difícil causado por hielo o nieve.</p>
+    </div>
+
+    <div class="feature ice-feature">
+      <p class="feature-name">Jaula de Hielo <span class="level-tag">Nivel 10</span></p>
+      <p>Al activar Tormenta Interior, el área queda cubierta de hielo 1 minuto (terreno difícil). Las criaturas que fallen la TS quedan Paralizadas hasta el final de tu siguiente turno en lugar de sufrir la mitad del daño.</p>
+    </div>
+
+    <div class="feature ice-feature">
+      <p class="feature-name">Corazón Glacial <span class="level-tag">Nivel 14</span></p>
+      <p>Inmune al daño de frío y a ser Ralentizado. Una vez por descanso largo, lanzas <em>Inmovilizar monstruo</em> sin gastar ranura. Mientras una criatura esté paralizada por ti, tus ataques contra ella infligen 1d8 de daño de frío adicional.</p>
+    </div>
+  </div>
+  </div>
+
+  <!-- RELÁMPAGO -->
+  <div class="sub-panel" id="sub-relampago">
+  <div class="subclass-block relampago">
+    <h3 class="subclass-name relampago">Tradición del Relámpago</h3>
+    <p class="subclass-tagline">"El trueno que rugió cuando Sypha convocó la tormenta resonó hasta en los cimientos del castillo."</p>
+    <p>Velocidad, precisión, poder explosivo. Los cazadores de esta Tradición son los más rápidos del linaje: eliminan objetivos antes de que puedan reaccionar.</p>
+
+    <div class="feature lightning-feature" style="margin-top:1.2rem;">
+      <p class="feature-name">Cantrips de Relámpago <span class="level-tag">Nivel 3</span></p>
+      <p><em>Sacudida Eléctrica</em> y <em>Toque de Relámpago</em>. Cuando impactas con Sacudida Eléctrica a una criatura con armadura metálica o mojada, el daño aumenta en 1d6.</p>
+    </div>
+
+    <div class="feature lightning-feature">
+      <p class="feature-name">Golpe Potenciado de Tradición: Relámpago <span class="level-tag">Nivel 3</span></p>
+      <p>Cuando gastas Sellos para un Golpe Potenciado o Explosión Sagrada, puedes sustituir el daño radiante por relámpago. Además, cuando impactas con tu arma, como acción adicional puedes descargar el relámpago: el objetivo y cada criatura a 1,5 metros sufren 2d6 de relámpago (TS DES para la mitad). El objetivo que falle no puede usar reacciones hasta el inicio de tu siguiente turno. Usos iguales a tu mod. SAB por descanso corto.</p>
+    </div>
+
+    <table class="spell-table" style="margin-top:1rem;">
+      <thead><tr><th>Nv. clase</th><th>Hechizos de Tradición</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td><span class="spell-name lightning">Ola atronadora, Castigo atronador</span></td></tr>
+        <tr><td>5</td><td><span class="spell-name lightning">Estallar, Ráfaga de viento</span></td></tr>
+        <tr><td>9</td><td><span class="spell-name lightning">Relámpago, Llamar al rayo</span></td></tr>
+        <tr><td>13</td><td><span class="spell-name lightning">Esfera tormentosa, Libertad de movimiento</span></td></tr>
+        <tr><td>17</td><td><span class="spell-name lightning">Onda destructora, Control de los vientos</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="feature lightning-feature" style="margin-top:1rem;">
+      <p class="feature-name">Velocidad del Rayo <span class="level-tag">Nivel 6</span></p>
+      <p>Resistente al daño de relámpago y trueno. Tu velocidad aumenta en 3 metros adicionales. Puedes usar Pasar durante un movimiento de carga sin provocar ataques de oportunidad.</p>
+    </div>
+
+    <div class="feature lightning-feature">
+      <p class="feature-name">Tormenta Encadenada <span class="level-tag">Nivel 10</span></p>
+      <p>Al activar Tormenta Interior, los relámpagos saltan entre criaturas: cada objetivo que falle la TS hace que el relámpago rebote a la criatura más cercana en 6 metros (mitad del daño). Máximo 3 rebotes en total.</p>
+    </div>
+
+    <div class="feature lightning-feature">
+      <p class="feature-name">Señor de la Tormenta <span class="level-tag">Nivel 14</span></p>
+      <p>Inmune al daño de relámpago y trueno. Una vez por descanso largo, como acción, lanzas hasta 3 rayos a hasta 3 objetivos distintos en 36 metros. Cada rayo: 10d10 de relámpago (TS DES para la mitad). Los que fallen quedan Aturdidos hasta el final de su siguiente turno.</p>
+    </div>
+  </div>
+  </div>
+
+  <!-- NIEBLA DE BAROVIA -->
+  <div class="sub-panel" id="sub-niebla">
+  <div class="subclass-block niebla">
+    <h3 class="subclass-name niebla">Tradición de la Niebla de Barovia</h3>
+    <p class="subclass-tagline">"No siguió a la bestia hasta un castillo. La siguió hasta una niebla que no debía cruzarse — y aprendió a hablar su idioma."</p>
+    <p>Algunos cazadores del linaje jamás encontraron su presa. En su lugar, la niebla los encontró a ellos: una extensión de la voluntad de un señor de la noche que gobierna un dominio entero como si fuera su ataúd. Estos Belmont no queman ni congelan; maldicen. Aprenden a caminar entre la bruma, a marcar a su presa de un modo que ninguna huida borra, y a devolver contra el cazador de almas su propia arma favorita: el miedo a no poder escapar jamás.</p>
+
+    <div class="feature mist-feature" style="margin-top:1.2rem;">
+      <p class="feature-name">Cantrips de Niebla <span class="level-tag">Nivel 3</span></p>
+      <p><em>Toque Helado</em> y <em>Burla Cruel</em>. Cuando usas Toque Helado contra una criatura ya maldita por uno de tus hechizos de Tradición, el objetivo tiene además desventaja en su siguiente tirada de salvación antes del final de tu siguiente turno.</p>
+    </div>
+
+    <div class="feature mist-feature">
+      <p class="feature-name">Golpe Potenciado de Tradición: Niebla <span class="level-tag">Nivel 3</span></p>
+      <p>Cuando gastas Sellos para un Golpe Potenciado o Explosión Sagrada, puedes sustituir el daño radiante por necrótico. Además, como acción adicional (sin gastar Sellos), puedes maldecir a una criatura que hayas impactado este turno: hasta el final de tu siguiente turno, sabes la dirección exacta hacia ella (aunque no la veas) y tiene desventaja en la primera tirada de salvación que realice contra tus hechizos de Tradición. Una vez por turno.</p>
+    </div>
+
+    <table class="spell-table" style="margin-top:1rem;">
+      <thead><tr><th>Nv. clase</th><th>Hechizos de Tradición</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td><span class="spell-name niebla">Maleficio, Nube de oscurecimiento</span></td></tr>
+        <tr><td>5</td><td><span class="spell-name niebla">Oscuridad, Invisibilidad</span></td></tr>
+        <tr><td>9</td><td><span class="spell-name niebla">Miedo, Lanzar maldición</span></td></tr>
+        <tr><td>13</td><td><span class="spell-name niebla">Confusión, Polimorfar</span></td></tr>
+        <tr><td>17</td><td><span class="spell-name niebla">Dominar persona, Contagio</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.83rem; opacity:.6; margin-top:.4rem;">Estos hechizos representan la magia de maldición a nivel avanzado; el DM puede sustituir cualquiera por un equivalente de su lista de campaña.</p>
+
+    <div class="feature mist-feature" style="margin-top:1rem;">
+      <p class="feature-name">Manto de Niebla <span class="level-tag">Nivel 6</span></p>
+      <p>Resistente al daño necrótico y psíquico. Cuando una criatura falla una tirada de salvación contra un hechizo de tu Tradición, puedes usar tu reacción para disolverte en niebla: te vuelves invisible hasta el inicio de tu siguiente turno o hasta que ataques, lo que ocurra antes.</p>
+    </div>
+
+    <div class="feature mist-feature">
+      <p class="feature-name">Niebla Devoradora <span class="level-tag">Nivel 10</span></p>
+      <p>Al activar Tormenta Interior, el área queda muy oscurecida por niebla espesa durante 1 minuto (solo tú puedes ver con normalidad a través de ella). Las criaturas que fallen la TS quedan además Maldecidas: hasta que reciban curación mágica, sabes la dirección exacta hacia ellas en todo momento, sin importar la distancia o los planos que os separen.</p>
+    </div>
+
+    <div class="feature mist-feature">
+      <p class="feature-name">Señor de la Niebla <span class="level-tag">Nivel 14</span></p>
+      <p>Inmune al daño necrótico y psíquico. Una vez por descanso largo, como acción, maldices a una criatura que puedas ver en 18 metros: debe superar una TS de Constitución (CD de conjuración) o queda <strong>Marcada por la Niebla</strong> durante 24 horas. Mientras esté marcada, la criatura no puede teletransportarse ni cambiar de plano para alejarse de ti, siempre sabes su ubicación exacta, y tiene desventaja en las tiradas de salvación contra tus hechizos de Tradición. Ninguna niebla, mundana o mágica, puede ocultarla de ti.</p>
+    </div>
+  </div>
+  </div>
+
+  <!-- CAZA LIGERA (antes El Renard) -->
+  <div class="sub-panel" id="sub-sonia">
+  <div class="subclass-block sonia">
+    <h3 class="subclass-name sonia">Tradición de la Caza Ligera</h3>
+    <p class="subclass-tagline">"Sonia cazó a Drácula un siglo antes que Trevor, sin más armadura que su ingenio y una cruz que siempre volvía a su mano."</p>
+    <p>No todos los Belmont despertaron el fuego o el hielo. Los de esta rama prescinden de la magia y del peso: cargan poco, se mueven rápido y llevan siempre un as bajo la manga. No lanzan tormentas, lanzan estacas, frascos y redes. Es la contraparte natural de las otras Tradiciones: uno resiste y golpea fuerte, el otro esquiva y golpea rápido.</p>
+
+    <div class="feature sonia-feature" style="margin-top:1.2rem;">
+      <p class="feature-name">Sin Conjuros, Más Sellos <span class="level-tag">Nivel 3</span></p>
+      <p>No obtienes cantrips, hechizos ni ranuras de Tradición (ignora la columna «Magia de Tradición»). A cambio, tu máximo de Sellos Sagrados aumenta en 2. Además, tu CD de Trucos y Marcaje es 8 + bonif. comp. + mod. DES, y mientras no lleves armadura pesada ni escudo, tu CA es 10 + DES + SAB (o la de tu armadura, si es mejor).</p>
+    </div>
+
+    <div class="feature sonia-feature">
+      <p class="feature-name">Marcaje de Caza <span class="level-tag">Nivel 3</span></p>
+      <p>Como acción adicional, marcas a una criatura que puedas ver a 18 metros o menos durante 1 minuto (o hasta que marques a otra o caiga a 0 PV). Mientras esté marcada, sabes en qué dirección está si se encuentra a 18 metros o menos. Cada vez que la impactas con un ataque, le colocas una <strong>Muesca</strong> (máximo igual a tu bonificador de competencia).</p>
+      <p><strong>Cobrar la caza.</strong> Una vez por turno, cuando impactas a la criatura marcada, puedes consumir todas sus Muescas (incluida la de ese impacto) para infligir 1d6 de daño adicional por Muesca, del tipo del arma (d8 a nivel 9, d10 a nivel 14). No necesitas ventaja ni aliados cerca: la caza se construye golpe a golpe y se cobra cuando tú decides.</p>
+      <p><strong>Corazones del castillo.</strong> Cuando Cobras la caza consumiendo 3 o más Muescas, recuperas 1 Sello Sagrado. El Cazador Ligero caza para reabastecerse.</p>
+    </div>
+
+    <div class="feature sonia-feature">
+      <p class="feature-name">Trucos de Cazador <span class="level-tag">Nivel 3</span></p>
+      <p>Llevas encima un arsenal de estacas, frascos, redes y trampas rápidas. Conoces 3 Trucos de la lista de abajo (4 a nivel 9, 5 a nivel 13, 6 a nivel 17) y puedes cambiar uno cada vez que subes de nivel. Cada Truco cuesta Sellos (se indica) y se paga cuando lo usas.</p>
+      <div class="trick-card"><p class="trick-name">Estaca de Plata Arrojadiza</p><p class="trick-cost">1 Sello · Acción adicional</p><p>Lanzas una estaca de plata a un objetivo en 9 m: ataque a distancia, 2d6 perforante. Si es un no muerto, +1d6 y no puede recuperar PV hasta el final de su siguiente turno.</p></div>
+      <div class="trick-card"><p class="trick-name">Frasco de Aceite Bendito</p><p class="trick-cost">1 Sello · Acción</p><p>Lanzas un frasco a un punto en 6 m (radio 1,5 m). Las criaturas en el área sufren 2d6 de fuego y quedan ardiendo (1d6 de fuego al inicio de sus turnos) hasta que alguien use una acción para apagarlas.</p></div>
+      <div class="trick-card"><p class="trick-name">Red de Plata</p><p class="trick-cost">1 Sello · Acción</p><p>Ataque a distancia contra una criatura Grande o menor en 4,5 m. Si impactas, queda Apresada (CD para escapar de Trucos) hasta que se libere o destruya la red (CA 10, 5 PG).</p></div>
+      <div class="trick-card"><p class="trick-name">Bomba de Humo Sagrado</p><p class="trick-cost">1 Sello · Acción adicional</p><p>Nube de humo muy oscurecida de 4,5 m de radio en un punto a 9 m, durante 1 minuto. Los no muertos y demonios dentro tienen desventaja en ataques contra objetivos fuera de ella.</p></div>
+      <div class="trick-card"><p class="trick-name">Espejo de Plata</p><p class="trick-cost">1 Sello · Reacción</p><p>Cuando una criatura invisible, en forma de niebla o murciélago actúa a 9 m de ti, debe superar una TS de SAB o revela su forma y posición hasta el final de tu siguiente turno.</p></div>
+      <div class="trick-card"><p class="trick-name">Gancho y Cuerda</p><p class="trick-cost">1 Sello · Acción adicional</p><p>Te enganchas a un punto en 9 m y te desplazas hasta él en línea recta sin provocar ataques de oportunidad. Si terminas adyacente a una criatura, puedes atacarla como parte del mismo Truco.</p></div>
+      <div class="trick-card"><p class="trick-name">Trampa Relámpago</p><p class="trick-cost">1 Sello · Acción</p><p>Colocas una trampa oculta en un espacio adyacente (CD de Percepción para detectarla = CD de Trucos). Cuando una criatura hostil entra o inicia turno ahí, sufre 2d6 perforante y su velocidad se reduce a 0 hasta el final de su turno.</p></div>
+      <div class="trick-card"><p class="trick-name">Amago Calculado</p><p class="trick-cost">1 Sello · Acción adicional</p><p>Finges un ataque contra una criatura adyacente. El siguiente ataque contra ella (tuyo o de un aliado que puedas ver) antes del final de tu siguiente turno tiene ventaja.</p></div>
+      <div class="trick-card"><p class="trick-name">Agua Bendita Concentrada</p><p class="trick-cost">2 Sellos · Acción adicional</p><p>Recuperas PV iguales a tu nivel de clase y finalizas un efecto de veneno o miedo sobre ti; o la lanzas a un no muerto en 9 m: 4d6 radiante (TS DES para la mitad).</p></div>
+    </div>
+
+    <div class="feature sonia-feature">
+      <p class="feature-name">Paso del Cazador <span class="level-tag">Nivel 6</span></p>
+      <p>Como acción adicional, puedes moverte hasta la mitad de tu velocidad sin provocar ataques de oportunidad. Si terminas fuera de la vista de todos los enemigos que podían verte, puedes Esconderte como parte de la misma acción adicional. Usos iguales a tu mod. DES (mínimo 1) por descanso corto.</p>
+    </div>
+
+    <div class="feature sonia-feature">
+      <p class="feature-name">Evasión y Trucos Maestros <span class="level-tag">Nivel 10</span></p>
+      <p><strong>Evasión.</strong> Cuando debes hacer una TS de Destreza para sufrir solo la mitad del daño, no sufres ningún daño si la superas y solo la mitad si fallas.</p>
+      <p><strong>Trucos Maestros.</strong> Una vez por descanso corto, usas un Truco de Cazador sin gastar Sellos.</p>
+    </div>
+
+    <div class="feature sonia-feature">
+      <p class="feature-name">Golpe de Gracia <span class="level-tag">Nivel 14</span></p>
+      <p>Cuando Cobras la caza contra una criatura con la mitad o menos de sus PG máximos, puedes gastar 1 Sello para maximizar los dados de Marcaje (no el daño del arma). Además, ninguna criatura tiene ventaja en las tiradas de ataque contra ti mientras no estés Incapacitado.</p>
+    </div>
+  </div>
+  </div>
+
+</section>
+
+</div>
+
+<!-- ============ TAB: RELIQUIA Y TRASFONDO ============ -->
+<div class="tab-panel" id="tab-reliquia">
+
+<section class="section">
+  <h2 class="section-title">El Vampire Killer — Reliquia Legendaria</h2>
+  <p>El Vampire Killer no es la clase. Es el arma más icónica del linaje, pero no la única. A lo largo de los siglos, los Belmont han empuñado espadas, lanzas, hachas, mazas y ballestas con la misma eficacia mortal. El látigo es un símbolo, no una cadena.</p>
+  <p>Si el DM desea incluirlo como objeto mágico en la campaña, aquí está su definición canónica:</p>
+
+  <div class="item-card">
+    <p class="item-name">Vampire Killer</p>
+    <p class="item-rarity">Arma (látigo), Legendaria · Requiere sintonización (Cazavampiros del linaje Belmont)</p>
+    <p>Un látigo forjado y consagrado por generaciones de cazadores Belmont, imbuido con el poder acumulado de cada monstruo que ha destruido. Tiene un alcance de 3 metros (aumenta a 4,5 m al nivel 9 del portador) y cuenta como mágica y plateada. Proporciona los siguientes beneficios al portador sintonizado:</p>
+    <ul class="class-list" style="margin-top:.6rem;">
+      <li><strong>+3</strong> a las tiradas de ataque y daño.</li>
+      <li><strong>Bane del Mal:</strong> Contra no muertos, demonios e infernales, inflige 3d6 de daño radiante adicional por golpe.</li>
+      <li><strong>Marca del Cazador:</strong> Como acción adicional, marca a una criatura. Mientras está marcada, no puede recuperar PV y sufre desventaja en TS contra los hechizos de Tradición del portador.</li>
+      <li><strong>Indestructible:</strong> No puede ser destruido por medios mundanos. Si se pierde o es robado, reaparece en la mano del portador al amanecer siguiente.</li>
+      <li><strong>Resonancia del Linaje:</strong> El portador recupera 1 Sello Sagrado adicional cuando usa Caza Implacable.</li>
+    </ul>
+  </div>
+
+  <div class="item-card">
+    <p class="item-name">Cruz Voltereta</p>
+    <p class="item-rarity">Arma (arrojadiza especial), Muy Rara · Requiere sintonización</p>
+    <p>El arma personal de Sonia Belmont: una cruz de plata maciza del tamaño de una mano, con bordes afilados y un peso perfectamente equilibrado para el lanzamiento. Cuenta como mágica y plateada, y cumple los requisitos de Arma Errante automáticamente si la eliges como tal.</p>
+    <ul class="class-list" style="margin-top:.6rem;">
+      <li><strong>+2</strong> a las tiradas de ataque y daño.</li>
+      <li><strong>Retorno Perfecto:</strong> Nunca necesitas usar una acción, mano libre ni objeto interactuable para recuperarla; siempre está en tu mano al inicio de tus turnos.</li>
+      <li><strong>Luz Consagrada:</strong> Como acción adicional, una vez por descanso corto, puedes hacer que brille con luz radiante (luz brillante 6 m, tenue 6 m más) durante 1 minuto. Mientras brilla, tus ataques con ella infligen 1d6 de daño radiante adicional contra no muertos.</li>
+      <li><strong>Ligera pero Cierta:</strong> Su daño de arrojadiza es 1d6 + tu modificador de Destreza, independientemente del arma base que hayas elegido para Arma Errante.</li>
+    </ul>
+  </div>
+
+  <div class="item-card">
+    <p class="item-name">El Farol que No se Apaga</p>
+    <p class="item-rarity">Objeto maravilloso, Raro · Requiere sintonización</p>
+    <p>Una lámpara de cristal ahumado y hierro forjado, recogida por un cazador que cruzó la niebla y volvió. Su luz nunca vacila, ni siquiera sin aceite.</p>
+    <ul class="class-list" style="margin-top:.6rem;">
+      <li>Emite luz brillante en 9 metros y luz tenue 9 metros más allá, a voluntad.</li>
+      <li>Mientras estás dentro de su luz brillante, eres inmune al efecto de niebla mágica que intente cegarte, desorientarte o hacerte perder el rumbo (como la niebla de Barovia).</li>
+      <li>Una vez por descanso largo, puedes usar una acción para que su luz revele el camino más corto hacia la salida de cualquier zona de niebla mágica en la que te encuentres, sin necesidad de tirada.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"><span class="divider-symbol">⚔</span></div>
+
+<section class="section">
+  <h2 class="section-title">Narrativa y Trasfondo</h2>
+  <div class="callout">
+    "Cuando Trevor Belmont se enfrentó a Drácula, iba armado con lo que tenía a mano. Cuando Sypha se unió a él, lo que tenían entre los dos era suficiente para acabar con un dios de la oscuridad. Sus descendientes heredaron ambas cosas: el instinto y la tormenta."
+  </div>
+  <div class="callout mist">
+    "Hay quien dice que no toda la sangre Belmont volvió de sus cacerías. Que algunas ramas se quedaron atrapadas donde el mapa termina en niebla, sirviendo — sin saberlo del todo — a la misma clase de poder que juraron destruir. Ellos no volvieron con historias de dragones o demonios. Volvieron hablando de un castillo que se repite, de un señor que siempre sabe tu nombre, y de una niebla que decide quién se va."
+  </div>
+  <p>Los Belmont son cazadores antes que guerreros. Improvisan. Aprenden las debilidades de cada criatura. Adaptan su equipo a cada amenaza. Un Belmont que lleva siglos combatiendo a los sirvientes de Drácula no se aferra a una sola arma porque sabe que la próxima fortaleza puede requerir algo completamente distinto.</p>
+  <p>La magia de Belnades fue el complemento perfecto a esa filosofía. Donde el combate no alcanza, la tormenta llega — o la maldición, si la sangre que despertó en ti no vino del fuego, sino de la niebla. Y quien rechaza ambas, como Sonia, caza con velocidad: lanza el golpe decisivo y ya está en otro lugar cuando la criatura se da cuenta.</p>
+
+  <p><strong>Tu personaje puede ser:</strong></p>
+  <ul class="class-list" style="margin-top:.4rem;">
+    <li>Un descendiente directo de Trevor y Sypha, criado con el peso del apellido.</li>
+    <li>Un miembro de una línea lateral que descubrió su herencia al enfrentarse a su primer no muerto.</li>
+    <li>Alguien entrenado por los Hablantes que también porta la sangre del linaje.</li>
+    <li>Un cazador independiente que descubrió sus poderes y buscó el origen de su sangre.</li>
+    <li><em>(Niebla de Barovia)</em> Un cazador que persiguió a su presa hasta una tierra envuelta en niebla perpetua, y que aún busca el camino de vuelta a casa mientras sobrevive a su señor.</li>
+    <li><em>(Niebla de Barovia)</em> Alguien nacido ya dentro de esa niebla, de un linaje lateral que nunca conoció otro cielo, hasta que decidió que había que acabar con lo que gobierna su tierra.</li>
+    <li><em>(Caza Ligera)</em> Una descendiente de Sonia Belmont, entrenada en la tradición olvidada de la caza ligera; o un ladrón que robó al monstruo equivocado y descubrió que cazar es más rentable que huir.</li>
+    <li><em>(Caza Ligera)</em> Un superviviente de un pueblo asolado que aprendió a base de trampas y desesperación, sin maestro ni linaje.</li>
+  </ul>
+</section>
+
+<footer class="doc-footer">
+  <p>El Cazavampiros · Linaje Belmont &amp; Belnades · Homebrew D&amp;D 5e · Revisión v3</p>
+  <p style="margin-top:.3rem;font-size:.68rem;opacity:.5;">Basado en Castlevania — Konami / Netflix, con ecos de Curse of Strahd — Wizards of the Coast. Solo para uso personal.</p>
+</footer>
+
+</div>
+
+</div>
+</div>
+
+<script>
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Sub-tab switching (Tradiciones)
+  document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('sub-' + btn.dataset.sub).classList.add('active');
+    });
+  });
+
+  // Sellos Sagrados tracker
+  let sellosSpent = new Set();
+  function rebuildPips() {
+    const max = parseInt(document.getElementById('maxSellos').value) || 4;
+    const row = document.getElementById('pipRow');
+    row.innerHTML = '';
+    for (let i = 0; i < max; i++) {
+      const pip = document.createElement('div');
+      pip.className = 'pip' + (sellosSpent.has(i) ? ' spent' : '');
+      pip.addEventListener('click', () => {
+        if (sellosSpent.has(i)) sellosSpent.delete(i); else sellosSpent.add(i);
+        rebuildPips();
+      });
+      row.appendChild(pip);
+    }
+  }
+  function resetPips() {
+    sellosSpent = new Set();
+    rebuildPips();
+  }
+  rebuildPips();
+</script>
+
+<div class="cv-rosa" aria-hidden="true"></div><div class="cv-murcielagos" aria-hidden="true"></div>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

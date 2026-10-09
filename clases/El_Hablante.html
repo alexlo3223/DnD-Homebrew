@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Hablante — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#4f8fd6;--acc2:#b4d3f5;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:'IM Fell English SC','IM Fell English',Georgia,serif;--f-body:'Crimson Text',Georgia,serif;--f-label:'Cinzel','Trajan Pro',Georgia,serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+body{background:radial-gradient(circle at 84% 9%,rgba(235,228,210,.16) 0 54px,rgba(235,228,210,.05) 55px,transparent 140px),radial-gradient(ellipse 80% 45% at 50% 0%,color-mix(in srgb,#2b5fa8 35%,transparent),transparent 70%),var(--bg)}
+.hero h1{font-family:'UnifrakturCook','IM Fell English',serif;font-weight:700;text-shadow:0 0 28px color-mix(in srgb,#2b5fa8 40%,transparent),0 2px 0 #000}
+.cv-rosa{position:absolute;top:-180px;left:50%;width:620px;height:620px;transform:translateX(-50%);border-radius:50%;z-index:-1;pointer-events:none;opacity:.12;
+ background:repeating-conic-gradient(from 0deg,#2b5fa8 0 10deg,#1a0f0a 10deg 12deg,#b8541c 12deg 22deg,#1a0f0a 22deg 24deg);
+ -webkit-mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%)}
+.cv-murcielagos{position:absolute;top:30px;right:40px;width:420px;height:260px;z-index:-1;pointer-events:none;opacity:.8;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cg fill='%23c9a84c' opacity='.35'%3E%3Cpath d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(250 30) scale(.7)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(330 150) scale(.5)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3C/g%3E%3C/svg%3E") no-repeat}
+h2::before{content:"✠";margin-right:10px;color:var(--acc)}
+@media (max-width:700px){.cv-rosa{width:420px;height:420px;top:-140px}.cv-murcielagos{right:0;transform:scale(.6);transform-origin:top right}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="cv-rosa" aria-hidden="true"></div><div class="cv-murcielagos" aria-hidden="true"></div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Castlevania · Inspirada en Sypha Belnades</p>
+  <h1>El Hablante</h1>
+  
+  <p class="lema">«La Orden guarda las historias del mundo. Y cuando hace falta, guarda también el fuego, el hielo y el rayo.»</p>
+  <div class="tags"><span>Tres Elementos</span><span>Combinaciones</span><span>Aliento</span><span>Sinergia de Cazador</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Elementos</button><button type="button" data-p="subs" aria-selected="false">Caminos de la Orden</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>Los Hablantes son una orden errante de eruditos que viajan contando historias y guardando la memoria de los pueblos. Unos pocos aprenden la magia elemental de la orden: tres fuerzas, <strong>fuego</strong>, <strong>hielo</strong> y <strong>rayo</strong>, que dominan por separado y combinan entre sí.</p><p>El Hablante no tiene lista de conjuros. Conoce sus tres elementos y las <strong>combinaciones</strong> que nacen de mezclarlos. El vapor sale de juntar fuego y hielo, y la prisión de escarcha cargada, de hielo y rayo. Cada combinación cuesta <strong>Aliento</strong>, y las más fuertes piden juntar los tres.</p><p>Los Hablantes nunca pelean del todo solos. Su magia está pensada para acompañar a un cazador: incendia su arma, congela a lo que él derriba y remata lo que él empieza.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Inteligencia</b></div><div><span>Salvaciones</span><b>Inteligencia · Sabiduría</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Sencillas</b></div><div><span>Habilidades</span><b>2 de: Arcanos, Historia, Interpretación, Medicina, Perspicacia, Persuasión, Religión</b></div><div><span>Subclase</span><b>Camino de la Orden (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Aliento máx.</th><th>Dado Elemental</th><th>Dados de Palabra Básica</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>1 + INT</td><td>d6</td><td>1</td><td class="col-f">Los Tres Elementos, Aliento, Palabras Básicas</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>2 + INT</td><td>d6</td><td>1</td><td class="col-f">Combinaciones, Memoria de la Orden</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>3 + INT</td><td>d6</td><td>1</td><td class="col-f">Camino de la Orden</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>4 + INT</td><td>d6</td><td>1</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>5 + INT</td><td>d8</td><td>2</td><td class="col-f">Arma Elemental</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>6 + INT</td><td>d8</td><td>2</td><td class="col-f">Rasgo de Camino</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>7 + INT</td><td>d8</td><td>2</td><td class="col-f">Remate Compartido</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>8 + INT</td><td>d8</td><td>2</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>9 + INT</td><td>d8</td><td>2</td><td class="col-f">Combinaciones Mayores</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>10 + INT</td><td>d8</td><td>2</td><td class="col-f">Rasgo de Camino</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>11 + INT</td><td>d10</td><td>3</td><td class="col-f">Tormenta de los Tres</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>12 + INT</td><td>d10</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>13 + INT</td><td>d10</td><td>3</td><td class="col-f">Elemento Afín</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>14 + INT</td><td>d10</td><td>3</td><td class="col-f">Rasgo de Camino</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>15 + INT</td><td>d10</td><td>3</td><td class="col-f">Respiración de la Orden</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>16 + INT</td><td>d10</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>17 + INT</td><td>d12</td><td>4</td><td class="col-f">Doble Combinación</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>18 + INT</td><td>d12</td><td>4</td><td class="col-f">Inmune al Propio Fuego</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>19 + INT</td><td>d12</td><td>4</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>20 + INT</td><td>d12</td><td>4</td><td class="col-f">La Voz de la Orden</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Aliento y elementos</h3><p>Tu recurso es el <strong>Aliento</strong>. Tu máximo es tu nivel + tu modificador de Inteligencia. Lo recuperas entero con un descanso largo, y la mitad con uno corto.</p><p>Las <strong>Palabras Básicas</strong> de un solo elemento no cuestan Aliento. Las <strong>Combinaciones</strong> sí, y su coste aparece en cada una. Algunas se desbloquean a ciertos niveles.</p><p>Tu <strong>Dado Elemental</strong> crece con el nivel. La CD de tus combinaciones es 8 + tu bonificador de competencia + tu modificador de Inteligencia, y tu ataque elemental es tu bonificador de competencia + tu modificador de Inteligencia.</p></div>
+    <article class="rasgo"><header><h3>Los Tres Elementos</h3><span class="nivel">Nivel 1</span></header><p>Dominas el fuego, el hielo y el rayo. Puedes producir efectos menores de cada uno a voluntad: encender o apagar una vela, enfriar una bebida o hacer saltar una chispa.</p></article><article class="rasgo"><header><h3>Palabras Básicas</h3><span class="nivel">Nivel 1</span></header><p>Conoces las tres Palabras Básicas (Llama, Escarcha y Chispa) de la pestaña Elementos. Sus dados crecen con la tabla, como los trucos.</p></article><article class="rasgo"><header><h3>Combinaciones</h3><span class="nivel">Nivel 2</span></header><p>Conoces todas las combinaciones de dos elementos de la pestaña Elementos cuyo nivel hayas alcanzado.</p></article><article class="rasgo"><header><h3>Memoria de la Orden</h3><span class="nivel">Nivel 2</span></header><p>Has escuchado mil historias. Tienes ventaja en las pruebas de Historia y de Arcanos sobre monstruos, linajes y lugares malditos. Una vez por descanso largo, puedes preguntar al DM por la debilidad más conocida de una criatura que hayas visto.</p></article><article class="rasgo"><header><h3>Arma Elemental</h3><span class="nivel">Nivel 5</span><span class="coste adicional">Acción adicional</span></header><p>Gastas 1 Aliento e imbuyes el arma de una criatura a 30 pies con fuego, hielo o rayo durante 1 minuto (concentración). Sus ataques con esa arma infligen tu Dado Elemental adicional del tipo elegido. Con hielo, además, el objetivo pierde 10 pies de velocidad hasta el final de su siguiente turno. Con rayo, no puede usar reacciones.</p></article><article class="rasgo"><header><h3>Remate Compartido</h3><span class="nivel">Nivel 7</span></header><p>Cuando una criatura que ha sufrido daño de un aliado este turno hace la salvación contra una de tus combinaciones, la hace con desventaja.</p></article><article class="rasgo"><header><h3>Combinaciones Mayores</h3><span class="nivel">Nivel 9</span></header><p>Aprendes las combinaciones de nivel 9 de la pestaña Elementos.</p></article><article class="rasgo"><header><h3>Tormenta de los Tres</h3><span class="nivel">Nivel 11</span></header><p>Aprendes la combinación de los tres elementos, Tormenta de los Tres.</p></article><article class="rasgo"><header><h3>Elemento Afín</h3><span class="nivel">Nivel 13</span></header><p>Elige un elemento. Tus combinaciones que lo incluyan ignoran la resistencia a su tipo de daño, y al tirar su daño tratas cualquier 1 como un 2.</p></article><article class="rasgo"><header><h3>Respiración de la Orden</h3><span class="nivel">Nivel 15</span></header><p>Cuando tiras iniciativa y te quedan menos de la mitad de tu Aliento, recuperas 2 Aliento.</p></article><article class="rasgo"><header><h3>Doble Combinación</h3><span class="nivel">Nivel 17</span></header><p>Una vez por turno, cuando usas una combinación que requiere una acción, puedes usar otra que cueste 2 Aliento o menos como acción adicional.</p></article><article class="rasgo"><header><h3>Inmune al Propio Fuego</h3><span class="nivel">Nivel 18</span></header><p>Tienes resistencia al daño de fuego, frío y rayo, y tus combinaciones nunca te dañan a ti ni a los aliados que elijas.</p></article><article class="rasgo"><header><h3>La Voz de la Orden</h3><span class="nivel">Nivel 20</span></header><p>Una vez por descanso largo, puedes usar Tormenta de los Tres sin gastar Aliento, y con el doble de radio. Durante 1 minuto después, tus combinaciones de dos elementos cuestan 1 Aliento menos (mínimo 1).</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Elementos</h2>
+    <p>Las Palabras Básicas no cuestan Aliento. En las combinaciones, «F» es fuego, «H» es hielo y «R» es rayo.</p>
+    <article class="tecnica"><header><h3>Llama (F)</h3><span class="precio">0</span><span class="coste accion">Acción</span></header><p>Ataque elemental a distancia contra una criatura a 60 pies. Inflige tus dados de Palabra Básica (ver tabla) del Dado Elemental de daño de fuego.</p></article><article class="tecnica"><header><h3>Escarcha (H)</h3><span class="precio">0</span><span class="coste accion">Acción</span></header><p>Una criatura a 60 pies hace una salvación de Constitución. Si la falla, sufre tus dados de Palabra Básica de daño de frío y pierde 10 pies de velocidad hasta el final de su siguiente turno.</p></article><article class="tecnica"><header><h3>Chispa (R)</h3><span class="precio">0</span><span class="coste accion">Acción</span></header><p>Ataque elemental cuerpo a cuerpo. Inflige tus dados de Palabra Básica de daño de rayo, y el objetivo no puede usar reacciones hasta el inicio de su siguiente turno.</p></article><article class="tecnica"><header><h3>Llamarada (F+F)</h3><span class="precio">2</span><span class="coste accion">Acción</span></header><p>Cono de 15 pies. Cada criatura hace una salvación de Destreza: sufre tres tiradas de tu Dado Elemental de daño de fuego si la falla, o la mitad si la supera.</p></article><article class="tecnica"><header><h3>Lanza de Hielo (H+H)</h3><span class="precio">2</span><span class="coste accion">Acción</span></header><p>Ataque elemental a distancia a 90 pies que inflige tres tiradas de tu Dado Elemental de daño de frío. Si impacta, el objetivo cae derribado.</p></article><article class="tecnica"><header><h3>Arco Voltaico (R+R)</h3><span class="precio">2</span><span class="coste accion">Acción</span></header><p>Un rayo salta entre hasta tres criaturas, cada una a 10 pies de la anterior, empezando a 60 pies de ti. Cada una hace una salvación de Destreza: sufre dos tiradas de tu Dado Elemental de daño de rayo si la falla, o la mitad si la supera.</p></article><article class="tecnica"><header><h3>Vapor Hirviente (F+H)</h3><span class="precio">2</span><span class="coste accion">Acción</span></header><p>Una nube de 15 pies de radio en un punto a 60 pies, durante 1 minuto (concentración). Dentro todo está muy oscurecido. Una criatura que empiece su turno dentro sufre dos tiradas de tu Dado Elemental de daño de fuego, o la mitad si supera una salvación de Constitución.</p></article><article class="tecnica"><header><h3>Escudo de Escarcha (H)</h3><span class="precio">1</span><span class="coste reaccion">Reacción</span></header><p>Cuando te atacan a ti o a un aliado a 30 pies, sumas una tirada de tu Dado Elemental a la CA del objetivo contra ese ataque. Si el ataque falla, el atacante pierde 10 pies de velocidad.</p></article><article class="tecnica"><header><h3>Estallido de Plasma (F+R)</h3><span class="precio">3</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 9</span></header><p>Esfera de 10 pies en un punto a 120 pies. Cada criatura hace una salvación de Destreza: sufre cuatro tiradas de tu Dado Elemental, mitad de fuego y mitad de rayo, si la falla, o la mitad si la supera.</p></article><article class="tecnica"><header><h3>Prisión de Escarcha (H+R)</h3><span class="precio">3</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 9</span></header><p>Una criatura a 60 pies hace una salvación de Fuerza. Si la falla, queda apresada durante 1 minuto. Repite la salvación al final de cada uno de sus turnos y, cada vez que la falla, sufre dos tiradas de tu Dado Elemental de daño de frío.</p></article><article class="tecnica"><header><h3>Muro de Llamas Heladas (F+H)</h3><span class="precio">4</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 9</span></header><p>Un muro de 30 pies de largo y 10 de alto durante 1 minuto (concentración). Un lado quema y el otro congela: la criatura que lo atraviesa sufre cuatro tiradas de tu Dado Elemental de fuego o de frío, según el lado, o la mitad si supera una salvación de Destreza.</p></article><article class="tecnica"><header><h3>Tormenta de los Tres (F+H+R)</h3><span class="precio">6</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 11</span></header><p>Un cilindro de 20 pies de radio y 40 de alto en un punto a 120 pies. Cada criatura hace una salvación de Constitución: sufre ocho tiradas de tu Dado Elemental, a partes iguales de fuego, frío y rayo, si la falla, o la mitad si la supera. El suelo se vuelve terreno difícil. Una vez por descanso corto.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Caminos de la Orden</h2>
+    <p>Al nivel 3 eliges qué has aprendido de la Orden: a contar, a pelear o a unir tu sangre con la de un cazador. Obtienes rasgos de Camino a los niveles 3, 6, 10 y 14.</p>
+    <div class="subs"><section class="sub" style="--sc:#e8c25a">
+      <header><span class="sub-eyebrow">Camino de la Orden</span><h3>La Narradora</h3><p class="sub-fuente">La tradición de las historias</p></header>
+      <p class="sub-intro">Para la Orden, una historia bien contada vale tanto como una bola de fuego. Tus palabras levantan ánimos y recuerdan a los demás quiénes son.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Cuento de Fogata</strong><p>Al terminar un descanso corto en el que has contado una historia, cada aliado que la oyó gana puntos de golpe temporales iguales a tu nivel + tu modificador de Inteligencia.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Así Termina la Historia</strong><span class="coste reaccion">Reacción</span><p>Cuando un aliado a 60 pies falla una tirada de ataque o una salvación, gastas 1 Aliento y sumas tu Dado Elemental al resultado.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Leyenda Viva</strong><p>Tus aliados a 30 pies tienen ventaja en las salvaciones contra quedar asustados o encantados mientras estés consciente.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>El Final que Merecen</strong><span class="coste accion">Acción</span><p>Una vez por descanso largo, gastas 3 Aliento: hasta tres aliados a 60 pies recuperan todos sus usos de un rasgo que se recupere con un descanso corto.</p></div></li></ul></section><section class="sub" style="--sc:#ff7a45">
+      <header><span class="sub-eyebrow">Camino de la Orden</span><h3>La Hechicera de Batalla</h3><p class="sub-fuente">La que se pone en primera línea</p></header>
+      <p class="sub-intro">Has visto demasiados monstruos para quedarte atrás. Lanzas tus elementos desde la primera fila y no te asusta que te devuelvan el golpe.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Primera Fila</strong><p>Ganas competencia con armadura media y escudos. Lanzar combinaciones a 5 pies de una criatura hostil no te impone desventaja.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Fuego Cruzado</strong><p>Una vez por turno, cuando una combinación tuya inflige daño, añades tu modificador de Inteligencia a una de sus tiradas de daño.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Ráfaga</strong><p>Cuando usas una Palabra Básica como acción, puedes usar otra como acción adicional.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Tormenta Personal</strong><p>Tormenta de los Tres puede centrarse en ti, sin afectarte, y se recupera tras un descanso corto o cuando tiras iniciativa sin tenerla disponible, una vez por descanso largo.</p></div></li></ul></section><section class="sub" style="--sc:#7aa8ff">
+      <header><span class="sub-eyebrow">Camino de la Orden</span><h3>Linaje Belnades</h3><p class="sub-fuente">La sangre que se unió a los Belmont</p></header>
+      <p class="sub-intro">Tu familia se casó con cazadores, o tú caminas al lado de uno. Tu magia se ha vuelto el complemento perfecto de un látigo.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Compañero de Caza</strong><p>Al terminar un descanso largo, eliges a un aliado como tu compañero de caza. Arma Elemental sobre él cuesta 0 Aliento y no requiere concentración.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Golpe Combinado</strong><p>Cuando tu compañero de caza impacta a una criatura, tu siguiente combinación contra ella antes del final de tu siguiente turno cuesta 1 Aliento menos (mínimo 1).</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Espalda con Espalda</strong><p>Mientras estés a 10 pies de tu compañero de caza, los dos tenéis +1 a la CA y a las salvaciones.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Unión de Linajes</strong><span class="coste accion">Acción</span><p>Una vez por descanso largo, tú y tu compañero de caza combináis fuerzas. Usas una combinación sin gastar Aliento y, como parte de la misma acción, tu compañero puede hacer un ataque con arma con su reacción.</p></div></li></ul></section></div>
+    
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Inteligencia</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p>
+      <div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Inteligencia</label><input type="number" id="mod" value="3" min="-5" max="10"></div>
+      <div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD</span><b id="dv1">–</b></div><div><span>Dado Elemental</span><b id="dv2">–</b></div><div><span>Palabra Básica</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Aliento</h3><p class="sub-t">Combinaciones: F+F, H+H y R+R cuestan 2; las de nivel 9 cuestan 3–4, y Tormenta de los Tres, 6.</p>
+          <div class="cuenta" id="cnt-aliento"></div><div class="pips" id="pips-aliento"></div><div class="btns"><button class="btn" type="button" data-act="r:aliento:corto">Descanso corto</button><button class="btn" type="button" data-act="r:aliento:largo">Descanso largo</button><button class="btn" type="button" data-act="r:aliento:-1">Gastar 1</button><button class="btn" type="button" data-act="r:aliento:-2">Gastar 2</button><button class="btn" type="button" data-act="r:aliento:-3">Gastar 3</button><button class="btn" type="button" data-act="r:aliento:-4">Gastar 4</button><button class="btn" type="button" data-act="r:aliento:-6">Gastar 6</button><button class="btn" type="button" data-act="r:aliento:2">+2 Respiración</button></div></div><div class="card"><h3>Tormenta de los Tres</h3><p class="sub-t">Desde nivel 11. Una vez por descanso corto.</p><div class="estado" id="tv-torm"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:torm:no">Lanzar</button><button class="btn" type="button" data-act="t:torm:si">Descanso corto</button></div></div><div class="card"><h3>Memoria de la Orden</h3><p class="sub-t">Preguntar una debilidad. Una vez por descanso largo.</p><div class="estado" id="tv-mem"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:mem:no">Preguntar</button><button class="btn" type="button" data-act="t:mem:si">Descanso largo</button></div></div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "T.dado[L-1]"}, {"v": "T.bas[L-1]+T.dado[L-1]"}], "recursos": [{"id": "aliento", "n": "Aliento", "max": "Math.max(1,L+M)"}], "contadores": [], "interruptores": [{"id": "torm", "si": "Disponible", "no": "Usada"}, {"id": "mem", "si": "Disponible", "no": "Usada"}], "tablas": {"dado": ["d6", "d6", "d6", "d6", "d8", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12"], "bas": [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

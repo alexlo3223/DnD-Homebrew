@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Pistolero — Clase Homebrew D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:     #0a0b0d;
+    --bg-card:     #10131a;
+    --bg-panel:    #13171f;
+    --border:      #1e2535;
+    --border-glow: #2a4a7f;
+    --gold:        #c8942a;
+    --gold-light:  #e8b84b;
+    --gold-dim:    #7a5a1a;
+    --cyan:        #3ab8d4;
+    --cyan-dim:    #1a5a6a;
+    --smoke:       #8a9ab5;
+    --text:        #d4cfc8;
+    --text-dim:    #6a7890;
+    --white:       #f0ece4;
+    --red:         #c04040;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── CANVAS DE PARTÍCULAS ── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,11,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 52px;
+    overflow-x: auto;
+  }
+  nav a {
+    color: var(--smoke);
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0 1rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  nav a:hover { color: var(--gold-light); border-bottom-color: var(--gold); }
+  nav .nav-brand {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-right: 1rem;
+    padding-right: 1rem;
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 5rem 1rem 3.5rem;
+    overflow: hidden;
+  }
+  .hero-emblem {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+    filter: drop-shadow(0 0 18px rgba(200,148,42,0.5));
+    animation: emblem-pulse 4s ease-in-out infinite;
+  }
+  @keyframes emblem-pulse {
+    0%,100% { filter: drop-shadow(0 0 18px rgba(200,148,42,0.5)); }
+    50%      { filter: drop-shadow(0 0 32px rgba(58,184,212,0.6)); }
+  }
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    text-shadow: 0 0 40px rgba(200,148,42,0.3);
+  }
+  .hero-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-top: 0.6rem;
+    margin-bottom: 1.8rem;
+  }
+  .hero-desc {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+    color: var(--smoke);
+    font-style: italic;
+  }
+  .hero-rule {
+    margin: 2.5rem auto 0;
+    width: 280px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--cyan), var(--gold), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  section { margin-top: 3.5rem; }
+
+  .section-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 0.4rem;
+  }
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 60px; height: 2px;
+    background: var(--gold);
+  }
+  h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin: 1.6rem 0 0.5rem;
+  }
+  p { margin-bottom: 0.9rem; }
+  p:last-child { margin-bottom: 0; }
+
+  em { color: var(--gold-light); font-style: italic; }
+  strong { color: var(--white); font-weight: 600; }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1.8rem;
+  }
+  .info-cell {
+    background: var(--bg-card);
+    padding: 0.9rem 1rem;
+  }
+  .info-cell .label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .info-cell .value {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+  .feature-card.cyan-accent { border-left-color: var(--cyan); }
+  .feature-card.red-accent  { border-left-color: var(--red); }
+
+  .feature-card .fc-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .feature-card .fc-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .feature-card .fc-level {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .feature-card .fc-cost {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    background: rgba(58,184,212,0.08);
+    border: 1px solid var(--cyan-dim);
+    border-radius: 2px;
+    padding: 0.1rem 0.5rem;
+    margin-left: auto;
+  }
+
+  /* ── CYLINDER TRACKER ── */
+  .cylinder-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+  .cylinder-pip {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: rgba(200,148,42,0.15);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 8px rgba(200,148,42,0.2);
+  }
+  .cylinder-pip.empty {
+    border-color: var(--border);
+    background: transparent;
+    box-shadow: none;
+  }
+  .cylinder-pip::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    transition: all 0.2s;
+  }
+  .cylinder-pip.empty::after { background: var(--border); width: 6px; height: 6px; }
+  .cylinder-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-left: 0.4rem;
+  }
+  #cyl-count {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--gold);
+    min-width: 50px;
+  }
+
+  /* ── TABLA ── */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+  }
+  thead tr {
+    background: #0d1018;
+    border-bottom: 2px solid var(--gold-dim);
+  }
+  thead th {
+    padding: 0.7rem 0.8rem;
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    font-weight: 700;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+  tbody tr:nth-child(even):hover { background: rgba(255,255,255,0.035); }
+  td {
+    padding: 0.55rem 0.8rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  td:first-child {
+    color: var(--gold-light);
+    font-weight: 700;
+    text-align: center;
+  }
+  td.features-col {
+    color: var(--smoke);
+    font-size: 0.8rem;
+    white-space: normal;
+    max-width: 260px;
+  }
+  td .new-feature { color: var(--cyan); }
+
+  /* ── SUBCLASS CARDS ── */
+  .subclass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+  }
+  .subclass-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 1.3rem;
+  }
+  .subclass-card.sc-cyan { border-top-color: var(--cyan); }
+  .subclass-card.sc-red  { border-top-color: var(--red); }
+
+  .sc-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+  }
+  .sc-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .sc-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+  }
+  .sc-desc {
+    font-size: 0.9rem;
+    color: var(--smoke);
+    line-height: 1.55;
+  }
+
+  /* ── QUOTE ── */
+  .flavor-quote {
+    margin: 2rem 0;
+    padding: 1.4rem 1.8rem;
+    background: var(--bg-panel);
+    border-left: 3px solid var(--cyan);
+    border-radius: 0 3px 3px 0;
+    font-style: italic;
+    color: var(--smoke);
+    font-size: 1rem;
+    position: relative;
+  }
+  .flavor-quote::before {
+    content: '"';
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    color: var(--cyan-dim);
+    position: absolute;
+    top: -0.4rem; left: 0.8rem;
+    line-height: 1;
+  }
+  .flavor-quote cite {
+    display: block;
+    margin-top: 0.6rem;
+    font-style: normal;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* ── TAG PILLS ── */
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.8rem 0;
+  }
+  .tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.7rem;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .tag-gold { background: rgba(200,148,42,0.12); color: var(--gold-light); border: 1px solid var(--gold-dim); }
+  .tag-cyan { background: rgba(58,184,212,0.1); color: var(--cyan); border: 1px solid var(--cyan-dim); }
+  .tag-smoke { background: rgba(138,154,181,0.08); color: var(--smoke); border: 1px solid #2a3040; }
+
+  /* ── DADO VISUAL ── */
+  .dice-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--gold-light);
+    font-weight: 700;
+  }
+  .dice-display .dice-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .subclass-grid { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">El Pistolero</span>
+  <a href="#resumen">Resumen</a>
+  <a href="#rasgos">Rasgos</a>
+  <a href="#cilindros">Cilindros</a>
+  <a href="#caracteristicas">Características</a>
+  <a href="#tabla">Progresión</a>
+  <a href="#subclases">Subclases</a>
+  <a href="#equipo">Equipo</a>
+</nav>
+
+<!-- HERO -->
+<div class="wrapper">
+<header class="hero">
+  <!-- SVG EMBLEM -->
+  <svg class="hero-emblem" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#3ab8d4" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#0a0b0d" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="58" fill="url(#glow)" />
+    <circle cx="60" cy="60" r="56" fill="none" stroke="#c8942a" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+    <!-- Cuerpo del revólver estilizado -->
+    <g transform="translate(60,60) rotate(-20)">
+      <!-- Cañón -->
+      <rect x="-4" y="-45" width="8" height="38" rx="2" fill="#c8942a" opacity="0.9"/>
+      <!-- Tambor hexagonal -->
+      <polygon points="0,-8 9,-4 9,4 0,8 -9,4 -9,-4" fill="none" stroke="#3ab8d4" stroke-width="1.5" opacity="0.9"/>
+      <circle cx="0" cy="0" r="3" fill="#3ab8d4" opacity="0.8"/>
+      <!-- Agujeros del tambor -->
+      <circle cx="0" cy="-5.5" r="1.2" fill="#0a0b0d"/>
+      <circle cx="4.8" cy="-2.8" r="1.2" fill="#0a0b0d"/>
+      <circle cx="4.8" cy="2.8" r="1.2" fill="#0a0b0d"/>
+      <circle cx="0" cy="5.5" r="1.2" fill="#0a0b0d"/>
+      <circle cx="-4.8" cy="2.8" r="1.2" fill="#0a0b0d"/>
+      <circle cx="-4.8" cy="-2.8" r="1.2" fill="#0a0b0d"/>
+      <!-- Mango -->
+      <path d="M-5,8 Q-7,20 -3,30 Q0,35 3,30 Q7,20 5,8 Z" fill="#c8942a" opacity="0.8"/>
+      <!-- Gatillo -->
+      <path d="M2,10 Q8,16 6,22 Q4,25 2,23 Q0,20 2,10Z" fill="#c8942a" opacity="0.6"/>
+    </g>
+    <!-- Destellos de bala -->
+    <g opacity="0.7">
+      <line x1="90" y1="18" x2="100" y2="10" stroke="#e8b84b" stroke-width="1.5"/>
+      <line x1="95" y1="25" x2="108" y2="20" stroke="#e8b84b" stroke-width="1"/>
+      <line x1="88" y1="12" x2="95" y2="5"   stroke="#3ab8d4" stroke-width="1.5"/>
+    </g>
+    <!-- Texto circular -->
+    <path id="textPath" d="M 60,60 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0" fill="none"/>
+    <text font-family="Cinzel, serif" font-size="7.5" fill="#c8942a" opacity="0.8" letter-spacing="3">
+      <textPath href="#textPath">EL PISTOLERO  ✦  D&D 5E HOMEBREW  ✦  </textPath>
+    </text>
+  </svg>
+
+  <p class="hero-sub">Clase Marcial · Homebrew D&D 5e</p>
+  <h1>El Pistolero</h1>
+  <p class="hero-desc">
+    Seis balas. Suficientes para cambiar el curso de una guerra,
+    si sabes cuándo apuntar — y cuándo confiar en la suerte.
+  </p>
+  <div class="hero-rule"></div>
+</header>
+
+<!-- RESUMEN -->
+<section id="resumen" class="reveal">
+  <p class="section-label">Introducción</p>
+  <h2>¿Quién es el Pistolero?</h2>
+
+  <div class="flavor-quote">
+    El momento en que el pistolero saca el arma, la batalla ya ha terminado.
+    Solo los muertos no lo saben todavía.
+    <cite>— Proverbio del Bajo Velo</cite>
+  </div>
+
+  <p>El Pistolero es un combatiente de instinto y pólvora que vive al filo de su propio impulso. No lleva escudo, no recita conjuros: lleva un revólver cargado con seis cilindros y una filosofía sencilla — <em>disparar primero, preguntar después, sobrevivir siempre</em>.</p>
+
+  <p>Su fuerza no viene solo del arma, sino de la actitud que hay detrás de ella. El Pistolero combina reflejos sobrehumanos, una suerte descarada que desafía la lógica, y una boca que puede terminar un conflicto antes de que se dispare un solo tiro. Cuando dispara, los demás se agachan. Cuando habla, los demás escuchan.</p>
+
+  <div class="info-grid">
+    <div class="info-cell"><span class="label">Dado de golpe</span><span class="value">d10</span></div>
+    <div class="info-cell"><span class="label">Stat principal</span><span class="value">DES / CAR</span></div>
+    <div class="info-cell"><span class="label">Tiradas de sal.</span><span class="value">DES · CON</span></div>
+    <div class="info-cell"><span class="label">Recurso</span><span class="value">Cilindros (6)</span></div>
+    <div class="info-cell"><span class="label">Armadura</span><span class="value">Ligera</span></div>
+    <div class="info-cell"><span class="label">Rol en grupo</span><span class="value">DPS · Control</span></div>
+  </div>
+
+  <div class="tag-row">
+    <span class="tag tag-gold">Marcial</span>
+    <span class="tag tag-cyan">Pólvora</span>
+    <span class="tag tag-smoke">Alta Movilidad</span>
+    <span class="tag tag-smoke">Carisma en Combate</span>
+    <span class="tag tag-gold">Daño Sostenido</span>
+  </div>
+</section>
+
+<!-- CILINDROS -->
+<section id="cilindros" class="reveal">
+  <p class="section-label">Recurso Principal</p>
+  <h2>Cilindros</h2>
+
+  <p>El Pistolero gestiona un tambor de <strong>6 Cilindros</strong> — las balas preparadas en su revólver. Muchas de sus habilidades consumen Cilindros; sin balas no hay trucos.</p>
+
+  <p>Haz clic en los pips para marcarlos como gastados:</p>
+
+  <div class="cylinder-display">
+    <div class="cylinder-pip" id="cp1" onclick="toggleCyl(1)" title="Cilindro 1"></div>
+    <div class="cylinder-pip" id="cp2" onclick="toggleCyl(2)" title="Cilindro 2"></div>
+    <div class="cylinder-pip" id="cp3" onclick="toggleCyl(3)" title="Cilindro 3"></div>
+    <div class="cylinder-pip" id="cp4" onclick="toggleCyl(4)" title="Cilindro 4"></div>
+    <div class="cylinder-pip" id="cp5" onclick="toggleCyl(5)" title="Cilindro 5"></div>
+    <div class="cylinder-pip" id="cp6" onclick="toggleCyl(6)" title="Cilindro 6"></div>
+    <span class="cylinder-label">Cilindros:</span>
+    <span id="cyl-count">6 / 6</span>
+  </div>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Recarga</span>
+      <span class="fc-level">Acción Adicional</span>
+    </div>
+    <p>Como acción adicional, recuperas hasta 2 Cilindros gastados. Recuperas todos los Cilindros al terminar un descanso corto o largo. <strong>Recarga Mejorada (nivel 5):</strong> una vez por descanso corto, puedes recuperar todos tus Cilindros como parte de la acción de Atacar, sin gastar tu acción adicional.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Recarga en Movimiento</span>
+      <span class="fc-level">Nivel 11</span>
+    </div>
+    <p>Cuando te mueves al menos 15 pies en tu turno, recuperas 1 Cilindro gastado de forma gratuita (máximo una vez por turno).</p>
+  </div>
+</section>
+
+<!-- RASGOS -->
+<section id="rasgos" class="reveal">
+  <p class="section-label">Rasgos de Clase</p>
+  <h2>Características de Clase</h2>
+
+  <h3>Peritos y Competencias</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Competencias de Inicio</span>
+      <span class="fc-level">Nivel 1</span>
+    </div>
+    <p><strong>Armaduras:</strong> Ligera.</p>
+    <p><strong>Armas:</strong> Armas simples, pistolas, rifles de pistón, escopetas de doble cañón.</p>
+    <p><strong>Herramientas:</strong> Herramientas de artesano (armas de fuego).</p>
+    <p><strong>Tiradas de salvación:</strong> Destreza, Constitución.</p>
+    <p><strong>Habilidades:</strong> Elige 3 entre Acrobacias, Atletismo, Engaño, Intimidación, Investigación, Percepción, Persuasión, Sigilo.</p>
+  </div>
+
+  <h3>Maestro de la Pólvora</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Maestro de la Pólvora</span>
+      <span class="fc-level">Nivel 1</span>
+    </div>
+    <p>Ignoras la propiedad <em>Carga</em> de las armas de fuego. Puedes fabricar munición en un descanso corto o largo (hasta 30 proyectiles por descanso largo, 10 por corto) siempre que tengas pólvora y materiales básicos.</p>
+    <p>Además, tus ataques con armas de fuego ignoran resistencia a daño por perforación no mágico.</p>
+  </div>
+
+  <h3>Disparo Rápido</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Disparo Rápido</span>
+      <span class="fc-level">Nivel 1</span>
+      <span class="fc-cost">1 Cilindro</span>
+    </div>
+    <p>Una vez por turno, cuando realizas la acción de <em>Atacar</em>, puedes gastar 1 Cilindro para realizar un ataque adicional con tu arma de fuego como <strong>parte de la misma acción</strong> (no como acción adicional). No añades tu modificador de característica al daño de este ataque adicional.</p>
+  </div>
+
+  <h3>Jugada de Suerte</h3>
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Jugada de Suerte</span>
+      <span class="fc-level">Nivel 2</span>
+    </div>
+    <p>Antes de tirar cualquier d20 (ataque, salvación, o prueba), puedes <strong>apostar por el resultado</strong>: declara un número entre 1 y 20. Si el resultado del dado (sin modificadores) cae en ese número exacto <em>o en ±2</em>, ocurre uno de los siguientes efectos a tu elección:</p>
+    <ul style="margin: 0.6rem 0 0.6rem 1.4rem; color: var(--smoke);">
+      <li style="margin-bottom:0.4rem"><strong style="color:var(--white)">Bala de la Suerte:</strong> el ataque hace daño máximo automáticamente.</li>
+      <li style="margin-bottom:0.4rem"><strong style="color:var(--white)">Esquiva Imposible:</strong> el siguiente ataque contra ti falla automáticamente antes de tu próximo turno.</li>
+      <li><strong style="color:var(--white)">Momento de Gloria:</strong> recuperas 1 Cilindro gastado.</li>
+    </ul>
+    <p>Tienes <strong>usos = tu modificador de Carisma</strong> (mínimo 1) de esta habilidad por descanso largo.</p>
+  </div>
+
+  <h3>Farol</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Farol</span>
+      <span class="fc-level">Nivel 2</span>
+    </div>
+    <p>Tu carisma entra al combate. Una vez por turno, antes de atacar a un objetivo que pueda verte y oírte, puedes hacer una prueba de <strong>Engaño o Intimidación (CAR)</strong> con CD igual a <em>8 + modificador de SAB del objetivo + bonificador de competencia del objetivo</em>. Si tienes éxito:</p>
+    <ul style="margin: 0.6rem 0 0.6rem 1.4rem; color: var(--smoke);">
+      <li style="margin-bottom:0.4rem">El objetivo tiene <em>desventaja</em> en su siguiente tirada de salvación o prueba de reacción hasta el comienzo de tu próximo turno.</li>
+      <li>O añades tu modificador de Carisma al daño del siguiente ataque que impacte al objetivo (lo que ocurra antes).</li>
+    </ul>
+  </div>
+
+  <h3>Tiro Imposible</h3>
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Tiro Imposible</span>
+      <span class="fc-level">Nivel 3</span>
+      <span class="fc-cost">Varía</span>
+    </div>
+    <p>Desbloqueas una serie de disparos especiales que puedes realizar en lugar de uno de tus ataques normales. Cada uno tiene su coste en Cilindros:</p>
+
+    <h3 style="color:var(--cyan); font-size:0.9rem; margin-top:1rem;">▸ Ricochet <span style="color:var(--text-dim); font-size:0.8rem">(1 Cilindro)</span></h3>
+    <p>El proyectil rebota en una superficie dura. Haz una tirada de ataque contra el objetivo primario; si impacta, haz una segunda tirada contra un objetivo secundario a 10 pies del primero. El objetivo secundario no se beneficia de cobertura media ni de tres cuartos y recibe la mitad del daño.</p>
+
+    <h3 style="color:var(--cyan); font-size:0.9rem; margin-top:1rem;">▸ Bala Ilusoria <span style="color:var(--text-dim); font-size:0.8rem">(1 Cilindro)</span></h3>
+    <p>Disparas en una dirección pero el sonido proviene de otra. La criatura impactada debe superar una salvación de Sabiduría (CD 8 + tu bonificador de competencia + tu modificador de DES) o quedará <em>asustada</em> hasta el final de su próximo turno.</p>
+
+    <h3 style="color:var(--cyan); font-size:0.9rem; margin-top:1rem;">▸ Disparo a Ciegas <span style="color:var(--text-dim); font-size:0.8rem">(1 Cilindro)</span></h3>
+    <p>Atacas a una criatura que no puedes ver (en cobertura total, invisible, etc.). Tiras normalmente sin desventaja por ceguera. Si impactas, el daño es normal. Disponible a partir de nivel 5.</p>
+
+    <h3 style="color:var(--gold); font-size:0.9rem; margin-top:1rem;">▸ Tiro Penetrante <span style="color:var(--text-dim); font-size:0.8rem">(2 Cilindros)</span></h3>
+    <p>El disparo atraviesa a todas las criaturas en una línea de 60 pies × 5 pies. Cada criatura en la línea recibe el daño completo del ataque (tirada de ataque separada para cada una).</p>
+
+    <h3 style="color:var(--gold); font-size:0.9rem; margin-top:1rem;">▸ Disparo al Corazón <span style="color:var(--text-dim); font-size:0.8rem">(3 Cilindros)</span></h3>
+    <p>Un disparo calculado para incapacitar. Si el ataque impacta, el objetivo debe superar una salvación de Constitución (CD 8 + bonificador de competencia + modificador de DES) o queda <em>aturdido</em> hasta el final de su próximo turno. Disponible a partir de nivel 9.</p>
+
+    <h3 style="color:var(--red); font-size:0.9rem; margin-top:1rem;">▸ El Último Cilindro <span style="color:var(--text-dim); font-size:0.8rem">(6 Cilindros — todos)</span></h3>
+    <p>Gastas todos tus Cilindros en un único disparo catastrófico. El ataque hace daño de <strong>6d10 extra</strong> (tipo perforación) además del daño normal. Si el impacto deja al objetivo con la mitad o menos de sus puntos de golpe máximos, debe superar una salvación de Constitución (CD 8 + bonificador de competencia + modificador de DES) o queda aturdido hasta el final de su siguiente turno. Tras usar esta habilidad, no puedes usar Tiro Imposible hasta que completes un descanso corto. Disponible a partir de nivel 15.</p>
+  </div>
+
+  <h3>Ataque Extra</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Ataque Extra</span>
+      <span class="fc-level">Nivel 5</span>
+    </div>
+    <p>Cuando realizas la acción de Atacar, puedes atacar dos veces en lugar de una. A nivel 11, atacas tres veces.</p>
+  </div>
+
+  <h3>Pies de Mercurio</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Pies de Mercurio</span>
+      <span class="fc-level">Nivel 7</span>
+    </div>
+    <p>Tu velocidad aumenta en 10 pies. Moverse no provoca ataques de oportunidad. Además, cuando un enemigo falla un ataque contra ti, puedes usar tu reacción para desplazarte hasta 10 pies sin provocar ataques de oportunidad.</p>
+  </div>
+
+  <h3>Instinto del Tirador</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Instinto del Tirador</span>
+      <span class="fc-level">Nivel 9</span>
+    </div>
+    <p>Tu iniciativa aumenta en +5. No puedes ser <em>sorprendido</em> mientras estés consciente. Además, en el primer turno de combate, tienes ventaja en todos los ataques con armas de fuego.</p>
+  </div>
+
+  <h3>Leyenda Viva</h3>
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Leyenda Viva</span>
+      <span class="fc-level">Nivel 13</span>
+    </div>
+    <p>La reputación del Pistolero precede a su bala. Cuando una criatura de CR 5 o menor te ve sacar tu arma de fuego en combate, debe superar una salvación de Sabiduría (CD 8 + bonificador de competencia + modificador de CAR) o queda <em>asustada</em> de ti durante 1 minuto.</p>
+    <p>Además, tienes ventaja en todas las pruebas de Persuasión e Intimidación con criaturas que hayan presenciado alguno de tus combates.</p>
+  </div>
+
+  <h3>Reacción de Pistolero</h3>
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Reacción de Pistolero</span>
+      <span class="fc-level">Nivel 17</span>
+      <span class="fc-cost">1 Cilindro</span>
+    </div>
+    <p>Cuando una criatura en tu rango de arma de fuego realiza un ataque contra un aliado, puedes usar tu <strong>reacción</strong> y gastar 1 Cilindro para realizar un ataque contra esa criatura. Si impactas, el ataque original de la criatura sufre desventaja.</p>
+  </div>
+
+  <h3>Mano de la Muerte</h3>
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Mano de la Muerte</span>
+      <span class="fc-level">Nivel 20</span>
+    </div>
+    <p>Llegas al cénit de tu arte. Una vez por turno, cuando reduces a una criatura a 0 puntos de golpe con un arma de fuego, recuperas inmediatamente <strong>3 Cilindros</strong> y puedes realizar un ataque de arma de fuego contra un segundo objetivo como parte de la misma acción, sin coste adicional de acción.</p>
+    <p>Además, tus ataques con arma de fuego cuentan como mágicos para superar resistencias e inmunidades.</p>
+  </div>
+</section>
+
+<!-- CARACTERÍSTICAS -->
+<section id="caracteristicas" class="reveal">
+  <p class="section-label">Mecánicas</p>
+  <h2>Características de Clase</h2>
+
+  <div class="feature-card">
+    <div class="fc-header"><span class="fc-name">Puntos de Golpe</span></div>
+    <p><strong>Dado de golpe:</strong> <span class="dice-display">d10 <span class="dice-label">por nivel</span></span></p>
+    <p><strong>PG a nivel 1:</strong> 10 + modificador de CON.</p>
+    <p><strong>PG en niveles superiores:</strong> 1d10 (o 6) + modificador de CON por nivel.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header"><span class="fc-name">Mejoras de Característica</span></div>
+    <p>Ganas mejoras de característica en los niveles <strong>4, 8, 12, 16 y 19</strong>.</p>
+    <p><em>Dotes sugeridas:</em> Tirador Experto, Alerta, Veloz, Artillero.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header"><span class="fc-name">Pericia</span><span class="fc-level">Nivel 6</span></div>
+    <p>Elige dos de tus competencias de habilidad. Tu bonificador de competencia se duplica en esas habilidades.</p>
+  </div>
+</section>
+
+<!-- TABLA -->
+<section id="tabla" class="reveal">
+  <p class="section-label">Progresión</p>
+  <h2>Tabla de Progresión</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nv.</th>
+          <th>BOP</th>
+          <th>Cilindros</th>
+          <th>Características</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td>6</td><td class="features-col">Maestro de la Pólvora, Disparo Rápido</td></tr>
+        <tr><td>2</td><td>+2</td><td>6</td><td class="features-col"><span class="new-feature">Jugada de Suerte, Farol</span></td></tr>
+        <tr><td>3</td><td>+2</td><td>6</td><td class="features-col"><span class="new-feature">Tiro Imposible, Senda del Pistolero</span></td></tr>
+        <tr><td>4</td><td>+2</td><td>6</td><td class="features-col">Mejora de Característica</td></tr>
+        <tr><td>5</td><td>+3</td><td>6</td><td class="features-col"><span class="new-feature">Ataque Extra (×2), Recarga Mejorada, Disparo a Ciegas</span></td></tr>
+        <tr><td>6</td><td>+3</td><td>6</td><td class="features-col"><span class="new-feature">Pericia, Rasgo de Senda</span></td></tr>
+        <tr><td>7</td><td>+3</td><td>6</td><td class="features-col"><span class="new-feature">Pies de Mercurio</span></td></tr>
+        <tr><td>8</td><td>+3</td><td>6</td><td class="features-col">Mejora de Característica</td></tr>
+        <tr><td>9</td><td>+4</td><td>6</td><td class="features-col"><span class="new-feature">Instinto del Tirador, Disparo al Corazón</span></td></tr>
+        <tr><td>10</td><td>+4</td><td>6</td><td class="features-col"><span class="new-feature">Rasgo de Senda</span></td></tr>
+        <tr><td>11</td><td>+4</td><td>6</td><td class="features-col"><span class="new-feature">Ataque Extra (×3), Recarga en Movimiento</span></td></tr>
+        <tr><td>12</td><td>+4</td><td>6</td><td class="features-col">Mejora de Característica</td></tr>
+        <tr><td>13</td><td>+5</td><td>6</td><td class="features-col"><span class="new-feature">Leyenda Viva</span></td></tr>
+        <tr><td>14</td><td>+5</td><td>6</td><td class="features-col"><span class="new-feature">Rasgo de Senda</span></td></tr>
+        <tr><td>15</td><td>+5</td><td>6</td><td class="features-col"><span class="new-feature">El Último Cilindro</span></td></tr>
+        <tr><td>16</td><td>+5</td><td>6</td><td class="features-col">Mejora de Característica</td></tr>
+        <tr><td>17</td><td>+6</td><td>6</td><td class="features-col"><span class="new-feature">Reacción de Pistolero</span></td></tr>
+        <tr><td>18</td><td>+6</td><td>6</td><td class="features-col"><span class="new-feature">Rasgo de Senda</span></td></tr>
+        <tr><td>19</td><td>+6</td><td>6</td><td class="features-col">Mejora de Característica</td></tr>
+        <tr><td>20</td><td>+6</td><td>6</td><td class="features-col"><span class="new-feature">Mano de la Muerte</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SUBCLASES -->
+<section id="subclases" class="reveal">
+  <p class="section-label">Sendas (Subclases — Nivel 3)</p>
+  <h2>Senda del Pistolero</h2>
+
+  <p>En el nivel 3, el Pistolero elige la filosofía que define su estilo de combate. Esta elección le otorga rasgos adicionales en los niveles 3, 6, 10, 14 y 18.</p>
+
+  <div class="subclass-grid">
+
+    <div class="subclass-card">
+      <div class="sc-icon">⚡</div>
+      <div class="sc-name">Senda de Vanguardia</div>
+      <div class="sc-tag">El Pistolero que nunca retrocede</div>
+      <div class="sc-desc">
+        <p>No crees en las distancias. El Vanguardia entra en la refriega con la pistola en la mano y el codo en la cara del enemigo. Combina disparos a quemarropa con golpes de culata y empujones. A corta distancia eres devastador.</p>
+        <p style="margin-top:0.6rem"><strong style="color:var(--white)">Rasgos clave:</strong> Disparo a Quemarropa (daño bonus en melé), Golpe de Culata (bonus action melee), Defensa Agresiva (CA mejorada al atacar en melé), Ciclón de Plomo (área a quemarropa).</p>
+      </div>
+    </div>
+
+    <div class="subclass-card sc-cyan">
+      <div class="sc-icon">💨</div>
+      <div class="sc-name">Senda del Errante</div>
+      <div class="sc-tag">El Pistolero que nunca está donde lo buscan</div>
+      <div class="sc-desc">
+        <p>El movimiento es tu armadura. El Errante dispara mientras rueda, se lanza por ventanas, y desaparece en las sombras entre un disparo y el siguiente. Nunca en el mismo lugar dos veces.</p>
+        <p style="margin-top:0.6rem"><strong style="color:var(--white)">Rasgos clave:</strong> Esquiva Instintiva (bonus de CA al moverte), Dash Libre (moverse no gasta acción), Desaparecer (acción para volverse invisible), Fantasma de Bala (disparar desde sigilo sin revelar posición).</p>
+      </div>
+    </div>
+
+    <div class="subclass-card sc-red">
+      <div class="sc-icon">🃏</div>
+      <div class="sc-name">Senda de la Suerte</div>
+      <div class="sc-tag">El Pistolero favorito del destino</div>
+      <div class="sc-desc">
+        <p>La suerte no es ciega — solo tiene favoritos. El Pistolero de la Suerte ha negociado un acuerdo extraño con el azar: el universo dobla las reglas para él, y él lo sabe. <em>Jugada de Suerte</em> escala hasta convertirse en el núcleo de su combate.</p>
+        <p style="margin-top:0.6rem"><strong style="color:var(--white)">Rasgos clave:</strong> Jugada Extendida (±3 en lugar de ±2), Doble o Nada (amplificar o cancelar un resultado), Golpe Improbable (crits en 18-19-20), Mano del Destino (relanzar una tirada de enemigo una vez por turno).</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detalle Senda Errante como ejemplo -->
+  <h3 style="margin-top:2.5rem">Senda del Errante (detalle completo)</h3>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Esquiva Instintiva</span>
+      <span class="fc-level">Nivel 3 — Errante</span>
+    </div>
+    <p>Mientras te hayas movido al menos 10 pies en este turno, tu CA aumenta en <strong>+2</strong> contra ataques de rango hasta el inicio de tu próximo turno.</p>
+  </div>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Velocidad de Sombra</span>
+      <span class="fc-level">Nivel 6 — Errante</span>
+    </div>
+    <p>Puedes tomar la acción de Correr (Dash) como Acción Adicional. Además, moviéndote más de 30 pies en línea recta, los ataques de oportunidad contra ti tienen desventaja hasta el final del movimiento.</p>
+  </div>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Fantasma de Bala</span>
+      <span class="fc-level">Nivel 10 — Errante</span>
+    </div>
+    <p>Puedes disparar desde el estado <em>oculto</em> sin revelar tu posición tras el disparo, siempre que te muevas al menos 15 pies después de atacar. La criatura que recibió el disparo puede intentar localizarte con una prueba de Percepción (CD igual a tu prueba de Sigilo).</p>
+  </div>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">En Todas Partes a la Vez</span>
+      <span class="fc-level">Nivel 14 — Errante</span>
+    </div>
+    <p>Cuando tomas la acción de Atacar, puedes dividir tu velocidad antes, entre, y después de cada ataque en lugar de moverla toda al inicio o al final del turno. Cada segmento cuenta como movimiento separado para activar Esquiva Instintiva.</p>
+  </div>
+
+  <div class="feature-card cyan-accent">
+    <div class="fc-header">
+      <span class="fc-name">Forma de Bala</span>
+      <span class="fc-level">Nivel 18 — Errante</span>
+    </div>
+    <p>Una vez por descanso corto, como acción adicional, puedes volverte <em>invisible</em> hasta el inicio de tu próximo turno. Si atacas mientras eres invisible, la invisibilidad no termina hasta el final del ataque.</p>
+  </div>
+
+  <h3 style="margin-top:2.5rem">Senda de Vanguardia (detalle completo)</h3>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Disparo a Quemarropa</span>
+      <span class="fc-level">Nivel 3 — Vanguardia</span>
+    </div>
+    <p>Tus ataques con armas de fuego no sufren desventaja por tener a un enemigo a 5 pies. Una vez por turno, cuando impactas con un arma de fuego a una criatura a 5 pies de ti, infliges 1d8 de daño adicional.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Golpe de Culata</span>
+      <span class="fc-level">Nivel 6 — Vanguardia</span>
+    </div>
+    <p>Cuando realizas la acción de Atacar con un arma de fuego, puedes usar tu acción adicional para golpear con la culata a una criatura a 5 pies: 1d6 + tu modificador de Fuerza o Destreza de daño contundente. Si impacta, puedes empujarla 5 pies o hacer que su siguiente ataque antes de tu próximo turno tenga desventaja.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Defensa Agresiva</span>
+      <span class="fc-level">Nivel 10 — Vanguardia</span>
+    </div>
+    <p>Mientras haya al menos una criatura hostil a 5 pies de ti, ganas +1 a la CA. Si impactas a esa criatura en tu turno, el bono pasa a +2 hasta el inicio de tu siguiente turno.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Ciclón de Plomo</span>
+      <span class="fc-level">Nivel 14 — Vanguardia</span>
+    </div>
+    <p>Como acción, gastas 2 Cilindros y disparas en círculo: cada criatura de tu elección a 10 pies hace una salvación de Destreza (CD 8 + bonificador de competencia + mod. DES) o recibe el daño de tu arma + 2d8. Con éxito, la mitad.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header">
+      <span class="fc-name">Inquebrantable</span>
+      <span class="fc-level">Nivel 18 — Vanguardia</span>
+    </div>
+    <p>Cuando una criatura a 5 pies te impacta, puedes usar tu reacción para hacerle un ataque con tu arma de fuego. Una vez por ronda, si ese ataque impacta, reduces a la mitad el daño que te hizo.</p>
+  </div>
+
+  <h3 style="margin-top:2.5rem">Senda de la Suerte (detalle completo)</h3>
+
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Jugada Extendida</span>
+      <span class="fc-level">Nivel 3 — Suerte</span>
+    </div>
+    <p>Tu Jugada de Suerte se activa si el dado cae en el número declarado o a ±3 de él (en lugar de ±2), y tienes un uso adicional por descanso largo.</p>
+  </div>
+
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Doble o Nada</span>
+      <span class="fc-level">Nivel 6 — Suerte</span>
+    </div>
+    <p>Cuando falla tu Jugada de Suerte, puedes apostar de nuevo en la siguiente tirada de d20 que hagas antes del final de tu próximo turno sin gastar otro uso. Si esa segunda apuesta también falla, tienes desventaja en esa tirada.</p>
+  </div>
+
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Golpe Improbable</span>
+      <span class="fc-level">Nivel 10 — Suerte</span>
+    </div>
+    <p>Tus ataques con armas de fuego consiguen un golpe crítico con un 19 o 20 en el dado.</p>
+  </div>
+
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">Mano del Destino</span>
+      <span class="fc-level">Nivel 14 — Suerte</span>
+    </div>
+    <p>Una vez por ronda, cuando una criatura que puedas ver a 60 pies hace una tirada de ataque, salvación o prueba, puedes usar tu reacción para obligarla a repetirla y quedarse con el resultado que tú elijas. Usos igual a tu modificador de Carisma (mínimo 1) por descanso largo.</p>
+  </div>
+
+  <div class="feature-card red-accent">
+    <div class="fc-header">
+      <span class="fc-name">La Casa Siempre Pierde</span>
+      <span class="fc-level">Nivel 18 — Suerte</span>
+    </div>
+    <p>Golpe Improbable te da crítico con 18–20. Además, cuando obtienes un 1 natural en una tirada de ataque, salvación o prueba, puedes repetirla una vez y quedarte con el nuevo resultado.</p>
+  </div>
+
+</section>
+
+<!-- EQUIPO -->
+<section id="equipo" class="reveal">
+  <p class="section-label">Punto de Partida</p>
+  <h2>Equipo Inicial</h2>
+
+  <div class="feature-card">
+    <div class="fc-header"><span class="fc-name">Equipo de Clase</span></div>
+    <p>Empiezas con el siguiente equipo, además del equipo proporcionado por tu trasfondo:</p>
+    <ul style="margin: 0.6rem 0 0.6rem 1.4rem; color: var(--smoke);">
+      <li style="margin-bottom:0.35rem"><strong style="color:var(--white)">Un revólver</strong> (1d8 perforación, alcance 60/240 pies, recarga, munición)</li>
+      <li style="margin-bottom:0.35rem"><strong style="color:var(--white)">30 proyectiles</strong> de revólver</li>
+      <li style="margin-bottom:0.35rem"><strong style="color:var(--white)">Armadura de cuero</strong></li>
+      <li style="margin-bottom:0.35rem">Un <strong style="color:var(--white)">arma simple</strong> a tu elección</li>
+      <li style="margin-bottom:0.35rem">Un <strong style="color:var(--white)">paquete de explorador</strong> o un <strong style="color:var(--white)">paquete de viajero</strong></li>
+      <li>Una <strong style="color:var(--white)">bolsa de herramientas de armas de fuego</strong></li>
+    </ul>
+  </div>
+
+  <div class="feature-card">
+    <div class="fc-header"><span class="fc-name">Estadísticas de Armas de Fuego</span></div>
+    <div class="table-wrap" style="margin-top:0.8rem">
+      <table>
+        <thead>
+          <tr>
+            <th>Arma</th>
+            <th>Daño</th>
+            <th>Alcance</th>
+            <th>Propiedades</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gold-light)">Revólver</td>
+            <td>1d8 perf.</td>
+            <td>60 / 240 p.</td>
+            <td style="color:var(--smoke); white-space:normal; font-size:0.82rem">Munición, Recarga (6)</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold-light)">Pistola</td>
+            <td>1d6 perf.</td>
+            <td>40 / 120 p.</td>
+            <td style="color:var(--smoke); white-space:normal; font-size:0.82rem">Munición, Recarga (1), Ligera</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold-light)">Rifle</td>
+            <td>1d10 perf.</td>
+            <td>120 / 480 p.</td>
+            <td style="color:var(--smoke); white-space:normal; font-size:0.82rem">Munición, Recarga (1), Pesada, Dos manos</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold-light)">Escopeta</td>
+            <td>2d6 perf.</td>
+            <td>15 / 30 p.</td>
+            <td style="color:var(--smoke); white-space:normal; font-size:0.82rem">Munición, Recarga (2), Pesada, Dos manos, Cono 15p.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:0.8rem; font-size:0.9rem; color:var(--text-dim)">Nota: <em>Recarga (X)</em> — el arma puede disparar X veces antes de recargarla (acción adicional). Con <strong>Maestro de la Pólvora</strong> ignoras la propiedad <em>Carga</em>, así que puedes disparar varias veces por turno. Los <strong>Cilindros</strong> son tu recurso de clase para los trucos, no tu munición física.</p>
+  </div>
+</section>
+
+<!-- FLAVOR FINAL -->
+<section class="reveal" style="margin-top:3.5rem">
+  <div class="flavor-quote">
+    Tengo seis balas y ningún miedo. Si no es suficiente,
+    tendré que confiar en que el universo todavía me debe una.
+    <cite>— El Pistolero, antes de entrar a la sala</cite>
+  </div>
+</section>
+
+</div><!-- /wrapper -->
+
+<!-- SCRIPTS -->
+<script>
+// ── PARTÍCULAS (polvo / chispas de pólvora) ──
+const canvas = document.getElementById('particles-canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x     = Math.random() * W;
+    this.y     = Math.random() * H;
+    this.size  = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = -Math.random() * 0.4 - 0.1;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    this.color = Math.random() > 0.6
+      ? `rgba(200,148,42,${this.alpha})`
+      : `rgba(58,184,212,${this.alpha * 0.6})`;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= 0.001;
+    if (this.alpha <= 0 || this.y < -10) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── CYLINDER TRACKER ──
+let cylStates = [true, true, true, true, true, true];
+
+function toggleCyl(n) {
+  cylStates[n-1] = !cylStates[n-1];
+  const pip = document.getElementById('cp' + n);
+  pip.classList.toggle('empty', !cylStates[n-1]);
+  const loaded = cylStates.filter(Boolean).length;
+  document.getElementById('cyl-count').textContent = `${loaded} / 6`;
+}
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.08 });
+reveals.forEach(r => io.observe(r));
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

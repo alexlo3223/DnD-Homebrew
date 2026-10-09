@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Marcado — Clase Homebrew para D&D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Marcellus+SC&family=Marcellus&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0b0810;
+  --void-deep:#050307;
+  --case:#1c1622;
+  --case-light:#2a2130;
+  --bone:#cdc6ba;
+  --bone-dim:#a39c90;
+  --brass:#a9803f;
+  --brass-light:#d2a85c;
+  --purple:#7958ad;
+  --purple-bright:#a98be0;
+  --purple-glow:rgba(155,120,224,0.5);
+  --blood:#7a2230;
+  --shadow:rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 50% -10%, #221a2c 0%, var(--void-deep) 60%);
+  color:var(--bone);
+  font-family:'Crimson Pro', serif;
+  font-size:18px;
+  line-height:1.65;
+}
+
+.book{
+  max-width:940px;
+  margin:0 auto;
+  background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 6px),
+    linear-gradient(180deg, var(--case) 0%, #161019 100%);
+  box-shadow:0 0 0 1px rgba(169,128,63,0.25), 0 50px 110px var(--shadow);
+  position:relative;
+}
+
+/* brass corner rivets frame */
+.rivet-frame{position:relative; border:1px solid rgba(169,128,63,0.35);}
+.rivet-frame::before,.rivet-frame::after,
+.rivet-frame .rv-tl,.rivet-frame .rv-tr,.rivet-frame .rv-bl,.rivet-frame .rv-br{content:""; position:absolute; width:9px; height:9px; border-radius:50%; background:radial-gradient(circle at 35% 35%, var(--brass-light), #5c4319 70%); box-shadow:0 0 4px rgba(0,0,0,0.6);}
+.rivet-frame::before{top:8px;left:8px;} .rivet-frame::after{top:8px;right:8px;}
+.rivet-frame .rv-bl{bottom:8px;left:8px;} .rivet-frame .rv-br{bottom:8px;right:8px;}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  text-align:center;
+  padding:64px 36px 50px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(121,88,173,0.30), transparent 55%),
+    linear-gradient(180deg, #0d0a14 0%, #161019 100%);
+  border-bottom:1px solid rgba(169,128,63,0.4);
+}
+.stamp{
+  position:absolute; top:26px; right:30px;
+  font-family:'Marcellus SC', serif;
+  font-size:11px; letter-spacing:0.22em;
+  color:rgba(122,34,48,0.75);
+  border:2px solid rgba(122,34,48,0.75);
+  padding:5px 10px;
+  transform:rotate(8deg);
+  border-radius:3px;
+}
+.mask{ width:118px; height:118px; margin:0 auto 20px; }
+.mask .glow{ animation:pulse 3.4s ease-in-out infinite; transform-origin:center; }
+@keyframes pulse{ 0%,100%{opacity:0.55;} 50%{opacity:1;} }
+.eyebrow{
+  font-family:'Marcellus SC', serif; font-size:11px; letter-spacing:0.4em;
+  text-transform:uppercase; color:var(--brass-light); margin:0 0 10px;
+}
+.hero h1{
+  font-family:'UnifrakturMaguntia', serif;
+  font-size:clamp(46px,9vw,78px);
+  margin:0 0 4px; color:var(--bone);
+  text-shadow:0 0 24px var(--purple-glow), 0 2px 0 #000;
+  letter-spacing:0.02em;
+}
+.hero .subtitle{
+  font-family:'Marcellus', serif; font-size:14.5px; letter-spacing:0.28em;
+  text-transform:uppercase; color:var(--bone-dim); margin:0 0 26px;
+}
+.hero blockquote{
+  max-width:540px; margin:0 auto; font-style:italic; color:#9d92a8; font-size:17.5px;
+}
+.rune-strip{display:flex; justify-content:center; gap:30px; margin-top:28px;}
+.rune-strip svg{width:24px; height:24px; opacity:0.7;}
+.rune-strip svg *{stroke:var(--purple-bright);}
+
+/* ===== page ===== */
+.page{padding:54px 56px 14px; position:relative;}
+@media (max-width:640px){ .page{padding:34px 20px 8px;} .hero{padding:48px 20px 38px;} }
+
+.section-mark{display:flex; align-items:center; gap:16px; margin:62px 0 22px;}
+.section-mark:first-of-type{margin-top:0;}
+.section-mark .icon{width:42px;height:42px;flex:none;}
+.section-mark .icon *{stroke:var(--purple-bright);}
+.section-mark h2{font-family:'Marcellus SC', serif; font-size:24px; letter-spacing:0.05em; color:var(--brass-light); margin:0;}
+.section-mark .rule{flex:1; height:1px; background:linear-gradient(90deg, rgba(169,128,63,0.5), transparent);}
+
+.lede{font-size:19px; color:#d8d2c8;}
+.lede::first-letter{
+  font-family:'UnifrakturMaguntia', serif; font-size:60px; float:left; line-height:0.7;
+  padding:8px 10px 0 0; color:var(--purple-bright);
+}
+p{margin:0 0 14px; color:#c7c0b5;}
+.small{font-size:14.5px; color:#9a93a3;}
+b{color:var(--brass-light); font-weight:600;}
+i{color:#ad9fd0;}
+
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin:26px 0 8px;}
+.statcard{background:rgba(255,255,255,0.03); border:1px solid rgba(169,128,63,0.3); border-left:3px solid var(--purple); padding:15px 17px; border-radius:2px;}
+.statcard .label{font-family:'Marcellus SC',serif; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--purple-bright); margin-bottom:6px;}
+.statcard .value{font-size:15.5px; color:#d8d2c8;}
+
+.table-wrap{overflow-x:auto; margin:18px 0 8px; border:1px solid rgba(169,128,63,0.35); border-radius:3px;}
+table{width:100%; border-collapse:collapse; font-family:'IBM Plex Mono', monospace; font-size:13px; background:rgba(255,255,255,0.02);}
+thead th{background:var(--void-deep); color:var(--brass-light); font-family:'Marcellus SC',serif; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; font-size:10.5px; padding:11px 10px; text-align:left; white-space:nowrap; border-bottom:1px solid var(--purple);}
+tbody td{padding:9px 10px; border-top:1px solid rgba(169,128,63,0.18); color:#c7c0b5; white-space:nowrap;}
+tbody tr:nth-child(odd){background:rgba(255,255,255,0.015);}
+tbody td:first-child{font-weight:600; color:var(--purple-bright);}
+td.feat{white-space:normal; min-width:230px;}
+
+.feature{margin:0 0 26px; padding-left:18px; border-left:2px solid rgba(169,128,63,0.4);}
+.feature h3{font-family:'Marcellus SC',serif; font-size:17.5px; color:var(--brass-light); margin:0 0 6px; letter-spacing:0.02em;}
+.feature h3 .lvl{font-family:'IBM Plex Mono',monospace; font-size:10.5px; background:var(--purple); color:#0d0a14; padding:2px 7px; border-radius:2px; margin-right:10px; vertical-align:middle; letter-spacing:0;}
+
+.powers-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; margin:20px 0 10px;}
+.power-card{background:linear-gradient(180deg, rgba(121,88,173,0.07), rgba(255,255,255,0.015)); border:1px solid rgba(169,128,63,0.3); border-radius:4px; padding:18px; position:relative;}
+.power-card .p-icon{width:36px;height:36px;margin-bottom:10px;}
+.power-card .p-icon *{stroke:var(--purple-bright);}
+.power-card h4{font-family:'Marcellus SC',serif; font-size:15px; margin:0 0 4px; color:var(--bone); display:flex; align-items:baseline; gap:8px;}
+.power-card h4 small{font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--brass-light); font-weight:600;}
+.power-card p{font-size:15px; margin:0; color:#bdb6c9;}
+.power-card h4 .pv-cost{margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#9a93a3; font-weight:400;}
+.power-card .tier{margin-top:10px; padding-top:9px; border-top:1px dashed rgba(169,128,63,0.28);}
+.power-card .tier:first-of-type{margin-top:10px; padding-top:9px; border-top:1px dashed rgba(169,128,63,0.28);}
+.power-card .tier-label{font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--brass-light); display:block; margin-bottom:4px;}
+.power-card .tier.upgrade .tier-label{color:var(--purple-bright);}
+.power-card.gated{border-style:dashed; opacity:0.95;}
+.power-card .req{display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--blood); margin:-2px 0 10px;}
+
+.note-box{background:rgba(217,166,87,0.08); border:1px solid rgba(169,128,63,0.4); border-left:3px solid var(--brass-light); padding:16px 20px; border-radius:3px; font-size:15px; color:#cdbf9f; margin:20px 0;}
+.note-box b{color:var(--brass-light);}
+
+.paths{display:grid; gap:22px; margin-top:10px;}
+.path{background:linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005)); border:1px solid rgba(169,128,63,0.3); border-top:4px solid var(--path-color, var(--purple)); border-radius:3px; padding:24px 26px;}
+.path .path-head{display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+.path .path-head svg{width:38px;height:38px;}
+.path .path-head svg *{stroke:var(--path-color, var(--purple));}
+.path h3{font-family:'Marcellus SC', serif; font-size:21px; margin:0; color:var(--bone); letter-spacing:0.03em;}
+.path .tagline{font-style:italic; color:#9a8fb0; margin:0 0 16px; font-size:15px;}
+.path .feature{border-left-color:var(--path-color,var(--purple));}
+
+.rivet-divider{display:flex; align-items:center; justify-content:center; gap:14px; margin:48px 0; opacity:0.65;}
+.rivet-divider span{width:6px;height:6px;border-radius:50%; background:var(--brass-light); box-shadow:0 0 4px rgba(0,0,0,0.6);}
+.rivet-divider .line{width:90px; height:1px; background:linear-gradient(90deg, transparent, var(--brass), transparent);}
+
+.eq-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px 30px; margin:14px 0;}
+.eq-list div{font-size:15.5px; padding:6px 0; border-bottom:1px dashed rgba(169,128,63,0.3); color:#c7c0b5;}
+
+.chaos-meter{display:flex; gap:6px; margin:14px 0 4px; flex-wrap:wrap;}
+.chaos-meter span{padding:6px 12px; border-radius:2px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; border:1px solid rgba(169,128,63,0.4);}
+.chaos-meter span.low{background:rgba(121,88,173,0.18); color:var(--purple-bright);}
+.chaos-meter span.mid{background:rgba(169,128,63,0.18); color:var(--brass-light);}
+.chaos-meter span.high{background:rgba(122,34,48,0.25); color:#d98a93;}
+
+footer{margin-top:60px; background:var(--void-deep); color:var(--bone-dim); text-align:center; padding:28px 20px 32px; font-family:'Marcellus SC',serif; font-size:11.5px; letter-spacing:0.14em; border-top:1px solid rgba(169,128,63,0.3);}
+footer .gold{color:var(--brass-light);}
+a{color:var(--purple-bright);}
+</style>
+</head>
+<body>
+<div class="book rivet-frame">
+  <span class="rv-tl"></span><span class="rv-tr"></span><span class="rv-bl"></span><span class="rv-br"></span>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="stamp">EXPEDIENTE&nbsp;VII</div>
+    <svg class="mask" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g class="glow">
+        <path d="M50 8 C24 8 12 28 12 48 C12 70 28 90 50 92 C72 90 88 70 88 48 C88 28 76 8 50 8 Z" fill="none" stroke="#a9803f" stroke-width="2"/>
+        <path d="M50 14 C30 16 20 32 20 48 C20 66 32 82 50 84 C68 82 80 66 80 48 C80 32 70 16 50 14 Z" fill="#0d0a14" stroke="#a9803f" stroke-width="1"/>
+        <path d="M30 44 Q50 32 70 44" fill="none" stroke="#a9803f" stroke-width="1.2"/>
+        <circle cx="50" cy="50" r="9" fill="none" stroke="#a98be0" stroke-width="2"/>
+        <circle cx="50" cy="50" r="3.4" fill="#a98be0"/>
+        <path d="M50 26 L50 38 M50 62 L50 74 M26 50 L36 50 M64 50 L74 50" stroke="#a98be0" stroke-width="1.1" opacity="0.7"/>
+        <path d="M38 70 Q50 78 62 70" fill="none" stroke="#a9803f" stroke-width="1.4"/>
+      </g>
+    </svg>
+    <p class="eyebrow">Clase Homebrew · Quinta Edición</p>
+    <h1>El Marcado</h1>
+    <p class="subtitle">Asesino Tocado por el Vacío</p>
+    <blockquote>«Hay un instante, entre dos latidos, donde algo sin nombre te mira de vuelta. Si sobrevives a ese instante, ya no vuelves a estar solo.»</blockquote>
+    <div class="rune-strip" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 3 L20 12 L12 21 L4 12 Z"/><path d="M12 3 L12 21"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2 C18 7 18 17 12 22 C6 17 6 7 12 2 Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 3 A9 9 0 1 1 11.99 3" /><path d="M12 7 L12 12 L15 14"/></svg>
+    </div>
+  </header>
+
+  <div class="page">
+
+    <!-- ===== INTRO ===== -->
+    <p class="lede">En las ciudades portuarias donde el aceite de ballena alimenta las farolas y la peste se filtra entre las tablas del muelle, corre el rumor de hombres y mujeres marcados por algo que no tiene nombre. No son magos, ni clérigos, ni ladrones comunes: son herramientas de una voluntad ajena al mundo, capaces de doblar el espacio, leer los latidos a través de un muro y caminar entre los vivos como un eco. El Marcado es una clase para quienes quieren interpretar a un asesino, espía o vengador con un pacto silencioso grabado en la piel — y la elección constante entre la sangre derramada y la mano que se contiene.</p>
+
+    <div class="statgrid">
+      <div class="statcard"><div class="label">Dado de Golpe</div><div class="value">d8 por nivel de Marcado</div></div>
+      <div class="statcard"><div class="label">Salvaciones</div><div class="value">Destreza y Carisma</div></div>
+      <div class="statcard"><div class="label">Armadura</div><div class="value">Ligera, sin escudos</div></div>
+      <div class="statcard"><div class="label">Armas</div><div class="value">Armas simples, espadas cortas, estoques, ballestas de mano</div></div>
+      <div class="statcard"><div class="label">Herramientas</div><div class="value">Herramientas de ladrón + un juego de artesano</div></div>
+      <div class="statcard"><div class="label">Habilidades</div><div class="value">Elige 3: Acrobacias, Sigilo, Engaño, Interpretación, Intimidación, Investigación, Percepción, Juego de Manos</div></div>
+    </div>
+
+    <!-- ===== TABLA ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><path d="M50 12 L88 50 L50 88 L12 50 Z"/><circle cx="50" cy="50" r="13"/></svg>
+      <h2>Tabla de Progresión</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nivel</th><th>Bono Comp.</th><th>Puntos de Vacío</th><th>Runas</th><th>Talismanes</th><th>Ataque Letal</th><th>Rasgos de Clase</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>+2</td><td>2</td><td>1</td><td>1</td><td>1d6</td><td class="feat">La Marca, Ataque Letal, Paso Silencioso</td></tr>
+          <tr><td>2</td><td>+2</td><td>2</td><td>2</td><td>1</td><td>1d6</td><td class="feat">Vínculo de Poderes</td></tr>
+          <tr><td>3</td><td>+2</td><td>3</td><td>3</td><td>2</td><td>2d6</td><td class="feat">Senda del Vacío</td></tr>
+          <tr><td>4</td><td>+2</td><td>4</td><td>3</td><td>2</td><td>2d6</td><td class="feat">Mejora de Característica</td></tr>
+          <tr><td>5</td><td>+3</td><td>5</td><td>4</td><td>2</td><td>3d6</td><td class="feat">Ataques Gemelos</td></tr>
+          <tr><td>6</td><td>+3</td><td>6</td><td>4</td><td>3</td><td>3d6</td><td class="feat">Rasgo de Senda</td></tr>
+          <tr><td>7</td><td>+3</td><td>7</td><td>5</td><td>3</td><td>3d6</td><td class="feat">Evasión</td></tr>
+          <tr><td>8</td><td>+3</td><td>8</td><td>5</td><td>3</td><td>4d6</td><td class="feat">Mejora de Característica</td></tr>
+          <tr><td>9</td><td>+4</td><td>9</td><td>6</td><td>4</td><td>4d6</td><td class="feat">Reconfiguración Rápida</td></tr>
+          <tr><td>10</td><td>+4</td><td>10</td><td>6</td><td>4</td><td>4d6</td><td class="feat">Rasgo de Senda</td></tr>
+          <tr><td>11</td><td>+4</td><td>11</td><td>7</td><td>4</td><td>5d6</td><td class="feat">Instinto Asesino</td></tr>
+          <tr><td>12</td><td>+4</td><td>12</td><td>7</td><td>5</td><td>5d6</td><td class="feat">Mejora de Característica</td></tr>
+          <tr><td>13</td><td>+5</td><td>13</td><td>8</td><td>5</td><td>5d6</td><td class="feat">Reflejos Imposibles</td></tr>
+          <tr><td>14</td><td>+5</td><td>14</td><td>8</td><td>5</td><td>6d6</td><td class="feat">Rasgo de Senda</td></tr>
+          <tr><td>15</td><td>+5</td><td>15</td><td>9</td><td>6</td><td>6d6</td><td class="feat">Talismán Mayor</td></tr>
+          <tr><td>16</td><td>+5</td><td>16</td><td>9</td><td>6</td><td>6d6</td><td class="feat">Mejora de Característica</td></tr>
+          <tr><td>17</td><td>+6</td><td>17</td><td>10</td><td>6</td><td>7d6</td><td class="feat">Maestría de Poderes</td></tr>
+          <tr><td>18</td><td>+6</td><td>18</td><td>10</td><td>7</td><td>7d6</td><td class="feat">Eco del Vacío</td></tr>
+          <tr><td>19</td><td>+6</td><td>19</td><td>11</td><td>7</td><td>7d6</td><td class="feat">Mejora de Característica</td></tr>
+          <tr><td>20</td><td>+6</td><td>20</td><td>12</td><td>8</td><td>8d6</td><td class="feat">El Vacío te Reclama (capstone)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">La columna <b>Runas</b> indica cuántas Runas tienes disponibles para equipar Poderes del Vacío (ver más abajo): cada poder en su versión Base cuesta 1 Runa, y su Mejora cuesta 1 Runa adicional (2 en total).</p>
+
+    <div class="rivet-divider" aria-hidden="true"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+
+    <!-- ===== RASGOS NIVEL 1-2 ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><path d="M20 75 L80 25 M68 20 L83 32 L78 24 L70 38" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Rasgos de Clase</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">NIVEL 1</span>La Marca</h3>
+      <p>Algo sin nombre te tocó en un momento de desesperación y dejó su huella bajo tu piel, visible como una fina red de venas oscuras cuando usas tu poder. Ganas una reserva de <b>Puntos de Vacío</b> (ver tabla) que se recupera por completo tras un descanso corto o largo. Gastas estos puntos para activar tus Poderes del Vacío equipados. Tu característica para estos poderes es el <b>Carisma</b> (CD para salvación = 8 + tu bono de competencia + tu mod. de Carisma; bono de ataque = tu bono de competencia + tu mod. de Carisma). Ya en el nivel 1 tallas en tu Marca la versión Base de un poder del catálogo (tienes 1 Runa); el rasgo Vínculo de Poderes (nivel 2) amplía cuántos puedes sostener y te permite reconfigurarlos.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">NIVEL 1</span>Ataque Letal</h3>
+      <p>Sabes golpear donde más duele. Una vez por turno, cuando aciertas un ataque con un arma que tenga la propiedad sutil o ligera y tienes ventaja en la tirada, o un aliado está a 1,5 m del objetivo, inflige daño adicional según la columna «Ataque Letal» de la tabla.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">NIVEL 1</span>Paso Silencioso</h3>
+      <p>Ganas competencia en Sigilo. Si ya eras competente, en su lugar duplicas tu bono de competencia para esa habilidad (experticia). Además, moverte a través del espacio ocupado por una criatura hostil de tu tamaño o mayor no provoca ataques de oportunidad, siempre que termines tu movimiento fuera de su alcance.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">NIVEL 2</span>Vínculo de Poderes</h3>
+      <p>Tu Marca se abre a todo el catálogo de Poderes del Vacío (ver más abajo), pero tu mente solo puede sostener una parte de él a la vez. Ganas un número de <b>Runas</b> según la tabla, que gastas para «tallar» poderes en tu Marca: la versión Base de un poder cuesta 1 Runa, y su Mejora cuesta 1 Runa adicional (2 en total). Eliges qué poderes tienes equipados ahora mismo; puedes reconfigurar tu selección por completo durante un descanso largo, meditando sobre tu vínculo.</p>
+    </div>
+
+    <div class="note-box"><b>Nota de diseño:</b> dos Marcados nacidos del mismo pacto pueden ser irreconocibles entre sí en la mesa. Quien invierte sus Runas en Salto Umbral, Ráfaga de Fuerza y Doble Ilusorio juega como un agresor móvil que golpea y desaparece; quien las invierte en Alcance Lejano, Paso de Sombra y Espejismo juega como un infiltrado al que casi nadie llega a ver. Ninguna combinación es «la correcta»: la Marca es la misma, pero lo que cada portador talla en ella la hace suya.</div>
+
+    <!-- ===== PODERES DEL VACÍO ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="8" fill="#a98be0" stroke="none"/></svg>
+      <h2>Poderes del Vacío</h2>
+      <div class="rule"></div>
+    </div>
+    <p>Tu catálogo de Poderes del Vacío es amplio, pero tu Marca solo retiene activos los que hayas tallado en ella con tus Runas (ver Vínculo de Poderes). Cada poder indica su coste de <b>activación</b> en Puntos de Vacío junto a su nombre, y el coste en <b>Runas</b> de cada uno de sus dos niveles —Base y Mejora— dentro de la tarjeta. No necesitas tener la Mejora para usar la Base, pero sí necesitas tener la Base equipada antes de poder tallar su Mejora.</p>
+
+    <div class="powers-grid">
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 18 L10 8 M14 16 L20 6" stroke-dasharray="2 2"/><circle cx="4" cy="18" r="1.4" fill="#a98be0" stroke="none"/><circle cx="20" cy="6" r="1.4" fill="#a98be0" stroke="none"/></svg>
+        <h4>Salto Umbral <small>Activar: 1 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción adicional, te desvaneces para reaparecer instantáneamente en un punto que puedas ver a 9 m o menos, sin provocar ataques de oportunidad.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El alcance aumenta a 15 m, puedes llevar contigo a una criatura pequeña voluntaria, y una vez por turno puedes usarlo como reacción para reducir a la mitad el daño de un ataque que te alcance.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="7" cy="17" r="2"/><path d="M9 15 Q15 9 19 5" stroke-dasharray="1 3"/><circle cx="19" cy="5" r="1.4" fill="#a98be0" stroke="none"/></svg>
+        <h4>Alcance Lejano <small>Activar: 1 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción adicional, un zarcillo de vacío se extiende hasta 9 m hacia un punto, objeto o criatura de tamaño Mediano o menor: te arrastra hacia él, o lo arrastra hacia ti (salvación de Fuerza para una criatura no voluntaria).</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El alcance aumenta a 15 m, puedes tirar de hasta dos objetivos a la vez, y arrastrar a una criatura hostil hacia ti le impone desventaja en su próxima tirada de ataque.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.4"/></svg>
+        <h4>Ojo del Vacío <small>Activar: 2 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, durante 1 minuto percibes los latidos y el calor de toda criatura viva en un radio de 9 m, incluso a través de hasta dos paredes. Ventaja en Percepción para detectarlas.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El radio aumenta a 18 m, también revela trampas y mecanismos ocultos, y la duración se extiende a 10 minutos.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/></svg>
+        <h4>Posesión <small>Activar: 2 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, tu conciencia salta al cuerpo de una bestia diminuta o pequeña a 9 m durante 1 minuto, mientras el tuyo queda inerte y desprotegido. Una criatura hostil hace salvación de Sabiduría para resistirse.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>Puedes poseer también humanoides medianas, la duración se extiende a 10 minutos, y al terminar puedes saltar de inmediato a otro huésped válido a 9 m sin regresar a tu propio cuerpo.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 14 Q9 6 14 14 Q19 22 24 14" /></svg>
+        <h4>Ráfaga de Fuerza <small>Activar: 2 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, liberas una ráfaga invisible en un cono de 4,5 m: cada criatura dentro hace salvación de Fuerza o es empujada 3 m y derribada.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El cono aumenta a 9 m, quien falle la salvación sufre además 2d6 de daño contundente, y puedes usarla como reacción para desviar un proyectil dirigido a ti o a un aliado cercano.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="16" r="3"/><path d="M9 10 L15 14" stroke-dasharray="1 2"/></svg>
+        <h4>Destino Compartido <small>Activar: 3 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, eliges hasta dos criaturas a 9 m (salvación de Sabiduría para resistirse). Durante 1 minuto, la mitad del daño que sufra una se refleja en la otra.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>Puedes vincular hasta cuatro criaturas a la vez, y la fracción de daño reflejado aumenta a tres cuartas partes.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="8" cy="10" r="1.3" fill="#a98be0" stroke="none"/><circle cx="13" cy="8" r="1.3" fill="#a98be0" stroke="none"/><circle cx="17" cy="13" r="1.3" fill="#a98be0" stroke="none"/><circle cx="10" cy="15" r="1.3" fill="#a98be0" stroke="none"/><circle cx="15" cy="17" r="1.3" fill="#a98be0" stroke="none"/></svg>
+        <h4>Enjambre Devorador <small>Activar: 3 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, invocas un enjambre de ratas en un área de 3 m durante 1 minuto. Al aparecer y al inicio de tus turnos siguientes, cada criatura dentro hace salvación de Destreza o sufre 2d6 de daño perforante; el área es terreno difícil.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El área aumenta a 6 m, el daño sube a 3d6, y puedes desplazar el enjambre hasta 4,5 m como acción adicional en tus turnos siguientes.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="6" stroke-dasharray="2 2"/><circle cx="12" cy="12" r="1.6" fill="#a98be0" stroke="none"/></svg>
+        <h4>Espejismo <small>Activar: 2 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, creas una aparición ilusoria y silenciosa en un punto a 9 m. Las criaturas hostiles que la vean hacen salvación de Sabiduría o quedan fascinadas mirándola durante 1 minuto (repiten la salvación si reciben daño).</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>Puedes crear hasta dos apariciones a la vez, y ahora emiten sonidos simples, haciéndolas más difíciles de distinguir de una persona real.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M8 19 L8 5 L16 5 L16 19" stroke-dasharray="2 2"/><path d="M8 12 L16 12"/></svg>
+        <h4>Doble Ilusorio <small>Activar: 3 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción adicional, creas una réplica ilusoria de ti mismo en un espacio adyacente durante 1 minuto, capaz de moverse e imitar tus acciones. Quien te ataque debe determinar al azar si golpea al doble (sin efecto) o a ti.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>Tu doble puede realizar un ataque simple cada turno, y cuando es destruido puedes hacer que estalle: cada criatura a 1,5 m sufre 2d6 de daño de fuerza.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 21 C7 16 7 10 12 5 C17 10 17 16 12 21 Z" stroke-dasharray="2 2"/></svg>
+        <h4>Paso de Sombra <small>Activar: 1 PV/turno</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción adicional, te transformas en una sombra viviente hasta 1 minuto (requiere concentración como un conjuro): tu velocidad aumenta en 6 m, puedes pasar por huecos de al menos 7 cm, y eres difícil de percibir a más de 9 m en penumbra u oscuridad.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>Mientras dure, eres inmune al daño de ataques de oportunidad y no dejas rastro físico (huellas, olor) que pueda seguirse.</p></div>
+      </div>
+
+      <div class="power-card">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 12 Q8 6 12 12 Q16 18 20 12" /><path d="M4 16 Q8 10 12 16 Q16 22 20 16" opacity="0.5"/></svg>
+        <h4>Atadura Umbría <small>Activar: 2 PV</small></h4>
+        <div class="tier"><span class="tier-label">Base — 1 Runa</span><p>Como acción, zarcillos de oscuridad brotan del suelo en un radio de 3 m a 9 m de ti. Cada criatura hostil dentro hace salvación de Fuerza o queda apresada hasta zafarse con éxito (acción, prueba de Fuerza o Destreza).</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +1 Runa</span><p>El alcance se duplica, no provoca ataques de oportunidad al lanzarla, y las criaturas atrapadas tienen desventaja en sus tiradas de ataque mientras siguen apresadas.</p></div>
+      </div>
+
+      <div class="power-card gated">
+        <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 7 L12 12 L15 14"/></svg>
+        <h4>Aliento del Vacío <small>Activar: 4 PV</small></h4>
+        <span class="req">Requiere nivel 9+</span>
+        <div class="tier"><span class="tier-label">Base — 2 Runas</span><p>Una vez por descanso largo, como acción, ganas un turno adicional inmediatamente después de este: el resto del mundo se mueve con tal lentitud que parece casi detenido.</p></div>
+        <div class="tier upgrade"><span class="tier-label">Mejora — +2 Runas (4 en total)</span><p>Puedes usarlo dos veces por descanso largo, y durante tu turno extra tus aliados también pueden usar sus reacciones con normalidad, en lugar de quedar congelados.</p></div>
+      </div>
+    </div>
+
+    <div class="rivet-divider" aria-hidden="true"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+
+    <!-- ===== RASGOS NIVEL 5+ ===== -->
+    <div class="feature"><h3><span class="lvl">NIVEL 5</span>Ataques Gemelos</h3><p>Puedes atacar dos veces, en lugar de una, cuando realizas la acción de Atacar en tu turno. Además, cuando luchas con un arma ligera en cada mano, añades tu modificador de Destreza al daño del ataque que hagas con tu mano secundaria.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 7</span>Evasión</h3><p>Cuando te enfrentas a un efecto que te permite hacer una salvación de Destreza para sufrir solo la mitad del daño, en su lugar no sufres daño alguno si tienes éxito, y solo la mitad si fallas.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 9</span>Reconfiguración Rápida</h3><p>Tu vínculo con el Vacío se vuelve lo bastante fluido como para no necesitar una noche entera de introspección: puedes cambiar qué Poderes del Vacío tienes equipados (dentro de tu límite de Runas) durante un descanso corto, en lugar de solo durante un descanso largo.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 11</span>Instinto Asesino</h3><p>Tu cercanía constante con el peligro afina tus reflejos al límite. Tienes ventaja en las tiradas de iniciativa, y si te sorprenden en el primer turno de un combate, igualmente puedes usar tu acción adicional ese turno.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 13</span>Reflejos Imposibles</h3><p>Ganas una reacción adicional que solo puedes usar para activar un poder de desplazamiento equipado (Salto Umbral o Alcance Lejano) como forma de esquivar un ataque o evitar una trampa. Además, no puedes ser sorprendido mientras estés consciente.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 15</span>Talismán Mayor</h3><p>Aprendes a tallar un Talismán Mayor: su bonificación es el doble de potente que la de un Talismán de Hueso normal (ver más abajo), pero ocupa dos espacios de sintonización.</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 17</span>Maestría de Poderes</h3><p>Una vez por turno, cuando actives un Poder del Vacío equipado, puedes reducir su coste en 1 Punto de Vacío (mínimo 1).</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 18</span>Eco del Vacío</h3><p>Una vez por descanso corto, puedes activar dos Poderes del Vacío equipados como parte de la misma acción (pagas el coste en Puntos de Vacío de cada uno por separado).</p></div>
+    <div class="feature"><h3><span class="lvl">NIVEL 20</span>El Vacío te Reclama <i>(capstone)</i></h3><p>Has dejado de ser por completo humano. Tu máximo de puntos de golpe aumenta en 20. Una vez por descanso largo, como acción gratuita, puedes activar todos tus Poderes del Vacío equipados sin gastar Puntos de Vacío durante 1 minuto, y mientras dure, tus golpes con armas ligeras cuentan como mágicos a efectos de superar resistencias e inmunidades.</p></div>
+
+    <div class="rivet-divider" aria-hidden="true"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+
+    <!-- ===== TALISMANES ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><path d="M50 14 L70 34 L62 70 L38 70 L30 34 Z"/><circle cx="50" cy="44" r="6"/></svg>
+      <h2>Talismanes de Hueso</h2>
+      <div class="rule"></div>
+    </div>
+    <p>Con tu juego de artesano y un descanso corto, puedes tallar un nuevo Talismán de Hueso eligiendo uno de los efectos de la lista siguiente. No hay límite para cuántos talismanes distintos puedes tallar y poseer a lo largo de la campaña —trátalos como una colección que vas reuniendo, igual que las esquirlas que un cazador guarda como trofeos— pero solo puedes llevar <b>sintonizados</b> (activos sobre tu cuerpo) un número de ellos igual al indicado en la columna «Talismanes» de la tabla. Cambiar qué talismanes llevas sintonizados requiere un descanso corto.</p>
+    <div class="eq-list">
+      <div><b>Pulso Quieto</b> — ventaja en salvaciones contra ser detectado mientras estás quieto.</div>
+      <div><b>Manos de Sombra</b> — +1d4 en pruebas de Juego de Manos y para abrir cerraduras.</div>
+      <div><b>Piel Curtida</b> — resistencia a un tipo de daño elegido al tallarlo (no mágico).</div>
+      <div><b>Aliento Largo</b> — puedes contener la respiración el doble de tiempo y tienes ventaja contra venenos inhalados.</div>
+      <div><b>Pie Ligero</b> — tu velocidad aumenta en 1,5 m y no dejas huellas al caminar con sigilo.</div>
+      <div><b>Ojo Despierto</b> — no puedes quedar cegado por luz mágica ni mundana.</div>
+      <div><b>Mano Firme</b> — ventaja en las pruebas para desactivar trampas y mecanismos.</div>
+      <div><b>Bolsillo Profundo</b> — puedes cargar un 50% más de peso sin sufrir penalizadores por carga.</div>
+      <div><b>Pulso Frío</b> — ventaja en salvaciones contra el miedo.</div>
+      <div><b>Filo Constante</b> — una vez por descanso corto, repite una tirada de daño con arma y queda el resultado más alto.</div>
+      <div><b>Eco Silencioso</b> — los sonidos que produces (pasos, roce de tela) no se oyen a más de 3 m.</div>
+      <div><b>Vena de Hierro</b> — tu máximo de puntos de golpe aumenta en la mitad de tu nivel de Marcado (redondeando hacia arriba). No es acumulable con otra Vena de Hierro.</div>
+      <div><b>Suerte del Callejón</b> — una vez por descanso largo, repite una salvación fallida.</div>
+      <div><b>Mirada que Calma</b> — ventaja en Persuasión con criaturas que no te hayan visto actuar con hostilidad.</div>
+    </div>
+    <div class="note-box"><b>Variante opcional — Talismanes Corruptos:</b> con permiso del DJ, puedes tallar una versión corrupta de cualquier talismán de la lista: duplica su efecto a cambio de una desventaja menor que el DJ y tú acordéis (por ejemplo, un Filo Constante Corrupto que repita el daño dos veces, pero te imponga desventaja en tu próxima tirada de iniciativa). Cada talismán corrupto sintonizado ocupa igualmente un único espacio.</div>
+
+    <!-- ===== CAOS (regla opcional) ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><path d="M50 12 L50 88 M28 28 L72 28 M28 28 L20 50 L36 50 Z M72 28 L64 50 L80 50 Z"/></svg>
+      <h2>Regla Opcional: El Caos</h2>
+      <div class="rule"></div>
+    </div>
+    <p>Esta regla es para el DJ, no para la ficha de personaje. Lleva un marcador narrativo de <b>Caos</b> que sube cuando el grupo elige la violencia letal e indiscriminada, y baja cuando opta por soluciones no letales, sigilosas o misericordiosas. El Caos no afecta tiradas: cambia el mundo.</p>
+    <div class="chaos-meter" aria-hidden="true">
+      <span class="low">CAOS BAJO — la ciudad respira, aparecen aliados inesperados, el clima mejora</span>
+      <span class="mid">CAOS MEDIO — patrullas reforzadas, rumores contradictorios</span>
+      <span class="high">CAOS ALTO — plagas de ratas, toque de queda, recompensas por tu cabeza</span>
+    </div>
+
+    <div class="rivet-divider" aria-hidden="true"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+
+    <!-- ===== SENDAS ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><path d="M20 80 Q50 20 80 80" /><circle cx="50" cy="44" r="5"/></svg>
+      <h2>Senda del Vacío</h2>
+      <div class="rule"></div>
+    </div>
+    <p>En el nivel 3 eliges qué relación tienes con tu Marca: cuánto te alejas de la violencia, cuánto te entregas a ella, o cuánto la usas para manipular a los demás. Cada Senda otorga rasgos en los niveles 3, 6, 10 y 14.</p>
+
+    <div class="paths">
+
+      <div class="path" style="--path-color:#7958ad;">
+        <div class="path-head">
+          <svg viewBox="0 0 100 100" fill="none" stroke-width="3"><path d="M50 15 C30 15 18 35 18 50 C18 70 34 85 50 88 C66 85 82 70 82 50 C82 35 70 15 50 15 Z" opacity="0.4"/><path d="M50 25 L50 75 M30 50 L70 50" stroke-dasharray="3 4"/></svg>
+          <h3>Senda del Fantasma</h3>
+        </div>
+        <p class="tagline">«Nadie llora a quien nunca estuvo ahí.»</p>
+        <p>Brujos del sigilo absoluto: entran y salen sin que nadie note su paso, y prefieren dejar inconsciente a quien podrían matar.</p>
+        <div class="feature"><h3><span class="lvl">NIVEL 3</span>Paso Fantasma</h3><p>El terreno difícil no reduce tu velocidad, y mientras no te muevas más de la mitad de tu velocidad en tu turno, tienes ventaja en las pruebas de Sigilo hasta el inicio de tu siguiente turno. Además, si no lo tienes ya, ganas el poder Salto Umbral equipado en su versión Base de forma gratuita, sin gastar Runas en él.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 6</span>Forma Difusa</h3><p>Una vez por descanso corto, como reacción al recibir daño, puedes gastar 1 Punto de Vacío para volverte incorpóreo durante un instante y reducir ese daño a la mitad.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 10</span>Manos Limpias</h3><p>Siempre puedes elegir que un ataque cuerpo a cuerpo que reduzca a una criatura a 0 PG la deje inconsciente en lugar de matarla, sin coste alguno. Además, una vez por combate puedes ignorar por completo el daño de un único ataque, fundiéndote brevemente con las sombras.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 14</span>Espectro</h3><p>Como acción adicional, gastas 3 Puntos de Vacío para volverte invisible durante 1 minuto. El efecto termina si atacas con intención letal o activas un poder que no sea uno de desplazamiento (Salto Umbral o Alcance Lejano).</p></div>
+      </div>
+
+      <div class="path" style="--path-color:#7a2230;">
+        <div class="path-head">
+          <svg viewBox="0 0 100 100" fill="none" stroke-width="3"><path d="M20 20 L80 80 M80 20 L20 80" stroke-linecap="round"/></svg>
+          <h3>Senda de la Furia</h3>
+        </div>
+        <p class="tagline">«El Vacío no susurra órdenes. Solo amplifica lo que ya quieres hacer.»</p>
+        <p>Asesinos que abrazan la violencia sin reservas, dejando que su Marca se vuelva visible como venas oscuras palpitando bajo la piel.</p>
+        <div class="feature"><h3><span class="lvl">NIVEL 3</span>Doble Filo</h3><p>Cuando luchas con un arma ligera en cada mano, añades tu modificador de Destreza al daño del ataque con el arma de tu mano secundaria, incluso sin un rasgo que normalmente lo permita. A partir del nivel 5 (cuando Ataques Gemelos ya te da esto), ese ataque inflige además 1d4 de daño adicional.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 6</span>Sed del Vacío</h3><p>Cuando reduces a una criatura a 0 puntos de golpe con un ataque cuerpo a cuerpo, recuperas 1 Punto de Vacío (máximo una vez por turno).</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 10</span>Frenesí Umbrío</h3><p>Como acción adicional, gastas 2 Puntos de Vacío para ganar un ataque cuerpo a cuerpo extra inmediato y velocidad +3 m durante 1 minuto, a cambio de -2 a tu CA mientras dure.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 14</span>Verdugo</h3><p>Tu margen de crítico con armas cuerpo a cuerpo se amplía a 19-20, y cuando obtienes un crítico, los dados de daño adicionales del crítico se consideran el máximo posible en lugar de tirarse.</p></div>
+      </div>
+
+      <div class="path" style="--path-color:#a9803f;">
+        <div class="path-head">
+          <svg viewBox="0 0 100 100" fill="none" stroke-width="3"><circle cx="35" cy="50" r="18"/><circle cx="65" cy="50" r="18" opacity="0.5"/></svg>
+          <h3>Senda del Eco</h3>
+        </div>
+        <p class="tagline">«Si controlas el rumor, ya has ganado antes de desenvainar.»</p>
+        <p>Manipuladores que usan la Marca para infiltrarse, suplantar y desorientar, reservando la violencia directa como último recurso.</p>
+        <div class="feature"><h3><span class="lvl">NIVEL 3</span>Voz Prestada</h3><p>Puedes imitar cualquier voz que hayas escuchado durante al menos 1 minuto; ganas ventaja en las pruebas de Engaño para hacerte pasar por esa persona ante quien no la conozca íntimamente.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 6</span>Posesión Innata</h3><p>Si no lo tienes ya, ganas el poder Posesión equipado en su versión Base de forma gratuita, sin gastar Runas en él. Además, mientras lo tengas equipado (Base o Mejora), su coste de activación se reduce en 1 Punto de Vacío.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 10</span>Doble Innato</h3><p>Si no lo tienes ya, ganas el poder Doble Ilusorio equipado en su versión Base de forma gratuita, sin gastar Runas en él. Además, puedes activarlo como acción gratuita en lugar de acción adicional una vez por descanso corto.</p></div>
+        <div class="feature"><h3><span class="lvl">NIVEL 14</span>Susurro Final</h3><p>Como acción, una criatura humanoide a 9 m que pueda oírte hace una salvación de Sabiduría o queda obligada a seguir una única orden corta y no letal tuya en su siguiente turno. Una vez por descanso largo.</p></div>
+      </div>
+
+    </div>
+
+    <div class="rivet-divider" aria-hidden="true"><span></span><div class="line"></div><span></span><div class="line"></div><span></span></div>
+
+    <!-- ===== EQUIPO ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="2.5"><rect x="22" y="38" width="56" height="42" rx="3"/><path d="M36 38 L36 26 Q50 12 64 26 L64 38"/></svg>
+      <h2>Equipo Inicial</h2>
+      <div class="rule"></div>
+    </div>
+    <p>Comienzas con el siguiente equipo, además de lo otorgado por tu trasfondo:</p>
+    <div class="eq-list">
+      <div><b>(a)</b> Un estoque <b>o</b> <b>(b)</b> dos espadas cortas</div>
+      <div>Una ballesta de mano y 20 virotes</div>
+      <div>Armadura de cuero</div>
+      <div>Herramientas de ladrón</div>
+      <div>Un juego de artesano (talla de hueso o similar)</div>
+      <div>Una máscara o capucha ornamentada (objeto narrativo) y ropas de civil para pasar desapercibido</div>
+    </div>
+
+    <!-- ===== MULTICLASE ===== -->
+    <div class="section-mark">
+      <svg class="icon" viewBox="0 0 100 100" fill="none" stroke-width="3"><path d="M30 30 L70 70 M70 30 L30 70" stroke-linecap="round"/></svg>
+      <h2>Requisitos de Multiclase</h2>
+      <div class="rule"></div>
+    </div>
+    <p><b>Requisito mínimo:</b> Destreza 13 y Carisma 13. Al multiclasear en Marcado ganas competencia con armas simples y estoques. Tu reserva de Puntos de Vacío y tu número de Talismanes sintonizables se calculan únicamente con tus niveles de Marcado.</p>
+
+  </div>
+
+  <footer><span class="gold">EL MARCADO</span> · Clase Homebrew Original para D&amp;D 5.ª Edición · Contenido de fans, no oficial</footer>
+</div>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

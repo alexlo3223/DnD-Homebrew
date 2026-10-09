@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Habla Maldita — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080d;--card:#0e1018;--card2:#141621;--ink:#ece6da;--dim:#a19ca8;--acc:#2fae98;--acc2:#8fe6d4;
+--line:rgba(236,230,218,.09);--line2:rgba(236,230,218,.2);--navbg:rgba(7,8,13,.93);--sel:rgba(200,32,42,.12);
+--f-title:'Shippori Mincho B1','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;--f-body:'Shippori Mincho','Hiragino Mincho ProN',Georgia,serif;--f-label:'Zen Kaku Gothic New','Hiragino Sans','Segoe UI',sans-serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+html::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:9998}
+body{background:radial-gradient(ellipse 70% 50% at 70% 0%,color-mix(in srgb,#2fae98 14%,transparent),transparent 60%),var(--bg)}
+h2::after{content:"";display:block;width:120px;height:6px;margin-top:10px;border-radius:3px 60% 40% 3px;background:linear-gradient(90deg,#2fae98,transparent);opacity:.85}
+h2{border-bottom:0}
+.hero .kanji-fondo{position:absolute;inset:0;display:grid;place-items:center;z-index:-1;font:800 clamp(160px,30vw,300px)/1 var(--f-title);color:#2fae98;opacity:.07;letter-spacing:-.05em;pointer-events:none}
+.hero h1{font-weight:800}
+.jjk-hanko{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40px;padding:8px 0;font:800 20px/1.1 var(--f-title);color:#f4ece0;background:#c8202a;border-radius:4px;box-shadow:0 0 0 2px #c8202a,inset 0 0 0 2px #f4ece0;transform:rotate(-4deg);opacity:.92}
+@media (max-width:600px){.jjk-hanko{font-size:15px;right:12px;bottom:12px;width:32px}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="kanji-fondo" aria-hidden="true">呪</div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Jujutsu Kaisen · Inspirada en Toge Inumaki</p>
+  <h1>El Habla Maldita</h1>
+  
+  <p class="lema">«Por eso casi no hablo. No es timidez: es que me harías caso.»</p>
+  <div class="tags"><span>Palabras Malditas</span><span>Voz</span><span>Control</span><span>Apoyo</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Palabras Malditas</button><button type="button" data-p="subs" aria-selected="false">Herencias de la Voz</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>El Habla Maldita nace en un linaje cuya técnica vive en la lengua: lo que ordena en voz alta, ocurre. Basta un «¡para!» para que un enemigo se quede clavado en el suelo, y un «¡explota!» para que reviente desde dentro.</p><p>No lanza conjuros ni toca instrumentos. Tiene un <strong>vocabulario</strong> de palabras malditas y una <strong>voz</strong> que se gasta. Cuanto más fuerte es el objetivo, más le cuesta a su garganta imponerse, y empujarla más allá del límite le hace sangrar.</p><p>Para no maldecir a nadie sin querer, muchos de su linaje solo hablan con palabras inofensivas fuera de combate. Sus compañeros aprenden a entenderle por gestos.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Carisma</b></div><div><span>Salvaciones</span><b>Constitución · Carisma</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Sencillas</b></div><div><span>Habilidades</span><b>2 de: Engaño, Intimidación, Interpretación, Percepción, Perspicacia, Sigilo</b></div><div><span>Subclase</span><b>Herencia de la Voz (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Voz máx.</th><th>Dado de Voz</th><th>Palabras</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>2 + CAR</td><td>d6</td><td>4</td><td class="col-f">Habla Maldita, Palabras Malditas, Voto del Silencio</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>2 + CAR</td><td>d6</td><td>4</td><td class="col-f">Jarabe para la Garganta, Lenguaje de Signos</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>3 + CAR</td><td>d6</td><td>5</td><td class="col-f">Herencia de la Voz</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>3 + CAR</td><td>d6</td><td>5</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>4 + CAR</td><td>d8</td><td>6</td><td class="col-f">Frase Doble</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>4 + CAR</td><td>d8</td><td>6</td><td class="col-f">Rasgo de Herencia</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>5 + CAR</td><td>d8</td><td>7</td><td class="col-f">La Voz Pesa</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>5 + CAR</td><td>d8</td><td>7</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>6 + CAR</td><td>d8</td><td>8</td><td class="col-f">Alcance de la Voz</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>6 + CAR</td><td>d8</td><td>8</td><td class="col-f">Rasgo de Herencia</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>7 + CAR</td><td>d10</td><td>9</td><td class="col-f">Garganta Curtida</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>7 + CAR</td><td>d10</td><td>9</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>8 + CAR</td><td>d10</td><td>10</td><td class="col-f">Palabra Pesada</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>8 + CAR</td><td>d10</td><td>10</td><td class="col-f">Rasgo de Herencia</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>9 + CAR</td><td>d10</td><td>11</td><td class="col-f">Voz que No se Apaga</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>9 + CAR</td><td>d10</td><td>11</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>10 + CAR</td><td>d12</td><td>12</td><td class="col-f">—</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>10 + CAR</td><td>d12</td><td>12</td><td class="col-f">Coro</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>11 + CAR</td><td>d12</td><td>12</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>11 + CAR</td><td>d12</td><td>12</td><td class="col-f">La Última Palabra</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>La Voz</h3><p>Tu recurso es la <strong>Voz</strong>. Tu máximo es la mitad de tu nivel (redondeando hacia arriba) + tu modificador de Carisma + 1. La recuperas entera con un descanso largo, y la mitad con uno corto.</p><p><strong>Cómo se pronuncia una palabra.</strong> Eliges como objetivo una criatura a 30 pies que pueda oírte. Pagas la Voz de la palabra y el objetivo hace una salvación de Constitución contra tu CD. Una criatura ensordecida es inmune.</p><p><strong>Cuanto más fuerte, más cuesta.</strong> Pagas 1 Voz más si el objetivo tiene más puntos de golpe máximos que tú, y 1 Voz más por cada objetivo adicional al que dirijas la misma palabra. Las palabras dirigidas solo a aliados no tienen ninguno de estos costes extra.</p><p><strong>Forzar la garganta.</strong> Si no te queda Voz, puedes pagarla igualmente: sufres 1d8 de daño necrótico por cada punto que te falte. Ese daño no se puede reducir.</p><p><strong>CD de palabra</strong> = 8 + tu bonificador de competencia + tu modificador de Carisma.</p></div>
+    <article class="rasgo"><header><h3>Palabras Malditas</h3><span class="nivel">Nivel 1</span></header><p>Conoces el número de palabras que indica la tabla, elegidas de la pestaña Palabras Malditas. Al subir de nivel puedes cambiar una por otra.</p></article><article class="rasgo"><header><h3>Voto del Silencio</h3><span class="nivel">Nivel 1</span></header><p>Opcional. Si fuera de combate solo hablas con palabras que no pueden hacer daño (ingredientes de comida, saludos, interjecciones), tu Voz máxima aumenta en 1. Si rompes el voto, pierdes ese punto hasta tu siguiente descanso largo.</p></article><article class="rasgo"><header><h3>Jarabe para la Garganta</h3><span class="nivel">Nivel 2</span><span class="coste adicional">Acción adicional</span></header><p>Te tomas un trago de jarabe y recuperas 1d4 de Voz. Puedes hacerlo un número de veces igual a tu bonificador de competencia por descanso largo.</p></article><article class="rasgo"><header><h3>Lenguaje de Signos</h3><span class="nivel">Nivel 2</span></header><p>Tus compañeros de grupo entienden tus gestos como si hablaras. Puedes transmitirles mensajes completos sin decir una palabra.</p></article><article class="rasgo"><header><h3>Frase Doble</h3><span class="nivel">Nivel 5</span></header><p>Cuando pronuncias una palabra que requiere una acción, puedes añadir a la misma frase una palabra que cueste 1 Voz, pagándola aparte. Las dos afectan al mismo objetivo.</p></article><article class="rasgo"><header><h3>La Voz Pesa</h3><span class="nivel">Nivel 7</span></header><p>Una criatura que supera la salvación contra una de tus palabras sin daño tiene desventaja en su siguiente tirada de ataque antes del final de su siguiente turno.</p></article><article class="rasgo"><header><h3>Alcance de la Voz</h3><span class="nivel">Nivel 9</span></header><p>Tus palabras alcanzan a criaturas a 60 pies.</p></article><article class="rasgo"><header><h3>Garganta Curtida</h3><span class="nivel">Nivel 11</span></header><p>Forzar la garganta te cuesta 1d6 por punto en lugar de 1d8, y el Jarabe para la Garganta recupera 2d4.</p></article><article class="rasgo"><header><h3>Palabra Pesada</h3><span class="nivel">Nivel 13</span></header><p>Una vez por descanso corto, cuando pronuncias una palabra, el objetivo hace la salvación con desventaja.</p></article><article class="rasgo"><header><h3>Voz que No se Apaga</h3><span class="nivel">Nivel 15</span></header><p>El silencio mágico no detiene tus palabras: la energía viaja igual. Eres inmune a quedar encantado.</p></article><article class="rasgo"><header><h3>Coro</h3><span class="nivel">Nivel 18</span></header><p>El coste por objetivos adicionales se paga una sola vez, sea cual sea el número de objetivos, hasta un máximo igual a tu modificador de Carisma.</p></article><article class="rasgo"><header><h3>La Última Palabra</h3><span class="nivel">Nivel 20</span><span class="coste accion">Acción</span></header><p>Una vez por descanso largo, dices «¡Muere!» a una criatura a 60 pies que pueda oírte. Hace una salvación de Constitución. Si la falla y tiene 100 puntos de golpe o menos, cae a 0. Si tiene más, o si supera la salvación, sufre 10d10 de daño necrótico.</p><div class="regla">Después pierdes la voz por completo: no puedes pronunciar palabras hasta terminar un descanso corto.</div></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Palabras Malditas</h2>
+    <p>Salvo que se indique otra cosa, cada palabra afecta a un objetivo y se resiste con una salvación de Constitución. Las marcadas «aliado» no tienen salvación y no pagan costes extra.</p>
+    <article class="tecnica"><header><h3>¡Para!</h3><span class="precio">1 Voz</span><span class="coste accion">Acción</span></header><p>Si falla, el objetivo no puede moverse ni usar reacciones hasta el final de su siguiente turno.</p></article><article class="tecnica"><header><h3>¡Al suelo!</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Si falla, el objetivo cae derribado.</p></article><article class="tecnica"><header><h3>¡Suéltalo!</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Si falla, el objetivo suelta lo que lleve en las manos.</p></article><article class="tecnica"><header><h3>¡Lárgate!</h3><span class="precio">1 Voz</span><span class="coste accion">Acción</span></header><p>Si falla, el objetivo usa su siguiente movimiento para alejarse de ti tanto como pueda.</p></article><article class="tecnica"><header><h3>¡Ven!</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Si falla, el objetivo se mueve hasta 15 pies hacia ti en línea recta. Este movimiento no provoca ataques de oportunidad.</p></article><article class="tecnica"><header><h3>¡Mírame!</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Si falla, hasta el final de su siguiente turno el objetivo tiene desventaja en los ataques contra cualquiera que no seas tú.</p></article><article class="tecnica"><header><h3>¡Callad!</h3><span class="precio">1 Voz</span><span class="coste accion">Acción</span></header><p>Si falla, el objetivo no puede hablar ni lanzar conjuros con componente verbal hasta el final de su siguiente turno.</p></article><article class="tecnica"><header><h3>¡Explota!</h3><span class="precio">2 Voz</span><span class="coste accion">Acción</span></header><p>El objetivo sufre tres tiradas de tu Dado de Voz de daño de fuerza si falla la salvación, o la mitad si la supera.</p></article><article class="tecnica"><header><h3>¡Retuércete!</h3><span class="precio">2 Voz</span><span class="coste accion">Acción</span></header><p>Si falla, el objetivo sufre dos tiradas de tu Dado de Voz de daño contundente y tiene desventaja en sus ataques hasta el final de su siguiente turno.</p></article><article class="tecnica"><header><h3>¡Duerme!</h3><span class="precio">2 Voz</span><span class="coste accion">Acción</span></header><p>Si falla, el objetivo queda inconsciente durante 1 minuto. Repite la salvación al final de cada uno de sus turnos, y despierta si sufre daño o si alguien usa una acción para despertarlo.</p></article><article class="tecnica"><header><h3>¡Aplástate!</h3><span class="precio">3 Voz</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 9</span></header><p>El objetivo sufre cuatro tiradas de tu Dado de Voz de daño contundente y cae derribado si falla la salvación; no puede levantarse hasta el final de su siguiente turno. Si la supera, sufre la mitad y no cae.</p></article><article class="tecnica"><header><h3>¡Despierta! (aliado)</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Un aliado dormido o inconsciente sin estar a 0 puntos de golpe se despierta. Si está aturdido o encantado, repite la salvación con ventaja.</p></article><article class="tecnica"><header><h3>¡Levántate! (aliado)</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>Un aliado derribado se levanta sin gastar movimiento y gana puntos de golpe temporales iguales a una tirada de tu Dado de Voz.</p></article><article class="tecnica"><header><h3>¡Corre! (aliado)</h3><span class="precio">1 Voz</span><span class="coste adicional">Acción adicional</span></header><p>La velocidad de un aliado aumenta 15 pies hasta el final de su siguiente turno, y su movimiento no provoca ataques de oportunidad.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Herencias de la Voz</h2>
+    <p>Al nivel 3 eliges cómo ha moldeado tu linaje tu voz: como arma, como altavoz o como escudo para los tuyos. Obtienes rasgos de Herencia a los niveles 3, 6, 10 y 14.</p>
+    <div class="subs"><section class="sub" style="--sc:#4fd1b8">
+      <header><span class="sub-eyebrow">Herencia de la Voz</span><h3>Sello de la Serpiente</h3><p class="sub-fuente">Los colmillos tatuados en la lengua y en la boca</p></header>
+      <p class="sub-intro">Llevas en la lengua los colmillos de la serpiente del clan. Tus palabras no solo mandan: muerden.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Colmillos</strong><p>Tus palabras que infligen daño suman tu modificador de Carisma a una de sus tiradas de daño. Aprendes ¡Explota! aunque no la conozcas, y no cuenta para tu número de palabras.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Mordida Encadenada</strong><p>Cuando una criatura falla la salvación contra una de tus palabras, la siguiente palabra que le dirijas antes del final de tu siguiente turno cuesta 1 Voz menos (mínimo 1).</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Veneno en la Lengua</strong><p>Tus palabras que infligen daño ignoran la resistencia al daño, pero no la inmunidad.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Lengua Desatada</strong><p>Una vez por descanso corto, pronuncias una palabra sin gastar Voz y el objetivo hace la salvación con desventaja.</p></div></li></ul></section><section class="sub" style="--sc:#e8c25a">
+      <header><span class="sub-eyebrow">Herencia de la Voz</span><h3>El Megáfono</h3><p class="sub-fuente">La voz amplificada que llega a todo un campo de batalla</p></header>
+      <p class="sub-intro">Tu familia descubrió que la técnica viaja a través de altavoces y aparatos. Si te oyen, te obedecen, estén donde estén.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Altavoz</strong><p>Si hablas a través de un megáfono, un altavoz o un objeto parecido, tus palabras alcanzan a criaturas a 120 pies. Además, cada dos objetivos adicionales cuestan 1 Voz extra en lugar de uno.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Onda</strong><p>Una palabra puede afectar a todas las criaturas que elijas en un cono de 30 pies. Pagas 2 Voz extra en lugar del coste por objetivo.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Voz Grabada</strong><p>Durante un descanso corto puedes grabar una palabra en un aparato o un talismán, pagando su Voz entonces. Más tarde, cualquier aliado puede activarla con su acción adicional. Solo puede haber una grabación a la vez.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Emisión General</strong><p>Una vez por descanso largo, una palabra alcanza a todas las criaturas hostiles que puedan oírte a 300 pies. No pagas Voz extra por objetivo.</p></div></li></ul></section><section class="sub" style="--sc:#9fb8ff">
+      <header><span class="sub-eyebrow">Herencia de la Voz</span><h3>El Guardián Callado</h3><p class="sub-fuente">La voz que solo se usa para proteger</p></header>
+      <p class="sub-intro">Aprendiste a hablar poco y a hacerlo solo cuando alguien tuyo está en peligro. Tus palabras sostienen a los demás.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Palabras para los Míos</strong><p>Una vez por turno, puedes pronunciar una palabra de aliado sin gastar Voz.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>¡Protégete!</strong><span class="coste reaccion">Reacción</span><p>Aprendes esta palabra, que no cuenta para tu número. Cuando atacan a un aliado a 30 pies, gastas 1 Voz y sumas una tirada de tu Dado de Voz a su CA contra ese ataque.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>¡Aguanta!</strong><span class="coste reaccion">Reacción</span><p>Cuando un aliado a 30 pies cae a 0 puntos de golpe sin morir en el acto, gastas 2 Voz y se queda con 1 punto de golpe.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Silencio Compartido</strong><p>Mientras te quede al menos 1 Voz, tus aliados a 30 pies que puedan oírte tienen ventaja en las salvaciones contra quedar encantados o asustados.</p></div></li></ul></section></div>
+    
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Carisma</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p>
+      <div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Carisma</label><input type="number" id="mod" value="3" min="-5" max="10"></div>
+      <div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de palabra</span><b id="dv1">–</b></div><div><span>Dado de Voz</span><b id="dv2">–</b></div><div><span>Palabras</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Voz</h3><p class="sub-t">Un descanso largo la recupera entera; uno corto, la mitad.</p>
+          <div class="cuenta" id="cnt-voz"></div><div class="pips" id="pips-voz"></div><div class="btns"><button class="btn" type="button" data-act="r:voz:corto">Descanso corto</button><button class="btn" type="button" data-act="r:voz:largo">Descanso largo</button><button class="btn" type="button" data-act="r:voz:-1">Gastar 1</button><button class="btn" type="button" data-act="r:voz:-2">Gastar 2</button><button class="btn" type="button" data-act="r:voz:-3">Gastar 3</button><button class="btn" type="button" data-act="r:voz:1">+1</button></div></div><div class="card"><h3>Jarabe para la Garganta</h3><p class="sub-t">Desde nivel 2. Cada trago recupera 1d4 de Voz (2d4 desde nivel 11).</p>
+          <div class="cuenta" id="cnt-jarabe"></div><div class="pips" id="pips-jarabe"></div><div class="btns"><button class="btn" type="button" data-act="r:jarabe:-1">Beber</button><button class="btn" type="button" data-act="r:jarabe:largo">Descanso largo</button></div></div><div class="card"><h3>La Última Palabra</h3><p class="sub-t">Nivel 20. Una vez por descanso largo.</p><div class="estado" id="tv-ult"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:ult:no">Pronunciar</button><button class="btn" type="button" data-act="t:ult:si">Descanso largo</button></div></div></div>
+  </section>
+</main>
+<div class="jjk-hanko" aria-hidden="true"><span>呪</span><span>言</span></div>
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "T.dado[L-1]"}, {"v": "T.pal[L-1]"}], "recursos": [{"id": "voz", "n": "Voz", "max": "Math.ceil(L/2)+M+1"}, {"id": "jarabe", "n": "Jarabe para la Garganta", "max": "L>=2?P:0"}], "contadores": [], "interruptores": [{"id": "ult", "si": "Disponible", "no": "Usada"}], "tablas": {"dado": ["d6", "d6", "d6", "d6", "d8", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12"], "pal": [4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 12, 12]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

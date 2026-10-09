@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Tejedor del Poder — Clase D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:       #09090F;
+    --bg-card:       #10121C;
+    --gold:          #C8922A;
+    --gold-light:    #E4B84A;
+    --gold-dim:      #7A5518;
+    --cream:         #E0D4B8;
+    --cream-dim:     #A09078;
+    --red:           #7A2020;
+    --red-light:     #C04040;
+    --silver:        #8A96A8;
+    --silver-light:  #C0CCDC;
+    --border:        rgba(200,146,42,0.25);
+    --border-strong: rgba(200,146,42,0.55);
+    --glow:          rgba(200,146,42,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--cream);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  .hero {
+    position: relative; text-align: center; padding: 70px 24px 44px; overflow: hidden;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(200,146,42,0.08) 0%, transparent 70%);
+  }
+  .wheel-svg { width: 150px; height: 150px; margin: 0 auto 28px; display: block; opacity: 0.9; filter: drop-shadow(0 0 18px rgba(200,146,42,0.4)); animation: wheel-spin 90s linear infinite; }
+  @keyframes wheel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
+  h1.hero-title {
+    font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 6vw, 54px); font-weight: 700; color: var(--gold);
+    text-shadow: 0 0 40px rgba(200,146,42,0.35), 0 2px 4px rgba(0,0,0,0.8); line-height: 1.15; margin-bottom: 18px;
+  }
+  .hero-subtitle { font-family: 'EB Garamond', serif; font-style: italic; font-size: 18px; color: var(--cream-dim); max-width: 580px; margin: 0 auto 30px; line-height: 1.6; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .tag {
+    font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border: 1px solid var(--border); color: var(--gold-dim); padding: 5px 14px; border-radius: 2px; background: rgba(200,146,42,0.05);
+  }
+  .weave-divider { width: 100%; height: 36px; margin: 0; display: block; overflow: visible; }
+
+  .tab-nav {
+    position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 2px; background: rgba(9,9,15,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 0 12px;
+  }
+  .tab-btn {
+    font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cream-dim); background: transparent; border: none; padding: 16px 18px 14px;
+    cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--gold-light); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 40px 20px 80px; }
+  .section { margin-bottom: 60px; }
+
+  h2.section-title {
+    font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 28px;
+  }
+  h3.feature-name { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 600; color: var(--gold-light); margin-bottom: 8px; }
+  h3.feature-name .level-badge { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: var(--gold-dim); font-weight: 400; margin-left: 10px; vertical-align: middle; }
+  .feature-block { margin-bottom: 36px; padding-left: 16px; border-left: 2px solid var(--border); }
+  .feature-block p { margin-bottom: 10px; color: var(--cream); }
+  .feature-block p:last-child { margin-bottom: 0; }
+
+  .quick-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px;
+    border: 1px solid var(--border); background: var(--border); margin-bottom: 48px; border-radius: 3px; overflow: hidden;
+  }
+  .stat-cell { background: var(--bg-card); padding: 18px 16px; text-align: center; }
+  .stat-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 6px; }
+  .stat-value { font-family: 'Cinzel', serif; font-size: 15px; color: var(--cream); display: block; line-height: 1.3; }
+
+  .prog-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }
+  .prog-table thead tr { background: rgba(200,146,42,0.1); }
+  .prog-table th {
+    font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); padding: 8px 6px; text-align: center; border-bottom: 1px solid var(--border-strong); white-space: nowrap;
+  }
+  .prog-table td { padding: 6px 6px; text-align: center; border-bottom: 1px solid rgba(200,146,42,0.08); color: var(--cream); font-family: 'EB Garamond', serif; font-size: 13px; }
+  .prog-table tbody tr:hover { background: rgba(200,146,42,0.04); }
+  .prog-table tbody tr.current-level-row { background: rgba(200,146,42,0.12); }
+  .prog-table .col-level { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold-dim); }
+  .prog-table .col-pb    { color: var(--gold-light); font-weight: 600; }
+  .prog-table .col-slot  { color: var(--silver-light); }
+  .prog-table .col-feature { text-align: left; color: var(--cream-dim); font-style: italic; font-size: 12px; min-width: 220px; }
+
+  .hilos-box {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px;
+    padding: 24px 28px; margin-bottom: 36px; position: relative; overflow: hidden;
+  }
+  .hilos-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,146,42,0.06) 0%, transparent 70%); pointer-events: none;
+  }
+  .hilos-box h3 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+
+  .elements-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0 28px; }
+  @media (max-width: 560px) { .elements-grid { grid-template-columns: repeat(3, 1fr); } }
+  .element-pill { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 14px 8px; text-align: center; }
+  .element-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .element-name { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 4px; }
+  .element-effect { font-size: 12px; color: var(--cream-dim); font-style: italic; }
+
+  .subclass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 36px; }
+  @media (max-width: 600px) { .subclass-grid { grid-template-columns: 1fr; } }
+  .subclass-card { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: var(--bg-card); }
+  .subclass-header { padding: 18px 20px; border-bottom: 1px solid var(--border); }
+  .subclass-header.dragon { background: radial-gradient(ellipse at top left, rgba(122,32,32,0.25), transparent 70%); }
+  .subclass-header.pastor { background: radial-gradient(ellipse at top left, rgba(60,90,60,0.22), transparent 70%); }
+  .subclass-eyebrow { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 6px; }
+  .subclass-header.dragon .subclass-eyebrow { color: var(--red-light); }
+  .subclass-header.pastor .subclass-eyebrow { color: #8FBF8F; }
+  .subclass-name { font-family: 'Cinzel Decorative', serif; font-size: 16px; line-height: 1.3; }
+  .subclass-header.dragon .subclass-name { color: var(--red-light); }
+  .subclass-header.pastor .subclass-name  { color: #A8D4A8; }
+  .subclass-body { padding: 18px 20px; }
+  .subclass-body p { font-size: 14px; color: var(--cream-dim); font-style: italic; line-height: 1.6; margin-bottom: 14px; }
+  .subclass-features { list-style: none; }
+  .subclass-features li { font-size: 13.5px; color: var(--cream); padding: 6px 0; border-bottom: 1px solid rgba(200,146,42,0.07); display: flex; gap: 10px; }
+  .subclass-features li:last-child { border-bottom: none; }
+  .subclass-features .sf-lvl { font-family: 'Cinzel', serif; font-size: 10px; color: var(--gold-dim); white-space: nowrap; padding-top: 2px; }
+
+  .spell-mini-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0 4px; }
+  .spell-mini-table th { font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--border); }
+  .spell-mini-table td { padding: 4px 8px 4px 0; color: var(--cream-dim); border-bottom: 1px solid rgba(200,146,42,0.06); font-style: italic; }
+
+  .corruption-box {
+    background: linear-gradient(135deg, rgba(60,10,10,0.5) 0%, rgba(16,18,28,0.8) 100%);
+    border: 1px solid rgba(122,32,32,0.4); border-radius: 3px; padding: 28px 32px; margin-top: 48px; position: relative; overflow: hidden;
+  }
+  .corruption-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+  .corruption-box h2 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red-light); margin-bottom: 18px; }
+  .corruption-box p { color: var(--cream-dim); margin-bottom: 12px; font-style: italic; font-size: 16px; line-height: 1.7; }
+  .corruption-box .corruption-title { font-style: normal; font-family: 'Cinzel', serif; font-size: 13px; color: var(--red-light); margin-top: 20px; margin-bottom: 6px; }
+
+  .rule { background: rgba(200,146,42,0.05); border-left: 3px solid var(--gold-dim); padding: 14px 18px; border-radius: 0 3px 3px 0; margin: 14px 0; font-size: 15px; color: var(--cream); }
+
+  em { color: var(--gold-light); font-style: italic; }
+  strong { color: var(--gold-light); font-weight: 600; }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  .sheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .sheet-grid { grid-template-columns: 1fr; } }
+  .sheet-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 22px 24px; position: relative; overflow: hidden; }
+  .sheet-card.wide { grid-column: 1 / -1; }
+  .sheet-card h3 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .sheet-card .sheet-sub { font-size: 12.5px; color: var(--cream-dim); font-style: italic; margin-bottom: 16px; }
+
+  .level-select-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+  .level-select-row label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: var(--gold-dim); text-transform: uppercase; }
+  select, input[type=number], input[type=text] {
+    background: var(--bg-deep); border: 1px solid var(--border-strong); color: var(--cream);
+    font-family: 'EB Garamond', serif; font-size: 15px; padding: 6px 10px; border-radius: 3px;
+  }
+  select:focus, input[type=number]:focus, input[type=text]:focus { outline: none; border-color: var(--gold); }
+
+  .derived-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 14px; }
+  .derived-stat { text-align: center; }
+  .derived-stat .d-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 4px; }
+  .derived-stat .d-value { font-family: 'Cinzel Decorative', serif; font-size: 22px; color: var(--gold-light); }
+
+  .slot-row { margin-bottom: 14px; }
+  .slot-row .slot-label { font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.12em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 6px; display: block; }
+  .pip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+  .pip {
+    width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--border-strong);
+    background: rgba(200,146,42,0.08); cursor: pointer; transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .pip:hover { transform: scale(1.08); }
+  .pip.filled { background: var(--gold); box-shadow: 0 0 10px rgba(200,146,42,0.6); border-color: var(--gold-light); }
+
+  .count-line { font-family: 'Cinzel', serif; font-size: 13px; color: var(--cream-dim); margin-bottom: 4px; }
+  .count-line strong { color: var(--gold-light); font-size: 16px; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn {
+    font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: rgba(200,146,42,0.08); border: 1px solid var(--border-strong); color: var(--gold-light);
+    padding: 9px 16px; border-radius: 3px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn:hover { background: var(--gold); color: #10121C; }
+  .btn.ghost { background: transparent; color: var(--cream-dim); border-color: var(--border); }
+  .btn.ghost:hover { background: rgba(200,146,42,0.08); color: var(--gold-light); }
+
+  .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .toggle {
+    width: 44px; height: 24px; border-radius: 12px; background: rgba(200,146,42,0.15);
+    border: 1px solid var(--border-strong); position: relative; cursor: pointer; flex-shrink: 0;
+  }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--cream-dim); transition: left 0.2s ease, background 0.2s ease;
+  }
+  .toggle.on { background: rgba(200,146,42,0.3); border-color: var(--gold); }
+  .toggle.on::after { left: 22px; background: var(--gold); }
+  .toggle-label { font-size: 14px; color: var(--cream); }
+
+  .hint { font-size: 12.5px; color: var(--cream-dim); font-style: italic; margin-top: 10px; }
+
+  @media print { body { background: white; color: black; } .wheel-svg { filter: none; } .tab-nav { display: none; } .tab-panel { display: block !important; } }
+</style>
+<style id="tema-ambientacion">
+  :root { --gold:#C9AE72; --gold-light:#F1E6C9; --gold-dim:#4A3F28; --border:rgba(201,174,114,.24); --border-strong:rgba(201,174,114,.5); --glow:rgba(241,230,201,.14); --hilo:rgba(241,230,201,.03); }
+
+  /* ── Rueda del Tiempo: capa común ── */
+  body { background-color: var(--bg-deep); }
+  body::before { content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
+    background:
+      repeating-linear-gradient(62deg, transparent 0 13px, var(--hilo) 13px 14px),
+      repeating-linear-gradient(-62deg, transparent 0 17px, var(--hilo) 17px 18px); }
+  .hero, .page, .weave-divider { position: relative; z-index: 1; }
+  .wheel-svg.rueda-emblema { width: 172px; height: 172px; animation: none; overflow: visible; }
+  .rueda-giro { transform-origin: 100px 100px; animation: rueda-gira 80s linear infinite; }
+  @keyframes rueda-gira { to { transform: rotate(360deg); } }
+  .antigua-lengua { font-family: 'Cinzel Decorative', serif; font-size: 15px; letter-spacing: .06em; color: var(--gold-light); margin: 14px auto 2px; }
+  .antigua-lengua + .antigua-trad { font-family: 'EB Garamond', serif; font-style: italic; font-size: 13.5px; color: var(--cream-dim); margin: 0 auto 18px; }
+  h2.section-title { display:flex; align-items:center; gap:12px; }
+  h2.section-title::before { content:""; flex:0 0 18px; height:18px; background: var(--gold);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22/%3E%3Cpath%20d%3D%22M12%203v6M12%2015v6M3%2012h6M15%2012h6M5.6%205.6l4.3%204.3M14.1%2014.1l4.3%204.3M18.4%205.6l-4.3%204.3M9.9%2014.1l-4.3%204.3%22/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22/%3E%3Cpath%20d%3D%22M12%203v6M12%2015v6M3%2012h6M15%2012h6M5.6%205.6l4.3%204.3M14.1%2014.1l4.3%204.3M18.4%205.6l-4.3%204.3M9.9%2014.1l-4.3%204.3%22/%3E%3C/svg%3E") center/contain no-repeat; }
+  .tab-btn.active { text-shadow: 0 0 12px var(--glow); }
+  @media (prefers-reduced-motion: reduce) { .rueda-giro, .capa-guardian { animation: none !important; } }
+
+  .wheel-svg.rueda-emblema { filter: drop-shadow(0 0 18px rgba(241,230,201,.30)); }
+  .hero-title { color: var(--gold-light) !important; }
+  /* Flecos del chal: los siete Ajah */
+  .flecos-ajah { display:grid; grid-template-columns:repeat(7,1fr); max-width:520px; height:6px; margin:18px auto 0; gap:3px; }
+  .flecos-ajah span { border-radius:1px; }
+  .flecos-ajah span:nth-child(1){background:#F4F1EA} .flecos-ajah span:nth-child(2){background:#3D6FB5}
+  .flecos-ajah span:nth-child(3){background:#8A5A33} .flecos-ajah span:nth-child(4){background:#8E8E8E}
+  .flecos-ajah span:nth-child(5){background:#3E8A4F} .flecos-ajah span:nth-child(6){background:#D9B53A}
+  .flecos-ajah span:nth-child(7){background:#B3322B}
+  .flecos-ajah + .flecos-nota { font-family:'Cinzel',serif; font-size:9.5px; letter-spacing:.3em; color:var(--cream-dim); margin:8px 0 0; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <svg class="wheel-svg rueda-emblema" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g class="rueda-giro" fill="none" stroke="#BFA36A">
+      <circle cx="100" cy="100" r="50" stroke-width="2.2"/>
+      <circle cx="100" cy="100" r="44" stroke-width="0.6" opacity="0.6"/>
+      <g stroke-width="2.4" stroke-linecap="round"><line x1="120.3" y1="108.4" x2="146.2" y2="119.1"/><line x1="108.4" y1="120.3" x2="119.1" y2="146.2"/><line x1="91.6" y1="120.3" x2="80.9" y2="146.2"/><line x1="79.7" y1="108.4" x2="53.8" y2="119.1"/><line x1="79.7" y1="91.6" x2="53.8" y2="80.9"/><line x1="91.6" y1="79.7" x2="80.9" y2="53.8"/><line x1="108.4" y1="79.7" x2="119.1" y2="53.8"/><line x1="120.3" y1="91.6" x2="146.2" y2="80.9"/></g>
+      <circle cx="100" cy="100" r="22" stroke-width="1.6"/>
+    </g>
+    <!-- La Gran Serpiente que se muerde la cola -->
+    <g fill="none" stroke="#EDE3C8">
+      <circle cx="100" cy="100" r="66" stroke-width="7" stroke-dasharray="3.2 2.2" opacity="0.55" transform="rotate(-80 100 100)" stroke-dashoffset="0"/>
+      <circle cx="100" cy="100" r="66" stroke-width="1" opacity="0.8"/>
+      <circle cx="100" cy="100" r="70.5" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="100" cy="100" r="61.5" stroke-width="0.8" opacity="0.6"/>
+    </g>
+    <path d="M100 26 C 112 27 118 31 117 36 C 116 41 108 41 100 40 Z" fill="#EDE3C8" opacity="0.95"/>
+    <circle cx="110" cy="33" r="1.4" fill="#0a0a0f"/>
+    <g transform="translate(50 50)"><path d="M50 28 C60 42 63 52 56 62 C53 67 47 67 44 62 C37 52 40 42 50 28 Z" fill="#F4EEE0" stroke="#BFA36A" stroke-width="1"/><path d="M50 44 C54 51 54 56 51 60 C49 62 47 60 47.5 57 C48 53 50 51 50 44 Z" fill="#E8D9B0" opacity="0.8"/></g>
+  </svg>
+
+  <p class="hero-eyebrow">Clase de D&D 5ª Edición · Homebrew · Full Caster</p>
+  <h1 class="hero-title">El Tejedor<br>del Poder</h1>
+  <p class="antigua-lengua">Aes Sedai</p>
+  <p class="antigua-trad">«Servidores de Todos»</p>
+  <p class="hero-subtitle">
+    No hay filo que sostenga tanto como un tejido bien hecho. El Tejedor del Poder ha entregado su vida entera al estudio de la Fuente Verdadera — Saidin o Saidar, da igual — hasta convertirse en algo mucho más peligroso que cualquier espada: alguien capaz de deshacer el mundo, con la disciplina suficiente para no hacerlo.
+  </p>
+  <div class="hero-tags">
+    <span class="tag">Full Caster</span>
+    <span class="tag">Los Cinco Poderes</span>
+    <span class="tag">Enlace</span>
+    <span class="tag">Saidin o Saidar</span>
+    <span class="tag">Ajahs</span>
+  </div>
+  <div class="flecos-ajah" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <p class="flecos-nota">Blanco · Azul · Marrón · Gris · Verde · Amarillo · Rojo</p>
+</div>
+
+<svg class="weave-divider" viewBox="0 0 860 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 20 Q 60 5 120 20 Q 180 35 240 20 Q 300 5 360 20 Q 420 35 480 20 Q 540 5 600 20 Q 660 35 720 20 Q 780 5 860 20" fill="none" stroke="#C8922A" stroke-width="0.8" opacity="0.3"/>
+  <path d="M0 25 Q 80 10 160 25 Q 240 40 320 25 Q 400 10 480 25 Q 560 40 640 25 Q 720 10 800 25 Q 840 30 860 25" fill="none" stroke="#C8922A" stroke-width="0.4" opacity="0.15"/>
+</svg>
+
+<!-- ══════════════ TAB NAV ══════════════ -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="clase">Clase</button>
+  <button class="tab-btn" data-tab="habilidades">Habilidades</button>
+  <button class="tab-btn" data-tab="tejidos">Tejidos</button>
+  <button class="tab-btn" data-tab="subclases">Ajahs</button>
+  <button class="tab-btn" data-tab="ficha">Ficha de Juego</button>
+</div>
+
+<!-- ══════════════ PÁGINA ══════════════ -->
+<div class="page">
+
+  <!-- ═══════ TAB: CLASE ═══════ -->
+  <div class="tab-panel active" id="tab-clase">
+    <div class="section reveal">
+      <h2 class="section-title">Descripción de Clase</h2>
+      <p style="margin-bottom:16px;">
+        El Tejedor del Poder es cualquiera que haya dedicado su vida a dominar la <em>Fuente Verdadera</em> — la corriente que alimenta toda la creación, dividida en dos mitades complementarias: el <em>Saidin</em>, masculino, y el <em>Saidar</em>, femenino. Da igual qué mitad toques: el resultado mecánico es idéntico, y la elección es puramente narrativa. Puedes ser una Aes Sedai jurada de la Torre Blanca, un Asha'man del Torre Negro, una Sabia de los Aiel, o alguien que aún estudia sin haber jurado nada todavía.
+      </p>
+      <p style="margin-bottom:16px;">
+        A diferencia de otros que rozan el Poder de pasada, el Tejedor lo ha convertido en el centro absoluto de su vida. No lleva armadura — se interpone entre él y el Poder que necesita sentir fluir sin obstáculos — y rara vez necesita nada más que una daga o un báculo, símbolos de su formación más que armas de verdad.
+      </p>
+      <p>
+        Su verdadero arsenal son los <strong>Tejidos</strong>: efectos que entrelaza a partir de los cinco elementos que componen la realidad. Con el tiempo y el estudio, esos tejidos crecen de simples chispas a fuerzas capaces de cambiar el curso de una batalla — o de una guerra.
+      </p>
+    </div>
+
+    <div class="quick-stats reveal">
+      <div class="stat-cell"><span class="stat-label">Dado de Golpe</span><span class="stat-value">d6</span></div>
+      <div class="stat-cell"><span class="stat-label">Conjuración</span><span class="stat-value">Inteligencia</span></div>
+      <div class="stat-cell"><span class="stat-label">Salvaciones</span><span class="stat-value">Inteligencia · Sabiduría</span></div>
+      <div class="stat-cell"><span class="stat-label">Armas</span><span class="stat-value">Simples (tradicionalmente daga o báculo)</span></div>
+      <div class="stat-cell"><span class="stat-label">Armaduras</span><span class="stat-value">Ninguna</span></div>
+      <div class="stat-cell"><span class="stat-label">Habilidades</span><span class="stat-value">2 de: Arcanos, Historia, Perspicacia, Investigación, Persuasión, Engaño</span></div>
+    </div>
+
+    <div class="section reveal">
+      <h2 class="section-title">Tabla de Progresión</h2>
+      <p class="hint" style="margin-bottom:14px;">La fila resaltada sigue el nivel que elijas en la pestaña <strong>Ficha de Juego</strong>. Los espacios de conjuro siguen la progresión estándar de conjurador completo.</p>
+      <div style="overflow-x:auto;">
+      <table class="prog-table" id="prog-table">
+        <thead>
+          <tr>
+            <th>Nv.</th><th>B.Prof.</th><th>Menores</th>
+            <th>1º</th><th>2º</th><th>3º</th><th>4º</th><th>5º</th><th>6º</th><th>7º</th><th>8º</th><th>9º</th>
+            <th>Características</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-lvl="1"><td class="col-level">1</td><td class="col-pb">+2</td><td>3</td><td class="col-slot">2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">La Fuente Verdadera, Tejer el Poder, Tejidos Menores</td></tr>
+          <tr data-lvl="2"><td class="col-level">2</td><td class="col-pb">+2</td><td>3</td><td class="col-slot">3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Recuperación del Tejido</td></tr>
+          <tr data-lvl="3"><td class="col-level">3</td><td class="col-pb">+2</td><td>3</td><td class="col-slot">4</td><td class="col-slot">2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Ajah (Subclase)</td></tr>
+          <tr data-lvl="4"><td class="col-level">4</td><td class="col-pb">+2</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="5"><td class="col-level">5</td><td class="col-pb">+3</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">—</td></tr>
+          <tr data-lvl="6"><td class="col-level">6</td><td class="col-pb">+3</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Característica de Ajah, Fluir con el Poder</td></tr>
+          <tr data-lvl="7"><td class="col-level">7</td><td class="col-pb">+3</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Enlace</td></tr>
+          <tr data-lvl="8"><td class="col-level">8</td><td class="col-pb">+3</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="9"><td class="col-level">9</td><td class="col-pb">+4</td><td>4</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">1</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Estudio Incesante</td></tr>
+          <tr data-lvl="10"><td class="col-level">10</td><td class="col-pb">+4</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td>-</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Característica de Ajah</td></tr>
+          <tr data-lvl="11"><td class="col-level">11</td><td class="col-pb">+4</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Afinidad Elemental</td></tr>
+          <tr data-lvl="12"><td class="col-level">12</td><td class="col-pb">+4</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td>-</td><td>-</td><td>-</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="13"><td class="col-level">13</td><td class="col-pb">+5</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td>-</td><td>-</td><td class="col-feature">—</td></tr>
+          <tr data-lvl="14"><td class="col-level">14</td><td class="col-pb">+5</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td>-</td><td>-</td><td class="col-feature">Característica de Ajah</td></tr>
+          <tr data-lvl="15"><td class="col-level">15</td><td class="col-pb">+5</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td>-</td><td class="col-feature">Enlace Ampliado</td></tr>
+          <tr data-lvl="16"><td class="col-level">16</td><td class="col-pb">+5</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td>-</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="17"><td class="col-level">17</td><td class="col-pb">+6</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-feature">Fuente Inagotable</td></tr>
+          <tr data-lvl="18"><td class="col-level">18</td><td class="col-pb">+6</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-feature">Mente Inviolable</td></tr>
+          <tr data-lvl="19"><td class="col-level">19</td><td class="col-pb">+6</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="20"><td class="col-level">20</td><td class="col-pb">+6</td><td>5</td><td class="col-slot">4</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">3</td><td class="col-slot">2</td><td class="col-slot">2</td><td class="col-slot">1</td><td class="col-slot">1</td><td class="col-feature">Maestro del Poder Único</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="hint">Tejidos preparados: modificador de Inteligencia + nivel de Tejedor (mínimo 1).</p>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: HABILIDADES ═══════ -->
+  <div class="tab-panel" id="tab-habilidades">
+    <div class="section reveal">
+      <h2 class="section-title">Habilidades de Clase</h2>
+
+      <div class="hilos-box">
+        <h3>La Fuente Verdadera</h3>
+        <p>Al crear tu personaje, elige si toca el <strong>Saidin</strong> o el <strong>Saidar</strong>. Esta elección es narrativa: ambas mitades funcionan de forma idéntica en términos de reglas.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejer el Poder <span class="level-badge">Nivel 1</span></h3>
+        <p>Eres un conjurador completo. Preparas Tejidos de la <em>lista de conjuros de Mago</em> (reflavorizados según los Cinco Poderes, ver más abajo), usando Inteligencia como tu característica de conjuración. Preparas un número de Tejidos igual a tu modificador de Inteligencia + tu nivel de Tejedor (mínimo 1), que puedes cambiar al final de un descanso largo.</p>
+        <p><strong>Tejidos de Curación.</strong> Además de la lista de Mago, puedes preparar estos conjuros de Clérigo, tejidos con Agua y Espíritu: <em>Orientación</em> (truco), <em>Curar Heridas</em>, <em>Palabra Sanadora</em>, <em>Restablecimiento Menor</em>, <em>Plegaria de Curación</em>, <em>Restablecimiento Mayor</em>, <em>Curar Heridas en Masa</em> y <em>Sanar</em>. La Curación de la Rueda no devuelve a los muertos.</p>
+        <p>Usas tus espacios de conjuro según la tabla de progresión, exactamente como cualquier otro conjurador completo. Puedes lanzar como rituales los Tejidos que tengas preparados y que tengan la etiqueta de ritual, sin gastar un espacio de conjuro.</p>
+        <div class="rule">La CD para tus Tejidos es <strong>8 + tu bonificador de competencia + tu modificador de Inteligencia</strong>. El bonificador de ataque de tus Tejidos es <strong>tu bonificador de competencia + tu modificador de Inteligencia</strong>.</div>
+        <p style="margin-top:12px;"><strong>Restricción:</strong> Los Tejedores del Poder no pueden preparar conjuros de la escuela de Nigromancia. La Fuente Verdadera no se presta a ese tipo de manipulación sobre la vida y la muerte.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Los Cinco Poderes <span class="level-badge">Nivel 1</span></h3>
+        <p>Cada Tejido que preparas se entreteje narrativamente a partir de uno o más de los cinco elementos. Usa esta tabla como guía de correspondencias entre las escuelas de magia tradicionales y los Cinco Poderes:</p>
+        <div class="elements-grid">
+          <div class="element-pill"><span class="element-icon">🪨</span><span class="element-name">Tierra</span><span class="element-effect">Transmutación física, barreras, ataduras</span></div>
+          <div class="element-pill"><span class="element-icon">🔥</span><span class="element-name">Fuego</span><span class="element-effect">Evocación de daño, calor, luz forzada</span></div>
+          <div class="element-pill"><span class="element-icon">💨</span><span class="element-name">Aire</span><span class="element-effect">Evocación de fuerza, desplazamiento, ilusión</span></div>
+          <div class="element-pill"><span class="element-icon">💧</span><span class="element-name">Agua</span><span class="element-effect">Curación, frío, niebla, transmutación líquida</span></div>
+          <div class="element-pill"><span class="element-icon">✦</span><span class="element-name">Espíritu</span><span class="element-effect">Adivinación, abjuración, encantamiento</span></div>
+        </div>
+        <p class="hint">Esta tabla es orientativa: al preparar un Tejido, decide junto a tu DM qué combinación de Poderes usas para tejerlo. No cambia ningún efecto mecánico del conjuro elegido.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejidos Menores <span class="level-badge">Nivel 1</span></h3>
+        <p>Conoces trucos menores (cantrips) según la tabla de progresión, elegidos de la lista de Tejidos Menores (ver pestaña Tejidos).</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Recuperación del Tejido <span class="level-badge">Nivel 2</span></h3>
+        <p>Una vez al día, durante un descanso corto, puedes recuperar espacios de conjuro gastados con un nivel combinado igual a la mitad de tu nivel de Tejedor (redondeando hacia arriba), ninguno de nivel 6 o superior.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Fluir con el Poder <span class="level-badge">Nivel 6</span></h3>
+        <p>Cuando haces una tirada de salvación contra un conjuro o un Tejido, puedes usar tu reacción y gastar un espacio de conjuro para sumar su nivel a la tirada, después de verla pero antes de saber si tienes éxito.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Enlace <span class="level-badge">Nivel 7</span></h3>
+        <p>Aprendes la técnica más antigua y peligrosa que existe entre quienes tocan la Fuente Verdadera: unir tu fuerza a la de otros. Como acción, puedes forjar un Enlace con hasta <strong>dos criaturas</strong> dispuestas y capaces de tocar el Poder Único, a 30 pies de ti.</p>
+        <p>Mientras el Enlace se mantenga (requiere tu concentración, hasta 10 minutos), te conviertes en el <em>foco</em> del grupo: cuando lanzas un Tejido, puedes gastar un espacio de conjuro de cualquier criatura enlazada en lugar de uno propio. Las criaturas enlazadas permanecen conscientes de su entorno y pueden actuar con normalidad, pero no pueden gastar sus propios espacios de conjuro de forma independiente mientras dure el Enlace — pueden abandonarlo como reacción en cualquier momento.</p>
+        <p>Si tu concentración se rompe, el Enlace termina para todos los implicados. Una vez que uses esta característica, no puedes volver a hacerlo hasta que termines un descanso corto o largo.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Estudio Incesante <span class="level-badge">Nivel 9</span></h3>
+        <p>Aprendes un Tejido Menor adicional de cualquier lista de conjuros.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Afinidad Elemental <span class="level-badge">Nivel 11</span></h3>
+        <p>Elige uno de los Cinco Poderes. Los Tejidos que inflijan el tipo de daño asociado a ese Poder (fuego, frío, contundente/fuerza, etc., según acordéis con tu DM) ignoran la resistencia a ese tipo, y al tirar su daño tratas cualquier 1 como un 2.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Enlace Ampliado <span class="level-badge">Nivel 15</span></h3>
+        <p>La capacidad de tu Enlace aumenta a <strong>cuatro criaturas</strong>. Además, mientras estés enlazado con al menos una criatura, tanto tú como todas las criaturas enlazadas tenéis ventaja en las tiradas de salvación de Constitución para mantener la concentración.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Fuente Inagotable <span class="level-badge">Nivel 17</span></h3>
+        <p>Una vez por descanso largo, puedes lanzar un Tejido preparado de nivel 5 o inferior sin gastar ningún espacio de conjuro.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Mente Inviolable <span class="level-badge">Nivel 18</span></h3>
+        <p>Eres inmune a los efectos de encantamiento y a ser aterrorizado. Cuando una criatura intenta leer tu mente, predecir tus acciones o verte mediante magia de adivinación, debes consentirlo o la magia falla automáticamente.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Maestro del Poder Único <span class="level-badge">Nivel 20 · Cúspide</span></h3>
+        <p>Has llegado a un dominio de la Fuente Verdadera que muy pocos alcanzan en toda una vida de estudio.</p>
+        
+        <p><strong>Dominio Absoluto:</strong> Una vez en cada uno de tus turnos, puedes lanzar un Tejido preparado de nivel 1 sin gastar un espacio de conjuro.</p>
+        <p><strong>Voluntad Perfecta:</strong> Tienes éxito automático en cualquier tirada de salvación contra efectos que buscan cortarte de la Fuente Verdadera o apagar tu capacidad de canalizar.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: TEJIDOS ═══════ -->
+  <div class="tab-panel" id="tab-tejidos">
+    <div class="section reveal">
+      <h2 class="section-title">Tejidos — Cómo Funcionan</h2>
+      <p style="margin-bottom: 20px; color: var(--cream-dim); font-style: italic;">
+        El Tejedor del Poder utiliza la <strong>lista de conjuros de Mago</strong> como base mecánica de sus Tejidos, reflavorizados según los Cinco Poderes. Esto significa que, en la mesa, eliges cualquier conjuro de la lista de Mago del nivel apropiado y lo describes en términos de Tierra, Fuego, Aire, Agua o Espíritu, en lugar de fórmulas arcanas o gestos rituales.
+      </p>
+
+      <div class="hilos-box">
+        <h3>Tejidos Menores (Trucos)</h3>
+        <p>Algunas opciones reflavorizadas para empezar — cada una es mecánicamente idéntica a un truco existente, solo con nombre y descripción distintos:</p>
+        <table class="spell-mini-table">
+          <thead><tr><th>Tejido Menor</th><th>Poder</th><th>Equivalente Mecánico</th></tr></thead>
+          <tbody>
+            <tr><td>Chispa de Fuego</td><td>Fuego</td><td>Idéntico a Descarga de Fuego (Fire Bolt)</td></tr>
+            <tr><td>Punta de Escarcha</td><td>Agua</td><td>Idéntico a Rayo de Escarcha (Ray of Frost)</td></tr>
+            <tr><td>Mano de Aire</td><td>Aire</td><td>Idéntico a Mano de Mago (Mage Hand)</td></tr>
+            <tr><td>Escudo de Tierra Menor</td><td>Tierra</td><td>Idéntico a Defensa de Cuchilla (Blade Ward)</td></tr>
+            <tr><td>Susurro del Espíritu</td><td>Espíritu</td><td>Idéntico a Orientación (Guidance), tomado de la lista de Clérigo</td></tr>
+            <tr><td>Pequeños Prodigios</td><td>Espíritu</td><td>Idéntico a Prestidigitación</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejidos de Nivel 1 a 9</h3>
+        <p>Para cualquier Tejido de nivel 1 o superior, elige un conjuro de la lista de Mago del nivel correspondiente (o de la lista ampliada que te otorgue tu Ajah, ver pestaña Ajahs) y reflavorízalo usando la tabla de correspondencias de Los Cinco Poderes. Algunos ejemplos de cómo quedarían nombrados en tu mesa:</p>
+        <table class="spell-mini-table">
+          <thead><tr><th>Nombre en Tejido</th><th>Nivel</th><th>Equivalente Mecánico</th></tr></thead>
+          <tbody>
+            <tr><td>Lanza de Aire</td><td>1º</td><td>Idéntico a Proyectil Mágico (Magic Missile)</td></tr>
+            <tr><td>Muro de Piedra</td><td>5º</td><td>Idéntico a Muro de Piedra (Wall of Stone)</td></tr>
+            <tr><td>Toque que Sana</td><td>1º</td><td>Idéntico a Curar Heridas, tomado de la lista de Clérigo</td></tr>
+            <tr><td>Escudo del Alma</td><td>1º</td><td>Idéntico a Escudo (Shield)</td></tr>
+            <tr><td>Aliento de Brasas</td><td>3º</td><td>Idéntico a Bola de Fuego</td></tr>
+            <tr><td>Grito de Tormenta</td><td>3º</td><td>Idéntico a Rayo (Lightning Bolt)</td></tr>
+            <tr><td>Disolver Atadura</td><td>3º</td><td>Idéntico a Contrahechizo (Counterspell)</td></tr>
+            <tr><td>Tormenta Perfecta</td><td>9º</td><td>Idéntico a Meteoro (Meteor Swarm)</td></tr>
+          </tbody>
+        </table>
+        <p class="hint">Esta tabla es solo un punto de partida — cualquier conjuro de la lista de Mago (salvo Nigromancia) puede convertirse en un Tejido con el nombre y la narrativa que prefieras.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: AJAHS (SUBCLASES) ═══════ -->
+  <div class="tab-panel" id="tab-subclases">
+    <div class="section reveal">
+      <h2 class="section-title">Ajahs — Subclases de Tejedor</h2>
+      <p style="margin-bottom: 28px; color: var(--cream-dim); font-style: italic;">Al nivel 3, eliges tu Ajah entre las siete de la Torre Blanca: la tradición y filosofía que moldea cómo aplicas la Fuente Verdadera. Obtienes características adicionales en los niveles 3, 6, 10 y 14, incluyendo Tejidos que están siempre preparados y no cuentan para tu límite normal.</p>
+
+      <div class="subclass-grid">
+        <div class="subclass-card">
+          <div class="subclass-header dragon">
+            <p class="subclass-eyebrow">Ajah I</p>
+            <p class="subclass-name">Ajah Verde<br><span style="font-size:12px; opacity:0.8;">La Batalla</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>La guerra contra la Sombra nunca ha terminado del todo para ti. Tejes para destruir, con una precisión que pocos igualan en el campo de batalla.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Tejidos de Batalla:</strong> Siempre tienes preparados dos Tejidos de nivel 1 de la escuela de Evocación de tu elección (p. ej. Manos Ardientes, Ola Atronadora), además de tu límite normal. <strong>Reflejo de Guerra:</strong> añades tu modificador de Inteligencia a las tiradas de iniciativa.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Golpe de Poder:</strong> Una vez por turno, cuando infliges daño con un Tejido, añade tu modificador de Inteligencia a ese daño. Aprendes dos Tejidos adicionales de nivel 2 de Evocación siempre preparados.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Ala de Fuego:</strong> Al final de un descanso largo, elige un tipo de daño; tienes resistencia a ese tipo hasta tu siguiente descanso largo. Aprendes dos Tejidos adicionales de nivel 3 de Evocación siempre preparados.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Juicio de Batalla:</strong> (Ver descripción completa abajo). Aprendes dos Tejidos adicionales de nivel 4 de Evocación siempre preparados.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header pastor">
+            <p class="subclass-eyebrow">Ajah II</p>
+            <p class="subclass-name">Ajah Gris<br><span style="font-size:12px; opacity:0.8;">La Diplomacia</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Las palabras bien tejidas ganan guerras que el acero nunca podría. Nadie sabe doblar una voluntad, calmar una sala o desenmascarar una mentira como tú.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Tejidos de Control:</strong> Siempre tienes preparados dos Tejidos de nivel 1 de Encantamiento de tu elección (p. ej. Amistad, Dormir), además de tu límite normal. <strong>Palabra Precisa:</strong> ventaja en pruebas de Persuasión o Engaño (elige una al aprender esta característica).</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Palabra que Doblega:</strong> Una vez por descanso corto, cuando una criatura falla una salvación contra uno de tus Tejidos de Encantamiento, también tiene desventaja en sus tiradas de ataque hasta el final de su siguiente turno. Aprendes dos Tejidos adicionales de nivel 2 de Encantamiento siempre preparados.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Verdad Innegable:</strong> Siempre sabes cuándo una criatura que puedes ver y oír te está mintiendo deliberadamente. Aprendes dos Tejidos adicionales de nivel 3 de Encantamiento siempre preparados.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Voluntad de la Torre:</strong> (Ver descripción completa abajo). Aprendes dos Tejidos adicionales de nivel 4 de Encantamiento siempre preparados.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header" style="background: radial-gradient(ellipse at top left, color-mix(in srgb,#3D6FB5 28%,transparent), transparent 70%); border-top: 3px solid #3D6FB5;">
+            <p class="subclass-eyebrow" style="color:#8DB4EA;">Ajah III</p>
+            <p class="subclass-name" style="color:#8DB4EA;">Ajah Azul<br><span style="font-size:12px; opacity:0.8;">Las Causas</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Siempre persigues una causa más grande que tú, y tienes una red de ojos y oídos que llega a cada corte. Tejes con discreción, y casi nunca se sabe que fuiste tú.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Una Causa:</strong> Al terminar un descanso largo, declaras tu causa (derrocar a un tirano, encontrar a alguien, proteger una ciudad…). Mientras actúes directamente por ella, tienes ventaja en las pruebas de Perspicacia y de Persuasión. <strong>Ojos y Oídos:</strong> una vez por descanso largo, tu red te trae un rumor útil sobre tu causa. Tejidos siempre preparados: <em>Disfrazarse</em> y <em>Detectar Magia</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Golpe por la Causa:</strong> Una vez por turno, cuando un Tejido tuyo daña a una criatura que se opone a tu causa, añades tu modificador de Inteligencia al daño. Siempre preparados: <em>Detectar Pensamientos</em> y <em>Silencio</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Tejido Invertido:</strong> Puedes invertir tus tejidos: otros canalizadores no pueden verlos, identificarlos ni contrarrestarlos. Siempre preparados: <em>Recado</em> y <em>Clarividencia</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Lo que la Rueda Pide:</strong> Una vez por descanso largo, cuando un aliado a 60 pies fuera a caer a 0 puntos de golpe, usas tu reacción para recibir tú el golpe o el efecto, con resistencia a su daño. Siempre preparados: <em>Localizar Criatura</em> y <em>Puerta Dimensional</em>.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header" style="background: radial-gradient(ellipse at top left, color-mix(in srgb,#D9B53A 28%,transparent), transparent 70%); border-top: 3px solid #D9B53A;">
+            <p class="subclass-eyebrow" style="color:#F2D97A;">Ajah IV</p>
+            <p class="subclass-name" style="color:#F2D97A;">Ajah Amarilla<br><span style="font-size:12px; opacity:0.8;">La Curación</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Para ti no hay herida pequeña ni enemigo más importante que una vida que se apaga. Sabes que curar no es gratis: la energía para cerrar una herida sale del propio herido.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Ahondar y Curar:</strong> Como acción, tocas a una criatura y ahondas en ella: sabes sus puntos de golpe aproximados, sus enfermedades, venenos y maldiciones. <strong>Curación de la Torre:</strong> cuando un Tejido tuyo cura a una criatura, esta puede gastar hasta tu modificador de Inteligencia de sus dados de golpe y sumar lo que saque a la curación. Siempre preparados: <em>Curar Heridas</em> y <em>Palabra Sanadora</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Sanar lo Difícil:</strong> Una vez por descanso corto, puedes lanzar <em>Restablecimiento Menor</em> como acción adicional sin gastar un espacio. Siempre preparados: <em>Restablecimiento Menor</em> y <em>Auxilio</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Curar lo Imposible:</strong> Tus Tejidos de curación pueden terminar también maldiciones, la petrificación y cualquier reducción de los puntos de golpe máximos. Siempre preparados: <em>Curar Heridas en Masa</em> y <em>Restablecimiento Mayor</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Curación Absoluta:</strong> Una vez por descanso largo, lanzas <em>Sanar</em> sin gastar un espacio, y el objetivo tiene resistencia a todo el daño hasta el inicio de tu siguiente turno. La Curación no devuelve a los muertos. Siempre preparados: <em>Sanar</em> y <em>Protección contra la Muerte</em>.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header" style="background: radial-gradient(ellipse at top left, color-mix(in srgb,#B3322B 28%,transparent), transparent 70%); border-top: 3px solid #B3322B;">
+            <p class="subclass-eyebrow" style="color:#E8786F;">Ajah V</p>
+            <p class="subclass-name" style="color:#E8786F;">Ajah Roja<br><span style="font-size:12px; opacity:0.8;">La Caza</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Tu Ajah persigue a quienes canalizan sin control. Sabes interponer un escudo entre otro canalizador y la Fuente, y sostenerlo hasta que se rinda.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Escudar:</strong> Como acción, gastas un espacio de conjuro de nivel 2 o superior. Una criatura a 30 pies capaz de lanzar conjuros hace una salvación de Inteligencia: si la falla, no puede lanzar conjuros durante 1 minuto (concentración). Repite la salvación al final de cada uno de sus turnos, con desventaja si usaste un espacio de nivel 4 o superior. Siempre preparados: <em>Escudo</em> y <em>Detectar Magia</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Atar el Escudo:</strong> Puedes atar tu Escudar: deja de requerir concentración y la criatura repite la salvación solo cada 1 minuto. Siempre preparados: <em>Inmovilizar Persona</em> y <em>Silencio</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Cazadora:</strong> Tienes ventaja en las salvaciones contra conjuros de criaturas a las que hayas escudado, y tus Tejidos añaden tu modificador de Inteligencia al daño contra criaturas que lanzan conjuros. Siempre preparados: <em>Contrahechizo</em> y <em>Disipar Magia</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Amansar:</strong> Una vez por descanso largo, si una criatura escudada por ti está apresada, incapacitada o a 0 puntos de golpe, puedes cortarla de la Fuente para siempre. El DM decide qué significa eso para un ser no humano. Siempre preparados: <em>Destierro</em> e <em>Inmovilizar Monstruo</em>.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header" style="background: radial-gradient(ellipse at top left, color-mix(in srgb,#8A5A33 28%,transparent), transparent 70%); border-top: 3px solid #8A5A33;">
+            <p class="subclass-eyebrow" style="color:#C99A6E;">Ajah VI</p>
+            <p class="subclass-name" style="color:#C99A6E;">Ajah Marrón<br><span style="font-size:12px; opacity:0.8;">El Saber</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Vives entre libros y objetos antiguos. Lo que otras no recuerdan, tú lo encontraste en un pergamino de la Era de Leyendas.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Biblioteca de la Torre:</strong> Duplicas tu bonificador de competencia en Historia y en Arcanos. <strong>Ter'angreal:</strong> puedes estar sintonizada con un objeto mágico más de lo normal, y te basta con tocar uno durante 1 minuto para saber qué hace. Siempre preparados: <em>Identificar</em> y <em>Comprensión Idiomática</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Saber Olvidado:</strong> Una vez por descanso corto, preguntas al DM la mayor debilidad de una criatura que veas: una vulnerabilidad, una resistencia o su salvación más baja. Tu siguiente Tejido contra ella tiene ventaja o impone desventaja en su salvación. Siempre preparados: <em>Localizar Objeto</em> y <em>Augurio</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Tejido Perdido:</strong> Al terminar un descanso largo, eliges un conjuro de nivel 3 o inferior de cualquier lista. Lo tienes siempre preparado como Tejido hasta tu siguiente descanso largo. Siempre preparados: <em>Don de Lenguas</em> y <em>Clarividencia</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Memoria de la Era de Leyendas:</strong> Una vez por descanso largo, lanzas un conjuro de nivel 5 o inferior de cualquier lista, gastando un espacio. Siempre preparados: <em>Leyenda</em> y <em>Ojo Arcano</em>.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header" style="background: radial-gradient(ellipse at top left, color-mix(in srgb,#F4F1EA 28%,transparent), transparent 70%); border-top: 3px solid #F4F1EA;">
+            <p class="subclass-eyebrow" style="color:#FFFFFF;">Ajah VII</p>
+            <p class="subclass-name" style="color:#FFFFFF;">Ajah Blanca<br><span style="font-size:12px; opacity:0.8;">La Lógica</span></p>
+          </div>
+          <div class="subclass-body">
+            <p>Para ti la Fuente es un problema de lógica. Observas, deduces el punto débil y tejes exactamente lo que hace falta, sin pasión y sin error.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Silogismo:</strong> Como acción adicional, analizas a una criatura que veas: sabes cuál es su salvación más baja. Tu siguiente Tejido contra ella antes del final de tu siguiente turno le obliga a hacer esa salvación en lugar de la normal. Siempre preparados: <em>Escudo</em> y <em>Comprensión Idiomática</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Calma Lógica:</strong> Tienes ventaja en las salvaciones de Constitución para mantener la concentración, y no puedes quedar asustada. Siempre preparados: <em>Ver lo Invisible</em> y <em>Calmar Emociones</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Refutar:</strong> Una vez por descanso corto, cuando una criatura analizada con Silogismo supera una salvación contra tu Tejido, la repite y se queda con el nuevo resultado. Siempre preparados: <em>Lentitud</em> y <em>Don de Lenguas</em>.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Verdad Absoluta:</strong> Una vez por descanso largo, durante 1 minuto, Silogismo no te cuesta acción y las criaturas analizadas hacen con desventaja las salvaciones contra tus Tejidos. Siempre preparados: <em>Confusión</em> y <em>Ojo Arcano</em>.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name" style="color: var(--red-light);">Juicio de Batalla <span class="level-badge">Ajah Verde · Nivel 14</span></h3>
+        <p style="color: var(--cream-dim); font-style: italic; margin-bottom: 12px;">Cuando el campo de batalla lo exige, la Fuente Verdadera responde sin dudar.</p>
+        <p>Una vez por descanso largo, puedes lanzar un Tejido de la escuela de Evocación de nivel 5 o inferior sin gastar un espacio de conjuro.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name" style="color: #A8D4A8;">Voluntad de la Torre <span class="level-badge">Ajah Gris · Nivel 14</span></h3>
+        <p>Como acción, eliges hasta tres criaturas que puedas ver a 60 pies. Cada una debe superar una salvación de Sabiduría o quedar encantada durante 1 minuto y obligada a seguir una orden clara y razonable que le des durante ese tiempo (efecto idéntico a Sugestión en Masa). Una vez usas esta característica, no puedes volver a hacerlo hasta que completes un descanso largo.</p>
+      </div>
+    </div>
+
+    <div class="corruption-box reveal">
+      <h2>Regla Opcional — El Precio del Poder</h2>
+      <p>Tocar la Fuente Verdadera nunca es gratis. Esta regla opcional es para grupos que deseen incorporar esa tensión narrativa a sus partidas, adaptada según qué mitad del Poder toque tu personaje.</p>
+      <p class="corruption-title">Si tocas el Saidin</p>
+      <p>El Oscuro corrompió esta mitad del Poder hace una Era, y aunque algunos relatos hablan de una purificación reciente, un DM puede optar por mantener la amenaza: todo hombre que canaliza en exceso camina hacia la locura. El DM puede llevar un marcador secreto de "torsión" puramente narrativo, que sube cuando el personaje abusa del poder o canaliza en situaciones desesperadas, y colorea su interpretación con visiones, voces o desconfianza creciente — sin forzar nunca sus acciones.</p>
+      <p class="corruption-title">Si tocas el Saidar</p>
+      <p>La amenaza aquí no es la locura, sino el control: sociedades enteras han construido su poder alrededor de vigilar, entrenar o encadenar a quienes tocan esta mitad de la Fuente. El DM puede introducir presión política, intentos de reclutamiento forzoso, o la simple sospecha con la que el mundo mira a alguien capaz de tejer sin supervisión.</p>
+      <p class="corruption-title">Para ambos casos</p>
+      <p>Esta regla es una herramienta de historia, no de castigo. Habla con tu DM sobre hasta dónde queréis llevarla y qué forma toma en vuestra mesa.</p>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: FICHA DE JUEGO ═══════ -->
+  <div class="tab-panel" id="tab-ficha">
+    <div class="section reveal">
+      <h2 class="section-title">Ficha de Juego</h2>
+      <p class="hint" style="margin-bottom:20px;">Herramientas de seguimiento para usar en mesa. Los valores se calculan a partir del nivel elegido y se guardan solo mientras esta página permanezca abierta.</p>
+
+      <div class="sheet-grid">
+        <div class="sheet-card wide">
+          <h3>Nivel de Personaje</h3>
+          <p class="sheet-sub">Elige tu nivel y tu modificador de Inteligencia para calcular tus Tejidos preparados.</p>
+          <div class="level-select-row">
+            <label for="level-select">Nivel</label>
+            <select id="level-select"></select>
+            <label for="int-mod">Mod. Int.</label>
+            <input type="number" id="int-mod" value="3" min="-5" max="10" onchange="renderDerived()">
+          </div>
+          <div class="derived-stats">
+            <div class="derived-stat"><span class="d-label">Bono Comp.</span><span class="d-value" id="d-pb">+2</span></div>
+            <div class="derived-stat"><span class="d-label">Tejidos Preparados</span><span class="d-value" id="d-prep">4</span></div>
+            <div class="derived-stat"><span class="d-label">Tejidos Menores</span><span class="d-value" id="d-cantrips">3</span></div>
+            <div class="derived-stat"><span class="d-label">CD de Tejido</span><span class="d-value" id="d-dc">13</span></div>
+          </div>
+        </div>
+
+        <div class="sheet-card wide">
+          <h3>Espacios de Conjuro</h3>
+          <p class="sheet-sub">Haz clic en un espacio para marcarlo como gastado.</p>
+          <div id="slots-container"></div>
+          <div class="btn-row">
+            <button class="btn" onclick="shortRestRecovery()">Recuperación del Tejido (desc. corto)</button>
+            <button class="btn" onclick="longRest()">Descanso Largo</button>
+            <button class="btn ghost" onclick="resetSlots()">Restablecer</button>
+          </div>
+        </div>
+
+        <div class="sheet-card wide">
+          <h3>Enlace</h3>
+          <p class="sheet-sub">Disponible desde nivel 7 (4 criaturas desde nivel 15).</p>
+          <div class="toggle-row">
+            <div class="toggle" id="enlace-toggle" onclick="toggleEnlace()"></div>
+            <span class="toggle-label" id="enlace-label">Enlace inactivo</span>
+          </div>
+          <div id="linked-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+          <p class="hint" id="enlace-hint"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fin .page -->
+
+<script>
+  // Progresión de espacios de conjuro (tabla estándar de conjurador completo)
+  const slotsTable = {
+    1:[2,0,0,0,0,0,0,0,0], 2:[3,0,0,0,0,0,0,0,0], 3:[4,2,0,0,0,0,0,0,0], 4:[4,3,0,0,0,0,0,0,0],
+    5:[4,3,2,0,0,0,0,0,0], 6:[4,3,3,0,0,0,0,0,0], 7:[4,3,3,1,0,0,0,0,0], 8:[4,3,3,2,0,0,0,0,0],
+    9:[4,3,3,3,1,0,0,0,0], 10:[4,3,3,3,2,0,0,0,0], 11:[4,3,3,3,2,1,0,0,0], 12:[4,3,3,3,2,1,0,0,0],
+    13:[4,3,3,3,2,1,1,0,0], 14:[4,3,3,3,2,1,1,0,0], 15:[4,3,3,3,2,1,1,1,0], 16:[4,3,3,3,2,1,1,1,0],
+    17:[4,3,3,3,2,1,1,1,1], 18:[4,3,3,3,3,1,1,1,1], 19:[4,3,3,3,3,2,1,1,1], 20:[4,3,3,3,3,2,2,1,1]
+  };
+  const cantripsTable = {1:3,2:3,3:3,4:4,5:4,6:4,7:4,8:4,9:4,10:5,11:5,12:5,13:5,14:5,15:5,16:5,17:5,18:5,19:5,20:5};
+  const pbTable = {1:2,2:2,3:2,4:2,5:3,6:3,7:3,8:3,9:4,10:4,11:4,12:4,13:5,14:5,15:5,16:5,17:6,18:6,19:6,20:6};
+
+  let state = { level: 1, slotsSpent: [0,0,0,0,0,0,0,0,0], enlaceActive: false };
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'instant'});
+    });
+  });
+
+  const levelSelect = document.getElementById('level-select');
+  for (let l = 1; l <= 20; l++) {
+    const opt = document.createElement('option');
+    opt.value = l;
+    opt.textContent = 'Nivel ' + l;
+    levelSelect.appendChild(opt);
+  }
+  levelSelect.addEventListener('change', () => {
+    state.level = parseInt(levelSelect.value);
+    state.slotsSpent = [0,0,0,0,0,0,0,0,0];
+    highlightProgRow();
+    renderDerived();
+    renderSlots();
+    renderEnlaceHint();
+  });
+
+  function highlightProgRow() {
+    document.querySelectorAll('#prog-table tbody tr').forEach(tr => {
+      tr.classList.toggle('current-level-row', parseInt(tr.dataset.lvl) === state.level);
+    });
+  }
+
+  function renderDerived() {
+    const pb = pbTable[state.level];
+    const intMod = parseInt(document.getElementById('int-mod').value) || 0;
+    document.getElementById('d-pb').textContent = '+' + pb;
+    document.getElementById('d-prep').textContent = Math.max(1, intMod + state.level);
+    document.getElementById('d-cantrips').textContent = cantripsTable[state.level];
+    document.getElementById('d-dc').textContent = 8 + pb + intMod;
+  }
+
+  function renderSlots() {
+    const slots = slotsTable[state.level];
+    const container = document.getElementById('slots-container');
+    container.innerHTML = '';
+    slots.forEach((max, idx) => {
+      if (max === 0) return;
+      const spent = state.slotsSpent[idx];
+      const available = max - spent;
+      const row = document.createElement('div');
+      row.className = 'slot-row';
+      const label = document.createElement('span');
+      label.className = 'slot-label';
+      label.textContent = 'Nivel ' + (idx + 1) + ' — ' + available + ' / ' + max;
+      row.appendChild(label);
+      const pipRow = document.createElement('div');
+      pipRow.className = 'pip-row';
+      for (let i = 0; i < max; i++) {
+        const pip = document.createElement('div');
+        pip.className = 'pip' + (i < available ? ' filled' : '');
+        pip.addEventListener('click', () => {
+          if (i < available) {
+            state.slotsSpent[idx] = max - i;
+          } else {
+            state.slotsSpent[idx] = max - i - 1;
+          }
+          renderSlots();
+        });
+        pipRow.appendChild(pip);
+      }
+      row.appendChild(pipRow);
+      container.appendChild(row);
+    });
+  }
+
+  function shortRestRecovery() {
+    // Recupera espacios con nivel combinado igual a la mitad del nivel (redondeando arriba), ninguno de 6+
+    let budget = Math.ceil(state.level / 2);
+    for (let idx = 4; idx >= 0 && budget > 0; idx--) { // niveles 5 a 1 (indices 4..0)
+      const max = slotsTable[state.level][idx];
+      if (max === 0) continue;
+      while (state.slotsSpent[idx] > 0 && budget >= (idx + 1)) {
+        state.slotsSpent[idx]--;
+        budget -= (idx + 1);
+      }
+    }
+    renderSlots();
+  }
+
+  function longRest() {
+    state.slotsSpent = [0,0,0,0,0,0,0,0,0];
+    renderSlots();
+  }
+
+  function resetSlots() {
+    state.slotsSpent = [0,0,0,0,0,0,0,0,0];
+    renderSlots();
+  }
+
+  function toggleEnlace() {
+    state.enlaceActive = !state.enlaceActive;
+    const toggle = document.getElementById('enlace-toggle');
+    const label = document.getElementById('enlace-label');
+    toggle.classList.toggle('on', state.enlaceActive);
+    label.textContent = state.enlaceActive ? 'Enlace activo' : 'Enlace inactivo';
+    renderLinkedList();
+  }
+
+  function renderLinkedList() {
+    const container = document.getElementById('linked-list');
+    container.innerHTML = '';
+    if (!state.enlaceActive) return;
+    const maxLinked = state.level >= 15 ? 4 : 2;
+    for (let i = 0; i < maxLinked; i++) {
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.gap = '10px';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.style.flex = '1';
+      input.placeholder = 'Criatura enlazada ' + (i + 1);
+      row.appendChild(input);
+      container.appendChild(row);
+    }
+  }
+
+  function renderEnlaceHint() {
+    const hint = document.getElementById('enlace-hint');
+    if (state.level < 7) {
+      hint.textContent = 'Aún no tienes acceso a Enlace (se obtiene en nivel 7).';
+    } else {
+      const maxLinked = state.level >= 15 ? 4 : 2;
+      hint.textContent = 'Puedes enlazar hasta ' + maxLinked + ' criatura' + (maxLinked > 1 ? 's' : '') + ' a la vez.';
+    }
+    renderLinkedList();
+  }
+
+  levelSelect.value = 1;
+  highlightProgRow();
+  renderDerived();
+  renderSlots();
+  renderEnlaceHint();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

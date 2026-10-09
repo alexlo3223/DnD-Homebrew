@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Dhampiro — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#c9a84c;--acc2:#ecd9a0;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:'IM Fell English SC','IM Fell English',Georgia,serif;--f-body:'Crimson Text',Georgia,serif;--f-label:'Cinzel','Trajan Pro',Georgia,serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+body{background:radial-gradient(circle at 84% 9%,rgba(235,228,210,.16) 0 54px,rgba(235,228,210,.05) 55px,transparent 140px),radial-gradient(ellipse 80% 45% at 50% 0%,color-mix(in srgb,#2b3f8a 35%,transparent),transparent 70%),var(--bg)}
+.hero h1{font-family:'UnifrakturCook','IM Fell English',serif;font-weight:700;text-shadow:0 0 28px color-mix(in srgb,#2b3f8a 40%,transparent),0 2px 0 #000}
+.cv-rosa{position:absolute;top:-180px;left:50%;width:620px;height:620px;transform:translateX(-50%);border-radius:50%;z-index:-1;pointer-events:none;opacity:.12;
+ background:repeating-conic-gradient(from 0deg,#2b3f8a 0 10deg,#1a0f0a 10deg 12deg,#7a1626 12deg 22deg,#1a0f0a 22deg 24deg);
+ -webkit-mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%)}
+.cv-murcielagos{position:absolute;top:30px;right:40px;width:420px;height:260px;z-index:-1;pointer-events:none;opacity:.8;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cg fill='%23c9a84c' opacity='.35'%3E%3Cpath d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(250 30) scale(.7)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(330 150) scale(.5)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3C/g%3E%3C/svg%3E") no-repeat}
+h2::before{content:"✠";margin-right:10px;color:var(--acc)}
+@media (max-width:700px){.cv-rosa{width:420px;height:420px;top:-140px}.cv-murcielagos{right:0;transform:scale(.6);transform-origin:top right}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="cv-rosa" aria-hidden="true"></div><div class="cv-murcielagos" aria-hidden="true"></div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Castlevania · Inspirada en Alucard</p>
+  <h1>El Dhampiro</h1>
+
+  <p class="lema">«Mi madre me enseñó a amar a los humanos. Mi padre, a no tenerles miedo. Llevo a los dos en la sangre.»</p>
+  <div class="tags"><span>Dos Naturalezas</span><span>Sangre</span><span>Dones</span><span>Formas Vampíricas</span><span>Corte del Señor</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Dones</button><button type="button" data-p="subs" aria-selected="false">Formas Vampíricas</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>El Dhampiro es hijo de un vampiro y de una humana. No vive a medias entre los dos mundos: vive entero en cada uno, según dónde caiga la luz. Bajo el sol es la parte que heredó de su madre, firme y compasiva. En la noche y en la sombra despierta la otra, rápida, hambrienta y peligrosa.</p><p>Esa <strong>doble naturaleza</strong> es el corazón de la clase. Cada mitad tiene sus propios rasgos y sus propios <strong>Dones</strong>, que se pagan con <strong>Sangre</strong>. Un Dhampiro bien jugado busca la sombra o la luz según lo que necesite, y aprende a forzar el cambio cuando el terreno no le conviene.</p><p>No arde al sol ni se debilita de día: la luz solo decide qué mitad tiene más cerca.</p><p>Al nivel 3 la sangre de tu padre se manifiesta de una de cuatro maneras: tres <strong>Formas</strong> en las que te transformas (Lobo, Murciélago, Niebla) o la <strong>Corte del Señor</strong>, el linaje de los vampiros que no muerden solos sino que mandan sobre sirvientes de sangre y un castillo propio.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d10</b></div><div><span>Característica principal</span><b>Destreza + Carisma</b></div><div><span>Salvaciones</span><b>Destreza · Carisma</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Sencillas, marciales</b></div><div><span>Habilidades</span><b>2 de: Acrobacias, Arcanos, Historia, Intimidación, Percepción, Persuasión, Sigilo</b></div><div><span>Subclase</span><b>Forma Vampírica (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Sangre máx.</th><th>Dado de Sangre</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>4</td><td>d6</td><td class="col-f">Dos Naturalezas, Sangre, Mordisco</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>4</td><td>d6</td><td class="col-f">Cambio Forzado, Dones de Sangre</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>4</td><td>d6</td><td class="col-f">Forma Vampírica</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>4</td><td>d6</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>6</td><td>d8</td><td class="col-f">Ataque Adicional</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>6</td><td>d8</td><td class="col-f">Rasgo de Forma, Sangre Antigua</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>6</td><td>d8</td><td class="col-f">Paso entre la Luz y la Sombra</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>6</td><td>d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>8</td><td>d8</td><td class="col-f">Espada Familiar</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>8</td><td>d8</td><td class="col-f">Rasgo de Forma</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>8</td><td>d10</td><td class="col-f">Hambre Contenida</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>8</td><td>d10</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>10</td><td>d10</td><td class="col-f">Hijo de Lisa</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>10</td><td>d10</td><td class="col-f">Rasgo de Forma</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>10</td><td>d10</td><td class="col-f">Equilibrio</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>10</td><td>d10</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>12</td><td>d12</td><td class="col-f">Familiar Despierto</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>12</td><td>d12</td><td class="col-f">Corazón Doble</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>12</td><td>d12</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>12</td><td>d12</td><td class="col-f">Hijo de Drácula</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Dos Naturalezas</h3><p>Al inicio de cada uno de tus turnos estás en una de tus dos naturalezas. Si estás bajo luz brillante o al sol, estás en tu <strong>naturaleza Humana</strong>. Si estás en penumbra, en oscuridad o es de noche al aire libre, estás en tu <strong>naturaleza Vampírica</strong>. Si dudas, eliges tú.</p><p><strong>Humana.</strong> Tienes ventaja en las salvaciones de Sabiduría y Carisma, y cuando gastas dados de golpe para curarte sumas tu modificador de Carisma a cada dado.</p><p><strong>Vampírica.</strong> Tienes visión en la oscuridad a 120 pies, tu velocidad aumenta 10 pies y tus ataques con arma infligen tu Dado de Sangre de daño necrótico adicional una vez por turno.</p><p>Fuera de combate, al dejar la luz o entrar en ella cambias al momento.</p></div><div class="caja"><h3>Sangre</h3><p>Tu recurso es la <strong>Sangre</strong>. Tu máximo es el doble de tu bonificador de competencia. La recuperas entera con un descanso largo, y la mitad con uno corto.</p><p>En tu naturaleza Vampírica, ganas 1 Sangre la primera vez en cada turno que impactas a una criatura que sangra. También ganas 1 al reducir a una criatura a 0 puntos de golpe, en cualquier naturaleza.</p><p>La CD de tus Dones es 8 + tu bonificador de competencia + tu modificador de Carisma.</p></div>
+    <article class="rasgo"><header><h3>Mordisco</h3><span class="nivel">Nivel 1</span></header><p>En tu naturaleza Vampírica, tu mordisco es un arma natural con la que tienes competencia. Inflige 1d6 de daño perforante + tu Dado de Sangre de daño necrótico, y recuperas tantos puntos de golpe como daño necrótico hayas causado. Puedes morder una vez por turno, y solo a criaturas que sangran y estén agarradas, incapacitadas o sorprendidas, o que estén de acuerdo.</p></article><article class="rasgo"><header><h3>Cambio Forzado</h3><span class="nivel">Nivel 2</span><span class="coste adicional">Acción adicional</span></header><p>Gastas 1 Sangre y pasas a la otra naturaleza, sea cual sea la luz, hasta el final de tu siguiente turno.</p></article><article class="rasgo"><header><h3>Dones de Sangre</h3><span class="nivel">Nivel 2</span></header><p>Conoces todos los Dones de tus dos naturalezas (pestaña Dones). Solo puedes usar los Dones de la naturaleza en la que estés.</p></article><article class="rasgo"><header><h3>Forma Vampírica</h3><span class="nivel">Nivel 3</span></header><p>Eliges la forma que hereda tu sangre: Lobo, Murciélago, Niebla o Corte del Señor. Obtienes rasgos de Forma a los niveles 3, 6, 10 y 14. Las tres primeras son transformaciones: solo puedes adoptarlas en tu naturaleza Vampírica, y si cambias a la Humana mientras la llevas, la forma termina. La Corte del Señor no se adopta: sus rasgos funcionan siempre que estés en tu naturaleza Vampírica, y sus Vasallos permanecen aunque cambies a la Humana.</p></article><article class="rasgo"><header><h3>Ataque Adicional</h3><span class="nivel">Nivel 5</span></header><p>Atacas dos veces cuando realizas la acción de Atacar.</p></article><article class="rasgo"><header><h3>Sangre Antigua</h3><span class="nivel">Nivel 6</span></header><p>Tienes resistencia al daño necrótico y eres inmune a las enfermedades.</p></article><article class="rasgo"><header><h3>Paso entre la Luz y la Sombra</h3><span class="nivel">Nivel 7</span></header><p>La primera vez en cada combate que cambias de naturaleza, por la luz o por Cambio Forzado, puedes moverte hasta la mitad de tu velocidad sin provocar ataques de oportunidad.</p></article><article class="rasgo"><header><h3>Espada Familiar</h3><span class="nivel">Nivel 9</span><span class="coste adicional">Acción adicional</span></header><p>Gastas 1 Sangre e invocas una espada que flota a tu lado durante 1 minuto. Mientras dure, cuando realizas la acción de Atacar, la espada hace un ataque adicional contra una criatura a 10 pies de ti. Usa tu bonificador de ataque e inflige 1d8 + tu modificador de Carisma de daño cortante. La espada no puede ser atacada.</p></article><article class="rasgo"><header><h3>Hambre Contenida</h3><span class="nivel">Nivel 11</span></header><p>Tu Mordisco puede usarse contra cualquier criatura que sangre, sin necesidad de que esté agarrada o incapacitada.</p></article><article class="rasgo"><header><h3>Hijo de Lisa</h3><span class="nivel">Nivel 13</span></header><p>Cuando quedas por debajo de la mitad de tus puntos de golpe, puedes usar tu reacción para pasar a tu naturaleza Humana y recuperar puntos de golpe iguales a tu nivel. Una vez por descanso largo.</p></article><article class="rasgo"><header><h3>Equilibrio</h3><span class="nivel">Nivel 15</span></header><p>Una vez por turno, puedes usar un Don de la naturaleza en la que no estás, pagando 1 Sangre más.</p></article><article class="rasgo"><header><h3>Familiar Despierto</h3><span class="nivel">Nivel 17</span></header><p>Tu Espada Familiar dura 10 minutos y su ataque inflige 2d8 + tu modificador de Carisma.</p></article><article class="rasgo"><header><h3>Corazón Doble</h3><span class="nivel">Nivel 18</span></header><p>Tu naturaleza Humana te da también resistencia al daño radiante, y la Vampírica, resistencia al daño de frío.</p></article><article class="rasgo"><header><h3>Hijo de Drácula</h3><span class="nivel">Nivel 20</span></header><p>Ya no eliges entre tus dos mitades. Estás siempre en ambas naturalezas a la vez, con los rasgos de las dos, y puedes usar cualquier Don sin coste extra. Al inicio de cada uno de tus turnos en combate, ganas 1 Sangre.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Dones</h2>
+    <p>Los Dones Humanos solo se usan en tu naturaleza Humana, y los Vampíricos en la Vampírica. Los que no indican acción se aplican cuando se cumple lo que describen.</p>
+    <article class="tecnica"><header><h3>Humano · Voluntad de su Madre</h3><span class="precio">1 Sangre</span><span class="coste reaccion">Reacción</span></header><p>Cuando fallas una salvación, la repites y te quedas con el nuevo resultado.</p></article><article class="tecnica"><header><h3>Humano · Manos que Curan</h3><span class="precio">2 Sangre</span><span class="coste accion">Acción</span></header><p>Tocas a una criatura y recupera dos tiradas de tu Dado de Sangre + tu modificador de Carisma de puntos de golpe.</p></article><article class="tecnica"><header><h3>Humano · Valor Compartido</h3><span class="precio">1 Sangre</span><span class="coste adicional">Acción adicional</span></header><p>Tus aliados a 30 pies tienen ventaja en las salvaciones contra quedar asustados hasta el final de tu siguiente turno, y uno que ya esté asustado deja de estarlo.</p></article><article class="tecnica"><header><h3>Humano · Golpe Justo</h3><span class="precio">1 Sangre</span></header><p>Cuando impactas a un no muerto o un infernal, añades dos tiradas de tu Dado de Sangre de daño radiante.</p></article><article class="tecnica"><header><h3>Humano · Varita Escudo</h3><span class="precio">1 Sangre</span><span class="coste reaccion">Reacción</span></header><p>Cuando atacan a un aliado a 30 pies, sumas 2 a su CA contra ese ataque.</p></article><article class="tecnica"><header><h3>Vampiro · Paso Sombrío</h3><span class="precio">1 Sangre</span><span class="coste adicional">Acción adicional</span></header><p>Te teletransportas hasta 30 pies a un espacio en penumbra u oscuridad que puedas ver.</p></article><article class="tecnica"><header><h3>Vampiro · Mirada de la Noche</h3><span class="precio">2 Sangre</span><span class="coste accion">Acción</span></header><p>Una criatura a 30 pies que pueda verte debe superar una salvación de Sabiduría o quedar encantada por ti durante 1 minuto. Repite la salvación cada vez que sufre daño.</p></article><article class="tecnica"><header><h3>Vampiro · Garras de Sangre</h3><span class="precio">1 Sangre</span></header><p>Cuando impactas con un arma, añades dos tiradas de tu Dado de Sangre de daño necrótico.</p></article><article class="tecnica"><header><h3>Vampiro · Capa de la Noche</h3><span class="precio">1 Sangre</span><span class="coste reaccion">Reacción</span></header><p>Cuando una criatura te ataca, te envuelves en tu capa: el ataque tiene desventaja.</p></article><article class="tecnica"><header><h3>Vampiro · Fuego del Infierno</h3><span class="precio">2 Sangre</span><span class="coste accion">Acción</span></header><p>Lanzas tres bolas de fuego oscuro a una, dos o tres criaturas a 60 pies. Cada una es un ataque a distancia (usa Carisma) que inflige tu Dado de Sangre + 2 de daño de fuego.</p></article><article class="tecnica"><header><h3>Vampiro · Robar el Alma</h3><span class="precio">3 Sangre</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 9</span></header><p>Cada criatura hostil a 20 pies debe superar una salvación de Constitución o sufrir tres tiradas de tu Dado de Sangre de daño necrótico (la mitad si la supera). Recuperas puntos de golpe iguales a la mitad del daño total.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Formas Vampíricas</h2>
+    <p>Al nivel 3 eliges la forma que hereda tu sangre. Las tres primeras son transformaciones: adoptarlas cuesta 2 Sangre y una acción adicional, duran 1 minuto o hasta que las dejes como acción adicional, y solo se pueden usar en tu naturaleza Vampírica. Mientras la llevas conservas tus puntos de golpe, tus características mentales y tus rasgos de clase. La cuarta, la Corte del Señor, no es una transformación: es un linaje de mando.</p>
+    <div class="subs"><section class="sub" style="--sc:#c9a84c">
+      <header><span class="sub-eyebrow">Forma Vampírica</span><h3>Forma de Lobo</h3><p class="sub-fuente">El lobo que corre por los pasillos del castillo</p></header>
+      <p class="sub-intro">La sangre de tu padre te deja correr a cuatro patas, oler el miedo y derribar a lo que huye.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Lobo</strong><span class="coste adicional">Acción adicional</span><p>Te conviertes en un lobo negro de tu tamaño. Tu velocidad es de 50 pies, tienes ventaja en las pruebas de Percepción que dependan del olfato y tus fauces infligen 1d8 + tu modificador de Destreza de daño perforante. Si impactas, el objetivo debe superar una salvación de Fuerza o caer derribado.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Carga del Lobo</strong><p>En forma de lobo, si te mueves al menos 20 pies en línea recta y luego impactas, añades tu Dado de Sangre al daño.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Manada de Uno</strong><span class="coste adicional">Acción adicional</span><p>En forma de lobo, cuando realizas la acción de Atacar, puedes hacer un ataque de fauces adicional.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Lobo del Castillo</strong><p>En forma de lobo, tienes resistencia al daño contundente, cortante y perforante.</p></div></li></ul></section><section class="sub" style="--sc:#9fb8ff">
+      <header><span class="sub-eyebrow">Forma Vampírica</span><h3>Forma de Murciélago</h3><p class="sub-fuente">El vuelo que nadie ve llegar</p></header>
+      <p class="sub-intro">Te deshaces en un murciélago y ves con el sonido. Nadie te encierra: las ventanas también son puertas.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Murciélago</strong><span class="coste adicional">Acción adicional</span><p>Te conviertes en un murciélago diminuto. Tienes velocidad de vuelo de 60 pies, percepción ciega a 30 pies y un mordisco que inflige 1d4 de daño perforante. Los ataques contra ti tienen desventaja.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Eco del Murciélago</strong><p>En forma de murciélago, nunca te sorprenden y sabes dónde están todas las criaturas a 60 pies, aunque sean invisibles.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Fuego del Murciélago</strong><span class="coste accion">Acción</span><p>En forma de murciélago, puedes usar Fuego del Infierno pagando 1 Sangre en lugar de 2.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Nube de Murciélagos</strong><span class="coste adicional">Acción adicional</span><p>Al dejar la forma, estallas en un enjambre. Cada criatura que elijas a 10 pies debe superar una salvación de Constitución o quedar cegada hasta el final de su siguiente turno. Además, al adoptar la forma puedes llevar contigo a un aliado dispuesto de tu tamaño o menor, convertido también en murciélago.</p></div></li></ul></section><section class="sub" style="--sc:#b5a8d6">
+      <header><span class="sub-eyebrow">Forma Vampírica</span><h3>Forma de Niebla</h3><p class="sub-fuente">Lo que se cuela por debajo de la puerta</p></header>
+      <p class="sub-intro">Tu cuerpo puede deshacerse en bruma. No te pueden coger, no te pueden encerrar, y lo que respira tu niebla lo lamenta.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Niebla</strong><span class="coste adicional">Acción adicional</span><p>Te conviertes en niebla. Tienes resistencia a todo el daño no mágico, velocidad de vuelo de 20 pies (puedes quedarte suspendido) y puedes pasar por rendijas de una pulgada. No puedes atacar, coger objetos ni usar Dones de acción.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Niebla Venenosa</strong><p>En forma de niebla, cuando atraviesas el espacio de una criatura por primera vez en un turno, debe superar una salvación de Constitución o sufrir dos tiradas de tu Dado de Sangre de daño de veneno y quedar envenenada hasta el final de su siguiente turno.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Salir de la Bruma</strong><p>Cuando dejas la forma de niebla, tu primer ataque antes del final de ese turno tiene ventaja y añade tu Dado de Sangre al daño.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Niebla Absoluta</strong><p>En forma de niebla, eres inmune al daño no mágico y tienes resistencia al resto.</p></div></li></ul></section><section class="sub" style="--sc:#c4293d">
+      <header><span class="sub-eyebrow">Forma Vampírica</span><h3>Corte del Señor</h3><p class="sub-fuente">El linaje que no muerde solo: manda</p></header>
+      <p class="sub-intro">La sangre de tu padre no te dio un cuerpo nuevo, sino un trono. En lugar de transformarte, formas una corte de sirvientes de sangre y llevas un castillo contigo. No se adopta: sus rasgos funcionan en tu naturaleza Vampírica y usan tu Sangre, sin recursos nuevos.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Vasallo de Sangre</strong><span class="coste adicional">Acción adicional</span><span class="precio">1 Sangre</span><p>En tu naturaleza Vampírica, formas un Vasallo de Sangre en un espacio libre a 30 pies. Dura 1 hora, o hasta que muera o lo disuelvas. Puedes tener un Vasallo a la vez (dos a nivel 10, tres a nivel 17).</p><p><strong>Bloque del Vasallo.</strong> Humanoide Mediano. CA 12 + tu bonificador de competencia. Puntos de golpe: 4 + 4 × tu nivel de clase. Velocidad 30 pies. Garra: ataque cuerpo a cuerpo con tu bonificador de ataque de Carisma, que inflige tu Dado de Sangre + tu bonificador de competencia de daño necrótico. Inmune al veneno y al estado de encantado. Actúa en tu iniciativa; con tu acción adicional puedes ordenarle moverse, atacar, esquivar o ayudar, y si no le ordenas nada ataca a la criatura hostil más cercana.</p><p>La primera vez en cada ronda que un Vasallo impacta a una criatura que sangra, ganas 1 Sangre. Cuando un Vasallo cae a 0 puntos de golpe, ganas 1 Sangre.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Tributo</strong><span class="coste adicional">Acción adicional</span><p>Un Vasallo a 30 pies paga tributo: pierde 1d6 puntos de golpe (sin reducción ni resistencia) y ganas 1 Sangre. Una vez por turno.</p></div><div></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Mandato</strong><span class="coste accion">Acción</span><span class="precio">1 Sangre</span><p>Eliges una criatura a 30 pies que pueda oírte. Debe superar una salvación de Sabiduría o obedecer una orden de una sola palabra en su siguiente turno (acércate, suelta, huye, detente, cae). No puede ser una orden suicida.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Sala del Castillo</strong><p>Al terminar un descanso largo en un lugar cerrado (una habitación, una cabaña, una cueva) puedes consagrar una Sala: ves y oyes todo lo que ocurre en ella, y los Vasallos que la ocupan recuperan 5 puntos de golpe al inicio de tu turno. Tienes tantas Salas como la mitad de tu bonificador de competencia (mínimo 1; redondea hacia arriba). Una vez por descanso corto, como acción adicional, puedes pasar de una Sala tuya a otra del mismo plano, llevándote a un Vasallo adyacente.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>El Castillo Entero</strong><span class="coste accion">Acción</span><p>Tus Vasallos ganan 5 × tu bonificador de competencia puntos de golpe más y resistencia al daño contundente, perforante y cortante no mágico. Además, una vez por descanso largo, como acción, durante 1 minuto tus Vasallos tienen ventaja en las tiradas de ataque y salvaciones, y las criaturas hostiles a 30 pies de ti tienen desventaja en las salvaciones contra tu Mandato.</p><p><strong>Fuego del Castillo</strong> (3 Sangre, acción): un pilar de fuego oscuro de 20 pies de radio cae sobre un punto a 90 pies. Cada criatura hace una salvación de Destreza: sufre 6d6 de daño de fuego (la mitad si la supera). Tus Vasallos son inmunes.</p></div></li></ul></section></div>
+
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Carisma</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p>
+      <div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Carisma</label><input type="number" id="mod" value="3" min="-5" max="10"></div>
+      <div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de Dones</span><b id="dv1">–</b></div><div><span>Dado de Sangre</span><b id="dv2">–</b></div><div><span>Sangre máx.</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Sangre</h3><p class="sub-t">Ganas 1 al impactar en tu naturaleza Vampírica (una vez por turno) o al derribar a alguien.</p>
+          <div class="cuenta" id="cnt-sangre"></div><div class="pips" id="pips-sangre"></div><div class="btns"><button class="btn" type="button" data-act="r:sangre:corto">Descanso corto</button><button class="btn" type="button" data-act="r:sangre:largo">Descanso largo</button><button class="btn" type="button" data-act="r:sangre:1">+1 Sangre</button><button class="btn" type="button" data-act="r:sangre:-1">Gastar 1</button><button class="btn" type="button" data-act="r:sangre:-2">Gastar 2</button><button class="btn" type="button" data-act="r:sangre:-3">Gastar 3</button></div></div><div class="card"><h3>Naturaleza actual</h3><p class="sub-t">La luz decide, salvo Cambio Forzado.</p><div class="estado" id="tv-nat"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:nat:no">Sombra</button><button class="btn" type="button" data-act="t:nat:si">Luz</button></div></div><div class="card"><h3>Hijo de Lisa</h3><p class="sub-t">Desde nivel 13. Una vez por descanso largo.</p><div class="estado" id="tv-lisa"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:lisa:no">Usar</button><button class="btn" type="button" data-act="t:lisa:si">Descanso largo</button></div></div><div class="card"><h3>Vasallos de Sangre</h3><p class="sub-t">Solo Corte del Señor. Los que tienes ahora mismo.</p><div class="cuenta" id="cv-vasallos"></div><p class="nota" id="cn-vasallos"></p><div class="btns"><button class="btn" type="button" data-act="c:vasallos:1">+1</button><button class="btn" type="button" data-act="c:vasallos:-1">−1</button><button class="btn" type="button" data-act="c:vasallos:0">A cero</button></div></div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "T.dado[L-1]"}, {"v": "P*2"}], "recursos": [{"id": "sangre", "n": "Sangre", "max": "P*2"}], "contadores": [{"id": "vasallos", "max": "L>=17?3:(L>=10?2:1)", "nota": "'Máximo: '+(L>=17?3:(L>=10?2:1))"}], "interruptores": [{"id": "nat", "si": "Humana (luz)", "no": "Vampírica (sombra)"}, {"id": "lisa", "si": "Disponible", "no": "Usado"}], "tablas": {"dado": ["d6", "d6", "d6", "d6", "d8", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12"]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

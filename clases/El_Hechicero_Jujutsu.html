@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Hechicero Jujutsu — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080d;--card:#0e1018;--card2:#141621;--ink:#ece6da;--dim:#a19ca8;--acc:#7b5cff;--acc2:#bfb0ff;
+--line:rgba(236,230,218,.09);--line2:rgba(236,230,218,.2);--navbg:rgba(7,8,13,.93);--sel:rgba(200,32,42,.12);
+--f-title:'Shippori Mincho B1','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;--f-body:'Shippori Mincho','Hiragino Mincho ProN',Georgia,serif;--f-label:'Zen Kaku Gothic New','Hiragino Sans','Segoe UI',sans-serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+html::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:9998}
+body{background:radial-gradient(ellipse 70% 50% at 70% 0%,color-mix(in srgb,#7b5cff 14%,transparent),transparent 60%),var(--bg)}
+h2::after{content:"";display:block;width:120px;height:6px;margin-top:10px;border-radius:3px 60% 40% 3px;background:linear-gradient(90deg,#7b5cff,transparent);opacity:.85}
+h2{border-bottom:0}
+.hero .kanji-fondo{position:absolute;inset:0;display:grid;place-items:center;z-index:-1;font:800 clamp(160px,30vw,300px)/1 var(--f-title);color:#7b5cff;opacity:.07;letter-spacing:-.05em;pointer-events:none}
+.hero h1{font-weight:800}
+.jjk-hanko{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40px;padding:8px 0;font:800 20px/1.1 var(--f-title);color:#f4ece0;background:#c8202a;border-radius:4px;box-shadow:0 0 0 2px #c8202a,inset 0 0 0 2px #f4ece0;transform:rotate(-4deg);opacity:.92}
+@media (max-width:600px){.jjk-hanko{font-size:15px;right:12px;bottom:12px;width:32px}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="kanji-fondo" aria-hidden="true">術</div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Jujutsu Kaisen</p>
+  <h1>El Hechicero Jujutsu</h1>
+  
+  <p class="lema">«Naces con una técnica grabada en el cuerpo. El resto de tu vida consiste en entender hasta dónde llega.»</p>
+  <div class="tags"><span>Técnica Innata</span><span>Energía Maldita</span><span>Expansión de Dominio</span><span>Votos Vinculantes</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Técnicas comunes</button><button type="button" data-p="subs" aria-selected="false">Técnicas Innatas</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>El Hechicero Jujutsu nace con una <strong>técnica innata</strong>, un hechizo grabado en su cuerpo que nadie más puede aprender. No estudia conjuros ni los elige de una lista: toda su carrera consiste en llevar esa única técnica cada vez más lejos, hasta que un día puede encerrar a sus enemigos dentro de ella.</p><p>Lo que alimenta la técnica es la <strong>energía maldita</strong>, que nace de las emociones negativas. No se recupera durmiendo: crece cuando el hechicero se mete en peligro, recibe golpes o derriba enemigos, y se gasta cada vez que la usa. Un hechicero prudente es un hechicero débil.</p><p>En lo más alto de su arte está la <strong>Expansión de Dominio</strong>: levantar a su alrededor un espacio donde su técnica ya no puede fallar. Es la jugada que decide combates, y también la que deja al hechicero quemado unos instantes después.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Carisma</b></div><div><span>Salvaciones</span><b>Constitución · Carisma</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Sencillas</b></div><div><span>Habilidades</span><b>2 de: Arcanos, Atletismo, Engaño, Intimidación, Percepción, Perspicacia</b></div><div><span>Subclase</span><b>Técnica Innata (nivel 1)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Concentrar</th><th>Dado de Técnica</th><th>Técnicas comunes</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>+2 EM</td><td>d6</td><td>2</td><td class="col-f">Energía Maldita, Técnica Innata, Golpe Imbuido</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>+2 EM</td><td>d6</td><td>2</td><td class="col-f">Revelar la Técnica, Percepción Maldita</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>+2 EM</td><td>d6</td><td>2</td><td class="col-f">Técnica Maldita Inversa</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>+2 EM</td><td>d6</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>+3 EM</td><td>d8</td><td>3</td><td class="col-f">Ataque Adicional</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>+3 EM</td><td>d8</td><td>3</td><td class="col-f">Rasgo de Técnica Innata</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>+3 EM</td><td>d8</td><td>4</td><td class="col-f">Emisión Defensiva</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>+3 EM</td><td>d8</td><td>4</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>+3 EM</td><td>d8</td><td>4</td><td class="col-f">Expansión de Dominio</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>+3 EM</td><td>d8</td><td>4</td><td class="col-f">Rasgo de Técnica Innata</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>+3 EM</td><td>d10</td><td>5</td><td class="col-f">Dominio Simple</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>+3 EM</td><td>d10</td><td>5</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>+3 EM</td><td>d10</td><td>5</td><td class="col-f">Inversión Plena</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>+3 EM</td><td>d10</td><td>5</td><td class="col-f">Rasgo de Técnica Innata</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>+3 EM</td><td>d10</td><td>5</td><td class="col-f">Mente sin Fondo</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>+3 EM</td><td>d10</td><td>6</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>+3 EM</td><td>d12</td><td>6</td><td class="col-f">Dominio Maestro</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>+3 EM</td><td>d12</td><td>6</td><td class="col-f">Dominio sin Barrera</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>+3 EM</td><td>d12</td><td>6</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>+3 EM</td><td>d12</td><td>6</td><td class="col-f">El Más Fuerte</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Energía Maldita</h3><p>Tu recurso es la <strong>Energía Maldita</strong> (EM). Tu máximo es tu nivel + tu modificador de Carisma (mínimo 2). Tu <strong>calma</strong> es la mitad de ese máximo, redondeando hacia abajo.</p><p><strong>No se recupera descansando.</strong> Empiezas cada combate en tu calma. Fuera de combate, tu EM vuelve a la calma al cabo de 1 minuto, tanto si estabas por encima como por debajo.</p><p><strong>Cómo crece.</strong> Ganas EM, hasta tu máximo, cuando te expones. Cada fuente solo cuenta una vez por turno: +1 cuando una criatura hostil te inflige daño, +1 si empiezas tu turno con una criatura hostil a 5 pies, y +2 cuando reduces a una criatura a 0 puntos de golpe.</p><p><strong>Concentrar Energía.</strong> Como acción adicional, ganas 2 EM (3 desde el nivel 5). Es la forma segura de cargar, pero te cuesta la acción adicional.</p><p><strong>CD de técnica</strong> = 8 + tu bonificador de competencia + tu modificador de Carisma. <strong>Ataque de técnica</strong> = tu bonificador de competencia + tu modificador de Carisma.</p></div>
+    <article class="rasgo"><header><h3>Técnica Innata</h3><span class="nivel">Nivel 1</span></header><p>Eliges tu técnica innata: Ilimitado, Santuario o Ratio 7:3 (pestaña Técnicas Innatas). Es tu subclase y la base de todo lo que haces. Te da rasgos a los niveles 1, 6, 9, 10 y 14.</p></article><article class="rasgo"><header><h3>Golpe Imbuido</h3><span class="nivel">Nivel 1</span></header><p>Tus golpes desarmados infligen 1d6 de daño contundente, y puedes usar Carisma para las tiradas de ataque y daño de tus golpes desarmados.</p><p>Una vez por turno, cuando impactas con un golpe desarmado o un arma cuerpo a cuerpo, puedes gastar 1 EM para añadir tu Dado de Técnica de daño de fuerza.</p></article><article class="rasgo"><header><h3>Revelar la Técnica</h3><span class="nivel">Nivel 2</span><span class="coste adicional">Acción adicional</span></header><p>Explicas en voz alta a tus enemigos cómo funciona tu técnica. Es un voto vinculante: das ventaja al rival a cambio de poder.</p><p>Hasta el final del combate, tu CD de técnica aumenta en 1 y, una vez por turno, una técnica tuya que inflija daño añade tu bonificador de competencia a ese daño. Solo puedes hacerlo una vez por combate.</p></article><article class="rasgo"><header><h3>Percepción Maldita</h3><span class="nivel">Nivel 2</span></header><p>Ves la energía maldita. Sabes si una criatura a 30 pies tiene energía maldita o magia, y si su reserva es menor, parecida o mayor que la tuya. También ves a las maldiciones aunque sean invisibles para los demás.</p></article><article class="rasgo"><header><h3>Técnica Maldita Inversa</h3><span class="nivel">Nivel 3</span><span class="coste adicional">Acción adicional</span></header><p>Multiplicas energía negativa por energía negativa y obtienes energía positiva. Gastas 2 EM y recuperas puntos de golpe iguales a dos tiradas de tu Dado de Técnica + tu modificador de Carisma.</p></article><article class="rasgo"><header><h3>Ataque Adicional</h3><span class="nivel">Nivel 5</span></header><p>Atacas dos veces cuando realizas la acción de Atacar. Puedes sustituir uno de esos ataques por una técnica de tu Técnica Innata que requiera una acción y cueste 2 EM o menos.</p></article><article class="rasgo"><header><h3>Emisión Defensiva</h3><span class="nivel">Nivel 7</span><span class="coste reaccion">Reacción</span></header><p>Cuando recibes daño, gastas 1 EM y lo reduces en tu Dado de Técnica + tu modificador de Carisma.</p></article><article class="rasgo"><header><h3>Expansión de Dominio</h3><span class="nivel">Nivel 9</span><span class="coste accion">Acción</span></header><p>Gastas 6 EM y levantas tu dominio: una esfera de 30 pies centrada en ti que dura hasta el final de tu tercer turno siguiente, o hasta que la deshagas como acción adicional.</p><p><strong>Barrera.</strong> Una criatura que intente salir debe superar una salvación de Fuerza contra tu CD de técnica, una vez por turno.</p><p><strong>Impacto garantizado.</strong> Dentro del dominio se aplica el efecto de tu Técnica Innata.</p><p><strong>Choque de dominios.</strong> Si otro dominio se superpone al tuyo, al inicio de cada ronda hacéis pruebas enfrentadas de Carisma. El que pierde ve cómo se deshace el suyo.</p><div class="regla">Cuando el dominio termina, tu técnica queda <strong>quemada</strong>: hasta el final de tu siguiente turno no puedes usar técnicas de tu Técnica Innata (sí Golpe Imbuido y Técnica Maldita Inversa). Lo usas una vez por descanso largo.</div></article><article class="rasgo"><header><h3>Dominio Simple</h3><span class="nivel">Nivel 11</span><span class="coste reaccion">Reacción</span></header><p>Cuando una criatura a 10 pies te ataca o te elige como objetivo de un conjuro, gastas 2 EM. Hasta el inicio de tu siguiente turno, las criaturas que estén a 10 pies de ti tienen desventaja en los ataques contra ti, y el impacto garantizado de un dominio enemigo no te afecta.</p></article><article class="rasgo"><header><h3>Inversión Plena</h3><span class="nivel">Nivel 13</span></header><p>Tu Técnica Maldita Inversa puede curar a una criatura que toques en lugar de a ti (cuesta 3 EM), y también termina un efecto de cegado, ensordecido o envenenado sobre el objetivo.</p></article><article class="rasgo"><header><h3>Mente sin Fondo</h3><span class="nivel">Nivel 15</span></header><p>Empiezas los combates con tu EM al máximo en lugar de en tu calma.</p></article><article class="rasgo"><header><h3>Dominio Maestro</h3><span class="nivel">Nivel 17</span></header><p>Puedes usar Expansión de Dominio dos veces por descanso largo.</p></article><article class="rasgo"><header><h3>Dominio sin Barrera</h3><span class="nivel">Nivel 18</span></header><p>Al levantar tu dominio, puedes desplegarlo sin barrera. El radio sube a 60 pies, pero las criaturas pueden salir libremente. Es la técnica de quien ya no necesita encerrar a nadie.</p></article><article class="rasgo"><header><h3>El Más Fuerte</h3><span class="nivel">Nivel 20</span></header><p>Al inicio de cada uno de tus turnos en combate ganas 1 EM. Una vez por descanso largo, puedes usar Expansión de Dominio sin gastar EM y sin que tu técnica quede quemada al terminar.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Técnicas comunes</h2>
+    <p>Todo hechicero aprende, además de su técnica innata, técnicas comunes de energía maldita. Conoces el número que indica la tabla y puedes cambiar una al subir de nivel.</p>
+    <article class="tecnica"><header><h3>Emisión</h3><span class="precio">1 EM</span><span class="coste accion">Acción</span></header><p>Disparas energía maldita a una criatura a 60 pies. Haces un ataque de técnica a distancia: si impacta, inflige tu Dado de Técnica + tu modificador de Carisma de daño de fuerza.</p></article><article class="tecnica"><header><h3>Refuerzo de Piernas</h3><span class="precio">1 EM</span><span class="coste adicional">Acción adicional</span></header><p>Hasta el final de tu turno, tu velocidad aumenta 15 pies y tus saltos alcanzan el triple de distancia.</p></article><article class="tecnica"><header><h3>Arma Imbuida</h3><span class="precio">1 EM</span><span class="coste adicional">Acción adicional</span></header><p>Durante 1 minuto, un arma que empuñes cuenta como mágica y puedes usar Carisma para atacar con ella.</p></article><article class="tecnica"><header><h3>Cortina</h3><span class="precio">2 EM</span><span class="coste minuto">1 minuto</span></header><p>Levantas una cortina negra de hasta 300 pies de radio que oculta lo que pasa dentro a los que están fuera. Dura 1 hora. Puedes fijar una condición, como que no entren los no hechiceros.</p></article><article class="tecnica"><header><h3>Rastro Residual</h3><span class="precio">1 EM</span><span class="coste accion">Acción</span></header><p>Sigues la energía maldita residual de un lugar. Sabes qué tipo de criatura la dejó, hacia dónde se fue y hace cuánto (hasta 1 día).</p></article><article class="tecnica"><header><h3>Presión Maldita</h3><span class="precio">2 EM</span><span class="coste accion">Acción</span></header><p>Liberas tu energía de golpe. Cada criatura hostil a 15 pies debe superar una salvación de Sabiduría o quedar asustada de ti hasta el final de tu siguiente turno.</p></article><article class="tecnica"><header><h3>Lanzamiento Imbuido</h3><span class="precio">1 EM</span><span class="coste adicional">Acción adicional</span></header><p>Lanzas un objeto de hasta 5 kg a una criatura a 30 pies con un ataque de técnica a distancia. Si impacta, inflige 2 tiradas de tu Dado de Técnica de daño contundente.</p></article><article class="tecnica"><header><h3>Barrera de Contención</h3><span class="precio">3 EM</span><span class="coste accion">Acción</span></header><p>Creas un muro de energía de 20 pies de largo y 10 de alto durante 1 minuto (concentración). Bloquea el paso y los ataques. Tiene 5 × tu nivel puntos de golpe.</p></article><article class="tecnica"><header><h3>Pacto Vinculante</h3><span class="precio">—</span><span class="coste minuto">1 minuto</span></header><p>Haces un voto con una criatura dispuesta: cada uno promete algo concreto. Si alguien lo rompe, sufre 4d10 de daño psíquico que no se puede reducir, y el otro lo sabe.</p></article><article class="tecnica"><header><h3>Golpe a Distancia Corta</h3><span class="precio">1 EM</span><span class="coste reaccion">Reacción</span></header><p>Cuando una criatura entra en tu alcance, la golpeas con un golpe desarmado. Si impacta, sumas tu Dado de Técnica de daño de fuerza.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Técnicas Innatas</h2>
+    <p>Al nivel 1 eliges con qué técnica naciste. Obtienes rasgos de técnica a los niveles 1, 6, 9 (su impacto garantizado), 10 y 14.</p>
+    <div class="subs"><section class="sub" style="--sc:#7aa8ff">
+      <header><span class="sub-eyebrow">Técnica Innata</span><h3>Ilimitado</h3><p class="sub-fuente">Inspirada en Satoru Gojo y el clan Gojo</p></header>
+      <p class="sub-intro">Llevas el infinito contigo. Entre tú y todo lo demás hay una distancia que nunca termina, y puedes encogerla o ensancharla a voluntad.</p>
+      <ul><li><span class="sf-n">Nv. 1</span><div><strong>Infinito</strong><span class="coste reaccion">Reacción</span><p>Cuando una criatura te ataca, gastas 1 EM: el ataque se frena antes de tocarte y tiene desventaja.</p></div></li><li><span class="sf-n">Nv. 1</span><div><strong>Azul</strong><span class="coste accion">Acción</span><p>Gastas 2 EM y eliges un punto a 60 pies. Cada criatura a 10 pies del punto debe superar una salvación de Fuerza o ser arrastrada hasta él y sufrir dos tiradas de tu Dado de Técnica de daño de fuerza. Si la supera, sufre la mitad y no se mueve.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Rojo Invertido</strong><span class="coste accion">Acción</span><p>Gastas 3 EM y disparas una línea de 60 pies de largo y 5 de ancho. Cada criatura en ella hace una salvación de Destreza: si la falla, sufre tres tiradas de tu Dado de Técnica de daño de fuerza y sale despedida 15 pies; si la supera, sufre la mitad y no se mueve.</p></div></li><li><span class="sf-n">Nv. 9</span><div><strong>Vacío Inconmensurable</strong><p>Impacto garantizado: al inicio de cada uno de tus turnos, cada criatura hostil dentro de tu dominio debe superar una salvación de Inteligencia o quedar incapacitada hasta el inicio de tu siguiente turno, ahogada en información infinita.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Infinito Constante</strong><p>Mientras tengas al menos la mitad de tu EM máxima, los ataques a distancia contra ti tienen desventaja, y la primera vez que usas Infinito en cada ronda no cuesta EM.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Púrpura Hueco</strong><span class="coste accion">Acción</span><p>Juntas Azul y Rojo. Gastas 8 EM y disparas una línea de 120 pies de largo y 10 de ancho. Cada criatura en ella hace una salvación de Destreza: sufre 10d10 de daño de fuerza si la falla, o la mitad si la supera. Los objetos no mágicos de la línea desaparecen. Una vez por descanso corto.</p></div></li></ul></section><section class="sub" style="--sc:#ff5a4f">
+      <header><span class="sub-eyebrow">Técnica Innata</span><h3>Santuario</h3><p class="sub-fuente">Inspirada en Ryomen Sukuna</p></header>
+      <p class="sub-intro">Tu técnica corta. Corta el aire, la piedra y lo que haya detrás, y se adapta a lo duro que sea aquello que tiene delante.</p>
+      <ul><li><span class="sf-n">Nv. 1</span><div><strong>Desmantelar</strong><span class="coste accion">Acción</span><p>Gastas 1 EM y haces un ataque de técnica a distancia contra una criatura a 60 pies. Si impacta, inflige dos tiradas de tu Dado de Técnica de daño cortante.</p></div></li><li><span class="sf-n">Nv. 1</span><div><strong>Partir</strong><p>Cuando impactas con Golpe Imbuido, puedes gastar 1 EM más para añadir dos tiradas de tu Dado de Técnica de daño cortante. Si el objetivo tiene menos de la mitad de sus puntos de golpe, ese daño cortante se duplica.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Abrir</strong><span class="coste accion">Acción</span><p>Gastas 4 EM y disparas una flecha de fuego a un punto a 120 pies. Cada criatura a 10 pies del punto hace una salvación de Destreza: sufre cuatro tiradas de tu Dado de Técnica de daño de fuego si la falla, o la mitad si la supera.</p></div></li><li><span class="sf-n">Nv. 9</span><div><strong>Santuario Malévolo</strong><p>Impacto garantizado: tu dominio no necesita barrera (la barrera no se aplica, aunque sigue siendo un dominio). Al inicio de cada uno de tus turnos, cada criatura que elijas dentro sufre dos tiradas de tu Dado de Técnica de daño cortante, sin salvación.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Corte en Abanico</strong><p>Desmantelar puede apuntar a dos o tres criaturas. Pagas 1 EM más por cada objetivo extra y haces un ataque contra cada uno.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Rey de las Maldiciones</strong><p>Cuando reduces a una criatura a 0 puntos de golpe con una técnica, ganas 2 EM además de las normales, y puedes usar Desmantelar como acción adicional ese mismo turno sin gastar EM.</p></div></li></ul></section><section class="sub" style="--sc:#e8c25a">
+      <header><span class="sub-eyebrow">Técnica Innata</span><h3>Ratio 7:3</h3><p class="sub-fuente">Inspirada en Kento Nanami</p></header>
+      <p class="sub-intro">Divides cualquier cosa en diez partes iguales y golpeas en el punto exacto de la séptima. No es una técnica vistosa: es la de un profesional que quiere acabar a su hora.</p>
+      <ul><li><span class="sf-n">Nv. 1</span><div><strong>Ratio</strong><span class="coste adicional">Acción adicional</span><p>Gastas 1 EM y marcas el punto débil de una criatura que puedas ver. Tu siguiente ataque cuerpo a cuerpo contra ella antes del final de tu siguiente turno es un crítico con 18–20 y añade dos tiradas de tu Dado de Técnica de daño. Ganas competencia con armas marciales cuerpo a cuerpo.</p></div></li><li><span class="sf-n">Nv. 1</span><div><strong>Contrato Laboral</strong><p>Revelar la Técnica te da +2 a la CD en lugar de +1. Explicar tu técnica es parte del trabajo.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Colapso</strong><span class="coste accion">Acción</span><p>Gastas 3 EM y golpeas el punto débil de una superficie a tu alcance. Un área de 15 pies a su alrededor se convierte en terreno difícil. Cada criatura en ella hace una salvación de Destreza: si la falla, cae derribada y sufre dos tiradas de tu Dado de Técnica de daño contundente.</p></div></li><li><span class="sf-n">Nv. 9</span><div><strong>Horas Extra</strong><span class="coste adicional">Acción adicional</span><p>Ratio 7:3 no tiene Expansión de Dominio: la sustituye este rasgo. Una vez por descanso largo y sin gastar EM, durante 1 minuto tu EM no puede bajar de tu calma, tus técnicas añaden un Dado de Técnica extra al daño y tu velocidad aumenta 10 pies. Al terminar, tu técnica no queda quemada.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Desglose</strong><p>Ratio puede marcar a dos criaturas a la vez, y al marcar a una sabes sus resistencias y vulnerabilidades al daño.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Sin Remordimientos</strong><p>Cuando una criatura marcada cae a 0 puntos de golpe, puedes pasar la marca a otra criatura que veas sin gastar EM. Tus críticos con Ratio usan el valor máximo de los Dados de Técnica.</p></div></li></ul></section></div>
+    <div class="caja"><h3>Regla opcional: maldiciones como enemigos</h3><p>Las maldiciones nacen del miedo humano y casi todas son invisibles para quien no tiene energía maldita. Con esta regla, solo los personajes con Percepción Maldita (o un objeto que la conceda) pueden ver a las maldiciones menores; el resto del grupo las ataca con desventaja hasta que un hechicero las señale. Es una herramienta para el DM, no una penalización para el hechicero.</p></div>
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Carisma</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p>
+      <div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Carisma</label><input type="number" id="mod" value="3" min="-5" max="10"></div>
+      <div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de técnica</span><b id="dv1">–</b></div><div><span>Dado de Técnica</span><b id="dv2">–</b></div><div><span>Técnicas comunes</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Energía Maldita</h3><p class="sub-t">Empiezas en la calma (la mitad). Pulsa un punto para fijar el valor, o usa los botones.</p>
+          <div class="cuenta" id="cnt-em"></div><div class="pips" id="pips-em"></div><div class="btns"><button class="btn" type="button" data-act="r:em:inicio">Volver a la calma</button><button class="btn" type="button" data-act="r:em:1">+1 golpe recibido / enemigo cerca</button><button class="btn" type="button" data-act="r:em:2">+2 derribo / concentrar</button><button class="btn" type="button" data-act="r:em:3">+3 concentrar (nv. 5+)</button><button class="btn" type="button" data-act="r:em:-1">Gastar 1</button><button class="btn" type="button" data-act="r:em:-2">Gastar 2</button><button class="btn" type="button" data-act="r:em:-3">Gastar 3</button><button class="btn" type="button" data-act="r:em:-6">Gastar 6 (dominio)</button></div></div><div class="card"><h3>Expansión de Dominio</h3><p class="sub-t">Desde nivel 9. Una vez por descanso largo (dos desde nivel 17).</p><div class="estado" id="tv-dom"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:dom:no">Usar</button><button class="btn" type="button" data-act="t:dom:si">Descanso largo</button></div></div><div class="card"><h3>Revelar la Técnica</h3><p class="sub-t">Una vez por combate.</p><div class="estado" id="tv-rev"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:rev:no">Revelar</button><button class="btn" type="button" data-act="t:rev:si">Nuevo combate</button></div></div></div>
+  </section>
+</main>
+<div class="jjk-hanko" aria-hidden="true"><span>術</span><span>式</span></div>
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "T.dado[L-1]"}, {"v": "T.com[L-1]"}], "recursos": [{"id": "em", "n": "Energía Maldita", "max": "Math.max(2,L+M)", "inicio": "Math.floor(Math.max(2,L+M)/2)"}], "contadores": [], "interruptores": [{"id": "dom", "si": "Disponible", "no": "Usada"}, {"id": "rev", "si": "Disponible", "no": "Usada"}], "tablas": {"dado": ["d6", "d6", "d6", "d6", "d8", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12"], "com": [2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

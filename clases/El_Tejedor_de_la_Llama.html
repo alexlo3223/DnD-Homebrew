@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Tejedor de la Llama — Clase D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep:       #09090F;
+    --bg-card:       #10121C;
+    --gold:          #C8542A;
+    --gold-light:    #E8823F;
+    --gold-dim:      #7A2F12;
+    --cream:         #E0D4B8;
+    --cream-dim:     #A09078;
+    --red:           #7A2020;
+    --red-light:     #C04040;
+    --silver:        #8A96A8;
+    --silver-light:  #C0CCDC;
+    --border:        rgba(200,84,42,0.25);
+    --border-strong: rgba(200,84,42,0.55);
+    --glow:          rgba(200,84,42,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--cream);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  .hero {
+    position: relative; text-align: center; padding: 70px 24px 44px; overflow: hidden;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(200,84,42,0.10) 0%, transparent 70%);
+  }
+  .wheel-svg { width: 150px; height: 150px; margin: 0 auto 28px; display: block; opacity: 0.9; filter: drop-shadow(0 0 18px rgba(200,84,42,0.45)); animation: wheel-spin 60s linear infinite; }
+  @keyframes wheel-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
+  h1.hero-title {
+    font-family: 'Cinzel Decorative', serif; font-size: clamp(28px, 6vw, 54px); font-weight: 700; color: var(--gold);
+    text-shadow: 0 0 40px rgba(200,84,42,0.4), 0 2px 4px rgba(0,0,0,0.8); line-height: 1.15; margin-bottom: 18px;
+  }
+  .hero-subtitle { font-family: 'EB Garamond', serif; font-style: italic; font-size: 18px; color: var(--cream-dim); max-width: 580px; margin: 0 auto 30px; line-height: 1.6; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .tag {
+    font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border: 1px solid var(--border); color: var(--gold-dim); padding: 5px 14px; border-radius: 2px; background: rgba(200,84,42,0.06);
+  }
+  .weave-divider { width: 100%; height: 36px; margin: 0; display: block; overflow: visible; }
+
+  .tab-nav {
+    position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 2px; background: rgba(9,9,15,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 0 12px;
+  }
+  .tab-btn {
+    font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--cream-dim); background: transparent; border: none; padding: 16px 18px 14px;
+    cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--gold-light); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .page { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+  .section { margin-bottom: 60px; }
+
+  h2.section-title {
+    font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 28px;
+  }
+  h3.feature-name { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 600; color: var(--gold-light); margin-bottom: 8px; }
+  h3.feature-name .level-badge { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: var(--gold-dim); font-weight: 400; margin-left: 10px; vertical-align: middle; }
+  .feature-block { margin-bottom: 36px; padding-left: 16px; border-left: 2px solid var(--border); }
+  .feature-block p { margin-bottom: 10px; color: var(--cream); }
+  .feature-block p:last-child { margin-bottom: 0; }
+
+  .quick-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px;
+    border: 1px solid var(--border); background: var(--border); margin-bottom: 48px; border-radius: 3px; overflow: hidden;
+  }
+  .stat-cell { background: var(--bg-card); padding: 18px 16px; text-align: center; }
+  .stat-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 6px; }
+  .stat-value { font-family: 'Cinzel', serif; font-size: 15px; color: var(--cream); display: block; line-height: 1.3; }
+
+  .prog-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 12px; }
+  .prog-table thead tr { background: rgba(200,84,42,0.12); }
+  .prog-table th {
+    font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); padding: 10px 10px; text-align: center; border-bottom: 1px solid var(--border-strong); white-space: nowrap;
+  }
+  .prog-table td { padding: 7px 10px; text-align: center; border-bottom: 1px solid rgba(200,84,42,0.08); color: var(--cream); font-family: 'EB Garamond', serif; font-size: 14px; }
+  .prog-table tbody tr:hover { background: rgba(200,84,42,0.05); }
+  .prog-table tbody tr.current-level-row { background: rgba(200,84,42,0.14); }
+  .prog-table .col-level { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-dim); }
+  .prog-table .col-pb    { color: var(--gold-light); font-weight: 600; }
+  .prog-table .col-hilos { color: var(--silver-light); }
+  .prog-table .col-feature { text-align: left; color: var(--cream-dim); font-style: italic; font-size: 13px; }
+
+  .hilos-box {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px;
+    padding: 24px 28px; margin-bottom: 36px; position: relative; overflow: hidden;
+  }
+  .hilos-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,84,42,0.08) 0%, transparent 70%); pointer-events: none;
+  }
+  .hilos-box h3 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+
+  .subclass-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 36px; }
+  @media (max-width: 600px) { .subclass-grid { grid-template-columns: 1fr; } }
+  .subclass-card { border: 1px solid var(--border); border-radius: 3px; overflow: hidden; background: var(--bg-card); }
+  .subclass-header { padding: 18px 20px; border-bottom: 1px solid var(--border); }
+  .subclass-header.dragon { background: radial-gradient(ellipse at top left, rgba(122,32,32,0.25), transparent 70%); }
+  .subclass-header.pastor { background: radial-gradient(ellipse at top left, rgba(42,80,122,0.20), transparent 70%); }
+  .subclass-eyebrow { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 6px; }
+  .subclass-header.dragon .subclass-eyebrow { color: var(--red-light); }
+  .subclass-header.pastor .subclass-eyebrow { color: var(--silver); }
+  .subclass-name { font-family: 'Cinzel Decorative', serif; font-size: 16px; line-height: 1.3; }
+  .subclass-header.dragon .subclass-name { color: var(--red-light); }
+  .subclass-header.pastor .subclass-name  { color: var(--silver-light); }
+  .subclass-body { padding: 18px 20px; }
+  .subclass-body p { font-size: 14px; color: var(--cream-dim); font-style: italic; line-height: 1.6; margin-bottom: 14px; }
+  .subclass-features { list-style: none; }
+  .subclass-features li { font-size: 13.5px; color: var(--cream); padding: 6px 0; border-bottom: 1px solid rgba(200,84,42,0.08); display: flex; gap: 10px; }
+  .subclass-features li:last-child { border-bottom: none; }
+  .subclass-features .sf-lvl { font-family: 'Cinzel', serif; font-size: 10px; color: var(--gold-dim); white-space: nowrap; padding-top: 2px; }
+
+  .elements-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0 28px; }
+  @media (max-width: 560px) { .elements-grid { grid-template-columns: repeat(3, 1fr); } }
+  .element-pill { background: var(--bg-card); border: 1px solid var(--border); border-radius: 3px; padding: 14px 8px; text-align: center; }
+  .element-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .element-name { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 4px; }
+  .element-effect { font-size: 12px; color: var(--cream-dim); font-style: italic; }
+
+  .corruption-box {
+    background: linear-gradient(135deg, rgba(60,10,10,0.5) 0%, rgba(16,18,28,0.8) 100%);
+    border: 1px solid rgba(122,32,32,0.4); border-radius: 3px; padding: 28px 32px; margin-top: 48px; position: relative; overflow: hidden;
+  }
+  .corruption-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+  .corruption-box h2 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red-light); margin-bottom: 18px; }
+  .corruption-box p { color: var(--cream-dim); margin-bottom: 12px; font-style: italic; font-size: 16px; line-height: 1.7; }
+  .corruption-box .corruption-title { font-style: normal; font-family: 'Cinzel', serif; font-size: 13px; color: var(--red-light); margin-top: 20px; margin-bottom: 6px; }
+
+  .rule { background: rgba(200,84,42,0.06); border-left: 3px solid var(--gold-dim); padding: 14px 18px; border-radius: 0 3px 3px 0; margin: 14px 0; font-size: 15px; color: var(--cream); }
+
+  em { color: var(--gold-light); font-style: italic; }
+  strong { color: var(--gold-light); font-weight: 600; }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  .sheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .sheet-grid { grid-template-columns: 1fr; } }
+  .sheet-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 4px; padding: 22px 24px; position: relative; overflow: hidden; }
+  .sheet-card.wide { grid-column: 1 / -1; }
+  .sheet-card h3 { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .sheet-card .sheet-sub { font-size: 12.5px; color: var(--cream-dim); font-style: italic; margin-bottom: 16px; }
+
+  .level-select-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+  .level-select-row label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: var(--gold-dim); text-transform: uppercase; }
+  select, input[type=number] {
+    background: var(--bg-deep); border: 1px solid var(--border-strong); color: var(--cream);
+    font-family: 'EB Garamond', serif; font-size: 15px; padding: 6px 10px; border-radius: 3px;
+  }
+  select:focus, input[type=number]:focus { outline: none; border-color: var(--gold); }
+
+  .derived-stats { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 14px; }
+  .derived-stat { text-align: center; }
+  .derived-stat .d-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 4px; }
+  .derived-stat .d-value { font-family: 'Cinzel Decorative', serif; font-size: 22px; color: var(--gold-light); }
+
+  .pip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .pip {
+    width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border-strong);
+    background: rgba(200,84,42,0.08); cursor: pointer; transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .pip:hover { transform: scale(1.08); }
+  .pip.filled { background: var(--gold); box-shadow: 0 0 10px rgba(200,84,42,0.65); border-color: var(--gold-light); }
+
+  .count-line { font-family: 'Cinzel', serif; font-size: 13px; color: var(--cream-dim); margin-bottom: 4px; }
+  .count-line strong { color: var(--gold-light); font-size: 16px; }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn {
+    font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: rgba(200,84,42,0.08); border: 1px solid var(--border-strong); color: var(--gold-light);
+    padding: 9px 16px; border-radius: 3px; cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn:hover { background: var(--gold); color: #10121C; }
+  .btn.ghost { background: transparent; color: var(--cream-dim); border-color: var(--border); }
+  .btn.ghost:hover { background: rgba(200,84,42,0.08); color: var(--gold-light); }
+
+  .hint { font-size: 12.5px; color: var(--cream-dim); font-style: italic; margin-top: 10px; }
+
+  @media print { body { background: white; color: black; } .wheel-svg { filter: none; } .tab-nav { display: none; } .tab-panel { display: block !important; } }
+</style>
+<style id="tema-ambientacion">
+  :root { --hilo:rgba(233,201,160,.03); }
+
+  /* ── Rueda del Tiempo: capa común ── */
+  body { background-color: var(--bg-deep); }
+  body::before { content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
+    background:
+      repeating-linear-gradient(62deg, transparent 0 13px, var(--hilo) 13px 14px),
+      repeating-linear-gradient(-62deg, transparent 0 17px, var(--hilo) 17px 18px); }
+  .hero, .page, .weave-divider { position: relative; z-index: 1; }
+  .wheel-svg.rueda-emblema { width: 172px; height: 172px; animation: none; overflow: visible; }
+  .rueda-giro { transform-origin: 100px 100px; animation: rueda-gira 80s linear infinite; }
+  @keyframes rueda-gira { to { transform: rotate(360deg); } }
+  .antigua-lengua { font-family: 'Cinzel Decorative', serif; font-size: 15px; letter-spacing: .06em; color: var(--gold-light); margin: 14px auto 2px; }
+  .antigua-lengua + .antigua-trad { font-family: 'EB Garamond', serif; font-style: italic; font-size: 13.5px; color: var(--cream-dim); margin: 0 auto 18px; }
+  h2.section-title { display:flex; align-items:center; gap:12px; }
+  h2.section-title::before { content:""; flex:0 0 18px; height:18px; background: var(--gold);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22/%3E%3Cpath%20d%3D%22M12%203v6M12%2015v6M3%2012h6M15%2012h6M5.6%205.6l4.3%204.3M14.1%2014.1l4.3%204.3M18.4%205.6l-4.3%204.3M9.9%2014.1l-4.3%204.3%22/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22/%3E%3Cpath%20d%3D%22M12%203v6M12%2015v6M3%2012h6M15%2012h6M5.6%205.6l4.3%204.3M14.1%2014.1l4.3%204.3M18.4%205.6l-4.3%204.3M9.9%2014.1l-4.3%204.3%22/%3E%3C/svg%3E") center/contain no-repeat; }
+  .tab-btn.active { text-shadow: 0 0 12px var(--glow); }
+  @media (prefers-reduced-motion: reduce) { .rueda-giro, .capa-guardian { animation: none !important; } }
+
+  .wheel-svg.rueda-emblema { filter: drop-shadow(0 0 18px rgba(200,84,42,.45)); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <!-- La Rueda del Tiempo — SVG simbólico -->
+  <svg class="wheel-svg rueda-emblema" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g class="rueda-giro" fill="none" stroke="#C8542A">
+      <circle cx="100" cy="100" r="50" stroke-width="2.2"/>
+      <circle cx="100" cy="100" r="44" stroke-width="0.6" opacity="0.6"/>
+      <g stroke-width="2.4" stroke-linecap="round"><line x1="120.3" y1="108.4" x2="146.2" y2="119.1"/><line x1="108.4" y1="120.3" x2="119.1" y2="146.2"/><line x1="91.6" y1="120.3" x2="80.9" y2="146.2"/><line x1="79.7" y1="108.4" x2="53.8" y2="119.1"/><line x1="79.7" y1="91.6" x2="53.8" y2="80.9"/><line x1="91.6" y1="79.7" x2="80.9" y2="53.8"/><line x1="108.4" y1="79.7" x2="119.1" y2="53.8"/><line x1="120.3" y1="91.6" x2="146.2" y2="80.9"/></g>
+      <circle cx="100" cy="100" r="22" stroke-width="1.6"/>
+    </g>
+    <!-- La Gran Serpiente que se muerde la cola -->
+    <g fill="none" stroke="#E9C9A0">
+      <circle cx="100" cy="100" r="66" stroke-width="7" stroke-dasharray="3.2 2.2" opacity="0.55" transform="rotate(-80 100 100)" stroke-dashoffset="0"/>
+      <circle cx="100" cy="100" r="66" stroke-width="1" opacity="0.8"/>
+      <circle cx="100" cy="100" r="70.5" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="100" cy="100" r="61.5" stroke-width="0.8" opacity="0.6"/>
+    </g>
+    <path d="M100 26 C 112 27 118 31 117 36 C 116 41 108 41 100 40 Z" fill="#E9C9A0" opacity="0.95"/>
+    <circle cx="110" cy="33" r="1.4" fill="#0a0a0f"/>
+    <g transform="translate(50 50)"><circle cx="50" cy="50" r="17" fill="#0c0b10" stroke="#F4EEE0" stroke-width="1.2"/><path d="M50 33 A17 17 0 0 1 50 67 A8.5 8.5 0 0 1 50 50 A8.5 8.5 0 0 0 50 33 Z" fill="#F4EEE0"/></g>
+  </svg>
+
+  <p class="hero-eyebrow">Clase de D&D 5ª Edición · Homebrew</p>
+  <h1 class="hero-title">El Tejedor<br>de la Llama</h1>
+  <p class="antigua-lengua">Asha'man</p>
+  <p class="antigua-trad">«Guardianes» — los que tocan el Saidin y lo sostienen</p>
+  <p class="hero-subtitle">
+    Quien toca el Saidin toca el poder que mueve el mundo. Mas la Rueda gira como quiere, y el hilo que teje puede deshacerte tanto como a tus enemigos.
+  </p>
+  <div class="hero-tags">
+    <span class="tag">Magia &amp; Melé</span>
+    <span class="tag">Los Cinco Hilos</span>
+    <span class="tag">Ta'veren</span>
+    <span class="tag">Fortuna &amp; Fatalidad</span>
+    <span class="tag">Complejo · Alta Expresividad</span>
+  </div>
+</div>
+
+<svg class="weave-divider" viewBox="0 0 860 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 20 Q 60 5 120 20 Q 180 35 240 20 Q 300 5 360 20 Q 420 35 480 20 Q 540 5 600 20 Q 660 35 720 20 Q 780 5 860 20" fill="none" stroke="#C8542A" stroke-width="0.8" opacity="0.3"/>
+  <path d="M0 25 Q 80 10 160 25 Q 240 40 320 25 Q 400 10 480 25 Q 560 40 640 25 Q 720 10 800 25 Q 840 30 860 25" fill="none" stroke="#C8542A" stroke-width="0.4" opacity="0.15"/>
+</svg>
+
+<!-- ══════════════ TAB NAV ══════════════ -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="clase">Clase</button>
+  <button class="tab-btn" data-tab="habilidades">Habilidades</button>
+  <button class="tab-btn" data-tab="tejidos">Tejidos</button>
+  <button class="tab-btn" data-tab="subclases">Subclases</button>
+  <button class="tab-btn" data-tab="ficha">Ficha de Juego</button>
+</div>
+
+<!-- ══════════════ PÁGINA ══════════════ -->
+<div class="page">
+
+  <!-- ═══════ TAB: CLASE ═══════ -->
+  <div class="tab-panel active" id="tab-clase">
+    <div class="section reveal">
+      <h2 class="section-title">Descripción de Clase</h2>
+      <p style="margin-bottom:16px;">
+        El Tejedor de la Llama es un guerrero que ha aprendido a rozar el <em>Saidin</em> — el Poder Único masculino que fluye como un río de fuego y hielo a través de la realidad. No lanza conjuros: <em>teje</em>. Cada efecto mágico es un patrón de cinco hilos elementales (Tierra, Fuego, Aire, Agua, Espíritu) entrelazados con una precisión letal.
+      </p>
+      <p style="margin-bottom:16px;">
+        A diferencia de la mayoría de clases arcanas, el Tejedor no separa la magia del combate físico. Porta una espada marcada con la Garza, combate con una técnica refinada durante años de práctica, y en medio de esa danza añade capas de tejidos que amplifican, protegen o destruyen.
+      </p>
+      <p>
+        Sobre todo ello pesa el concepto de <em>Ta'veren</em>: el destino dobla el mundo alrededor de ciertas personas. El Tejedor es una de ellas. La probabilidad misma se tuerce a su favor — aunque no siempre de la forma esperada.
+      </p>
+    </div>
+
+    <div class="quick-stats reveal">
+      <div class="stat-cell"><span class="stat-label">Dado de Golpe</span><span class="stat-value">d10</span></div>
+      <div class="stat-cell"><span class="stat-label">Característica Principal</span><span class="stat-value">Fuerza o Destreza + Sabiduría</span></div>
+      <div class="stat-cell"><span class="stat-label">Salvaciones</span><span class="stat-value">Constitución · Sabiduría</span></div>
+      <div class="stat-cell"><span class="stat-label">Armas</span><span class="stat-value">Simples, Marciales</span></div>
+      <div class="stat-cell"><span class="stat-label">Armaduras</span><span class="stat-value">Ligera, Media, Escudos</span></div>
+      <div class="stat-cell"><span class="stat-label">Habilidades</span><span class="stat-value">2 de: Atletismo, Arcanos, Historia, Percepción, Perspicacia, Intimidación</span></div>
+    </div>
+
+    <div class="section reveal">
+      <h2 class="section-title">Tabla de Progresión</h2>
+      <p class="hint" style="margin-bottom:14px;">La fila resaltada sigue el nivel que elijas en la pestaña <strong>Ficha de Juego</strong>.</p>
+      <div style="overflow-x:auto;">
+      <table class="prog-table" id="prog-table">
+        <thead>
+          <tr><th>Nivel</th><th>Bon. Prof.</th><th>Hilos de Saidin</th><th>Dado Ta'veren</th><th>Características</th></tr>
+        </thead>
+        <tbody>
+          <tr data-lvl="1"><td class="col-level">1</td><td class="col-pb">+2</td><td class="col-hilos">3</td><td>—</td><td class="col-feature">Los Cinco Hilos, Saidin (d6), Marca de Garza</td></tr>
+          <tr data-lvl="2"><td class="col-level">2</td><td class="col-pb">+2</td><td class="col-hilos">4</td><td>d4</td><td class="col-feature">Ta'veren, Tejido de Combate</td></tr>
+          <tr data-lvl="3"><td class="col-level">3</td><td class="col-pb">+2</td><td class="col-hilos">5</td><td>d4</td><td class="col-feature">Subclase de Tejedor</td></tr>
+          <tr data-lvl="4"><td class="col-level">4</td><td class="col-pb">+2</td><td class="col-hilos">6</td><td>d4</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="5"><td class="col-level">5</td><td class="col-pb">+3</td><td class="col-hilos">7</td><td>d4</td><td class="col-feature">Ataque Adicional, Saidin (d8)</td></tr>
+          <tr data-lvl="6"><td class="col-level">6</td><td class="col-pb">+3</td><td class="col-hilos">8</td><td>d6</td><td class="col-feature">Característica de Subclase, Fluir con el Poder</td></tr>
+          <tr data-lvl="7"><td class="col-level">7</td><td class="col-pb">+3</td><td class="col-hilos">9</td><td>d6</td><td class="col-feature">Tejido Sostenido, Resistencia del Ta'veren</td></tr>
+          <tr data-lvl="8"><td class="col-level">8</td><td class="col-pb">+3</td><td class="col-hilos">10</td><td>d6</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="9"><td class="col-level">9</td><td class="col-pb">+4</td><td class="col-hilos">11</td><td>d6</td><td class="col-feature">Saidin (d10), Tejido Dual</td></tr>
+          <tr data-lvl="10"><td class="col-level">10</td><td class="col-pb">+4</td><td class="col-hilos">12</td><td>d8</td><td class="col-feature">Característica de Subclase</td></tr>
+          <tr data-lvl="11"><td class="col-level">11</td><td class="col-pb">+4</td><td class="col-hilos">13</td><td>d8</td><td class="col-feature">Marca de Garza (mejorada), Paso del Viento</td></tr>
+          <tr data-lvl="12"><td class="col-level">12</td><td class="col-pb">+4</td><td class="col-hilos">14</td><td>d8</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="13"><td class="col-level">13</td><td class="col-pb">+5</td><td class="col-hilos">15</td><td>d8</td><td class="col-feature">Saidin (d12), Tejido Instintivo</td></tr>
+          <tr data-lvl="14"><td class="col-level">14</td><td class="col-pb">+5</td><td class="col-hilos">16</td><td>d10</td><td class="col-feature">Característica de Subclase</td></tr>
+          <tr data-lvl="15"><td class="col-level">15</td><td class="col-pb">+5</td><td class="col-hilos">17</td><td>d10</td><td class="col-feature">Certeza del Ta'veren</td></tr>
+          <tr data-lvl="16"><td class="col-level">16</td><td class="col-pb">+5</td><td class="col-hilos">18</td><td>d10</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="17"><td class="col-level">17</td><td class="col-pb">+6</td><td class="col-hilos">19</td><td>d10</td><td class="col-feature">Tejido Perfecto, Saidin (2d8)</td></tr>
+          <tr data-lvl="18"><td class="col-level">18</td><td class="col-pb">+6</td><td class="col-hilos">20</td><td>d12</td><td class="col-feature">Mente Inviolable</td></tr>
+          <tr data-lvl="19"><td class="col-level">19</td><td class="col-pb">+6</td><td class="col-hilos">21</td><td>d12</td><td class="col-feature">Mejora de Característica</td></tr>
+          <tr data-lvl="20"><td class="col-level">20</td><td class="col-pb">+6</td><td class="col-hilos">22</td><td>d12</td><td class="col-feature">El Dragón</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: HABILIDADES ═══════ -->
+  <div class="tab-panel" id="tab-habilidades">
+    <div class="section reveal">
+      <h2 class="section-title">Habilidades de Clase</h2>
+
+      <div class="hilos-box">
+        <h3>El Saidin &amp; Los Hilos</h3>
+        <p>Tu recurso principal son los <strong>Hilos de Saidin</strong> — puntos de poder que gastas para tejer efectos elementales. Recuperas todos tus Hilos al final de un descanso largo, y la mitad (redondeando hacia abajo) tras un descanso corto.</p>
+        <p style="margin-top:10px;">Cada vez que tejes, añades tu <strong>dado de Saidin</strong> al efecto producido. El tamaño de este dado aumenta con el nivel (d6 → d8 → d10 → d12 → 2d8).</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Los Cinco Hilos <span class="level-badge">Nivel 1</span></h3>
+        <p>Aprendes a manipular los cinco elementos que componen la realidad. Cada Hilo de Saidin que gastas te permite activar uno de los siguientes efectos, o combinaciones de ellos como acción bonificada en tu turno:</p>
+        <div class="elements-grid">
+          <div class="element-pill"><span class="element-icon">🪨</span><span class="element-name">Tierra</span><span class="element-effect">Escudo de roca, dificultar terreno, refuerzo de estructuras</span></div>
+          <div class="element-pill"><span class="element-icon">🔥</span><span class="element-name">Fuego</span><span class="element-effect">Explosión canalizada, calor seco, luz forzada</span></div>
+          <div class="element-pill"><span class="element-icon">💨</span><span class="element-name">Aire</span><span class="element-effect">Empuje, vuelo breve, proyectil de viento</span></div>
+          <div class="element-pill"><span class="element-icon">💧</span><span class="element-name">Agua</span><span class="element-effect">Curación, niebla, ralentizar hemorragia</span></div>
+          <div class="element-pill"><span class="element-icon">✦</span><span class="element-name">Espíritu</span><span class="element-effect">Barreras mentales, detectar magia, neutralizar tejidos</span></div>
+        </div>
+        <p>Tienes acceso a una lista de <strong>Tejidos</strong> conocidos (ver pestaña Tejidos). Cada Tejido especifica qué Hilos consume, qué elemento usa y su efecto mecánico. Aprendes <strong>cuatro Tejidos</strong> al nivel 1, y uno adicional cada nivel de clase hasta el 10. A partir del nivel 11, aprendes un Tejido en los niveles impares.</p>
+        <div class="rule">La CD para resistir tus Tejidos es <strong>8 + tu bonificador de competencia + tu modificador de Sabiduría</strong>. Las tiradas de ataque de Tejidos usan <strong>bonificador de competencia + modificador de Sabiduría</strong>.</div>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Marca de Garza <span class="level-badge">Nivel 1</span></h3>
+        <p>Posees un arma cuerpo a cuerpo marcada con la Garza — símbolo de maestría en el combate con espada. Eres competente con ella, y cuando realizas un ataque con el arma de Garza puedes gastar 1 Hilo de Saidin para añadir tu dado de Saidin al daño.</p>
+        <p>Además, cuando tomas la acción de Atacar con el arma de Garza, puedes substituir uno de tus ataques por un Tejido que tenga tiempo de lanzamiento de acción bonificada.</p>
+        <p><em>A nivel 11:</em> El arma de Garza cuenta como mágica a efectos de superar resistencias, y cuando realizas un crítico, el dado de Saidin adicional se triplica en lugar de duplicarse.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Ta'veren <span class="level-badge">Nivel 2</span></h3>
+        <p>La Rueda del Tiempo teje su voluntad a través de ti. Obtienes un <strong>Dado Ta'veren</strong> (ver tabla de progresión). Tienes un número de usos de esta característica igual a tu modificador de Sabiduría (mínimo 1), y los recuperas todos al final de un descanso largo.</p>
+        <p>Puedes gastar un uso de Ta'veren para uno de los siguientes efectos:</p>
+        <p><strong>Fortuna:</strong> Cuando tú o una criatura que puedas ver realizáis una tirada de ataque, salvación o habilidad, puedes tirar tu Dado Ta'veren y añadir el resultado a esa tirada. Puedes hacer esto <em>después</em> de ver el resultado original pero antes de que surta efecto.</p>
+        <p><strong>Torsión del Destino:</strong> Cuando una criatura que puedas ver realiza una tirada de ataque contra ti o un aliado adyacente, puedes tirar tu Dado Ta'veren como reacción y restar el resultado de esa tirada.</p>
+        <p><strong>Hilo Roto:</strong> Cuando fallas una tirada de salvación contra un efecto que te incapacita, aturde, asusta o paraliza, puedes gastar un uso de Ta'veren para repetir la salvación con ventaja. Debes aceptar el nuevo resultado.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejido de Combate <span class="level-badge">Nivel 2</span></h3>
+        <p>Aprendes a entrelazar el Saidin con tus movimientos marciales. Cuando tomas la acción de Atacar, puedes usar una acción bonificada para activar un Tejido de coste 1 Hilo. Este Tejido no requiere que el objetivo sea el mismo de tu ataque.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Ataque Adicional <span class="level-badge">Nivel 5</span></h3>
+        <p>Puedes atacar dos veces, en lugar de una, cada vez que tomas la acción de Atacar en tu turno.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Fluir con el Poder <span class="level-badge">Nivel 6</span></h3>
+        <p>El Saidin no solo destruye — también protege al que lo domina. Mientras tengas al menos 1 Hilo de Saidin no gastado, tienes ventaja en las tiradas de salvación contra hechizos y otros efectos mágicos.</p>
+        <p>Además, cuando una criatura te fuerza a hacer una tirada de salvación contra un hechizo, puedes gastar 2 Hilos como reacción para tener ventaja en esa salvación.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejido Sostenido <span class="level-badge">Nivel 7</span></h3>
+        <p>Puedes mantener activo un Tejido de Concentración sin necesitar concentración real: en su lugar, gasta 1 Hilo adicional al inicio de cada uno de tus turnos para mantenerlo activo. Esto te libera la concentración para usar otros Tejidos si es necesario. Solo puedes tener un Tejido Sostenido de esta forma en cualquier momento.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Resistencia del Ta'veren <span class="level-badge">Nivel 7</span></h3>
+        <p>La Rueda no te permite caer fácilmente. Cuando caes a 0 puntos de golpe, puedes gastar un uso de Ta'veren como reacción para quedarte en 1 punto de golpe en su lugar. Una vez usas esta característica, no puedes volver a hacerlo hasta que completes un descanso largo.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejido Dual <span class="level-badge">Nivel 9</span></h3>
+        <p>Puedes tejer con ambas manos en el mismo instante. Cuando usas tu acción para activar un Tejido, puedes gastar 1 Hilo adicional para activar simultáneamente un segundo Tejido diferente cuyo coste sea de 1 Hilo. Ambos Tejidos se resuelven al mismo tiempo.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Paso del Viento <span class="level-badge">Nivel 11</span></h3>
+        <p>Con un gasto de 1 Hilo de Saidin como acción bonificada, te envuelves en el Hilo de Aire. Hasta el final de tu turno: no provocas ataques de oportunidad, tu velocidad de movimiento aumenta 10 pies, y puedes pasar a través de espacios ocupados por criaturas hostiles (aunque no puedes terminar tu turno allí).</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejido Instintivo <span class="level-badge">Nivel 13</span></h3>
+        <p>El Saidin fluye a través de ti sin esfuerzo consciente. Puedes activar Tejidos de coste 1 Hilo sin gastar acción ni acción bonificada una vez por turno, siempre que ya hayas tomado la acción de Atacar ese turno. Debes aún pagar el coste de Hilos.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Certeza del Ta'veren <span class="level-badge">Nivel 15</span></h3>
+        <p>El destino te protege en los momentos más críticos. Cuando usas Fortuna o Torsión del Destino, puedes tirar dos Dados Ta'veren en lugar de uno y elegir cuál usar. Además, recuperas 1 uso de Ta'veren cuando reduces a 0 puntos de golpe a una criatura de CR 1 o superior.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Tejido Perfecto <span class="level-badge">Nivel 17</span></h3>
+        <p>Has alcanzado la maestría absoluta en el Saidin. Cuando tejes, puedes maximizar el dado de Saidin en lugar de tirarlo. Una vez usas esta característica, debes completar un descanso corto o largo para volver a usarla.</p>
+        <p>Además, tus Tejidos ignoran la resistencia a los tipos de daño que infligen.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">Mente Inviolable <span class="level-badge">Nivel 18</span></h3>
+        <p>Tu mente ha sido forjada por años de lucha contra el Saidin. Eres inmune a los efectos de encantamiento y a ser aterrorizado. Cuando una criatura intenta leer tu mente, predecir tus acciones o verte mediante magia de adivinación, debes consentirlo o la magia falla automáticamente.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name">El Dragón <span class="level-badge">Nivel 20 · Cúspide</span></h3>
+        <p>Eres el Dragón Renacido. El destino de las Eras recae sobre ti y el Saidin arde con una intensidad que dobla la realidad a tu alrededor.</p>
+        <p><strong>Torrente del Saidin:</strong> Como acción, gastas cualquier número de Hilos y liberas el Saidin en una explosión devastadora. Elige un punto que puedas ver a 60 pies. Todas las criaturas en un radio de 30 pies deben superar una tirada de salvación de Constitución contra tu CD de Tejidos o sufrir 1d10 por cada Hilo gastado de daño de fuerza, o la mitad si superan la salvación.</p>
+        <p><strong>Centro de la Rueda:</strong> Al comienzo de cada combate, recuperas un número de Hilos de Saidin igual a tu bonificador de competencia. Tus Dados Ta'veren mejoran automáticamente un paso (de d12 a 2d8).</p>
+        <p><strong>El Tiempo se Tuerce:</strong> Una vez por descanso largo, puedes declarar que un ataque que te hubiera reducido a 0 puntos de golpe falla completamente — la Rueda rechaza tu muerte. No puedes usar esta característica si ya usaste Resistencia del Ta'veren en el mismo combate.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: TEJIDOS ═══════ -->
+  <div class="tab-panel" id="tab-tejidos">
+    <div class="section reveal">
+      <h2 class="section-title">Tejidos — Lista de Habilidades</h2>
+      <p style="margin-bottom: 24px; color: var(--cream-dim); font-style: italic;">Los Tejidos son los efectos mágicos que produces al entrelazar los Hilos del Saidin. A menos que se indique lo contrario, activar un Tejido requiere una acción. El coste en Hilos aparece entre corchetes.</p>
+
+      <div class="feature-block reveal"><h3 class="feature-name">Lanza de Fuego <span class="level-badge">[1 Hilo · Fuego]</span></h3><p>Realizas un ataque de conjuro a distancia contra una criatura a 60 pies. En caso de impacto, inflige <em>1d8 + dado de Saidin</em> de daño de fuego. Puedes gastar 1 Hilo adicional para crear una segunda lanza simultánea con el mismo ataque.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Mano de Aire <span class="level-badge">[1 Hilo · Aire]</span></h3><p>Una criatura a 30 pies debe superar una salvación de Fuerza o es empujada hasta 15 pies en una dirección que elijas y queda tumbada. Si el objetivo choca con un obstáculo sólido, sufre 1d6 de daño contundente adicional.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Escudo de Tierra <span class="level-badge">[1 Hilo · Tierra · Reacción]</span></h3><p>Como reacción a recibir daño, invocas una barrera de roca y tierra. Reduces el daño de ese ataque en <em>dado de Saidin + modificador de Sabiduría</em>. El escudo desaparece tras absorber el daño.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Toque Curativo <span class="level-badge">[2 Hilos · Agua]</span></h3><p>Tocas a una criatura y recupera <em>2d8 + dado de Saidin + modificador de Sabiduría</em> puntos de golpe. Puedes gastar 1 Hilo adicional para que el rango sea de 30 pies en lugar de toque.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Vínculo de Espíritu <span class="level-badge">[2 Hilos · Espíritu]</span></h3><p>Forjas un vínculo mental con una criatura consentidora a 60 pies. Durante 1 hora, puedes comunicarte telepáticamente con ella, sentís el estado general de salud del otro, y una vez durante la duración puedes redirigir el daño que uno de los dos sufra al otro (distribuyéndolo equitativamente).</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Trampa de Tierra <span class="level-badge">[2 Hilos · Tierra · Concentración, 1 minuto]</span></h3><p>El suelo en un radio de 20 pies centrado en un punto a 60 pies se convierte en terreno difícil hasta que el Tejido termina. Cualquier criatura que comience su turno en esa área debe superar una salvación de Fuerza o queda retenida (salvación al final de cada turno para liberarse).</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Tormenta de Relámpagos <span class="level-badge">[3 Hilos · Aire + Fuego]</span></h3><p>Invocas una descarga eléctrica en una línea de 60 pies × 5 pies. Cada criatura en la línea debe superar una salvación de Destreza o sufrir <em>3d8 + dado de Saidin</em> de daño de rayo, o la mitad si supera la salvación.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Neblina Veladora <span class="level-badge">[1 Hilo · Agua · Concentración, 10 minutos]</span></h3><p>Generas una densa neblina en un radio de 20 pies centrado en ti. El área queda fuertemente oscurecida. Tú puedes ver con normalidad a través de ella. La neblina se desplaza contigo.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Barrera Mental <span class="level-badge">[2 Hilos · Espíritu · Concentración, 1 hora]</span></h3><p>Tejes una coraza invisible alrededor de tu mente. Mientras se mantiene, eres inmune a la lectura de pensamientos, a ser encantado, y tienes ventaja en las salvaciones de Sabiduría. Si una criatura intenta entrar en tu mente, sufre <em>dado de Saidin</em> de daño psíquico.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Pulso de Tierra <span class="level-badge">[3 Hilos · Tierra]</span></h3><p>Golpeas el suelo y envías una onda de choque. Todas las criaturas a 15 pies de ti deben superar una salvación de Fuerza o sufrir <em>2d10 + dado de Saidin</em> de daño contundente y quedar tumbadas. En caso de éxito, la mitad del daño y no quedan tumbadas.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Desintegrar Tejido <span class="level-badge">[2 Hilos · Espíritu · Reacción]</span></h3><p>Como reacción a ver a una criatura a 60 pies lanzar un hechizo, intentas deshacer sus Hilos. Esa criatura debe superar una salvación de Sabiduría o su hechizo falla y los espacios de conjuro o recursos utilizados se consumen sin efecto. La CD para deshacer hechizos de nivel 5 o superior aumenta en 2 por nivel superior al 4.</p></div>
+      <div class="feature-block reveal"><h3 class="feature-name">Lluvia de Fuego <span class="level-badge">[4 Hilos · Fuego · Concentración, 1 minuto]</span></h3><p>Invocas una tormenta de fuego en un cilindro de 20 pies de radio y 40 pies de alto centrado en un punto a 120 pies. Las criaturas que entren por primera vez o comiencen su turno en el área sufren <em>dado de Saidin + 3d6</em> de daño de fuego (salvación de Destreza para la mitad).</p></div>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: SUBCLASES ═══════ -->
+  <div class="tab-panel" id="tab-subclases">
+    <div class="section reveal">
+      <h2 class="section-title">Subclases de Tejedor</h2>
+      <p style="margin-bottom: 28px; color: var(--cream-dim); font-style: italic;">Al nivel 3, eliges el camino que define tu relación con el Saidin. Obtienes características adicionales de subclase en los niveles 3, 6, 10 y 14.</p>
+
+      <div class="subclass-grid">
+        <div class="subclass-card">
+          <div class="subclass-header dragon">
+            <p class="subclass-eyebrow">Subclase I</p>
+            <p class="subclass-name">El Dragón<br>Renacido</p>
+          </div>
+          <div class="subclass-body">
+            <p>Abrazas el poder en toda su destructiva plenitud. Eres la tormenta que anuncia el fin de una Era y el inicio de la siguiente. Maximizas el daño a costa de control.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Llama del Dragón:</strong> Cuando gastas 2+ Hilos en un Tejido ofensivo, añades un dado de Saidin adicional al daño.</span></li>
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Fuego de la Destrucción:</strong> Aprendes el Tejido Lluvia de Fuego aunque no estuviese en tu lista, y su coste se reduce en 1 Hilo para ti.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Canalización Sin Límites:</strong> Una vez por turno, cuando infliges daño con un Tejido, puedes gastar 1 Hilo adicional para que ese daño ignore la resistencia y la inmunidad.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>El Fuego Que Olvida:</strong> Una vez por descanso largo, puedes lanzar Desintegrar sin gastar Hilos. Cuando lo haces, el Tejido obtiene ventaja en la tirada de ataque.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Balefire:</strong> (Ver descripción completa abajo)</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="subclass-card">
+          <div class="subclass-header pastor">
+            <p class="subclass-eyebrow">Subclase II</p>
+            <p class="subclass-name">El Pastor<br>de la Noche</p>
+          </div>
+          <div class="subclass-body">
+            <p>Te vinculas a la tierra, las raíces y el flujo lento del agua. Proteges, sostienes y controlas el campo de batalla, siendo el ancla que permite sobrevivir a los demás.</p>
+            <ul class="subclass-features">
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Raíces Vivas:</strong> Aprendes los Tejidos Trampa de Tierra y Toque Curativo. Cuando los usas, no consumen acción bonificada — solo la acción.</span></li>
+              <li><span class="sf-lvl">Nv. 3</span><span><strong>Escudo Compartido:</strong> Cuando usas Escudo de Tierra, puedes elegir que el efecto se aplique a una criatura adyacente en lugar de a ti.</span></li>
+              <li><span class="sf-lvl">Nv. 6</span><span><strong>Vínculo del Bosque:</strong> Mientras estés en terreno natural (exterior), recuperas 1 Hilo de Saidin al inicio de cada uno de tus turnos en combate.</span></li>
+              <li><span class="sf-lvl">Nv. 10</span><span><strong>Flujo Regenerador:</strong> Cuando usas Toque Curativo, el objetivo también gana la mitad de esa curación como puntos de golpe temporales durante 1 minuto.</span></li>
+              <li><span class="sf-lvl">Nv. 14</span><span><strong>Corazón de la Tierra:</strong> (Ver descripción completa abajo)</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name" style="color: var(--red-light);">Balefire <span class="level-badge">El Dragón Renacido · Nivel 14</span></h3>
+        <p style="color: var(--cream-dim); font-style: italic; margin-bottom: 12px;">El Tejido que la Aes Sedai lleva siglos prohibiendo. Destruye no solo al objetivo — borra los momentos recientes de su existencia de la trama de la realidad.</p>
+        <p>Como acción, gastas 5 Hilos de Saidin y lanzas un rayo de luz blanca en línea de 5 pies × 100 pies. Cada criatura en la línea debe realizar una tirada de salvación de Constitución contra tu CD de Tejidos:</p>
+        <p><strong>Fallo:</strong> La criatura sufre <em>10d10</em> de daño de fuerza. Si esto la reduce a 0 puntos de golpe, es borrada de la existencia — su cuerpo desaparece y no puede ser revivida mediante ningún conjuro de nivel 7 o inferior. Además, los efectos que esa criatura causó en los últimos 6 segundos (un turno de combate) son deshechos retroactivamente.</p>
+        <p><strong>Éxito:</strong> La criatura sufre la mitad del daño y no es borrada aunque caiga a 0 puntos de golpe.</p>
+        <div class="rule">El uso excesivo del Balefire debilita la trama de la realidad. El DM puede usar esto como gancho narrativo o para invocar las reglas opcionales de Corrupción al final de este documento.</div>
+        <p>Una vez usas esta característica, no puedes volver a hacerlo hasta que completes un descanso largo.</p>
+      </div>
+
+      <div class="feature-block reveal">
+        <h3 class="feature-name" style="color: var(--silver-light);">Corazón de la Tierra <span class="level-badge">El Pastor de la Noche · Nivel 14</span></h3>
+        <p>Te conviertes en el eje del que emana la vida. Como acción, gastas 4 Hilos de Saidin y anclas la tierra en un radio de 30 pies durante 1 minuto (concentración). Mientras te mantengas en ese radio:</p>
+        <p>Todas las criaturas aliadas que comiencen su turno en el radio recuperan <em>dado de Saidin</em> puntos de golpe. El terreno dentro del radio se vuelve sagrado para ti: puedes ver a través de obstáculos dentro de él, y el terreno difícil creado por enemigos se disuelve.</p>
+        <p>Una vez por turno, cuando una criatura aliada dentro del radio caiga a 0 puntos de golpe, puedes gastar 2 Hilos como reacción para estabilizarla automáticamente y que recupere puntos de golpe iguales a tu modificador de Sabiduría × 2.</p>
+        <p>Una vez usas esta característica, no puedes volver a hacerlo hasta que completes un descanso largo.</p>
+      </div>
+    </div>
+
+    <div class="corruption-box reveal">
+      <h2>Regla Opcional — La Corrupción del Saidin</h2>
+      <p>En el mundo de la Rueda del Tiempo, el Saidin fue corrompido por el Oscuro en el momento del Sellado. Todo hombre que lo toca camina hacia la locura. Esta regla opcional es para grupos que desean incorporar esa tensión narrativa a sus partidas.</p>
+      <p class="corruption-title">Para el Dungeon Master</p>
+      <p>Si el grupo desea explorar la corrupción, el DM puede llevar un marcador secreto de "torsión" del personaje. Este marcador no tiene efectos mecánicos — es puramente narrativo. Sube cuando el Tejedor abusa del poder, usa el Balefire, o canaliza en situaciones desesperadas.</p>
+      <p>A ciertos umbrales narrativos, el DM puede introducir: episodios de visiones durante los descansos, voces que el personaje escucha en momentos de alta tensión, una resistencia creciente a bajar la guardia o una desconfianza visceral hacia los demás. Nunca debería forzar acciones, pero sí colorear la interpretación del personaje.</p>
+      <p class="corruption-title">Para el Jugador</p>
+      <p>Si optas por interpretar la corrupción, considera que el Saidin se siente como fuego y hielo corriendo al mismo tiempo por tus venas. Hay momentos en que canalizarlo se siente bien. Demasiado bien. Y hay una voz en el fondo que te dice que más sería mejor.</p>
+      <p>La corrupción es una herramienta de historia, no de castigo. Habla con tu DM sobre hasta dónde queréis llevarla y cuándo — si alguna vez — el personaje podría purificarse.</p>
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: FICHA DE JUEGO ═══════ -->
+  <div class="tab-panel" id="tab-ficha">
+    <div class="section reveal">
+      <h2 class="section-title">Ficha de Juego</h2>
+      <p class="hint" style="margin-bottom:20px;">Herramientas de seguimiento para usar en mesa. Los valores se calculan a partir del nivel elegido y se guardan solo mientras esta página permanezca abierta.</p>
+
+      <div class="sheet-grid">
+        <div class="sheet-card wide">
+          <h3>Nivel de Personaje</h3>
+          <p class="sheet-sub">Elige tu nivel para calcular Bono de Competencia, Hilos máximos, Dado de Saidin y Dado Ta'veren.</p>
+          <div class="level-select-row">
+            <label for="level-select">Nivel</label>
+            <select id="level-select"></select>
+          </div>
+          <div class="derived-stats">
+            <div class="derived-stat"><span class="d-label">Bono Comp.</span><span class="d-value" id="d-pb">+2</span></div>
+            <div class="derived-stat"><span class="d-label">Hilos Máx.</span><span class="d-value" id="d-hilos-max">3</span></div>
+            <div class="derived-stat"><span class="d-label">Dado de Saidin</span><span class="d-value" id="d-dado-saidin">d6</span></div>
+            <div class="derived-stat"><span class="d-label">Dado Ta'veren</span><span class="d-value" id="d-dado-taveren">—</span></div>
+          </div>
+        </div>
+
+        <div class="sheet-card wide">
+          <h3>Hilos de Saidin</h3>
+          <p class="sheet-sub">Haz clic en un hilo para marcarlo como gastado.</p>
+          <div class="count-line">Disponibles: <strong id="hilos-count">3 / 3</strong></div>
+          <div class="pip-row" id="hilos-pips"></div>
+          <div class="btn-row">
+            <button class="btn" onclick="shortRest()">Descanso Corto</button>
+            <button class="btn" onclick="longRest()">Descanso Largo</button>
+            <button class="btn ghost" onclick="resetHilos()">Restablecer</button>
+          </div>
+        </div>
+
+        <div class="sheet-card wide">
+          <h3>Usos de Ta'veren</h3>
+          <p class="sheet-sub">Igual a tu modificador de Sabiduría (mínimo 1). Se recuperan al final de un descanso largo.</p>
+          <div class="level-select-row">
+            <label for="wis-mod">Mod. Sab.</label>
+            <input type="number" id="wis-mod" value="3" min="-5" max="10" onchange="renderTaveren()">
+          </div>
+          <div class="count-line">Disponibles: <strong id="taveren-count">3 / 3</strong></div>
+          <div class="pip-row" id="taveren-pips"></div>
+          <div class="btn-row">
+            <button class="btn ghost" onclick="resetTaveren()">Restablecer (descanso largo)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fin .page -->
+
+<script>
+  const progression = [
+    {lvl:1,pb:2,hilos:3,dadoSaidin:'d6',dadoTaveren:'—'}, {lvl:2,pb:2,hilos:4,dadoSaidin:'d6',dadoTaveren:'d4'},
+    {lvl:3,pb:2,hilos:5,dadoSaidin:'d6',dadoTaveren:'d4'}, {lvl:4,pb:2,hilos:6,dadoSaidin:'d6',dadoTaveren:'d4'},
+    {lvl:5,pb:3,hilos:7,dadoSaidin:'d8',dadoTaveren:'d4'}, {lvl:6,pb:3,hilos:8,dadoSaidin:'d8',dadoTaveren:'d6'},
+    {lvl:7,pb:3,hilos:9,dadoSaidin:'d8',dadoTaveren:'d6'}, {lvl:8,pb:3,hilos:10,dadoSaidin:'d8',dadoTaveren:'d6'},
+    {lvl:9,pb:4,hilos:11,dadoSaidin:'d10',dadoTaveren:'d6'}, {lvl:10,pb:4,hilos:12,dadoSaidin:'d10',dadoTaveren:'d8'},
+    {lvl:11,pb:4,hilos:13,dadoSaidin:'d10',dadoTaveren:'d8'}, {lvl:12,pb:4,hilos:14,dadoSaidin:'d10',dadoTaveren:'d8'},
+    {lvl:13,pb:5,hilos:15,dadoSaidin:'d12',dadoTaveren:'d8'}, {lvl:14,pb:5,hilos:16,dadoSaidin:'d12',dadoTaveren:'d10'},
+    {lvl:15,pb:5,hilos:17,dadoSaidin:'d12',dadoTaveren:'d10'}, {lvl:16,pb:5,hilos:18,dadoSaidin:'d12',dadoTaveren:'d10'},
+    {lvl:17,pb:6,hilos:19,dadoSaidin:'2d8',dadoTaveren:'d10'}, {lvl:18,pb:6,hilos:20,dadoSaidin:'2d8',dadoTaveren:'d12'},
+    {lvl:19,pb:6,hilos:21,dadoSaidin:'2d8',dadoTaveren:'d12'}, {lvl:20,pb:6,hilos:22,dadoSaidin:'2d8',dadoTaveren:'d12'}
+  ];
+
+  let state = { level: 1, hilosSpent: 0, taverenSpent: 0 };
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'instant'});
+    });
+  });
+
+  const levelSelect = document.getElementById('level-select');
+  progression.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.lvl;
+    opt.textContent = 'Nivel ' + p.lvl;
+    levelSelect.appendChild(opt);
+  });
+  levelSelect.addEventListener('change', () => {
+    state.level = parseInt(levelSelect.value);
+    state.hilosSpent = 0;
+    highlightProgRow();
+    renderDerived();
+    renderHilos();
+  });
+
+  function currentProg() { return progression.find(p => p.lvl === state.level); }
+
+  function highlightProgRow() {
+    document.querySelectorAll('#prog-table tbody tr').forEach(tr => {
+      tr.classList.toggle('current-level-row', parseInt(tr.dataset.lvl) === state.level);
+    });
+  }
+
+  function renderDerived() {
+    const p = currentProg();
+    document.getElementById('d-pb').textContent = '+' + p.pb;
+    document.getElementById('d-hilos-max').textContent = p.hilos;
+    document.getElementById('d-dado-saidin').textContent = p.dadoSaidin;
+    document.getElementById('d-dado-taveren').textContent = p.dadoTaveren;
+  }
+
+  function renderHilos() {
+    const p = currentProg();
+    const max = p.hilos;
+    const available = max - state.hilosSpent;
+    document.getElementById('hilos-count').textContent = available + ' / ' + max;
+    const container = document.getElementById('hilos-pips');
+    container.innerHTML = '';
+    for (let i = 0; i < max; i++) {
+      const pip = document.createElement('div');
+      pip.className = 'pip' + (i < available ? ' filled' : '');
+      pip.addEventListener('click', () => {
+        if (i < available) { state.hilosSpent = max - i; } else { state.hilosSpent = max - i - 1; }
+        renderHilos();
+      });
+      container.appendChild(pip);
+    }
+  }
+
+  function shortRest() {
+    const p = currentProg();
+    const recover = Math.floor(p.hilos / 2);
+    state.hilosSpent = Math.max(0, state.hilosSpent - recover);
+    renderHilos();
+  }
+
+  function longRest() {
+    state.hilosSpent = 0;
+    state.taverenSpent = 0;
+    renderHilos();
+    renderTaveren();
+  }
+
+  function resetHilos() {
+    state.hilosSpent = 0;
+    renderHilos();
+  }
+
+  function renderTaveren() {
+    const mod = parseInt(document.getElementById('wis-mod').value) || 0;
+    const max = Math.max(1, mod);
+    if (state.taverenSpent > max) state.taverenSpent = max;
+    const available = max - state.taverenSpent;
+    document.getElementById('taveren-count').textContent = available + ' / ' + max;
+    const container = document.getElementById('taveren-pips');
+    container.innerHTML = '';
+    for (let i = 0; i < max; i++) {
+      const pip = document.createElement('div');
+      pip.className = 'pip' + (i < available ? ' filled' : '');
+      pip.addEventListener('click', () => {
+        if (i < available) { state.taverenSpent = max - i; } else { state.taverenSpent = max - i - 1; }
+        renderTaveren();
+      });
+      container.appendChild(pip);
+    }
+  }
+
+  function resetTaveren() {
+    state.taverenSpent = 0;
+    renderTaveren();
+  }
+
+  levelSelect.value = 1;
+  highlightProgRow();
+  renderDerived();
+  renderHilos();
+  renderTaveren();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

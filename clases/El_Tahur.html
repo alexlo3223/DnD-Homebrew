@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Tahúr — Clase para D&D 5e</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root{
+  --bg:#100d0a;
+  --panel:#1b1611;
+  --panel-2:#241d16;
+  --line:#3a2f24;
+  --gold:#c8963e;
+  --gold-bright:#e8bf6a;
+  --rust:#8c4a2f;
+  --blood:#8c2e2e;
+  --parchment:#ecdfc4;
+  --muted:#a89a82;
+  --shadow:rgba(0,0,0,.55);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 20% 10%, rgba(200,150,62,.06), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(140,46,46,.06), transparent 45%),
+    var(--bg);
+  color:var(--parchment);
+  font-family:'Libre Baskerville', serif;
+  font-size:18px;
+  line-height:1.55;
+  padding:0 0 80px 0;
+}
+
+::selection{ background:var(--gold); color:#1b1611; }
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;
+  padding:64px 24px 40px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.35), transparent 60%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,.015) 0 2px, transparent 2px 6px);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(232,191,106,.5), transparent),
+    radial-gradient(1px 1px at 80% 60%, rgba(232,191,106,.35), transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(232,191,106,.3), transparent);
+  opacity:.5;
+  pointer-events:none;
+}
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--rust);
+  font-size:12px;
+  margin-bottom:14px;
+}
+h1.title{
+  font-family:'Playfair Display SC', serif;
+  font-weight:900;
+  font-size:clamp(42px,7vw,76px);
+  margin:0;
+  color:var(--gold-bright);
+  text-shadow:0 2px 18px rgba(200,150,62,.25);
+  letter-spacing:.02em;
+}
+.subtitle{
+  font-family:'Libre Baskerville', serif;
+  font-style:italic;
+  color:var(--muted);
+  font-size:20px;
+  max-width:640px;
+  margin:18px auto 0;
+}
+.hero-meta{
+  margin-top:28px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+.hero-meta span{
+  border:1px solid var(--line);
+  padding:6px 14px;
+  border-radius:2px;
+  color:var(--muted);
+  background:var(--panel);
+}
+
+/* ---------- NAV ---------- */
+.tabs{
+  position:sticky; top:0; z-index:50;
+  display:flex;
+  justify-content:center;
+  gap:2px;
+  background:rgba(16,13,10,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  padding:10px 10px;
+  flex-wrap:wrap;
+}
+.tab-btn{
+  font-family:'Playfair Display SC', serif;
+  font-size:13px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  background:transparent;
+  color:var(--muted);
+  border:1px solid transparent;
+  padding:10px 18px;
+  cursor:pointer;
+  transition:.15s;
+}
+.tab-btn:hover{ color:var(--gold-bright); }
+.tab-btn.active{
+  color:var(--gold-bright);
+  border:1px solid var(--gold);
+  background:rgba(200,150,62,.08);
+}
+
+.wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
+.section{ display:none; padding-top:44px; }
+.section.active{ display:block; animation:fade .35s ease; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+h2.h-section{
+  font-family:'Playfair Display SC', serif;
+  color:var(--gold-bright);
+  font-size:28px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:10px;
+  margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+}
+h2.h-section .num{
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;
+  color:var(--rust);
+  border:1px solid var(--rust);
+  padding:2px 8px;
+}
+h3.h-sub{
+  font-family:'Playfair Display SC', serif;
+  color:var(--gold);
+  font-size:19px;
+  margin:28px 0 8px;
+}
+p{ color:var(--parchment); }
+.muted{ color:var(--muted); }
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:20px 22px;
+  margin-bottom:18px;
+}
+.card.rust{ border-color:var(--rust); }
+.feature{
+  border-left:3px solid var(--gold);
+  padding-left:16px;
+  margin:18px 0;
+}
+.feature .flabel{
+  font-family:'Playfair Display SC', serif;
+  color:var(--gold-bright);
+  font-size:17px;
+  display:block;
+  margin-bottom:4px;
+}
+.feature .flevel{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:var(--rust);
+  margin-right:8px;
+}
+
+/* table */
+table{ width:100%; border-collapse:collapse; font-size:15px; margin:12px 0 28px;}
+th{
+  font-family:'Playfair Display SC', serif;
+  font-size:12px;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:var(--gold-bright);
+  border-bottom:1px solid var(--gold);
+  padding:8px 6px;
+  text-align:left;
+  background:var(--panel-2);
+}
+td{
+  padding:7px 6px;
+  border-bottom:1px solid var(--line);
+  color:var(--parchment);
+}
+tr:hover td{ background:rgba(200,150,62,.05); }
+td.center, th.center{ text-align:center; }
+
+/* Puntos de Lectura widget */
+.chip-widget{
+  background:var(--panel-2);
+  border:1px solid var(--gold);
+  border-radius:4px;
+  padding:22px;
+  margin:20px 0 30px;
+}
+.chip-widget h4{
+  margin:0 0 4px;
+  font-family:'Playfair Display SC', serif;
+  color:var(--gold-bright);
+  font-size:16px;
+}
+.chip-widget .desc{ font-size:14px; color:var(--muted); margin-bottom:16px;}
+.chip-controls{ display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap;}
+.chip-controls label{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted);}
+.chip-controls input[type=number]{
+  width:60px; background:var(--bg); border:1px solid var(--line); color:var(--parchment);
+  padding:5px 8px; font-family:'JetBrains Mono', monospace; border-radius:2px;
+}
+.chip-controls button{
+  font-family:'Playfair Display SC', serif; font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+  background:transparent; border:1px solid var(--rust); color:var(--rust);
+  padding:6px 14px; cursor:pointer; border-radius:2px; transition:.15s;
+}
+.chip-controls button:hover{ background:var(--rust); color:var(--bg); }
+.chips-row{ display:flex; flex-wrap:wrap; gap:10px; }
+.chip{
+  width:46px; height:46px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono', monospace; font-weight:600; font-size:13px;
+  cursor:pointer; user-select:none; transition:.15s;
+  background:radial-gradient(circle at 35% 30%, #e8bf6a, #a9762e 70%, #7a5420 100%);
+  color:#241a0c;
+  border:2px dashed rgba(0,0,0,.25);
+  box-shadow:0 3px 6px var(--shadow);
+}
+.chip.spent{
+  background:#2a231a;
+  color:#5c5040;
+  border:2px dashed #4a3f2e;
+  box-shadow:none;
+  transform:scale(.92);
+}
+.chip-status{ margin-top:14px; font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--gold-bright);}
+
+/* Trucos - flip cards */
+.tricks-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+  gap:18px;
+  margin:20px 0;
+}
+.trick-card{
+  perspective:1200px;
+  height:190px;
+  cursor:pointer;
+}
+.trick-inner{
+  position:relative; width:100%; height:100%;
+  transition:transform .5s;
+  transform-style:preserve-3d;
+}
+.trick-card.flipped .trick-inner{ transform:rotateY(180deg); }
+.trick-face{
+  position:absolute; inset:0;
+  backface-visibility:hidden;
+  border-radius:6px;
+  padding:16px;
+  border:1px solid var(--gold);
+  display:flex; flex-direction:column;
+}
+.trick-front{
+  background:linear-gradient(160deg, var(--panel-2), var(--panel));
+  justify-content:center; align-items:center; text-align:center;
+  gap:8px;
+}
+.trick-front .tname{ font-family:'Playfair Display SC', serif; color:var(--gold-bright); font-size:17px;}
+.trick-front .tcost{
+  font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--rust);
+  border:1px solid var(--rust); padding:3px 10px; border-radius:12px;
+}
+.trick-front .thint{ font-size:12px; color:var(--muted); font-style:italic; }
+.trick-back{
+  background:var(--panel-2);
+  transform:rotateY(180deg);
+  font-size:13.5px;
+  overflow-y:auto;
+  color:var(--parchment);
+}
+.trick-back strong{ color:var(--gold-bright); font-family:'Playfair Display SC', serif; font-size:14px; display:block; margin-bottom:6px;}
+
+/* subclass tabs */
+.subtabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.subtab-btn{
+  font-family:'Playfair Display SC', serif; font-size:13px; letter-spacing:.04em;
+  background:var(--panel); border:1px solid var(--line); color:var(--muted);
+  padding:9px 16px; cursor:pointer; border-radius:2px; transition:.15s;
+}
+.subtab-btn.active{ border-color:var(--gold); color:var(--gold-bright); background:rgba(200,150,62,.08); }
+.subpanel{ display:none; }
+.subpanel.active{ display:block; animation:fade .3s ease; }
+
+.tag-row{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 20px;}
+.tag{
+  font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.05em;
+  border:1px solid var(--rust); color:var(--rust); padding:4px 10px; border-radius:12px;
+}
+
+.divider{ border:none; border-top:1px solid var(--line); margin:34px 0; }
+
+footer{
+  text-align:center; margin-top:60px; padding:24px;
+  font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);
+  letter-spacing:.05em;
+}
+
+@media (max-width:640px){
+  h1.title{ font-size:38px; }
+  .tab-btn{ padding:8px 12px; font-size:11px; }
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style id="tema-ambientacion">
+
+/* Tema garito: tapete verde, latón y naipes */
+:root{--bg:#0b2219;--panel:#10301f;--panel-2:#143a27;--line:#2a5a3f;--rust:#b3242c;--blood:#b3242c;}
+body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg font-family='serif' font-size='34' opacity='.07'%3E%3Ctext x='20' y='50' fill='%23ecdfc4'%3E%E2%99%A0%3C/text%3E%3Ctext x='130' y='70' fill='%23b3242c'%3E%E2%99%A5%3C/text%3E%3Ctext x='60' y='170' fill='%23b3242c'%3E%E2%99%A6%3C/text%3E%3Ctext x='160' y='190' fill='%23ecdfc4'%3E%E2%99%A3%3C/text%3E%3C/g%3E%3C/svg%3E"),radial-gradient(ellipse at 50% 30%,#14402c 0%,#0b2219 60%,#06150f 100%);background-attachment:fixed;font-size:17px;}
+.hero{background:radial-gradient(ellipse at 50% 0%,rgba(232,191,106,.12),transparent 60%);border-bottom:3px double var(--gold);}
+.tabs{background:rgba(6,21,15,.94);}
+.card,.trick-face{box-shadow:0 6px 16px rgba(0,0,0,.45);}
+.trick-front{background:linear-gradient(160deg,#f4ead2,#e3d4ab);}
+.trick-front .tname{color:#241a0c;} .trick-front .thint{color:#5a4a30;}
+
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Clase para D&D 5ª Edición</div>
+  <h1 class="title">EL TAHÚR</h1>
+  <p class="subtitle">"No hace falta ser más fuerte que tu rival. Basta con saber, un instante antes que él, dónde va a fallar."</p>
+  <div class="hero-meta">
+    <span>Dado de golpe: d8</span>
+    <span>Característica clave: Inteligencia</span>
+    <span>Salvaciones: Int · Des</span>
+    <span>Sin conjuros — solo maniobras</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="wrap">
+
+  <!-- ============ RESUMEN ============ -->
+  <section class="section" id="sec-resumen">
+    <h2 class="h-section"><span class="num">01</span> Resumen y Rasgos</h2>
+
+    <div class="card">
+      <p>El Tahúr no gana los combates a golpes limpios: los gana antes de que empiecen, observando cómo respira el rival, hacia dónde carga el peso, qué mano protege de más. Un instante de lectura vale más que diez de fuerza bruta. Y cuando llega el momento de actuar, no hay honor que valga: una finta, un puñado de tierra, un golpe donde no se espera. Gana quien sigue en pie, no quien peleó más bonito.</p>
+    </div>
+
+    <h3 class="h-sub">Progresión de nivel 1</h3>
+    <table>
+      <tr><th>Rasgo</th><th>Detalle</th></tr>
+      <tr><td>Dado de golpe</td><td>d8 por nivel de Tahúr</td></tr>
+      <tr><td>Puntos de golpe a nivel 1</td><td>8 + modificador de Constitución</td></tr>
+      <tr><td>Puntos de golpe por nivel adicional</td><td>1d8 (o 5) + modificador de Constitución</td></tr>
+      <tr><td>Competencia en armaduras</td><td>Armaduras ligeras</td></tr>
+      <tr><td>Competencia en armas</td><td>Armas sencillas, armas marciales con la propiedad Sutil, armas improvisadas</td></tr>
+      <tr><td>Herramientas</td><td>Herramientas de ladrón y un juego de cartas o dados, a elección</td></tr>
+      <tr><td>Salvaciones</td><td>Inteligencia, Destreza</td></tr>
+      <tr><td>Habilidades</td><td>Elige 3: Acrobacias, Engaño, Perspicacia, Intimidación, Investigación, Percepción, Juego de Manos, Sigilo</td></tr>
+    </table>
+
+    <h3 class="h-sub">Equipo inicial</h3>
+    <div class="card">
+      <p class="muted">Eliges (a) una espada corta o (b) cualquier arma sencilla; y (a) una ballesta ligera con 20 virotes o (b) dos dagas; y herramientas de ladrón; y un paquete de explorador; y una bolsa con arena/sal fina (para tus trucos más sucios) y 10 po.</p>
+    </div>
+
+    <hr class="divider">
+    <h2 class="h-section"><span class="num">02</span> Puntos de Lectura</h2>
+    <p>Observas a tu enemigo constantemente: cómo pisa, cómo respira, dónde titubea. Esa información se traduce en <strong>Puntos de Lectura</strong>, el recurso que alimenta tus Trucos Sucios.</p>
+
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 1</span>Reserva de Puntos</span>
+      <p>Tienes una reserva de Puntos de Lectura igual al valor de la Tabla de Progresión + tu modificador de Inteligencia (mínimo 1 punto total). Recuperas toda la reserva al terminar un descanso corto o largo.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 1</span>Leer el Fallo</span>
+      <p>Cuando una criatura te ataca cuerpo a cuerpo o a distancia y falla, lees la abertura que ha dejado: ganas 1 Punto de Lectura. No requiere reacción, así que puedes combinarlo con Riposte. Una vez por turno.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 2</span>Estudiar (acción adicional)</span>
+      <p>Como acción adicional, observas a una criatura que puedas ver a 30 pies: ganas 2 Puntos de Lectura. Puedes usar Estudiar un número de veces igual a tu modificador de Inteligencia (mínimo 1), y recuperas los usos al terminar un descanso corto o largo.</p>
+    </div>
+
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 1</span>La Apuesta</span>
+      <p>Un tahúr no solo lee: apuesta. Una vez por ronda, sin usar acción, apuesta entre 1 y 3 Puntos de Lectura a que una criatura que puedas ver fallará su siguiente tirada de ataque o salvación antes del inicio de tu próximo turno. Si aciertas, recuperas el doble de lo apostado (sin superar tu máximo). Si fallas, pierdes lo apostado. La casa eres tú.</p>
+    </div>
+
+    <div class="chip-widget">
+      <h4>◈ Contador de Puntos de Lectura</h4>
+      <div class="desc">Ajusta tu máximo (según tu nivel + INT) y pulsa las fichas para marcarlas como gastadas al usar un Truco Sucio. Pulsa "Descanso" para recuperarlas todas.</div>
+      <div class="chip-controls">
+        <label>Puntos máximos:</label>
+        <input type="number" id="chipMax" value="6" min="1" max="20">
+        <button onclick="rebuildChips()">Fijar máximo</button>
+        <button onclick="restChips()">Descanso (recuperar todo)</button>
+      </div>
+      <div class="chips-row" id="chipsRow"></div>
+      <div class="chip-status" id="chipStatus"></div>
+    </div>
+
+  </section>
+
+  <!-- ============ PROGRESION ============ -->
+  <section class="section" id="sec-progresion">
+    <h2 class="h-section"><span class="num">03</span> Tabla de Progresión</h2>
+    <table>
+      <tr>
+        <th class="center">Nv.</th><th class="center">Bon. Comp.</th>
+        <th class="center">Puntos de Lectura</th><th class="center">Trucos Conocidos</th>
+        <th>Rasgos</th>
+      </tr>
+      <tr><td class="center">1</td><td class="center">+2</td><td class="center">2</td><td class="center">3</td><td>Ojo Certero, Puntos de Lectura, Leer el Fallo, La Apuesta, Trucos Sucios</td></tr>
+      <tr><td class="center">2</td><td class="center">+2</td><td class="center">2</td><td class="center">3</td><td>Estudiar, Estilo de Combate</td></tr>
+      <tr><td class="center">3</td><td class="center">+2</td><td class="center">3</td><td class="center">4</td><td>Escuela (Subclase)</td></tr>
+      <tr><td class="center">4</td><td class="center">+2</td><td class="center">3</td><td class="center">4</td><td>Mejora de Característica</td></tr>
+      <tr><td class="center">5</td><td class="center">+3</td><td class="center">4</td><td class="center">5</td><td>Ataque Extra</td></tr>
+      <tr><td class="center">6</td><td class="center">+3</td><td class="center">4</td><td class="center">5</td><td>Rasgo de Escuela</td></tr>
+      <tr><td class="center">7</td><td class="center">+3</td><td class="center">5</td><td class="center">6</td><td>Instinto Agudo</td></tr>
+      <tr><td class="center">8</td><td class="center">+3</td><td class="center">5</td><td class="center">6</td><td>Mejora de Característica</td></tr>
+      <tr><td class="center">9</td><td class="center">+4</td><td class="center">6</td><td class="center">7</td><td>Rasgo de Escuela</td></tr>
+      <tr><td class="center">10</td><td class="center">+4</td><td class="center">6</td><td class="center">7</td><td>Nunca Sorprendido</td></tr>
+      <tr><td class="center">11</td><td class="center">+4</td><td class="center">7</td><td class="center">8</td><td>Golpe Certero</td></tr>
+      <tr><td class="center">12</td><td class="center">+4</td><td class="center">7</td><td class="center">8</td><td>Mejora de Característica</td></tr>
+      <tr><td class="center">13</td><td class="center">+5</td><td class="center">8</td><td class="center">9</td><td>Rasgo de Escuela</td></tr>
+      <tr><td class="center">14</td><td class="center">+5</td><td class="center">8</td><td class="center">9</td><td>Instinto Infalible</td></tr>
+      <tr><td class="center">15</td><td class="center">+5</td><td class="center">9</td><td class="center">10</td><td>Evasión Táctica</td></tr>
+      <tr><td class="center">16</td><td class="center">+5</td><td class="center">9</td><td class="center">10</td><td>Mejora de Característica</td></tr>
+      <tr><td class="center">17</td><td class="center">+6</td><td class="center">10</td><td class="center">11</td><td>Rasgo de Escuela</td></tr>
+      <tr><td class="center">18</td><td class="center">+6</td><td class="center">10</td><td class="center">11</td><td>Maestría en Trucos Sucios</td></tr>
+      <tr><td class="center">19</td><td class="center">+6</td><td class="center">11</td><td class="center">12</td><td>Mejora de Característica</td></tr>
+      <tr><td class="center">20</td><td class="center">+6</td><td class="center">12</td><td class="center">13</td><td>Libro Abierto</td></tr>
+    </table>
+
+    <h3 class="h-sub">Rasgos de clase (niveles sin escuela)</h3>
+
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 1</span>Ojo Certero</span>
+      <p>Añades tu modificador de Inteligencia a tus tiradas de Iniciativa. Nada empieza sin que tú ya lo hayas visto venir.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 2</span>Estilo de Combate</span>
+      <p>Eliges uno:</p>
+      <p class="muted"><strong>Esgrima:</strong> +2 al daño cuando empuñas un arma cuerpo a cuerpo con una mano y ninguna otra arma.<br>
+      <strong>Presa Certera:</strong> ventaja en ataques contra una criatura que estés agarrando; el primer impacto contra ella cada turno inflige 1d4 extra.<br>
+      <strong>Manos Improvisadas:</strong> las armas improvisadas nunca tienen desventaja para ti y su dado de daño mínimo es 1d6.<br>
+      <strong>Reflejos de Callejón:</strong> +1 a la CA mientras no lleves armadura pesada ni escudo.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 5</span>Ataque Extra</span>
+      <p>Puedes atacar dos veces, en lugar de una, cada vez que uses la acción de Atacar en tu turno.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 7</span>Instinto Agudo</span>
+      <p>Tienes ventaja en las pruebas de Perspicacia para detectar mentiras y en las de Percepción o Investigación para detectar emboscadas, trampas o intenciones ocultas.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 10</span>Nunca Sorprendido</span>
+      <p>No puedes ser sorprendido mientras estés consciente. Siempre hay una parte de ti observando.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 11</span>Golpe Certero</span>
+      <p>El daño extra de Golpe Bajo aumenta de 1d6 a 1d8, y el de Golpe desde la Ignorancia (Escuela de la Sombra) de 1d6 a 1d8.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 14</span>Instinto Infalible</span>
+      <p>Cuando fallas una tirada de salvación contra ser Asustado, Cegado o Hechizado, puedes gastar 1 Punto de Lectura como reacción para repetirla.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 15</span>Evasión Táctica</span>
+      <p>Cuando debes hacer una tirada de salvación de Destreza para recibir la mitad de daño, superarla te libra de todo el daño, y fallarla solo te inflige la mitad.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 18</span>Maestría en Trucos Sucios</span>
+      <p>Eliges un Truco Sucio que conozcas. Puedes usarlo una vez por turno sin gastar Puntos de Lectura.</p>
+    </div>
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. 20 · CAPSTONE</span>Libro Abierto</span>
+      <p>En cuanto ves o Estudias a una criatura, sabes automáticamente si tiene resistencia, inmunidad o vulnerabilidad relevante en ese momento. Además, una vez por turno, contra una criatura a la que hayas Estudiado en este combate, la CD de tus Trucos Sucios aumenta en 2 y tus ataques la impactan como crítico con un 19 o 20 natural.</p>
+    </div>
+  </section>
+
+  <!-- ============ TRUCOS ============ -->
+  <section class="section" id="sec-trucos">
+    <h2 class="h-section"><span class="num">04</span> Trucos Sucios</h2>
+    <p class="muted">La CD de salvación de tus Trucos Sucios es <strong>8 + tu bonificador de competencia + tu modificador de Inteligencia</strong>. Conoces un número de Trucos Sucios según la Tabla de Progresión; puedes cambiar uno que conozcas por otro distinto al subir de nivel. Pulsa cada carta para ver su efecto.</p>
+
+    <div class="tricks-grid" id="tricksGrid"></div>
+  </section>
+
+  <!-- ============ ESCUELAS ============ -->
+  <section class="section" id="sec-escuelas">
+    <h2 class="h-section"><span class="num">05</span> Escuelas</h2>
+    <p class="muted">En el nivel 3 eliges tu Escuela: el estilo concreto en el que se ha forjado tu forma de leer y de golpear.</p>
+
+    <div class="subtabs" id="subtabs"></div>
+    <div id="subpanels"></div>
+  </section>
+
+</div>
+
+<footer>EL TAHÚR · Clase homebrew para D&D 5ª Edición · Documento de uso personal en mesa</footer>
+
+<script>
+// ---------------- TABS PRINCIPALES ----------------
+const tabsData = [
+  {id:'sec-resumen', label:'Resumen'},
+  {id:'sec-progresion', label:'Progresión'},
+  {id:'sec-trucos', label:'Trucos Sucios'},
+  {id:'sec-escuelas', label:'Escuelas'},
+];
+const tabsEl = document.getElementById('tabs');
+tabsData.forEach((t,i)=>{
+  const b = document.createElement('button');
+  b.className = 'tab-btn' + (i===0?' active':'');
+  b.textContent = t.label;
+  b.onclick = ()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById(t.id).classList.add('active');
+  };
+  tabsEl.appendChild(b);
+});
+document.getElementById('sec-resumen').classList.add('active');
+
+// ---------------- CHIPS (Puntos de Lectura) ----------------
+let chipMaxVal = 6;
+function rebuildChips(){
+  chipMaxVal = parseInt(document.getElementById('chipMax').value) || 1;
+  const row = document.getElementById('chipsRow');
+  row.innerHTML = '';
+  for(let i=0;i<chipMaxVal;i++){
+    const c = document.createElement('div');
+    c.className='chip';
+    c.textContent = i+1;
+    c.onclick = ()=>{ c.classList.toggle('spent'); updateChipStatus(); };
+    row.appendChild(c);
+  }
+  updateChipStatus();
+}
+function restChips(){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('spent'));
+  updateChipStatus();
+}
+function updateChipStatus(){
+  const total = document.querySelectorAll('.chip').length;
+  const spent = document.querySelectorAll('.chip.spent').length;
+  document.getElementById('chipStatus').textContent = `Disponibles: ${total-spent} / ${total}`;
+}
+rebuildChips();
+
+// ---------------- TRUCOS SUCIOS ----------------
+const tricks = [
+  {name:'Finta Rápida', cost:1, hint:'Antes de atacar', back:'Antes de hacer un ataque, gasta el punto: tienes ventaja en ese ataque contra la criatura elegida.'},
+  {name:'Tierra a los Ojos', cost:2, hint:'Acción · 5 pies', back:'Acción contra una criatura a 5 pies con algo de polvo, arena o tierra a mano: TS de Constitución o queda Cegada hasta el final de su siguiente turno. En terreno sin nada suelto en el suelo, la criatura hace la salvación con ventaja.'},
+  {name:'Golpe Bajo', cost:2, hint:'Al impactar', back:'Al impactar con un ataque, inflige 1d6 de daño extra. Además, TS de Constitución o la criatura tiene desventaja en su próxima tirada de ataque.'},
+  {name:'Desequilibrio', cost:2, hint:'Al impactar cuerpo a cuerpo', back:'Al impactar con un ataque cuerpo a cuerpo: TS de Fuerza o la criatura cae Derribada.'},
+  {name:'Distracción', cost:1, hint:'Reacción', back:'Reacción cuando un aliado ataca a una criatura a 5 pies de ti: ese aliado tiene ventaja en esa tirada de ataque.'},
+  {name:'Farol de Retirada', cost:1, hint:'Acción adicional', back:'Como acción adicional, realizas la acción de Retirada. Si algún enemigo te hace un ataque de oportunidad de todas formas, lo hace con desventaja.'},
+  {name:'Presión Psicológica', cost:2, hint:'Al impactar', back:'Al impactar con un ataque: TS de Sabiduría o la criatura queda Asustada de ti hasta el final de tu siguiente turno.'},
+  {name:'Robo Rápido', cost:1, hint:'En vez de daño', back:'Al impactar, en vez de infligir daño, intentas arrebatar un objeto pequeño o desarmar a la criatura (TS de Fuerza contra tu CD de Trucos Sucios).'},
+  {name:'Golpe Aturdidor', cost:3, hint:'Nivel 5+ · Al impactar', back:'Al impactar con un ataque: TS de Constitución o la criatura queda Aturdida hasta el final de tu siguiente turno.'},
+  {name:'Doble Finta', cost:3, hint:'Nivel 9+ · Antes de atacar', back:'Como Finta Rápida, pero puedes repartir el efecto entre dos criaturas distintas que puedas ver, ganando ventaja en tu próximo ataque contra cada una.'},
+  {name:'Golpe a Ciegas', cost:2, hint:'Ignora ceguera propia', back:'En tu próximo ataque de este turno contra una criatura que hayas Estudiado en este combate, ignoras las desventajas por estar tú Cegado.'},
+  {name:'Última Palabra', cost:1, hint:'Cuando fallan una salvación', back:'Cuando una criatura falla una salvación contra uno de tus Trucos Sucios, gasta 1 Punto de Lectura: tiene desventaja en su siguiente tirada de salvación antes del final de tu próximo turno.'},
+];
+const grid = document.getElementById('tricksGrid');
+tricks.forEach(t=>{
+  const card = document.createElement('div');
+  card.className='trick-card';
+  card.onclick = ()=> card.classList.toggle('flipped');
+  card.innerHTML = `
+    <div class="trick-inner">
+      <div class="trick-face trick-front">
+        <div class="tname">${t.name}</div>
+        <div class="tcost">Coste: ${t.cost} PL</div>
+        <div class="thint">${t.hint}</div>
+      </div>
+      <div class="trick-face trick-back">
+        <strong>${t.name}</strong>
+        ${t.back}
+      </div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+// ---------------- ESCUELAS ----------------
+const schools = [
+  {
+    id:'duelo', name:'Escuela del Duelo',
+    tagline:'"Un solo rival, un solo error. Tuyo será."',
+    tags:['1 contra 1','Riposte','Precisión'],
+    features:[
+      {lvl:3, name:'Riposte', text:'Reacción: cuando una criatura falla un ataque cuerpo a cuerpo contra ti, puedes gastar 1 Punto de Lectura para hacerle un ataque cuerpo a cuerpo. Además, mientras empuñes un arma con una mano y ninguna otra arma, sumas tu modificador de Inteligencia al daño de cualquier ataque en el que gastes Puntos de Lectura.'},
+      {lvl:6, name:'Marca del Duelista', text:'Mientras solo tú y una criatura enemiga estéis luchando cuerpo a cuerpo (ningún otro combatiente a 5 pies de ninguno de los dos), ganas +1 a la CA. Si reduces a 0 los puntos de golpe de esa criatura en esas condiciones, recuperas 1 Punto de Lectura.'},
+      {lvl:9, name:'Contragolpe Perfecto', text:'La primera vez en cada uno de tus turnos que usas Riposte, no gastas Puntos de Lectura.'},
+      {lvl:13, name:'Sentencia', text:'Cuando usas Riposte, puedes aplicar además un Truco Sucio de coste 2 o menos sin gastar puntos adicionales por él.'},
+      {lvl:17, name:'El Duelo Nunca Termina', text:'Una vez por combate, si quedarías a 0 puntos de golpe mientras luchas en un duelo 1 contra 1, quedas en su lugar a 1 punto de golpe.'},
+    ]
+  },
+  {
+    id:'calle', name:'Escuela de la Calle',
+    tagline:'"Las normas las pone quien puede permitirse perder."',
+    tags:['Improvisado','Entorno','Bruto'],
+    features:[
+      {lvl:3, name:'Pelea Sucia', text:'Las armas improvisadas nunca tienen desventaja para ti y su daño mínimo es 1d6. Una vez por turno, como parte de un ataque cuerpo a cuerpo que impacte, puedes intentar Agarrar o Empujar sin gastar tu acción.'},
+      {lvl:6, name:'Lo Que Tengas a Mano', text:'Puedes lanzar objetos improvisados como ataque a distancia (alcance 20/60, con tu modificador de Fuerza) y aplicar un Truco Sucio a ese ataque.'},
+      {lvl:9, name:'Piel Curtida', text:'Tienes resistencia al daño contundente y ventaja en las tiradas de salvación para evitar ser Derribado o Agarrado.'},
+      {lvl:13, name:'Nadie Pelea Limpio', text:'Una vez por turno, al impactar con un ataque, puedes aplicar un Truco Sucio de coste 2 o menos sin gastar Puntos de Lectura.'},
+      {lvl:17, name:'El Callejón Es Mío', text:'Mientras luches en un terreno que puedas usar a tu favor (escombros, suelo irregular, poca luz, multitud), tus Trucos Sucios cuestan 1 punto menos (mínimo 1) y tienes ventaja en tiradas de Iniciativa.'},
+    ]
+  },
+  {
+    id:'sombra', name:'Escuela de la Sombra',
+    tagline:'"Nunca sabrá qué lo golpeó. Ni que estuve ahí."',
+    tags:['Sigilo','Emboscada','Veneno'],
+    features:[
+      {lvl:3, name:'Golpe desde la Ignorancia', text:'Cuando impactas con ventaja por estar oculto o porque el objetivo no te ha detectado, añades automáticamente 1d6 de daño extra (1d8 a partir del nivel 11). Además, puedes usar Estudiar sin revelar tu posición si tu Sigilo supera la Percepción pasiva del objetivo.'},
+      {lvl:6, name:'Leer en la Oscuridad', text:'Puedes gastar Puntos de Lectura para Estudiar a una criatura que no puedas ver pero que esté a 30 pies y puedas oír, oler o intuir de algún modo.'},
+      {lvl:9, name:'Veneno de Callejón', text:'Una vez por combate, cuando aplicas un Truco Sucio que impone una condición, puedes añadir también la condición Envenenado hasta el final de tu siguiente turno, sin coste adicional.'},
+      {lvl:13, name:'Nunca Estoy Aquí', text:'Después de impactar con un ataque contra una criatura que no te ha detectado, puedes usar tu reacción para esconderte inmediatamente, sin necesitar cobertura.'},
+      {lvl:17, name:'El Cuchillo que No Viste Venir', text:'Una vez por combate, un ataque contra una criatura que no te ha detectado es automáticamente un golpe crítico.'},
+    ]
+  },
+  {
+    id:'espectaculo', name:'Escuela del Espectáculo',
+    tagline:'"Mientras miran mi mano izquierda, la derecha ya ha terminado."',
+    tags:['Multitudes','Misdirección','Control'],
+    features:[
+      {lvl:3, name:'Distracción Magistral', text:'Cuando usarías Estudiar, puedes en su lugar atraer la atención de hasta 2 criaturas que puedas ver a 30 pies: cada una hace una TS de Sabiduría o su próxima tirada de ataque antes del final de tu siguiente turno tiene desventaja.'},
+      {lvl:6, name:'Multitud Confundida', text:'Coste 3, acción: hasta 3 criaturas a tu elección en un radio de 10 pies desde un punto que veas hacen una TS de Sabiduría. Quien falle queda Distraído hasta el final de tu siguiente turno (no puede usar reacciones y tiene desventaja en pruebas de Percepción).'},
+      {lvl:9, name:'Nadie Ve Venir', text:'Tienes ventaja en ataques contra criaturas que aún no hayan actuado en el combate o que estén Sorprendidas. Una vez por combate, un Truco Sucio usado contra una de esas criaturas ignora su resistencia a la condición que impone.'},
+      {lvl:13, name:'El Público Aplaude', text:'Cuando un Truco Sucio tuyo hace que una criatura falle su salvación, el primer aliado que la ataque antes del final de tu siguiente turno tiene ventaja en esa tirada de ataque.'},
+      {lvl:17, name:'El Espectáculo Termina', text:'Una vez por combate, como acción: cada criatura a la que hayas aplicado un Truco Sucio en este combate sufre 1d6 de daño por cada vez que lo hayas hecho (máximo 6d6), con una TS de Sabiduría para reducirlo a la mitad.'},
+    ]
+  }
+];
+
+const subtabsEl = document.getElementById('subtabs');
+const subpanelsEl = document.getElementById('subpanels');
+
+schools.forEach((s,i)=>{
+  const btn = document.createElement('button');
+  btn.className='subtab-btn' + (i===0?' active':'');
+  btn.textContent = s.name;
+  btn.onclick = ()=>{
+    document.querySelectorAll('.subtab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.subpanel').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-'+s.id).classList.add('active');
+  };
+  subtabsEl.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.className='subpanel' + (i===0?' active':'');
+  panel.id = 'panel-'+s.id;
+
+  let featuresHtml = s.features.map(f=>`
+    <div class="feature">
+      <span class="flabel"><span class="flevel">NV. ${f.lvl}</span>${f.name}</span>
+      <p>${f.text}</p>
+    </div>
+  `).join('');
+
+  panel.innerHTML = `
+    <div class="card rust">
+      <p style="font-style:italic;color:var(--muted);margin-top:0;">${s.tagline}</p>
+      <div class="tag-row">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+    ${featuresHtml}
+  `;
+  subpanelsEl.appendChild(panel);
+});
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

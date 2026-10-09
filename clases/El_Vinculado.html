@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Vinculado — Clase de D&D 5e</title>
+<style>
+:root{
+  --bg:#0a0e14;
+  --panel:#131a24;
+  --panel2:#161e2a;
+  --border:#243040;
+  --text:#dfe7ef;
+  --muted:#8a97a8;
+  --cyan:#4fd8c9;
+  --cyan-dim:#2a6e66;
+  --violet:#9b7fe0;
+  --violet-dim:#4a3d73;
+  --ember:#e0935a;
+  --ember-dim:#7a4b28;
+  --danger:#d9636a;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Segoe UI',Georgia,serif;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(79,216,201,0.07), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(155,127,224,0.08), transparent 45%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:60px;
+}
+header{
+  padding:40px 20px 24px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(79,216,201,0.05), transparent);
+}
+header h1{
+  margin:0;
+  font-size:2.6em;
+  letter-spacing:4px;
+  color:var(--cyan);
+  text-shadow:0 0 18px rgba(79,216,201,0.45);
+  font-weight:700;
+}
+header p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-style:italic;
+  font-size:1.05em;
+  letter-spacing:1px;
+}
+nav{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:16px 10px;
+  position:sticky;
+  top:0;
+  background:rgba(10,14,20,0.94);
+  backdrop-filter:blur(6px);
+  z-index:50;
+  border-bottom:1px solid var(--border);
+}
+nav button{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.88em;
+  letter-spacing:0.5px;
+  transition:all .2s;
+}
+nav button:hover{ color:var(--text); border-color:var(--cyan-dim);}
+nav button.active{
+  background:linear-gradient(135deg, var(--cyan-dim), var(--panel));
+  color:var(--cyan);
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(79,216,201,0.25);
+}
+main{
+  max-width:920px;
+  margin:0 auto;
+  padding:30px 20px;
+}
+.tab{ display:none; animation:fade .35s ease; }
+.tab.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+h2{
+  color:var(--cyan);
+  border-bottom:1px solid var(--border);
+  padding-bottom:10px;
+  letter-spacing:1px;
+  font-size:1.5em;
+}
+h3{ color:var(--violet); margin-top:28px; letter-spacing:0.5px;}
+h4{ color:var(--ember); margin-bottom:4px;}
+p, li{ line-height:1.65; color:var(--text); }
+.muted{ color:var(--muted); }
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 20px;
+  margin:16px 0;
+}
+.card.glow-cyan{ border-color:var(--cyan-dim); box-shadow:0 0 16px rgba(79,216,201,0.08) inset; }
+.card.glow-violet{ border-color:var(--violet-dim); box-shadow:0 0 16px rgba(155,127,224,0.08) inset; }
+.card.glow-ember{ border-color:var(--ember-dim); box-shadow:0 0 16px rgba(224,147,90,0.08) inset; }
+
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:640px){ .grid2{ grid-template-columns:1fr; } }
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:14px 0;
+  font-size:0.92em;
+}
+th, td{
+  border:1px solid var(--border);
+  padding:8px 10px;
+  text-align:center;
+}
+th{
+  background:var(--panel2);
+  color:var(--cyan);
+  font-weight:600;
+}
+tr:nth-child(even){ background:rgba(255,255,255,0.02); }
+td:first-child, th:first-child{ text-align:center; }
+td.feat-cell{ text-align:left; }
+
+.badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:0.75em;
+  letter-spacing:0.5px;
+  margin-right:6px;
+  border:1px solid var(--border);
+}
+.badge.cost{ color:var(--cyan); border-color:var(--cyan-dim); }
+.badge.action{ color:var(--violet); border-color:var(--violet-dim); }
+
+.archetype-nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.archetype-nav button{
+  flex:1;
+  min-width:130px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.85em;
+}
+.archetype-nav button.active-bestia{ border-color:#5fa85f; color:#8fd08f; background:#12210f;}
+.archetype-nav button.active-coloso{ border-color:var(--ember); color:var(--ember); background:#241608;}
+.archetype-nav button.active-verdugo{ border-color:#d16fae; color:#e79bcd; background:#221022;}
+.archetype-nav button.active-ilusionista{ border-color:var(--violet); color:var(--violet); background:#181229;}
+
+.arch-panel{ display:none; }
+.arch-panel.active{ display:block; }
+
+/* Tracker */
+.tracker-box{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  text-align:center;
+}
+.pips{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin:20px 0;
+}
+.pip{
+  width:38px; height:38px;
+  border-radius:50%;
+  border:2px solid var(--cyan-dim);
+  background:radial-gradient(circle, rgba(79,216,201,0.35), rgba(79,216,201,0.08));
+  cursor:pointer;
+  transition:all .15s;
+  box-shadow:0 0 8px rgba(79,216,201,0.3);
+}
+.pip.spent{
+  background:var(--panel2);
+  box-shadow:none;
+  border-color:var(--border);
+  opacity:0.4;
+}
+.pip:hover{ transform:scale(1.12); }
+.tracker-controls{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.tracker-controls button, .tracker-controls select{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9em;
+}
+.tracker-controls button:hover{ border-color:var(--cyan); color:var(--cyan); }
+.tracker-controls button.reset{ border-color:var(--danger); color:var(--danger); }
+.level-select-wrap{ margin-bottom:10px; color:var(--muted); font-size:0.9em; }
+.esencia-count{ font-size:1.3em; color:var(--cyan); letter-spacing:1px; margin-bottom:4px;}
+
+.bond-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media(max-width:640px){ .bond-grid{ grid-template-columns:1fr; } }
+.bond-card{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+}
+.bond-card h4{ margin-top:0; }
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.8em;
+  margin-top:50px;
+  padding:20px;
+  border-top:1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>EL VINCULADO</h1>
+  <p>Clase Marcial · Vínculo Espiritual</p>
+</header>
+
+<nav>
+  <button class="navbtn active" data-tab="resumen">Visión General</button>
+  <button class="navbtn" data-tab="progresion">Progresión</button>
+  <button class="navbtn" data-tab="rasgos">Rasgos de Clase</button>
+  <button class="navbtn" data-tab="manifestaciones">Manifestaciones</button>
+  <button class="navbtn" data-tab="arquetipos">Arquetipos del Espíritu</button>
+  <button class="navbtn" data-tab="rastreador">Rastreador de Esencia</button>
+</nav>
+
+<main>
+
+<!-- ===================== RESUMEN ===================== -->
+<div class="tab active" id="resumen">
+  <h2>El Vinculado</h2>
+  <p>Todo Vinculado carga con una presencia que no es del todo suya: un espíritu que comparte su cuerpo y que, en el fragor del combate, se manifiesta parcialmente como zarpas, hojas, puños colosales o siluetas gemelas. No es un lanzador de conjuros ni un invocador: es un guerrero cuya arma más letal es la fusión momentánea entre carne y espíritu.</p>
+  <p>La naturaleza exacta de ese vínculo —si fue elegido, heredado, impuesto o compartido— depende de cada Vinculado. Lo único constante es la <strong>Esencia</strong>: la energía que fluye entre ambos y que, al liberarse, permite que el espíritu se manifieste sobre el cuerpo, las manos o el arma del portador.</p>
+
+  <div class="card glow-cyan">
+    <h3 style="margin-top:0;">Rasgos de Clase</h3>
+    <div class="grid2">
+      <div>
+        <p><strong>Dado de Golpe:</strong> 1d10</p>
+        <p><strong>Puntos de Golpe a Nivel 1:</strong> 10 + mod. Constitución</p>
+        <p><strong>Puntos de Golpe por Nivel:</strong> 1d10 (o 6) + mod. Constitución</p>
+      </div>
+      <div>
+        <p><strong>Salvaciones:</strong> Fuerza, Constitución</p>
+        <p><strong>Armadura:</strong> Ligera, media, escudos</p>
+        <p><strong>Armas:</strong> Simples y marciales</p>
+      </div>
+    </div>
+    <p><strong>Habilidades:</strong> elige 2 entre Atletismo, Acrobacias, Intimidación, Perspicacia, Percepción y Supervivencia.</p>
+    <p><strong>Equipo inicial:</strong> (a) un arma marcial y un escudo o (b) dos armas marciales; armadura de cuero; (a) un paquete de explorador o (b) un paquete de calabozo; dos armas simples a tu elección.</p>
+  </div>
+
+  <h3>El Vínculo Espiritual (Nivel 1)</h3>
+  <p>Al crear tu personaje, decide el origen de tu vínculo. Esta elección es sobre todo narrativa: define cómo interpretas tu relación con el espíritu y te concede un pequeño rasgo mecánico propio.</p>
+
+  <div class="bond-grid">
+    <div class="bond-card">
+      <h4>Pacto</h4>
+      <p class="muted">Elegiste esta unión libremente, como una alianza entre iguales.</p>
+      <p><strong>Favor del Espíritu:</strong> una vez por descanso largo, antes de tirar un ataque, prueba de característica o salvación, puedes pedir el favor de tu espíritu para tener ventaja en esa tirada.</p>
+    </div>
+    <div class="bond-card">
+      <h4>Prisión</h4>
+      <p class="muted">El espíritu quedó atrapado en tu cuerpo, por accidente o por castigo.</p>
+      <p><strong>Última Voluntad:</strong> una vez por descanso largo, cuando llegarías a 0 puntos de golpe, puedes gastar todos tus puntos de Esencia restantes (mínimo 1) para quedarte en pie con 1 punto de golpe en su lugar.</p>
+    </div>
+    <div class="bond-card">
+      <h4>Herencia</h4>
+      <p class="muted">El vínculo pasó de generación en generación por tu linaje.</p>
+      <p><strong>Memoria de Sangre:</strong> tienes ventaja en pruebas de Perspicacia o Historia para reconocer a otros seres vinculados a un espíritu o el origen del tuyo propio. Además, recuperas 1 punto de Esencia adicional al terminar un descanso corto.</p>
+    </div>
+    <div class="bond-card">
+      <h4>Posesión</h4>
+      <p class="muted">Ninguno de los dos tiene el control total; convivís en una tensión constante.</p>
+      <p><strong>Impulso Errático:</strong> cuando te quedas sin puntos de Esencia, el espíritu toma brevemente el control: tu próximo ataque cuerpo a cuerpo ese turno tiene ventaja (una vez por descanso corto).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PROGRESION ===================== -->
+<div class="tab" id="progresion">
+  <h2>Tabla de Progresión</h2>
+  <table>
+    <tr><th>Nivel</th><th>Bono Comp.</th><th>Esencia Máx.</th><th>Dado Manifest.</th><th>Manifest. Conocidas</th><th class="feat-cell">Rasgos</th></tr>
+    <tr><td>1</td><td>+2</td><td>2</td><td>1d6</td><td>2</td><td class="feat-cell">Vínculo Espiritual, Esencia Espiritual, Manifestación Básica</td></tr>
+    <tr><td>2</td><td>+2</td><td>3</td><td>1d6</td><td>3</td><td class="feat-cell">Instinto de Combate</td></tr>
+    <tr><td>3</td><td>+2</td><td>4</td><td>1d6</td><td>3</td><td class="feat-cell">Arquetipo del Espíritu</td></tr>
+    <tr><td>4</td><td>+2</td><td>5</td><td>1d6</td><td>4</td><td class="feat-cell">Mejora de Característica</td></tr>
+    <tr><td>5</td><td>+3</td><td>6</td><td>1d8</td><td>4</td><td class="feat-cell">Ataque Extra</td></tr>
+    <tr><td>6</td><td>+3</td><td>7</td><td>1d8</td><td>5</td><td class="feat-cell">Rasgo de Arquetipo</td></tr>
+    <tr><td>7</td><td>+3</td><td>8</td><td>1d8</td><td>5</td><td class="feat-cell">Armadura Espiritual</td></tr>
+    <tr><td>8</td><td>+3</td><td>9</td><td>1d8</td><td>6</td><td class="feat-cell">Mejora de Característica</td></tr>
+    <tr><td>9</td><td>+4</td><td>10</td><td>1d8</td><td>6</td><td class="feat-cell">Capacidad de Manifestación Ampliada (2 activas)</td></tr>
+    <tr><td>10</td><td>+4</td><td>11</td><td>1d8</td><td>7</td><td class="feat-cell">Rasgo de Arquetipo</td></tr>
+    <tr><td>11</td><td>+4</td><td>12</td><td>1d10</td><td>7</td><td class="feat-cell">Dado de Manifestación Mejorado</td></tr>
+    <tr><td>12</td><td>+4</td><td>13</td><td>1d10</td><td>8</td><td class="feat-cell">Mejora de Característica</td></tr>
+    <tr><td>13</td><td>+5</td><td>14</td><td>1d10</td><td>8</td><td class="feat-cell">Fusión Parcial</td></tr>
+    <tr><td>14</td><td>+5</td><td>15</td><td>1d10</td><td>9</td><td class="feat-cell">Rasgo de Arquetipo</td></tr>
+    <tr><td>15</td><td>+5</td><td>16</td><td>1d10</td><td>9</td><td class="feat-cell">Voluntad Inquebrantable</td></tr>
+    <tr><td>16</td><td>+5</td><td>17</td><td>1d10</td><td>10</td><td class="feat-cell">Mejora de Característica</td></tr>
+    <tr><td>17</td><td>+6</td><td>18</td><td>1d12</td><td>10</td><td class="feat-cell">Dado de Manifestación Mejorado, Fusión Total, Capacidad de Manifestación Ampliada (3 activas)</td></tr>
+    <tr><td>18</td><td>+6</td><td>19</td><td>1d12</td><td>11</td><td class="feat-cell">Presencia Trascendente</td></tr>
+    <tr><td>19</td><td>+6</td><td>20</td><td>1d12</td><td>11</td><td class="feat-cell">Mejora de Característica</td></tr>
+    <tr><td>20</td><td>+6</td><td>21</td><td>1d12</td><td>12</td><td class="feat-cell">Avatar del Vínculo</td></tr>
+  </table>
+  <p class="muted">La Esencia Máxima y el Dado de Manifestación se aplican a todas las manifestaciones que los mencionen, sin importar el arquetipo elegido. Así, una manifestación aprendida a nivel 1 escala automáticamente: hace más daño a nivel 5 (1d8), más a nivel 11 (1d10) y aún más a nivel 17 (1d12).</p>
+  <p class="muted"><strong>Capacidad de Manifestación:</strong> puedes tener 1 manifestación activa a la vez entre los niveles 1-8, 2 entre los niveles 9-16, y 3 a partir del nivel 17.</p>
+</div>
+
+<!-- ===================== RASGOS ===================== -->
+<div class="tab" id="rasgos">
+  <h2>Rasgos de Clase</h2>
+
+  <div class="card glow-cyan">
+    <h3 style="margin-top:0;">Esencia Espiritual (Nivel 1)</h3>
+    <p>Tu vínculo con el espíritu se mide en puntos de <strong>Esencia</strong>, según la tabla de progresión. Recuperas todos tus puntos de Esencia al completar un descanso largo, y la mitad de tu máximo (redondeando hacia arriba) al completar un descanso corto.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Manifestación Básica (Nivel 1)</h3>
+    <p><span class="badge cost">1 Esencia</span><strong>Golpe Espiritual:</strong> cuando impactas a una criatura con un ataque con arma o sin arma, puedes gastar 1 punto de Esencia para infligir daño de fuerza adicional igual a tu Dado de Manifestación. No requiere activación ni ocupa capacidad de manifestación: es la técnica más básica de tu espíritu, siempre disponible.</p>
+    <p class="muted">Además, en este nivel aprendes 2 <strong>Manifestaciones</strong> de la lista de la pestaña "Manifestaciones". Consulta esa pestaña para ver cómo funcionan, su duración y el catálogo completo.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Instinto de Combate (Nivel 2)</h3>
+    <p>Tienes ventaja en las tiradas de iniciativa. Además, mientras tengas al menos 1 punto de Esencia, no puedes ser sorprendido: tu espíritu percibe el peligro un instante antes que tú.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Armadura Espiritual (Nivel 7)</h3>
+    <p><span class="badge action">Reacción</span><span class="badge cost">1 Esencia</span>Cuando recibas daño, puedes gastar 1 punto de Esencia para que tu espíritu forme una placa protectora instantánea: ganas resistencia a ese tipo de daño hasta el inicio de tu siguiente turno. Esta reacción es independiente de tus manifestaciones activas.</p>
+  </div>
+
+  <div class="card glow-violet">
+    <h3 style="margin-top:0;">Fusión Parcial (Nivel 13)</h3>
+    <p><span class="badge action">Acción Adicional</span><span class="badge cost">4 Esencia</span>Tu espíritu se manifiesta con más fuerza durante 1 minuto. Mientras dure: todos tus ataques que provengan de una manifestación activa o de Golpe Espiritual infligen 1d6 de daño de fuerza adicional, y ganas resistencia a un tipo de daño de tu elección (relacionado con la naturaleza de tu espíritu).</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Voluntad Inquebrantable (Nivel 15)</h3>
+    <p>Tienes ventaja en las salvaciones contra ser asustado o hechizado. Además, una vez por descanso largo, cuando te quedes con 0 puntos de Esencia, recuperas inmediatamente 1d4 puntos.</p>
+  </div>
+
+  <div class="card glow-ember">
+    <h3 style="margin-top:0;">Fusión Total (Nivel 17)</h3>
+    <p><span class="badge action">Acción Adicional</span><span class="badge cost">6 Esencia</span>Tu espíritu se manifiesta casi por completo, envolviendo tu cuerpo y tu arma. Durante 1 minuto:</p>
+    <ul>
+      <li>Tu alcance cuerpo a cuerpo aumenta en 3 metros (10 pies).</li>
+      <li>Tus ataques manifestados infligen 1d8 de daño de fuerza adicional (en lugar del bono de Fusión Parcial).</li>
+      <li>Ganas resistencia a daño contundente, perforante y cortante de origen no mágico.</li>
+      <li>Una vez en cada uno de tus turnos, cuando impactas con un ataque manifestado, puedes hacer un ataque manifestado adicional como parte de la misma acción.</li>
+    </ul>
+    <p class="muted">Puedes usar Fusión Total una vez por descanso largo.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0;">Presencia Trascendente (Nivel 18)</h3>
+    <p>Una vez por descanso largo, cuando tus puntos de Esencia lleguen a 0, recuperas inmediatamente la mitad de tu máximo de Esencia (redondeando hacia arriba).</p>
+  </div>
+
+  <div class="card glow-cyan">
+    <h3 style="margin-top:0;">Avatar del Vínculo (Nivel 20)</h3>
+    <p>Tu vínculo alcanza su máxima expresión. Fusión Total ya no consume puntos de Esencia (sigue requiriendo una acción adicional) y puedes usarla dos veces entre cada descanso largo. Además, mientras estés bajo los efectos de Fusión Total, al inicio de cada uno de tus turnos recuperas puntos de golpe temporales iguales al doble de tu bono de competencia.</p>
+  </div>
+</div>
+
+<!-- ===================== MANIFESTACIONES ===================== -->
+<div class="tab" id="manifestaciones">
+  <h2>Manifestaciones</h2>
+  <p>Las Manifestaciones son la forma en que tu espíritu se vuelve tangible: una hoja adicional, unas garras, una coraza, una zancada imposible. A partir del nivel 1 conoces varias, según la tabla de progresión, y puedes elegirlas libremente de este catálogo sin importar tu arquetipo.</p>
+
+  <div class="card glow-cyan">
+    <h3 style="margin-top:0;">Cómo funcionan</h3>
+    <p><strong>Activación:</strong> activar una manifestación cuesta una acción adicional y 1 punto de Esencia (salvo que se indique lo contrario). Una vez activa, <strong>dura 1 minuto o hasta que la termines como acción gratuita</strong>: cada combate exige volver a manifestar a tu espíritu.</p>
+    <p><strong>Capacidad:</strong> solo puedes mantener activo un número limitado de manifestaciones a la vez (1 en niveles 1-8, 2 en niveles 9-16, 3 desde el nivel 17). Si activas una nueva estando al límite, debes terminar una manifestación activa para dar paso a la nueva.</p>
+    <p><strong>Escalado automático:</strong> el daño y los efectos de tus manifestaciones dependen de tu <strong>Dado de Manifestación</strong> actual (1d6 → 1d8 → 1d10 → 1d12). Esto significa que una manifestación aprendida a nivel 1 se vuelve más poderosa por sí sola conforme subes de nivel, sin necesidad de volver a elegirla.</p>
+    <p><strong>Cambiar manifestaciones conocidas:</strong> cada vez que subas de nivel, puedes sustituir una manifestación que ya conozcas por otra del catálogo, si quieres reajustar tu estilo de combate.</p>
+  </div>
+
+  <h3>Catálogo de Manifestaciones</h3>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:var(--cyan);">Espada Manifestada <span class="badge action" style="border-color:var(--cyan-dim); color:var(--cyan);">Ofensiva</span></h4>
+    <p>Tu espíritu invoca una segunda hoja espectral que flota junto a ti, independiente de tu propia arma. Mientras esté activa, una vez en cada uno de tus turnos puedes usar tu acción adicional para atacar con ella. No es acero: la hoja atraviesa el cuerpo y corta el espíritu. En lugar de tirada de ataque, el objetivo hace una salvación de Sabiduría (CD 8 + tu bono de competencia + tu mod. de Fuerza); si falla, recibe 1[Dado de Manifestación] + tu modificador de Fuerza en daño de fuerza. Las armaduras y escudos no la detienen; solo la voluntad.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:var(--cyan);">Garras Manifestadas <span class="badge action" style="border-color:var(--cyan-dim); color:var(--cyan);">Ofensiva</span></h4>
+    <p>Tus manos se transforman en garras espectrales. Mientras estén activas, tus ataques sin arma infligen 1[Dado de Manifestación] + tu modificador de Fuerza en daño cortante, y cuentan como manifestados (mágicos a efectos de superar resistencias).</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:var(--cyan);">Filo del Espíritu <span class="badge action" style="border-color:var(--cyan-dim); color:var(--cyan);">Ofensiva</span></h4>
+    <p>Tu arma empuñada queda imbuida por tu espíritu. Mientras esté activa: tu arma se considera mágica, su alcance aumenta 1,5 metros (5 pies), y una vez en cada uno de tus turnos que impactes con ella infliges daño de fuerza adicional igual a la mitad de tu Dado de Manifestación (redondeando hacia abajo).</p>
+  </div>
+
+  <div class="card" style="border-color:var(--ember-dim);">
+    <h4 style="margin-top:0; color:var(--ember);">Puño Colosal <span class="badge cost">Requiere nivel 9</span></h4>
+    <p><span class="badge action">Acción Adicional</span><span class="badge cost">2 Esencia por uso</span>A diferencia de las demás, esta manifestación no es persistente: es un golpe puntual. Tu espíritu forma un puño colosal y golpea: en caso de impactar, inflige el doble de tu Dado de Manifestación + tu modificador de Fuerza en daño de fuerza, y el objetivo debe superar una salvación de Fuerza (CD 8 + tu bono de competencia + tu mod. de Fuerza) o ser empujado 3 metros (10 pies) y caer derribado.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:var(--violet);">Armadura del Espíritu <span class="badge action" style="border-color:var(--violet-dim); color:var(--violet);">Defensiva</span></h4>
+    <p>Un caparazón espiritual translúcido te recubre. Mientras esté activa, ganas +1 a la Clase de Armadura y resistencia a un tipo de daño que elijas al activarla (puedes volver a elegir cada vez que la reactives).</p>
+  </div>
+
+  <div class="card" style="border-color:var(--violet-dim);">
+    <h4 style="margin-top:0; color:var(--violet);">Guardia Refleja <span class="badge action" style="border-color:var(--violet-dim); color:var(--violet);">Defensiva</span> <span class="badge cost">Requiere nivel 5</span></h4>
+    <p>Tu espíritu eriza espinas espectrales sobre tu piel. Mientras esté activa, cuando una criatura te impacte con un ataque cuerpo a cuerpo, sufre daño de fuerza igual a la mitad de tu Dado de Manifestación (redondeando hacia abajo).</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:#8fd08f;">Zancada Espectral <span class="badge action" style="border-color:#3f6a3f; color:#8fd08f;">Movilidad</span></h4>
+    <p>Tu espíritu aligera tus pasos. Mientras esté activa, tu velocidad aumenta 3 metros (10 pies) y no provocas ataques de oportunidad al moverte.</p>
+  </div>
+
+  <div class="card" style="border-color:#3f6a3f;">
+    <h4 style="margin-top:0; color:#8fd08f;">Presencia Amenazante <span class="badge action" style="border-color:#3f6a3f; color:#8fd08f;">Control</span> <span class="badge cost">Requiere nivel 5</span></h4>
+    <p>Tu espíritu emana una advertencia primal. Mientras esté activa, las criaturas hostiles a 3 metros (10 pies) de ti tienen desventaja en las tiradas de ataque contra criaturas que no seas tú, a menos que superen una salvación de Sabiduría (CD 8 + tu bono de competencia + tu mod. de Fuerza) al inicio de su turno.</p>
+  </div>
+
+  <div class="card" style="border-color:#7a3f66;">
+    <h4 style="margin-top:0; color:#e79bcd;">Latigazo Espectral <span class="badge action" style="border-color:#7a3f66; color:#e79bcd;">Ofensiva</span> <span class="badge cost">Requiere nivel 7</span></h4>
+    <p>Un zarcillo o tendón espiritual se extiende desde tu espalda. Mientras esté activa, una vez en cada uno de tus turnos puedes usar tu acción adicional para atacar con ella a 9 metros (30 pies) de alcance: en caso de impacto, inflige 1[Dado de Manifestación] de daño de fuerza y puedes arrastrar al objetivo hasta 3 metros (10 pies) hacia ti.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:#e79bcd;">Regeneración Espiritual <span class="badge action" style="border-color:#7a3f66; color:#e79bcd;">Sostén</span> <span class="badge cost">Requiere nivel 7</span></h4>
+    <p>Tu espíritu vela por tu supervivencia. Mientras esté activa, si empiezas tu turno con la mitad o menos de tus puntos de golpe máximos, ganas puntos de golpe temporales iguales a la mitad de tu Dado de Manifestación.</p>
+  </div>
+
+  <div class="card">
+    <h4 style="margin-top:0; color:var(--muted);">Percepción del Espíritu <span class="badge action">Utilidad</span></h4>
+    <p>Tu espíritu presta sus sentidos a los tuyos. Mientras esté activa, ganas visión en la oscuridad hasta 18 metros (60 pies) y ventaja en las pruebas de Sabiduría (Percepción).</p>
+  </div>
+
+  <p class="muted">¿Quieres más opciones para tu mesa? Este catálogo está pensado para crecer: puedes añadir nuevas manifestaciones siguiendo el mismo patrón (efecto ligado al Dado de Manifestación, activación por acción adicional + 1 Esencia, duración de 1 minuto).</p>
+</div>
+
+<!-- ===================== ARQUETIPOS ===================== -->
+<div class="tab" id="arquetipos">
+  <h2>Arquetipos del Espíritu</h2>
+  <p class="muted">Al alcanzar el nivel 3, eliges la naturaleza de tu espíritu. Este arquetipo determina cómo se manifiesta en combate.</p>
+
+  <div class="archetype-nav">
+    <button class="archbtn active-bestia" data-arch="bestia">Espíritu Bestia</button>
+    <button class="archbtn" data-arch="coloso">Espíritu Coloso</button>
+    <button class="archbtn" data-arch="verdugo">Espíritu Verdugo</button>
+    <button class="archbtn" data-arch="ilusionista">Espíritu Ilusionista</button>
+  </div>
+
+  <div class="arch-panel active" id="arch-bestia">
+    <div class="card" style="border-color:#3f6a3f;">
+      <h3 style="margin-top:0; color:#8fd08f;">Espíritu Bestia</h3>
+      <p class="muted">Un espíritu primal y feroz, cercano al instinto del cazador y la manada.</p>
+      <h4>Zarpas del Espíritu (Nivel 3)</h4>
+      <p>Aprendes la manifestación Garras Manifestadas si no la conocías (no cuenta para tus conocidas). Mientras esté activa no ocupa capacidad de manifestación, y la primera vez en cada uno de tus turnos que impactas con ella puedes moverte 1,5 metros sin provocar ataques de oportunidad.</p>
+      <h4>Instinto Feral (Nivel 3)</h4>
+      <p>Tienes ventaja en las pruebas de Percepción que dependan del olfato o del oído, y tu velocidad aumenta 3 metros (10 pies) mientras no lleves armadura pesada.</p>
+      <h4>Salto Depredador (Nivel 6)</h4>
+      <p><span class="badge action">Acción Adicional</span>Puedes moverte hasta 3 metros (10 pies) en línea recta hacia una criatura ignorando el terreno difícil y hacer un ataque con Zarpas del Espíritu. Si impactas, el objetivo debe superar una salvación de Fuerza o caer derribado.</p>
+      <h4>Furia Compartida (Nivel 10)</h4>
+      <p><span class="badge action">Acción Adicional</span><span class="badge cost">3 Esencia</span>Durante 1 minuto ganas resistencia a daño contundente, perforante y cortante, y el dado de tus Zarpas del Espíritu aumenta un escalón (a 1d8).</p>
+      <h4>Cazador Definitivo (Nivel 14)</h4>
+      <p><span class="badge action">Acción Adicional</span>Marcas a una criatura que puedas ver, sin coste de Esencia. Mientras esté marcada: tus ataques contra ella son críticos con un 19 o un 20, y no puede beneficiarse de estar escondida de ti. La marca dura hasta que marques a otra criatura o completes un descanso largo.</p>
+    </div>
+  </div>
+
+  <div class="arch-panel" id="arch-coloso">
+    <div class="card" style="border-color:var(--ember-dim);">
+      <h3 style="margin-top:0; color:var(--ember);">Espíritu Coloso</h3>
+      <p class="muted">Un guerrero ancestral que envuelve a su portador en hoja y armadura descomunales.</p>
+      <h4>Coraza del Coloso (Nivel 3)</h4>
+      <p><span class="badge action">Reacción</span><span class="badge cost">1 Esencia</span>Cuando un ataque te impacta, ganas +2 a la CA contra ese ataque y los demás hasta el inicio de tu siguiente turno, lo que puede hacer que falle. A diferencia de Armadura Espiritual (que reduce el daño), la Coraza evita el golpe.</p>
+      <h4>Golpe Sísmico (Nivel 3)</h4>
+      <p>Una vez en cada uno de tus turnos, cuando impactas con un ataque manifestado, puedes forzar al objetivo a superar una salvación de Fuerza o caer derribado.</p>
+      <h4>Paso Firme (Nivel 6)</h4>
+      <p>Tienes ventaja en las salvaciones y pruebas para evitar ser derribado, empujado o desplazado contra tu voluntad. El terreno difícil no reduce tu velocidad.</p>
+      <h4>Muralla Viviente (Nivel 10)</h4>
+      <p><span class="badge action">Reacción</span><span class="badge cost">2 Esencia</span>Cuando un aliado a 1,5 metros (5 pies) de ti reciba daño, puedes interponer tu armadura espiritual: reduce ese daño en 1d10 + tu modificador de Fuerza.</p>
+      <h4>Avatar de Guerra (Nivel 14)</h4>
+      <p><span class="badge action">Acción Adicional</span><span class="badge cost">5 Esencia</span>Durante 1 minuto te conviertes en una silueta acorazada colosal: tu alcance cuerpo a cuerpo aumenta en 3 metros (10 pies), ganas +2 a las tiradas de ataque y daño con ataques manifestados, y resistencia a daño contundente, perforante y cortante de origen no mágico.</p>
+    </div>
+  </div>
+
+  <div class="arch-panel" id="arch-verdugo">
+    <div class="card" style="border-color:#7a3f66;">
+      <h3 style="margin-top:0; color:#e79bcd;">Espíritu Verdugo</h3>
+      <p class="muted">Una mano gigantesca y precisa que ejecuta sentencias a distancia.</p>
+      <h4>Mano Ejecutora (Nivel 3)</h4>
+      <p><span class="badge cost">1 Esencia</span>Como parte de un ataque, tu espíritu manifiesta una mano espectral que empuña tu arma a 4,5 metros (15 pies) de alcance, sin necesidad de estar adyacente al objetivo.</p>
+      <h4>Golpe Preciso (Nivel 3)</h4>
+      <p>Tus ataques manifestados son críticos con un 19 o un 20.</p>
+      <h4>Sentencia (Nivel 6)</h4>
+      <p><span class="badge action">Acción Adicional</span>Marcas a una criatura sin coste de Esencia. Mientras esté por debajo de la mitad de sus puntos de golpe máximos, tus ataques contra ella infligen daño de fuerza adicional igual a tu Dado de Manifestación.</p>
+      <h4>Alcance Espectral (Nivel 10)</h4>
+      <p>El alcance de Mano Ejecutora aumenta a 9 metros (30 pies). Además, una vez en cada uno de tus turnos, cuando impactas con ella, puedes arrastrar al objetivo hasta 4,5 metros (15 pies) hacia ti.</p>
+      <h4>Verdugo Absoluto (Nivel 14)</h4>
+      <p><span class="badge cost">3 Esencia</span>Cuando impactas con un ataque manifestado a una criatura marcada por Sentencia que se encuentre por debajo de la mitad de sus puntos de golpe máximos, puedes gastar 3 puntos de Esencia para infligir daño de fuerza adicional igual al doble de tu nivel de Vinculado.</p>
+    </div>
+  </div>
+
+  <div class="arch-panel" id="arch-ilusionista">
+    <div class="card" style="border-color:var(--violet-dim);">
+      <h3 style="margin-top:0; color:var(--violet);">Espíritu Ilusionista</h3>
+      <p class="muted">Un espíritu que se fragmenta en siluetas gemelas, sembrando la duda en el campo de batalla.</p>
+      <h4>Clones Espirituales (Nivel 3)</h4>
+      <p><span class="badge action">Acción Adicional</span><span class="badge cost">1 Esencia</span>Creas una réplica ilusoria de ti mismo en un espacio desocupado a 3 metros (10 pies). El clon no actúa, pero cualquier ataque contra ti mientras el clon esté a 1,5 metros (5 pies) tiene un 50% de probabilidad de disiparlo en tu lugar en vez de impactarte. Dura 1 minuto o hasta que absorba un ataque.</p>
+      <h4>Golpe Fantasma (Nivel 6)</h4>
+      <p>Mientras al menos un clon esté a 3 metros (10 pies) de ti, una vez en cada uno de tus turnos, cuando impactas a una criatura adyacente a un clon, infliges daño de fuerza adicional igual a tu Dado de Manifestación.</p>
+      <h4>Enjambre de Espejismos (Nivel 10)</h4>
+      <p>Puedes mantener hasta 2 clones activos a la vez (1 Esencia cada uno). Además, como acción adicional, puedes intercambiar tu posición con la de un clon a 9 metros (30 pies).</p>
+      <h4>Ilusión Perfecta (Nivel 14)</h4>
+      <p><span class="badge action">Reacción</span><span class="badge cost">3 Esencia</span>Cuando un ataque te impactaría, si tienes un clon a 1,5 metros (5 pies), puedes hacer que el ataque le impacte a él en su lugar, disipándolo. Si no tienes ningún clon activo, en su lugar ganas resistencia a ese ataque.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RASTREADOR ===================== -->
+<div class="tab" id="rastreador">
+  <h2>Rastreador de Esencia</h2>
+  <div class="tracker-box">
+    <div class="level-select-wrap">
+      Nivel de personaje:
+      <select id="levelSelect"></select>
+    </div>
+    <div class="esencia-count" id="esenciaLabel">Esencia: 2 / 2</div>
+    <div class="pips" id="pipsContainer"></div>
+    <div class="tracker-controls">
+      <button id="shortRestBtn">Descanso Corto (recupera la mitad)</button>
+      <button id="longRestBtn">Descanso Largo (recupera todo)</button>
+      <button id="resetBtn" class="reset">Gastar Todo</button>
+    </div>
+  </div>
+  <p class="muted" style="text-align:center; margin-top:14px;">Haz clic en un punto para gastarlo o recuperarlo manualmente.</p>
+</div>
+
+</main>
+
+<footer>El Vinculado — clase homebrew para D&D 5e</footer>
+
+<script>
+const maxByLevel = {1:2,2:3,3:4,4:5,5:6,6:7,7:8,8:9,9:10,10:11,11:12,12:13,13:14,14:15,15:16,16:17,17:18,18:19,19:20,20:21};
+
+// Tab navigation
+document.querySelectorAll('.navbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Archetype sub-nav
+document.querySelectorAll('.archbtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.archbtn').forEach(b=>b.className='archbtn');
+    document.querySelectorAll('.arch-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active-'+btn.dataset.arch);
+    document.getElementById('arch-'+btn.dataset.arch).classList.add('active');
+  });
+});
+
+// Tracker
+const levelSelect = document.getElementById('levelSelect');
+for(let i=1;i<=20;i++){
+  const opt = document.createElement('option');
+  opt.value = i; opt.textContent = 'Nivel ' + i;
+  if(i===1) opt.selected = true;
+  levelSelect.appendChild(opt);
+}
+
+let currentMax = maxByLevel[1];
+let currentSpent = 0;
+
+function renderPips(){
+  const container = document.getElementById('pipsContainer');
+  container.innerHTML = '';
+  for(let i=0;i<currentMax;i++){
+    const pip = document.createElement('div');
+    pip.className = 'pip' + (i < currentSpent ? ' spent' : '');
+    pip.dataset.index = i;
+    pip.addEventListener('click', ()=>{
+      if(i < currentSpent){
+        currentSpent = i;
+      } else {
+        currentSpent = i+1;
+      }
+      renderPips();
+    });
+    container.appendChild(pip);
+  }
+  document.getElementById('esenciaLabel').textContent = 'Esencia: ' + (currentMax-currentSpent) + ' / ' + currentMax;
+}
+
+levelSelect.addEventListener('change', ()=>{
+  currentMax = maxByLevel[parseInt(levelSelect.value)];
+  currentSpent = Math.min(currentSpent, currentMax);
+  renderPips();
+});
+
+document.getElementById('shortRestBtn').addEventListener('click', ()=>{
+  const recover = Math.ceil(currentMax/2);
+  currentSpent = Math.max(0, currentSpent - recover);
+  renderPips();
+});
+document.getElementById('longRestBtn').addEventListener('click', ()=>{
+  currentSpent = 0;
+  renderPips();
+});
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  currentSpent = currentMax;
+  renderPips();
+});
+
+renderPips();
+</script>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

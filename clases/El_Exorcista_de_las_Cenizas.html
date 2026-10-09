@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Exorcista de las Cenizas | Clase D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:         #0C0A0E;
+    --bg-panel:   #110E15;
+    --bg-card:    #16121C;
+    --gold:       #C8A96E;
+    --gold-dim:   #7A6240;
+    --gold-bright:#E8CC9A;
+    --violet:     #4A1A6B;
+    --violet-mid: #6B2A9B;
+    --violet-bright:#9B5FC0;
+    --blood:      #8B0000;
+    --blood-mid:  #B22222;
+    --ash:        #D4C5A9;
+    --ash-dim:    #9A8E7A;
+    --ash-dark:   #4A4440;
+    --text:       #D4C5A9;
+    --text-muted: #7A7068;
+    --border:     rgba(200,169,110,0.18);
+    --border-v:   rgba(74,26,107,0.4);
+    --glow-gold:  rgba(200,169,110,0.25);
+    --glow-blood: rgba(139,0,0,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── TEXTURA DE FONDO ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(74,26,107,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(139,0,0,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12,10,14,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    height: 50px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 0;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  nav a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0 1.1rem;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  nav a:hover, nav a.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  .nav-brand {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    color: var(--gold-bright) !important;
+    margin-right: 1.5rem;
+    border-bottom: none !important;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  /* cadenas de fondo */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.04;
+  }
+  .hero-bg svg {
+    width: min(90vw, 700px);
+    height: min(90vw, 700px);
+  }
+
+  /* tótem — firma visual */
+  .totem-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin-bottom: 2.5rem;
+  }
+  .totem-wrap svg {
+    width: 140px;
+    height: 140px;
+    filter: drop-shadow(0 0 18px rgba(200,169,110,0.4)) drop-shadow(0 0 40px rgba(139,0,0,0.3));
+  }
+  .totem-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,0,0,0.2) 0%, transparent 70%);
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.08); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.2rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--gold-bright);
+    text-shadow: 0 0 60px rgba(200,169,110,0.3), 0 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blood-mid);
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-quote {
+    max-width: 560px;
+    font-style: italic;
+    color: var(--ash-dim);
+    font-size: 1.1rem;
+    line-height: 1.65;
+    border-left: 1px solid var(--gold-dim);
+    padding-left: 1.4rem;
+    text-align: left;
+    margin-bottom: 3rem;
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid;
+  }
+  .tag-gold   { border-color: var(--gold-dim); color: var(--gold); }
+  .tag-blood  { border-color: rgba(139,0,0,0.5); color: var(--blood-mid); }
+  .tag-violet { border-color: var(--border-v); color: var(--violet-bright); }
+
+  /* ── MAIN ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  .section {
+    margin-bottom: 5rem;
+    scroll-margin-top: 65px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+  }
+
+  p { margin-bottom: 1em; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .info-cell {
+    background: var(--bg-panel);
+    padding: 1.1rem 1.3rem;
+  }
+  .info-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.25rem;
+  }
+  .info-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ash);
+  }
+
+  /* ── RECURSO ── */
+  .resource-box {
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid rgba(139,0,0,0.4);
+    padding: 1.8rem 2rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .resource-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blood-mid), transparent);
+  }
+  .resource-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+  .resource-box h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blood-mid);
+    margin-bottom: 0.8rem;
+  }
+  .resource-box p { font-size: 0.97rem; }
+
+  /* ── RASGOS ── */
+  .feature {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--gold-dim);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.1rem;
+    transition: border-left-color 0.2s, box-shadow 0.2s;
+  }
+  .feature:hover {
+    border-left-color: var(--gold);
+    box-shadow: -4px 0 20px rgba(200,169,110,0.1);
+  }
+  .feature h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold-bright);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+  .feature h3 .nivel {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--ash-dim);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.45rem;
+  }
+  .feature h3 .coste {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--blood-mid);
+    border: 1px solid rgba(139,0,0,0.35);
+    padding: 0.1rem 0.45rem;
+  }
+  .feature p { font-size: 0.97rem; color: var(--text); margin-bottom: 0.5em; }
+  .feature p:last-child { margin-bottom: 0; }
+  .feature.blood-border { border-left-color: var(--blood); }
+  .feature.blood-border:hover { border-left-color: var(--blood-mid); box-shadow: -4px 0 20px rgba(139,0,0,0.15); }
+
+  /* ── TABLA ── */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+  }
+  thead tr {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--gold-dim);
+  }
+  th {
+    padding: 0.65rem 0.8rem;
+    text-align: center;
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-family: 'Cinzel', serif;
+  }
+  td {
+    padding: 0.5rem 0.8rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(200,169,110,0.07);
+    color: var(--ash);
+    white-space: nowrap;
+  }
+  tr:nth-child(even) td { background: rgba(200,169,110,0.03); }
+  tr:hover td { background: rgba(200,169,110,0.07); }
+  td:first-child { color: var(--gold); font-weight: 700; font-family: 'Cinzel', serif; font-size: 0.75rem; }
+  td.feat-col { text-align: left; white-space: normal; min-width: 210px; font-size: 0.78rem; }
+  td .nuevo { color: var(--gold-bright); }
+  td .subclase-text { color: var(--violet-bright); }
+
+  /* ── SUBCLASES ── */
+  .subclass {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .subclass-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .subclass-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
+  .subclass h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  .sub-subtitle {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* ── LISTAS ── */
+  ul.flist {
+    list-style: none;
+    padding: 0;
+    margin: 0.6rem 0 0.8rem;
+  }
+  ul.flist li {
+    padding: 0.2rem 0 0.2rem 1.3rem;
+    position: relative;
+    font-size: 0.96rem;
+  }
+  ul.flist li::before {
+    content: '†';
+    position: absolute;
+    left: 0;
+    color: var(--gold-dim);
+    font-size: 0.8rem;
+  }
+
+  em   { color: var(--gold-bright); font-style: normal; }
+  strong { color: var(--blood-mid); font-weight: 600; }
+  .vi { color: var(--violet-bright); }
+
+  hr.div {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 3rem 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  footer span { color: var(--gold-dim); }
+
+  /* ── ANIMACIONES TÓTEM ── */
+  .chain-orbit {
+    animation: orbit 8s linear infinite;
+    transform-origin: 70px 70px;
+  }
+  .chain-orbit-rev {
+    animation: orbit 12s linear infinite reverse;
+    transform-origin: 70px 70px;
+  }
+  .soul-float {
+    animation: soul 3s ease-in-out infinite;
+  }
+  .soul-float:nth-child(2) { animation-delay: -1s; }
+  .soul-float:nth-child(3) { animation-delay: -2s; }
+  @keyframes orbit {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes soul {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50%       { opacity: 0.9; transform: translateY(-4px); }
+  }
+
+  .nail-spin {
+    animation: orbit 20s linear infinite;
+    transform-origin: 70px 70px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">✝ LOCKE</a>
+  <a href="#descripcion">Descripción</a>
+  <a href="#rasgos">Rasgos</a>
+  <a href="#clavos">Clavos Rituales</a>
+  <a href="#niveles">Niveles</a>
+  <a href="#hechizos">Hechizos</a>
+  <a href="#subclases">Juramentos</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <svg viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- círculos rituales -->
+      <circle cx="350" cy="350" r="320" stroke="#C8A96E" stroke-width="1" stroke-dasharray="6 12"/>
+      <circle cx="350" cy="350" r="260" stroke="#4A1A6B" stroke-width="1.5" stroke-dasharray="3 8"/>
+      <circle cx="350" cy="350" r="200" stroke="#8B0000" stroke-width="1" stroke-dasharray="10 5"/>
+      <!-- pentágrama ritual -->
+      <polygon points="350,90 560,470 140,250 560,250 140,470" fill="none" stroke="#C8A96E" stroke-width="0.8" opacity="0.6"/>
+      <!-- runas -->
+      <text x="350" y="40" text-anchor="middle" fill="#C8A96E" font-size="12" font-family="serif" opacity="0.8">ᚱ ᚢ ᚾ ᚨ ᛊ</text>
+      <text x="350" y="680" text-anchor="middle" fill="#C8A96E" font-size="12" font-family="serif" opacity="0.8">ᛈ ᚢ ᚱ ᚷ ᚨ</text>
+    </svg>
+  </div>
+
+  <!-- TÓTEM ANIMADO -->
+  <div class="totem-wrap">
+    <div class="totem-glow"></div>
+    <svg viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- cadenas exteriores orbitando -->
+      <g class="chain-orbit">
+        <circle cx="70" cy="16" r="4" fill="none" stroke="#C8A96E" stroke-width="1.2"/>
+        <rect x="67" y="12" width="6" height="3" fill="none" stroke="#C8A96E" stroke-width="0.8"/>
+        <circle cx="70" cy="124" r="4" fill="none" stroke="#C8A96E" stroke-width="1.2"/>
+        <line x1="70" y1="20" x2="70" y2="28" stroke="#C8A96E" stroke-width="0.8"/>
+        <line x1="70" y1="112" x2="70" y2="120" stroke="#C8A96E" stroke-width="0.8"/>
+      </g>
+      <g class="chain-orbit" style="animation-delay:-4s">
+        <circle cx="16" cy="70" r="4" fill="none" stroke="#8B0000" stroke-width="1.2"/>
+        <circle cx="124" cy="70" r="4" fill="none" stroke="#8B0000" stroke-width="1.2"/>
+        <line x1="20" y1="70" x2="28" y2="70" stroke="#8B0000" stroke-width="0.8"/>
+        <line x1="112" y1="70" x2="120" y2="70" stroke="#8B0000" stroke-width="0.8"/>
+      </g>
+
+      <!-- clavos girando -->
+      <g class="nail-spin">
+        <line x1="70" y1="36" x2="70" y2="50" stroke="#C8A96E" stroke-width="1.5" stroke-linecap="round"/>
+        <polygon points="70,34 72,39 68,39" fill="#C8A96E"/>
+        <line x1="104" y1="70" x2="90" y2="70" stroke="#C8A96E" stroke-width="1.5" stroke-linecap="round"/>
+        <polygon points="106,70 101,68 101,72" fill="#C8A96E"/>
+        <line x1="70" y1="104" x2="70" y2="90" stroke="#C8A96E" stroke-width="1.5" stroke-linecap="round"/>
+        <polygon points="70,106 72,101 68,101" fill="#C8A96E"/>
+        <line x1="36" y1="70" x2="50" y2="70" stroke="#C8A96E" stroke-width="1.5" stroke-linecap="round"/>
+        <polygon points="34,70 39,68 39,72" fill="#C8A96E"/>
+      </g>
+
+      <!-- tótem central -->
+      <rect x="52" y="42" width="36" height="56" rx="3" fill="#0C0A0E" stroke="#C8A96E" stroke-width="1.5"/>
+      <rect x="56" y="46" width="28" height="48" rx="2" fill="#110E15" stroke="#7A6240" stroke-width="0.8"/>
+      <!-- orificio del tótem -->
+      <ellipse cx="70" cy="70" rx="10" ry="12" fill="#1A0A0A" stroke="#8B0000" stroke-width="1.2"/>
+      <ellipse cx="70" cy="70" rx="6" ry="8" fill="#2A0000" opacity="0.8"/>
+
+      <!-- almas atrapadas dentro -->
+      <g class="soul-float">
+        <circle cx="70" cy="65" r="2.5" fill="#C8A96E" opacity="0.6"/>
+      </g>
+      <g class="soul-float" style="animation-delay:-1s">
+        <circle cx="66" cy="72" r="1.8" fill="#9B5FC0" opacity="0.5"/>
+      </g>
+      <g class="soul-float" style="animation-delay:-2s">
+        <circle cx="74" cy="74" r="2" fill="#8B0000" opacity="0.7"/>
+      </g>
+
+      <!-- grabados en el tótem -->
+      <text x="70" y="52" text-anchor="middle" fill="#7A6240" font-size="6" font-family="serif">ᚱᚢᚾ</text>
+      <text x="70" y="96" text-anchor="middle" fill="#7A6240" font-size="6" font-family="serif">ᛈᚢᚱ</text>
+    </svg>
+  </div>
+
+  <p class="hero-eyebrow">Clase de D&D 5e · Homebrew · Inspirado en Locke, el Exorcista</p>
+  <h1>El Exorcista<br>de las Cenizas</h1>
+  <p class="hero-name">Corvin Locke · El que Sella Almas · El Precio de los Demonios</p>
+
+  <blockquote class="hero-quote">
+    Los demonios no son la causa de la oscuridad humana. Son su consecuencia. Yo lo sé porque cargo con las dos cosas.
+  </blockquote>
+
+  <div class="hero-tags">
+    <span class="tag tag-gold">Asesino AP</span>
+    <span class="tag tag-blood">Coste de Sangre</span>
+    <span class="tag tag-violet">Ocultismo Demaciano</span>
+    <span class="tag tag-gold">Clavos Rituales</span>
+    <span class="tag tag-blood">Sellador de Almas</span>
+    <span class="tag tag-violet">Alta Movilidad</span>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main>
+
+  <!-- DESCRIPCIÓN -->
+  <section class="section fade-in" id="descripcion">
+    <div class="section-header"><h2>Descripción de Clase</h2><div class="line"></div></div>
+
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-label">Dado de Golpe</div><div class="info-value">d8</div></div>
+      <div class="info-cell"><div class="info-label">Característica Principal</div><div class="info-value">Inteligencia</div></div>
+      <div class="info-cell"><div class="info-label">Salvaciones</div><div class="info-value">Inteligencia · Destreza</div></div>
+      <div class="info-cell"><div class="info-label">Arquetipo</div><div class="info-value">Asesino Semimágico</div></div>
+    </div>
+
+    <p>El Exorcista de las Cenizas es un cazador de demonios que proviene de una línea de ocultistas condenados: familias que aprendieron a usar el mismo lenguaje de los demonios para destruirlos. A través de rituales prohibidos, el Exorcista puede <em>clavar almas</em> a la realidad, rasgar el velo entre planos con su cuerpo como precio, y ejecutar a sus enemigos antes de que comprendan lo que les ocurre.</p>
+
+    <p>Su poder no es gratuito. Cada vez que enciende su <em>Ignición de Alma</em>, su propio cuerpo paga el coste: quema su vitalidad para moverse más rápido, golpear más fuerte, y sobrevivir lo que mataría a otros. El secreto está en saber exactamente cuándo dejar de arder.</p>
+
+    <p>En combate, el Exorcista trabaja en tres fases: <em>marcar</em> al objetivo con Clavos Rituales, <em>sellarlo</em> con su Tótem del Purgatorio y <em>ejecutarlo</em> antes de que alcance a suplicar. Es un asesino condicional — su techo de daño es brutal, pero solo si ejecuta la secuencia con precisión.</p>
+
+    <hr class="div">
+
+    <h3 style="font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem;">Competencias</h3>
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-label">Armaduras</div><div class="info-value">Ligeras, Medias</div></div>
+      <div class="info-cell"><div class="info-label">Armas</div><div class="info-value">Simples, Marciales sin pesadas</div></div>
+      <div class="info-cell"><div class="info-label">Herramientas</div><div class="info-value">Utensilios de herrero · Herram. de ladrón</div></div>
+      <div class="info-cell"><div class="info-label">Habilidades (3)</div><div class="info-value">Atletismo, Engaño, Historia, Percepción, Religión, Sigilo, Trato con Animales</div></div>
+    </div>
+
+    <h3 style="font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin:1.5rem 0 0.8rem;">Equipo Inicial</h3>
+    <ul class="flist">
+      <li>(a) Armadura de cuero tachonado, o (b) cota de mallas</li>
+      <li>Una espada corta y un cuchillo de combate, o dos cuchillos de combate y una ballesta de mano</li>
+      <li><em>El Tótem del Purgatorio</em> — su artefacto ritual forjado en cenizas y hierro exorcizado</li>
+      <li>Un pack de explorador y un grimorio de familia con rituales incompletos</li>
+      <li>20 po en materiales de clavo ritual (plata, sal bendita, carbón)</li>
+    </ul>
+  </section>
+
+  <!-- RASGOS -->
+  <section class="section fade-in" id="rasgos">
+    <div class="section-header"><h2>Rasgos de Clase</h2><div class="line"></div></div>
+
+    <!-- RECURSO PRINCIPAL -->
+    <div class="resource-box">
+      <h3>⚡ Ignición de Alma — El Coste del Poder</h3>
+      <p>La <em>Ignición de Alma</em> es el recurso central del Exorcista. Como acción adicional, puedes activarla y pierdes <strong>1d4 puntos de golpe</strong> al inicio de cada uno de tus turnos mientras siga activa (esta pérdida no se reduce con resistencias). Dura un número de rondas igual al valor de la columna «Ignición» de la tabla. Mientras está activa, ganas:</p>
+      <ul class="flist" style="margin-top:0.5rem;">
+        <li>+10 pies (3 m) a tu velocidad de movimiento</li>
+        <li>Ventaja en tiradas de ataque con armas ligeras o de mano</li>
+        <li>Daño de Clavo Plateado activo (ver Pasiva)</li>
+      </ul>
+      <p style="margin-top:0.7rem;">Al finalizar o cancelar la Ignición (acción adicional), recuperas los puntos de golpe que perdiste por la propia Ignición (no por otras fuentes) más tu modificador de Inteligencia. Después necesitas un descanso corto o largo para volver a usarla.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Clavo Plateado <span class="nivel">Pasiva — Nivel 1</span></h3>
+      <p>Tus ataques básicos aplican una carga de <em>Marca de Plata</em> al objetivo (máximo 3 cargas). Cada carga inflige <strong>1d4 de daño de fuerza</strong> adicional por carga acumulada cuando consumes las marcas con <em>Persecución Ceniciento</em> o con el Tótem del Purgatorio. El daño escala según la tabla (1d4 por carga al nivel 1, hasta 2d6 por carga al nivel 17).</p>
+      <p>Las cargas duran hasta el final de tu siguiente turno si no las consumes. Una criatura no puede acumular más de 3 cargas a la vez.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Clavos Rituales <span class="nivel">Nivel 1</span> <span class="coste">1 acción</span></h3>
+      <p>Como acción, lanzas 2 clavos exorcizados (3 a partir del nivel 5, en lugar de beneficiarte de Ataque Extra) a objetivos a 18 m. Cada clavo requiere una tirada de ataque a distancia separada (usando tu modificador de Inteligencia + bonificador de proficiencia). Cada clavo que impacta inflige <strong>1d6 de daño perforante</strong> e impone una <em>Marca de Plata</em>; sumas tu modificador de Inteligencia al daño de solo uno de ellos por turno. Si todos los clavos impactan al mismo objetivo, su velocidad se reduce a la mitad hasta el inicio de tu próximo turno.</p>
+    </div>
+
+    <div class="feature fade-in blood-border">
+      <h3>Ignición de Alma <span class="nivel">Nivel 1</span> <span class="coste">Acción adicional</span></h3>
+      <p>Activa o desactiva tu Ignición de Alma (ver recurso principal arriba). Este rasgo mejora a medida que subes de nivel — al nivel 9 ganas resistencia al daño de armas no mágicas mientras está activa; al nivel 13 la recuperación de vida al desactivarla se duplica.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Persecución Ceniciento <span class="nivel">Nivel 2</span> <span class="coste">Acción adicional</span></h3>
+      <p>Como acción adicional, realizas un parpadeo arcano de hasta 9 m hacia un objetivo visible. Al llegar, tu siguiente ataque cuerpo a cuerpo en ese turno consume todas las <em>Marcas de Plata</em> del objetivo e inflige el daño de Clavo Plateado correspondiente como daño adicional, más <strong>1d8 de daño de fuerza</strong>. Si el objetivo queda a 0 puntos de golpe tras este ataque, el enfriamiento de Persecución Ceniciento se reinicia completamente (coste: 1 uso; recuperas los usos con descanso corto, máximo = mod. INT).</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Ataque Furtivo del Exorcista <span class="nivel">Nivel 2</span></h3>
+      <p>Una vez por turno, cuando atacas a una criatura que tiene al menos 1 carga de <em>Marca de Plata</em>, o con la que tengas ventaja en el ataque, puedes añadir daño extra igual a los dados de la tabla. Este daño es de fuerza.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Ritual de Vinculación <span class="nivel">Nivel 3</span></h3>
+      <p>Eliges tu <em>Juramento de Ceniza</em> (subclase) al nivel 3. Además, aprendes a usar el Tótem del Purgatorio como foco arcano para tus hechizos, y puedes preparar hechizos de tu lista de clase usando tu modificador de Inteligencia.</p>
+    </div>
+
+    <div class="feature fade-in blood-border">
+      <h3>Tótem del Purgatorio <span class="nivel">Nivel 5</span> <span class="coste">1 acción · 1 uso/descanso largo</span></h3>
+      <p>Lanzas tu Tótem a un punto que puedas ver a 27 m. Al aterrizar, el Tótem libera cadenas de alma en un radio de 6 m: todas las criaturas en el área sufren <strong>3d8 de daño necrótico</strong> (salvación de Inteligencia CD = 8 + bon. prof. + mod. INT para la mitad); las que fallen tienen velocidad 0 hasta el final de su siguiente turno.</p>
+      <p>Mientras el Tótem permanece activo (hasta 5 rondas), toda criatura afectada que quede con un número de puntos de golpe igual o inferior a tu <strong>Umbral de Ejecución</strong> (columna «Umbral Tótem»: igual a tu nivel de Exorcista) cae a 0 PG y su alma queda atrapada en el Tótem. Las criaturas con acciones legendarias son inmunes a la ejecución. Si al menos un alma queda atrapada, puedes recuperar el Tótem al final del combate para obtener:</p>
+      <ul class="flist">
+        <li><strong>+1 al Umbral de Ejecución</strong> de forma permanente (acumulable, máximo +5)</li>
+        <li>Reducción del enfriamiento del Tótem en un descanso corto (en lugar de largo)</li>
+      </ul>
+      <p>El Tótem puede ser destruido (CA 15, 20 pv). Si es destruido, libera las almas atrapadas y el efecto termina.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Ataque Extra <span class="nivel">Nivel 5</span></h3>
+      <p>Puedes atacar dos veces, en lugar de una, cuando realizas la acción de Atacar en tu turno. (Clavos Rituales no se beneficia de este rasgo: a cambio, lanza 3 clavos.)</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Parpadeo Ceniciento Mejorado <span class="nivel">Nivel 7</span></h3>
+      <p>Tu Persecución Ceniciento ahora puede usarse como reacción cuando una criatura a 9 m que puedas ver recibe un ataque de un aliado — parpadeas junto a ella e impactas con un ataque de oportunidad que consume sus Marcas de Plata. Esto no consume tu uso normal de Persecución Ceniciento.</p>
+    </div>
+
+    <div class="feature fade-in blood-border">
+      <h3>Pacto del Exorcista <span class="nivel">Nivel 11</span></h3>
+      <p>Tu linaje ocultista se manifiesta plenamente. Cuando activas la Ignición de Alma, ya no pierdes puntos de golpe de forma inmediata: en su lugar, acumulas un contador de <em>Deuda de Sangre</em>. Al desactivarla, la Deuda se cancela con la curación. Si la Deuda supera tu máximo de puntos de golpe, caes inconsciente al desactivar la Ignición (sigues curándote normalmente).</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Ejecución Sublime <span class="nivel">Nivel 15</span></h3>
+      <p>Tu Umbral de Ejecución pasa a ser <strong>tu nivel de Exorcista × 1,5</strong> (antes de los bonos acumulados por almas selladas). Además, la ejecución se aplica a objetivos dentro del área del Tótem aunque <em>no</em> hayan fallado la salvación inicial.</p>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Clavos de Alma <span class="nivel">Nivel 17</span></h3>
+      <p>El daño de tus Clavos Rituales y de tus Marcas de Plata ignora la resistencia (no la inmunidad) a su tipo de daño.</p>
+    </div>
+
+    <div class="feature fade-in blood-border">
+      <h3>Ascensión Ceniciento <span class="nivel">Nivel 20</span></h3>
+      <p>Has cruzado el umbral. Una vez por descanso largo, cuando activas la Ignición de Alma puedes entrar en <em>Estado Ceniciento</em> durante 1 minuto: eres inmune al daño de tu propia Ignición, tu velocidad se duplica, Persecución Ceniciento no tiene coste ni enfriamiento, y tu Umbral de Ejecución se duplica. Al terminar el Estado, sufres un nivel de agotamiento.</p>
+    </div>
+  </section>
+
+  <!-- CLAVOS RITUALES -->
+  <section class="section fade-in" id="clavos">
+    <div class="section-header"><h2>Sistema de Clavos Rituales</h2><div class="line"></div></div>
+
+    <p>Los <em>Clavos Rituales</em> son la herramienta de preparación del Exorcista. No son solo daño — son el setup para las ejecuciones. Un Exorcista que no gestiona bien sus marcas es un asesino sin filo.</p>
+
+    <div class="feature fade-in">
+      <h3>Tipos de Clavos</h3>
+      <p>Al nivel 3, aprendes a forjar clavos especializados durante un descanso corto. Puedes llevar un máximo de <strong>6 clavos especiales</strong> a la vez (el resto son clavos básicos, ilimitados).</p>
+      <ul class="flist">
+        <li><strong>Clavo de Raíz.</strong> Al impactar, el objetivo queda <em>aferrado</em> (velocidad 0) hasta el final de su próximo turno. No acumula Marca de Plata.</li>
+        <li><strong>Clavo Encadenado.</strong> Si impactas a dos criaturas adyacentes con el mismo ataque de Clavos Rituales, ambas quedan vinculadas: si una se mueve más de 3 m de la otra, sufre 2d6 de daño necrótico.</li>
+        <li><strong>Clavo Bendito.</strong> El daño del clavo y de las Marcas de Plata se convierte en radiante. Los no-muertos y demonios que reciban marcas de clavos benditos tienen desventaja en su siguiente tirada de salvación contra el Tótem.</li>
+        <li><strong>Clavo Silenciador.</strong> El objetivo queda <em>silenciado</em>: no puede hablar ni lanzar hechizos con componente verbal hasta el inicio de tu próximo turno.</li>
+      </ul>
+    </div>
+
+    <div class="feature fade-in">
+      <h3>Cadencia de Combo Recomendada</h3>
+      <p>El Exorcista tiene un flujo de combate óptimo que maximiza su daño:</p>
+      <ul class="flist">
+        <li><strong>Turno 1:</strong> Clavos Rituales (x3 al mismo objetivo → ralentización + 3 Marcas). Ignición de Alma como acción adicional.</li>
+        <li><strong>Turno 2:</strong> Persecución Ceniciento (parpadeo + consumo de Marcas + daño masivo). Si queda vivo, ataques básicos para nueva Marca.</li>
+        <li><strong>Turno 3:</strong> Tótem del Purgatorio sobre el objetivo debilitado → ejecución si está bajo el umbral. Desactivar Ignición para curación.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TABLA DE NIVELES -->
+  <section class="section fade-in" id="niveles">
+    <div class="section-header"><h2>Progresión por Niveles</h2><div class="line"></div></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Niv.</th>
+            <th>Bon. Prof.</th>
+            <th>Ignición<br>(rondas)</th>
+            <th>Atq. Furtivo</th>
+            <th>Clavo<br>Plateado</th>
+            <th>Umbral<br>Tótem</th>
+            <th>Hechizos<br>Preparados</th>
+            <th class="feat-col">Rasgos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>+2</td><td>Mod.INT</td><td>—</td><td>1d4/carga</td><td>—</td><td>—</td><td class="feat-col"><span class="nuevo">Clavo Plateado, Clavos Rituales, Ignición de Alma</span></td></tr>
+          <tr><td>2</td><td>+2</td><td>Mod.INT</td><td>1d6</td><td>1d4/carga</td><td>—</td><td>2</td><td class="feat-col"><span class="nuevo">Persecución Ceniciento, Ataque Furtivo del Exorcista, Hechizos</span></td></tr>
+          <tr><td>3</td><td>+2</td><td>Mod.INT</td><td>1d6</td><td>1d6/carga</td><td>—</td><td>3</td><td class="feat-col"><span class="nuevo">Ritual de Vinculación, Juramento de Ceniza</span></td></tr>
+          <tr><td>4</td><td>+2</td><td>Mod.INT</td><td>1d6</td><td>1d6/carga</td><td>—</td><td>3</td><td class="feat-col"><span class="nuevo">Mejora de Característica</span></td></tr>
+          <tr><td>5</td><td>+3</td><td>Mod.INT</td><td>2d6</td><td>1d8/carga</td><td>Nivel</td><td>4</td><td class="feat-col"><span class="nuevo">Tótem del Purgatorio, Ataque Extra</span></td></tr>
+          <tr><td>6</td><td>+3</td><td>Mod.INT+1</td><td>2d6</td><td>1d8/carga</td><td>Nivel</td><td>4</td><td class="feat-col"><span class="subclase-text">Rasgo de Juramento</span></td></tr>
+          <tr><td>7</td><td>+3</td><td>Mod.INT+1</td><td>3d6</td><td>1d8/carga</td><td>Nivel</td><td>5</td><td class="feat-col"><span class="nuevo">Parpadeo Ceniciento Mejorado</span></td></tr>
+          <tr><td>8</td><td>+3</td><td>Mod.INT+1</td><td>3d6</td><td>1d10/carga</td><td>Nivel</td><td>5</td><td class="feat-col"><span class="nuevo">Mejora de Característica</span></td></tr>
+          <tr><td>9</td><td>+4</td><td>Mod.INT+1</td><td>3d6</td><td>1d10/carga</td><td>Nivel</td><td>6</td><td class="feat-col"><span class="nuevo">Ignición Mejorada (resistencia)</span></td></tr>
+          <tr><td>10</td><td>+4</td><td>Mod.INT+2</td><td>4d6</td><td>1d10/carga</td><td>Nivel</td><td>6</td><td class="feat-col"><span class="subclase-text">Rasgo de Juramento</span></td></tr>
+          <tr><td>11</td><td>+4</td><td>Mod.INT+2</td><td>4d6</td><td>2d6/carga</td><td>Nivel</td><td>7</td><td class="feat-col"><span class="nuevo">Pacto del Exorcista</span></td></tr>
+          <tr><td>12</td><td>+4</td><td>Mod.INT+2</td><td>5d6</td><td>2d6/carga</td><td>Nivel</td><td>7</td><td class="feat-col"><span class="nuevo">Mejora de Característica</span></td></tr>
+          <tr><td>13</td><td>+5</td><td>Mod.INT+2</td><td>5d6</td><td>2d6/carga</td><td>Nivel</td><td>8</td><td class="feat-col"><span class="nuevo">Ignición Superior (curación x2)</span></td></tr>
+          <tr><td>14</td><td>+5</td><td>Mod.INT+3</td><td>5d6</td><td>2d6/carga</td><td>Nivel</td><td>8</td><td class="feat-col"><span class="subclase-text">Rasgo de Juramento</span></td></tr>
+          <tr><td>15</td><td>+5</td><td>Mod.INT+3</td><td>6d6</td><td>2d6/carga</td><td>Nivel ×1,5</td><td>9</td><td class="feat-col"><span class="nuevo">Ejecución Sublime</span></td></tr>
+          <tr><td>16</td><td>+5</td><td>Mod.INT+3</td><td>6d6</td><td>2d6/carga</td><td>Nivel ×1,5</td><td>9</td><td class="feat-col"><span class="nuevo">Mejora de Característica</span></td></tr>
+          <tr><td>17</td><td>+6</td><td>Mod.INT+3</td><td>7d6</td><td>2d6/carga</td><td>Nivel ×1,5</td><td>10</td><td class="feat-col"><span class="nuevo">Clavos de Alma (daño a todo tipo)</span></td></tr>
+          <tr><td>18</td><td>+6</td><td>Mod.INT+4</td><td>7d6</td><td>2d6/carga</td><td>Nivel ×1,5</td><td>10</td><td class="feat-col"><span class="subclase-text">Rasgo de Juramento</span></td></tr>
+          <tr><td>19</td><td>+6</td><td>Mod.INT+4</td><td>8d6</td><td>2d6/carga</td><td>Nivel ×1,5</td><td>11</td><td class="feat-col"><span class="nuevo">Mejora de Característica</span></td></tr>
+          <tr><td>20</td><td>+6</td><td>Mod.INT+4</td><td>9d6</td><td>2d6/carga</td><td>Nivel ×1,5*</td><td>11</td><td class="feat-col"><span class="nuevo">Ascensión Ceniciento</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.6rem;">* El Umbral de Ejecución está en puntos de golpe. Durante el Estado Ceniciento del nivel 20 se duplica. El bono permanente por almas selladas (máximo +5) se suma siempre.</p>
+  </section>
+
+  <!-- HECHIZOS -->
+  <section class="section fade-in" id="hechizos">
+    <div class="section-header"><h2>Lista de Hechizos</h2><div class="line"></div></div>
+
+    <p>El Exorcista es un <em>semilanzador</em> (como el Paladín). Su característica de lanzamiento es <em>Inteligencia</em>. CD de salvación = 8 + bon. prof. + mod. INT. Prepara hechizos de la siguiente lista en número igual al indicado en la tabla. <strong>Espacios de conjuro:</strong> los mismos que un Paladín de tu nivel de Exorcista (2 espacios de nivel 1 a nivel 2, hasta espacios de nivel 5 a partir del nivel 17); los recuperas con un descanso largo. Conoces dos trucos de la lista.</p>
+
+    <div class="feature fade-in">
+      <h3>Trucos (Nivel 0)</h3>
+      <p><em>Llama sagrada, Prestidigitación, Rociada venenosa, Taumaturgia, Toque helado</em></p>
+    </div>
+    <div class="feature fade-in">
+      <h3>Hechizos de Nivel 1</h3>
+      <p><em>Absorber elementos, Armadura de Agathys, Castigo abrasador, Comprensión idiomática, Detectar magia, Escudo, Marca del cazador, Protección contra el bien y el mal, Represión infernal</em></p>
+    </div>
+    <div class="feature fade-in">
+      <h3>Hechizos de Nivel 2</h3>
+      <p><em>Inmovilizar persona, Invisibilidad, Localizar objeto, Misil Mágico de Plata*, Oscuridad, Rayo abrasador, Sombra Efímera*</em></p>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">*<strong>Misil Mágico de Plata:</strong> Como Misil Mágico, pero inflige daño radiante y aplica 1 Marca de Plata por misil que impacta. <strong>Sombra Efímera:</strong> Te vuelves invisible hasta el inicio de tu siguiente turno o hasta que atacas.</p>
+    </div>
+    <div class="feature fade-in">
+      <h3>Hechizos de Nivel 3</h3>
+      <p><em>Círculo mágico, Contrahechizo, Disipar magia, Forma gaseosa, Lanzar maldición, Vínculo de Alma*</em></p>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">*<strong>Vínculo de Alma:</strong> Encadenas a una criatura visible a 18 m. Hasta el final de tu siguiente turno, cada vez que recibas daño, el 50% del daño lo sufre también el objetivo vinculado (sin salvación).</p>
+    </div>
+    <div class="feature fade-in">
+      <h3>Hechizos de Nivel 4</h3>
+      <p><em>Destierro, Libertad de movimiento, Ojo arcano, Tentáculos negros de Evard, Tormenta de hielo</em></p>
+    </div>
+    <div class="feature fade-in">
+      <h3>Hechizos de Nivel 5</h3>
+      <p><em>Contactar con otro plano, Disipar el bien y el mal, Dominar persona, Mano Interplanar*</em></p>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">*<strong>Mano Interplanar:</strong> Como Mano Telequinética pero el daño es necrótico y aplica 2 Marcas de Plata al objetivo cada ronda.</p>
+    </div>
+  </section>
+
+  <!-- SUBCLASES -->
+  <section class="section fade-in" id="subclases">
+    <div class="section-header"><h2>Juramentos de Ceniza</h2><div class="line"></div></div>
+
+    <p>Al nivel 3, el Exorcista elige su <em>Juramento de Ceniza</em>: el voto que lo vincula a su poder y define el precio que pagará por él. No son juramentos de honor — son contratos con algo más viejo que los dioses.</p>
+
+    <!-- SUBCLASE 1 -->
+    <div class="subclass fade-in">
+      <div class="subclass-header">
+        <div class="subclass-icon">🔱</div>
+        <div>
+          <h3>Juramento del Cazador de Brujos</h3>
+          <div class="sub-subtitle">«Los demonios tienen un precio. Yo soy el cobrador.»</div>
+        </div>
+      </div>
+      <p>El Cazador de Brujos ha dedicado su vida a rastrear y destruir entidades del Más Allá. Conoce sus nombres verdaderos, sus debilidades y sus miedos. Contra demonios, diablos, no-muertos y aberraciones, es implacable.</p>
+
+      <div class="feature" style="margin-top:1rem;">
+        <h3>Marca del Cazador <span class="nivel">Nivel 3</span></h3>
+        <p>Como acción adicional, marcas a una criatura visible como tu <em>Presa Demoniaca</em>. Tus ataques contra esa criatura infligen +1d8 de daño radiante adicional, y puedes seguir su rastro mágico a través de muros y oscuridad (conoces su dirección exacta si está a 90 m). La marca dura hasta que la criatura cae a 0 pv, o 1 hora. Solo una presa activa a la vez.</p>
+      </div>
+      <div class="feature">
+        <h3>Palabra Prohibida <span class="nivel">Nivel 6</span></h3>
+        <p>Conoces el nombre verdadero de una categoría de entidad (elige entre demonio, diablo, no-muerto, aberración). Como acción, puedes pronunciarlo: las criaturas de ese tipo en 9 m deben superar una salvación de Sabiduría (CD = 8 + bon. prof. + mod. INT) o quedar <em>asustadas</em> de ti durante 1 minuto. Uso: 1 vez por descanso corto.</p>
+      </div>
+      <div class="feature">
+        <h3>Sellar para Siempre <span class="nivel">Nivel 10</span></h3>
+        <p>Cuando el Tótem del Purgatorio ejecuta a un demonio, diablo, no-muerto o aberración, el alma queda sellada permanentemente — la criatura no puede ser revivida por ningún medio por debajo de un deseo. Además, tu umbral de ejecución se duplica contra estas criaturas.</p>
+      </div>
+      <div class="feature">
+        <h3>Exorcismo Total <span class="nivel">Nivel 14</span></h3>
+        <p>Como acción, tocas a una criatura poseída o bajo un encantamiento demoniaco: puedes terminar automáticamente el efecto sin tirada. Si la entidad poseedora es expulsada, debe materializarse en el plano material por 1 ronda antes de poder huir, durante la cual es vulnerable a todos los daños.</p>
+      </div>
+      <div class="feature">
+        <h3>Último Rito <span class="nivel">Nivel 18</span></h3>
+        <p>Una vez por descanso largo, cuando reduces a 0 pv a tu Presa Demoniaca, puedes declarar el <em>Último Rito</em>: absorbes la esencia de la criatura y recuperas todos tus puntos de golpe. Hasta el final del combate, ganas resistencia a todos los daños e inmunidad al miedo.</p>
+      </div>
+    </div>
+
+    <!-- SUBCLASE 2 -->
+    <div class="subclass fade-in">
+      <div class="subclass-header">
+        <div class="subclass-icon">🩸</div>
+        <div>
+          <h3>Juramento del Linaje Maldito</h3>
+          <div class="sub-subtitle">«Nunca elegí este poder. Pero sí elijo cómo usarlo.»</div>
+        </div>
+      </div>
+      <p>El Linaje Maldito es el Exorcista que ha aceptado la corrupción en su propia sangre. No lucha contra los demonios — los contiene dentro de sí mismo. Es más rápido, más fuerte y más brutal que cualquier otro Exorcista. Y cada día que pasa, la línea entre él y lo que caza se vuelve más borrosa.</p>
+
+      <div class="feature" style="margin-top:1rem;">
+        <h3>Sangre Corrompida <span class="nivel">Nivel 3</span></h3>
+        <p>Tu Ignición de Alma ya no tiene límite de rondas por uso. Sin embargo, mientras esté activa, pierdes 1d6 puntos de golpe adicionales por ronda (además del 1d4 base). Al desactivarla, la curación incluye también el daño extra del rasgo.</p>
+      </div>
+      <div class="feature">
+        <h3>Furia Demoniaca <span class="nivel">Nivel 6</span></h3>
+        <p>Mientras la Ignición de Alma está activa y tienes menos de la mitad de tus puntos de golpe máximos, tus ataques infligen daño de tipo <em>necrótico</em> adicionalmente igual a tu bonificador de proficiencia, y tienes ventaja en todas las tiradas de ataque cuerpo a cuerpo.</p>
+      </div>
+      <div class="feature">
+        <h3>Forma Corrupta <span class="nivel">Nivel 10</span></h3>
+        <p>Como acción adicional (coste: 2 rondas de Ignición extra), puedes manifestar brevemente la corrupción de tu linaje: ganas 30 pv temporales, tu velocidad aumenta en 9 m y tus ataques empujan al objetivo 3 m hacia atrás. Dura hasta el inicio de tu siguiente turno.</p>
+      </div>
+      <div class="feature">
+        <h3>Sin Retorno <span class="nivel">Nivel 14</span></h3>
+        <p>Ya no caes inconsciente si la Deuda de Sangre del Pacto del Exorcista supera tu máximo de pv. En su lugar, entras en <em>Estado de Furia</em>: sigues combatiendo con 1 pv, tienes ventaja en todos los ataques y las criaturas hostiles a 9 m de ti tienen desventaja en las tiradas de ataque contra objetivos que no seas tú. El Estado dura hasta el final del combate o hasta que la Ignición se desactiva.</p>
+      </div>
+      <div class="feature">
+        <h3>La Bestia Interior <span class="nivel">Nivel 18</span></h3>
+        <p>Una vez por descanso largo, puedes liberar completamente tu linaje durante 1 minuto. Durante este tiempo: eres inmune a los efectos de encantamiento y miedo, tus ataques infligen daño máximo automáticamente, y cualquier criatura que muera en un radio de 6 m a tu alrededor te otorga 10 pv temporales. Al terminar, sufres 2 niveles de agotamiento.</p>
+      </div>
+    </div>
+
+    <!-- SUBCLASE 3 -->
+    <div class="subclass fade-in">
+      <div class="subclass-header">
+        <div class="subclass-icon">⚗️</div>
+        <div>
+          <h3>Juramento del Ocultista de Demacia</h3>
+          <div class="sub-subtitle">«El Estado prohíbe la magia. Yo prohíbo a los demonios.»</div>
+        </div>
+      </div>
+      <p>El Ocultista demaciano opera en las sombras de una sociedad que condenaría su existencia. Es el más disciplinado y metódico de los Exorcistas — su magia está camuflada de ritual, su poder escondido bajo capas de protocolo. Pero cuando actúa, actúa con una precisión que los demás no pueden igualar.</p>
+
+      <div class="feature" style="margin-top:1rem;">
+        <h3>Protocolo Arcano <span class="nivel">Nivel 3</span></h3>
+        <p>Cuando preparas tus hechizos, puedes preparar uno extra. Además, puedes lanzar hechizos sin componentes verbales — los rituales están grabados en tus gestos, no en tu voz. Eres indetectable como lanzador de magia a menos que el observador supere una tirada de Percepción contra tu CD de hechizos.</p>
+      </div>
+      <div class="feature">
+        <h3>Contención Táctica <span class="nivel">Nivel 6</span></h3>
+        <p>Cuando el Tótem del Purgatorio impacta a una criatura, puedes elegir <em>contenerla</em> en lugar de ejecutarla: la criatura es apresada dentro del campo del Tótem (sin movimiento posible) pero no recibe daño de ejecución. Solo puedes contener a una criatura a la vez. La contención termina si el Tótem es destruido o si la criatura supera una salvación de Inteligencia al inicio de sus turnos.</p>
+      </div>
+      <div class="feature">
+        <h3>Análisis Precombate <span class="nivel">Nivel 10</span></h3>
+        <p>Si observas a una criatura durante al menos 1 ronda de combate sin atacarla, identificas su resistencia más alta y su inmunidad más relevante. A partir de entonces, tus Clavos Rituales y el Tótem ignoran una resistencia (a tu elección entre las que has identificado) de esa criatura.</p>
+      </div>
+      <div class="feature">
+        <h3>Red de Ocultistas <span class="nivel">Nivel 14</span></h3>
+        <p>Contactas con tu red clandestina. Una vez por semana, puedes solicitar información arcana específica (localización de un demonio, historia de una maldición, debilidad de un artefacto) — el DM te la proporciona en 1d4 días. Además, como acción, puedes enviar un mensaje codificado a un aliado del gremio a cualquier distancia.</p>
+      </div>
+      <div class="feature">
+        <h3>Purga Total <span class="nivel">Nivel 18</span></h3>
+        <p>Una vez por descanso largo, cuando lanzas el Tótem del Purgatorio puedes declarar una <em>Purga Total</em>: el radio se duplica (12 m), el daño inicial se triplica, y tu Umbral de Ejecución se duplica para esa instancia. Las almas selladas en una Purga Total cuentan como 3 para el bonus permanente de umbral.</p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>El Exorcista de las Cenizas · Homebrew D&D 5e · <span>Inspirado en Locke, el Exorcista de las Cenizas · League of Legends</span></p>
+  <p style="margin-top:0.4rem;opacity:0.5;">No oficial · Uso personal · Dungeons & Dragons es marca de Wizards of the Coast · League of Legends es marca de Riot Games</p>
+</footer>
+
+<script>
+// ── FADE IN EN SCROLL ──
+const fadeEls = document.querySelectorAll('.fade-in');
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+fadeEls.forEach(el => fadeObs.observe(el));
+
+// ── NAV ACTIVO ──
+const sections = document.querySelectorAll('.section[id]');
+const navLinks = document.querySelectorAll('nav a:not(.nav-brand)');
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+sections.forEach(s => navObs.observe(s));
+</script>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

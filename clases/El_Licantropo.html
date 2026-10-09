@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Licántropo — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#c9a84c;--acc2:#ecd9a0;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:Georgia,serif;--f-body:Georgia,serif;--f-label:Georgia,serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.caja ul{margin:6px 0 10px 20px}.caja li{margin-bottom:4px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+:root{--f-title:'IM Fell English SC','IM Fell English',Georgia,serif;--f-body:'Crimson Text',Georgia,serif;--f-label:'Cinzel','Trajan Pro',Georgia,serif;--bg:#0b0906;--card:#15100b;--card2:#1d160f;--ink:#efe5d4;--dim:#ad9f8a;--acc:#d9b07a;--acc2:#f4dfbd;--line:rgba(239,229,212,.09);--line2:rgba(217,176,122,.28);--navbg:rgba(11,9,6,.93);--sel:rgba(217,176,122,.10);--glow:#4a3a1a;--glow2:#5a1a1a;}
+
+body{background:radial-gradient(circle at 84% 9%,rgba(235,228,210,.16) 0 54px,rgba(235,228,210,.05) 55px,transparent 140px),radial-gradient(ellipse 80% 45% at 50% 0%,color-mix(in srgb,var(--glow,#2b3f8a) 35%,transparent),transparent 70%),var(--bg)}
+.hero h1{font-family:'UnifrakturCook','IM Fell English',serif;font-weight:700;text-shadow:0 0 28px color-mix(in srgb,var(--glow,#2b3f8a) 40%,transparent),0 2px 0 #000}
+.cv-rosa{position:absolute;top:-180px;left:50%;width:620px;height:620px;transform:translateX(-50%);border-radius:50%;z-index:-1;pointer-events:none;opacity:.12;background:repeating-conic-gradient(from 0deg,var(--glow,#2b3f8a) 0 10deg,#1a0f0a 10deg 12deg,var(--glow2,#7a1626) 12deg 22deg,#1a0f0a 22deg 24deg);-webkit-mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%)}
+.cv-murcielagos{position:absolute;top:30px;right:40px;width:420px;height:260px;z-index:-1;pointer-events:none;opacity:.8;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cg fill='%23c9a84c' opacity='.35'%3E%3Cpath d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(250 30) scale(.7)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(330 150) scale(.5)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3C/g%3E%3C/svg%3E") no-repeat}
+h2::before{content:"✠";margin-right:10px;color:var(--acc)}
+@media (max-width:700px){.cv-rosa{width:420px;height:420px;top:-140px}.cv-murcielagos{right:0;transform:scale(.6);transform-origin:top right}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="cv-rosa" aria-hidden="true"></div><div class="cv-murcielagos" aria-hidden="true"></div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Castlevania · Inspirada en el hombre lobo</p>
+  <h1>El Licántropo</h1>
+  <p class="lema">«No soy un monstruo que se esconda de la luna. Soy lo que queda cuando el hombre decide que ya ha tenido bastante.»</p>
+  <div class="tags"><span>Forma Híbrida</span><span>Sangre de la Bestia</span><span>Instinto</span><span>Cazador</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Instintos</button><button type="button" data-p="subs" aria-selected="false">Linajes</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>El Licántropo no sufre una maldición: la ha asumido. Es el hombre lobo de las leyendas de Castlevania, el que no se encadena a las fases de la luna sino a su propia decisión. Cuando quiere, se convierte en la bestia. Cuando quiere, deja de serlo. Y en cada forma tiene algo que perder y algo que ganar.</p><p>La clase gira en torno a la <strong>Sangre de la Bestia</strong>, un contador propio que se llena al morder y al sobrevivir. Cuanto más cargas, más Instintos puedes soltar: zarpazos, aullidos, saltos, el olfato que persigue a una presa herida. No es una furia ciega, y tampoco es una Forma Salvaje. Conserva su mente y su equipo.</p><p>Es una clase de cuerpo a cuerpo con identidad propia: no depende de ninguna arma, no lanza conjuros y no se debilita por la luz del día. La forma híbrida es una elección, no una condena.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d10</b></div><div><span>Característica principal</span><b>Fuerza + Sabiduría</b></div><div><span>Salvaciones</span><b>Fuerza · Constitución</b></div><div><span>Armadura</span><b>Ligera, media</b></div><div><span>Armas</span><b>Sencillas, marciales</b></div><div><span>Habilidades</span><b>2 de: Atletismo, Supervivencia, Percepción, Intimidación, Sigilo, Trato con Animales</b></div><div><span>Subclase</span><b>Linaje (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Sangre máx.</th><th>Garras</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>4</td><td>d8</td><td class="col-f">Forma Híbrida, Garras y Colmillos, Sangre de la Bestia</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>4</td><td>d8</td><td class="col-f">Nariz de Presa, Instintos, Ciclo Lunar</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>4</td><td>d8</td><td class="col-f">Linaje</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>4</td><td>d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>5</td><td>d8</td><td class="col-f">Ataque Adicional</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>5</td><td>d8</td><td class="col-f">Pelaje, rasgo de Linaje</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>5</td><td>d8</td><td class="col-f">Sentidos de Lobo</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>5</td><td>d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>6</td><td>d10</td><td class="col-f">Forma Bestial, Aullido a la Luna</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>6</td><td>d10</td><td class="col-f">Rasgo de Linaje</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>6</td><td>d10</td><td class="col-f">Ferocidad</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>6</td><td>d10</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>7</td><td>d10</td><td class="col-f">Sangre Plateada</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>7</td><td>d10</td><td class="col-f">Rasgo de Linaje</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>7</td><td>d10</td><td class="col-f">Regeneración</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>7</td><td>d10</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>8</td><td>d12</td><td class="col-f">Luna Llena</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>8</td><td>d12</td><td class="col-f">—</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>8</td><td>d12</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>8</td><td>d12</td><td class="col-f">Alfa Absoluto</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Sangre de la Bestia</h3><p>Tu recurso es la <strong>Sangre de la Bestia</strong>. Tu máximo viene en la tabla. La recuperas entera con un descanso largo y la mitad con uno corto.</p><p>Ganas 1 de Sangre la primera vez en cada turno que impactas con una Garra o un Colmillo, y 1 más la primera vez en cada ronda que una criatura hostil a 5 pies queda a 0 puntos de golpe. Sobrevivir también te alimenta: la primera vez en cada ronda que una criatura te impacta, ganas 1.</p><p>La CD de tus Instintos es 8 + tu bonificador de competencia + tu modificador de Sabiduría.</p></div><div class="caja"><h3>Forma Híbrida</h3><p>Como acción adicional puedes adoptar la <strong>Forma Híbrida</strong>, una figura erguida con cabeza y garras de lobo, o dejarla. No te cuesta nada y no tiene límite de duración. Mientras la llevas: tu velocidad aumenta 10 pies, tienes ventaja en las pruebas de Percepción que dependan del olfato y del oído, y tus Garras y Colmillos son armas naturales mágicas con las que eres competente. No puedes lanzar conjuros ni usar objetos delicados. Mantienes tu armadura y tus capacidades mentales.</p></div><div class="caja"><h3>Solo el Licántropo: Ciclo Lunar</h3><p>La luna manda. Cada descanso largo avanza una <strong>Fase</strong> en el ciclo de cuatro: <strong>Nueva → Creciente → Llena → Menguante</strong> (empiezas en Nueva). La Fase cambia cómo funciona tu Sangre de la Bestia hasta el siguiente descanso largo. Si un día no descansas, la Fase se queda donde estaba. Puedes forzar el ciclo una vez por semana con una hora de aullido (el DM decide si se ve la luna).<ul><li><strong>Nueva:</strong> sigilo y emboscada. Ventaja en Sigilo y +1d6 de daño al primer ataque contra una criatura que no te vea.</li><li><strong>Creciente:</strong> velocidad y salto. +10 pies de velocidad y tus Saltos Lobunos no gastan Sangre.</li><li><strong>Llena:</strong> furia. Tus dados de daño de Garras y Colmillos se maximizan una vez por turno.</li><li><strong>Menguante:</strong> resistencia. Regeneras 1 + tu mod. de Constitución al inicio de cada turno y tienes resistencia al daño de plata.</li></ul></p></div><article class="rasgo"><header><h3>Garras y Colmillos</h3><span class="nivel">Nivel 1</span></header><p>En Forma Híbrida tienes dos armas naturales. Las Garras infligen el dado de la tabla de daño cortante. El Colmillo inflige 1d6 + tu modificador de daño perforante. Usas Fuerza o Destreza para atacar con ellas. Cuando haces la acción de Atacar, puedes sustituir uno de tus ataques con Garras por un Colmillo.</p></article><article class="rasgo"><header><h3>Nariz de Presa</h3><span class="nivel">Nivel 2</span></header><p>Tienes ventaja en las pruebas de Supervivencia para rastrear criaturas que hayan sangrado en las últimas 24 horas. Sabes si una criatura a 60 pies tiene la mitad o menos de sus puntos de golpe.</p></article><article class="rasgo"><header><h3>Ciclo Lunar</h3><span class="nivel">Nivel 2</span></header><p>Tu Fase cambia en cada descanso largo (ver Solo el Licántropo). Siempre sabes en qué Fase estás aunque no veas la luna.</p></article><article class="rasgo"><header><h3>Linaje</h3><span class="nivel">Nivel 3</span></header><p>Eliges el linaje de tu bestia: Lobo Solitario, Alfa de la Manada o Luna Roja. Obtienes rasgos de Linaje a los niveles 3, 6, 10 y 14.</p></article><article class="rasgo"><header><h3>Ataque Adicional</h3><span class="nivel">Nivel 5</span></header><p>Atacas dos veces cuando realizas la acción de Atacar.</p></article><article class="rasgo"><header><h3>Pelaje</h3><span class="nivel">Nivel 6</span></header><p>En Forma Híbrida, si no llevas armadura, tu CA es 12 + tu modificador de Destreza.</p></article><article class="rasgo"><header><h3>Sentidos de Lobo</h3><span class="nivel">Nivel 7</span></header><p>Tienes sentido ciego a 10 pies gracias al olfato y al oído. En Forma Híbrida, no puedes ser sorprendido.</p></article><article class="rasgo"><header><h3>Forma Bestial</h3><span class="nivel">Nivel 9</span><span class="coste adicional">Acción adicional</span></header><p>Como acción adicional puedes pasar de la Forma Híbrida a la <strong>Forma Bestial</strong>: un lobo enorme, de tamaño Grande, con velocidad de 50 pies. Tus Colmillos infligen 2d6 + tu modificador y quien reciba un impacto debe superar una salvación de Fuerza o caer derribado. Dejas esta forma cuando quieras como acción adicional. En ella no puedes hablar ni usar armadura pesada.</p></article><article class="rasgo"><header><h3>Aullido a la Luna</h3><span class="nivel">Nivel 9</span><span class="coste adicional">Acción adicional</span></header><p>Una vez por descanso largo, como acción adicional, saltas a la Fase que quieras hasta el final del combate. Todo aliado que oiga tu aullido gana 1d8 + tu mod. de Constitución puntos de golpe temporales.</p></article><article class="rasgo"><header><h3>Ferocidad</h3><span class="nivel">Nivel 11</span></header><p>Si quedas a 0 puntos de golpe mientras estás en Forma Híbrida o Bestial, haces una salvación de Constitución CD 5 + el daño recibido. Si la superas, quedas en 1 punto de golpe. Una vez por descanso largo.</p></article><article class="rasgo"><header><h3>Sangre Plateada</h3><span class="nivel">Nivel 13</span></header><p>Eres inmune a las enfermedades y al veneno. Tus ataques naturales cuentan como de plata y de adamantina a efectos de superar resistencias.</p></article><article class="rasgo"><header><h3>Regeneración</h3><span class="nivel">Nivel 15</span></header><p>Al inicio de cada uno de tus turnos en Forma Híbrida o Bestial, si tienes al menos 1 de Sangre y no estás a 0 puntos de golpe, recuperas puntos de golpe iguales a tu bonificador de competencia × 2.</p></article><article class="rasgo"><header><h3>Luna Llena</h3><span class="nivel">Nivel 17</span><span class="coste adicional">Acción adicional</span></header><p>Como acción adicional, tu Sangre pasa a su máximo y durante 1 minuto tienes ventaja en los ataques con Garra y Colmillo y tus impactos infligen 2d6 de daño adicional. Una vez por descanso largo.</p></article><article class="rasgo"><header><h3>Alfa Absoluto</h3><span class="nivel">Nivel 20</span></header><p>Tu máximo de Sangre aumenta en 4. Tus Instintos cuestan 1 de Sangre menos (mínimo 1). Al inicio de cada uno de tus turnos en combate ganas 1 de Sangre.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Instintos</h2>
+    <p>Se pagan con Sangre de la Bestia y solo pueden usarse en Forma Híbrida o Bestial, salvo que se indique otra cosa.</p>
+    <article class="tecnica"><header><h3>Zarpazo Feroz</h3><span class="precio">1 Sangre</span><span class="coste libre">Sin acción</span><span class="nivel">Desde nivel 2</span></header><p>Cuando impactas con una Garra, añades 2d6 de daño cortante.</p></article><article class="tecnica"><header><h3>Desgarro</h3><span class="precio">2 Sangre</span><span class="coste libre">Sin acción</span><span class="nivel">Desde nivel 2</span></header><p>Cuando impactas con una Garra, el objetivo debe superar una salvación de Constitución o empieza a sangrar: sufre 1d6 de daño al inicio de cada uno de sus turnos durante 3 rondas.</p></article><article class="tecnica"><header><h3>Salto Lobuno</h3><span class="precio">1 Sangre</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 2</span></header><p>Saltas hasta 30 pies en línea recta sin provocar ataques de oportunidad. Si aterrizas a 5 pies de una criatura hostil, tu siguiente ataque tiene ventaja.</p></article><article class="tecnica"><header><h3>Presa de Mandíbulas</h3><span class="precio">1 Sangre</span><span class="coste libre">Sin acción</span><span class="nivel">Desde nivel 3</span></header><p>Cuando impactas con un Colmillo, el objetivo queda agarrado (escape CD 8 + tu competencia + tu mod. de Fuerza). Mientras lo mantienes agarrado, ganas 1 Sangre al inicio de tus turnos.</p></article><article class="tecnica"><header><h3>Aullido</h3><span class="precio">2 Sangre</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 5</span></header><p>Cada criatura hostil a 30 pies que te oiga debe superar una salvación de Sabiduría o quedar asustada durante 1 minuto. Repite la salvación cada vez que sufre daño.</p></article><article class="tecnica"><header><h3>Embestida</h3><span class="precio">2 Sangre</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 5</span></header><p>Te mueves hasta tu velocidad en línea recta y empujas a cada criatura Mediana o menor que atravieses (salvación de Fuerza o derribada y 2d6 de daño contundente).</p></article><article class="tecnica"><header><h3>Rastro de Sangre</h3><span class="precio">1 Sangre</span><span class="coste minuto">1 minuto</span><span class="nivel">Desde nivel 7</span></header><p>Hueles el rastro de una criatura herida que haya pasado en la última hora. Durante 1 hora sabes su dirección y distancia aproximadas hasta una milla.</p></article><article class="tecnica"><header><h3>Regeneración Feroz</h3><span class="precio">2 Sangre</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 9</span></header><p>Recuperas puntos de golpe iguales a 2d8 + tu modificador de Constitución.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Linajes</h2>
+    <p>Al nivel 3 eliges el linaje de tu bestia. Define cómo la usas, no si eres bueno o malo.</p>
+    <div class="subs"><section class="sub" style="--sc:#c9a84c"><header><span class="sub-eyebrow">Linaje</span><h3>Lobo Solitario</h3><p class="sub-fuente">El cazador que no necesita manada</p></header><p class="sub-intro">Caza solo, persigue solo y vuelve a casa solo. Es el más sigiloso y el más veloz.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Paso Silencioso</strong><p>En Forma Híbrida o Bestial tienes ventaja en las pruebas de Sigilo y tu velocidad aumenta 10 pies más.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Presa Marcada</strong><span class="coste adicional">Acción adicional</span><p>Como acción adicional, marcas a una criatura que veas: tienes ventaja en tus tiradas de ataque contra ella y puedes seguirla sin perderla durante 1 hora. Una criatura a la vez.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Emboscada</strong><p>Cuando sorprendes a una criatura o impactas desde una posición oculta, el primer ataque de ese turno inflige 3d6 de daño adicional.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Caza Perfecta</strong><span class="coste reaccion">Reacción</span><p>Una vez por descanso largo, cuando impactas a tu Presa Marcada con un ataque, haces un segundo ataque contra ella como reacción.</p></div></li></ul></section><section class="sub" style="--sc:#8fd1a8"><header><span class="sub-eyebrow">Linaje</span><h3>Alfa de la Manada</h3><p class="sub-fuente">Los que aúllan contigo</p></header><p class="sub-intro">Mandas a los lobos y ellos te siguen. Llevas contigo una manada pequeña que corre a tu lado.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Manada</strong><span class="coste adicional">Acción adicional</span><p>Como acción adicional convocas a dos lobos (bloque de lobo del Manual de Monstruos, con puntos de golpe iguales a 2 × tu nivel de clase). Duran 1 hora y actúan en tu iniciativa. Una vez por descanso corto.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Cazar Juntos</strong><p>Cuando un lobo de tu manada y tú atacáis a la misma criatura en el mismo turno, el segundo ataque tiene ventaja y ganas 1 de Sangre.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Aullido de la Manada</strong><p>Tu Aullido afecta también a los aliados a 30 pies: ganan ventaja en su siguiente tirada de ataque.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Jauría</strong><p>Tu Manada pasa a ser de cuatro lobos y cada uno tiene puntos de golpe iguales a 3 × tu nivel de clase.</p></div></li></ul></section><section class="sub" style="--sc:#e07a8a"><header><span class="sub-eyebrow">Linaje</span><h3>Luna Roja</h3><p class="sub-fuente">La noche de la sangre</p></header><p class="sub-intro">La bestia en ti se despierta con la luna, y despierta algo más: una rabia que nunca se apaga.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Rojo Lunar</strong><p>Tus Garras infligen 1d6 de daño radiante o necrótico adicional (elige al impactar). Una vez por turno.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Instinto Carmesí</strong><p>Cuando tu Sangre llega a su máximo, tu siguiente impacto inflige 3d6 de daño adicional y la Sangre se reduce a la mitad.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Aliento de la Noche</strong><span class="coste accion">Acción</span><p>Como acción, exhalas una bruma roja en un cono de 15 pies. Cada criatura hace una salvación de Constitución o queda cegada hasta el final de su siguiente turno y sufre 4d6 de daño psíquico. Una vez por descanso corto.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Sed Lunar</strong><p>Cuando reduces a una criatura a 0 puntos de golpe, recuperas puntos de golpe iguales a tu nivel de clase y ganas 2 de Sangre.</p></div></li></ul></section></div>
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Sabiduría</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p><div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Sabiduría</label><input type="number" id="mod" value="3" min="-5" max="10"></div><div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de Instintos</span><b id="dv1">–</b></div><div><span>Sangre máx.</span><b id="dv2">–</b></div><div><span>Garras</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Sangre de la Bestia</h3><p class="sub-t">Se gana al golpear, al cazar y al sobrevivir. Se gasta en Instintos.</p><div class="cuenta" id="cnt-sangre"></div><div class="pips" id="pips-sangre"></div><div class="btns"><button class="btn" type="button" data-act="r:sangre:corto">Descanso corto</button><button class="btn" type="button" data-act="r:sangre:largo">Descanso largo</button><button class="btn" type="button" data-act="r:sangre:1">+1</button><button class="btn" type="button" data-act="r:sangre:-1">Gastar 1</button><button class="btn" type="button" data-act="r:sangre:-2">Gastar 2</button><button class="btn" type="button" data-act="r:sangre:-3">Gastar 3</button></div></div><div class="card"><h3>Forma</h3><p class="sub-t">Híbrida desde nivel 1, Bestial desde nivel 9.</p><div class="estado" id="tv-forma"></div><div class="btns"><button class="btn" type="button" data-act="t:forma:no">Humana</button><button class="btn" type="button" data-act="t:forma:si">Híbrida</button></div></div><div class="card"><h3>Luna Llena</h3><p class="sub-t">Desde nivel 17. Una vez por descanso largo.</p><div class="estado" id="tv-luna"></div><div class="btns"><button class="btn" type="button" data-act="t:luna:no">Descanso largo</button><button class="btn" type="button" data-act="t:luna:si">Usar</button></div></div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "P+2+(L>=20?4:0)"}, {"v": "T.garra[L-1]"}], "recursos": [{"id": "sangre", "n": "Sangre de la Bestia", "max": "P+2+(L>=20?4:0)"}], "contadores": [], "interruptores": [{"id": "forma", "si": "Híbrida", "no": "Humana"}, {"id": "luna", "si": "Disponible", "no": "Usada"}], "tablas": {"garra": ["d8", "d8", "d8", "d8", "d8", "d8", "d8", "d8", "d10", "d10", "d10", "d10", "d10", "d10", "d10", "d10", "d12", "d12", "d12", "d12"]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

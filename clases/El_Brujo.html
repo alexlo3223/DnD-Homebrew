@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El Brujo — The Witcher</title>
+<style>
+:root{--bg:#0c0d0f;--panel:#15171b;--panel2:#1c1f24;--line:#2a2e35;--gold:#c9a24b;--silver:#b8c0cc;--red:#a8322d;--text:#d9dce1;--mut:#858b95}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Georgia,'Times New Roman',serif}
+header{padding:30px 18px 16px;text-align:center;border-bottom:1px solid var(--line);background:#0c0d0f}
+h1{margin:0;font-size:2.1rem;letter-spacing:.1em;color:var(--gold);font-weight:600}
+.sub{color:var(--mut);font-style:italic;margin-top:4px}
+nav{display:flex;gap:4px;overflow-x:auto;padding:10px 12px;position:sticky;top:0;background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
+nav button{flex:0 0 auto;background:var(--panel);color:var(--silver);border:1px solid var(--line);padding:8px 14px;border-radius:6px;font:inherit;font-size:.9rem;cursor:pointer}
+nav button.on{background:var(--gold);color:#17120a;border-color:var(--gold)}
+main{max-width:880px;margin:0 auto;padding:16px 14px 60px}
+section{display:none}section.on{display:block}
+h2{color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:6px;margin-top:26px;font-weight:600}
+h3{margin:22px 0 4px;font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0}
+.tag{display:inline-block;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;padding:1px 8px;border-radius:10px;margin-right:6px;font-family:system-ui,sans-serif;vertical-align:middle}
+.t-acc{background:#7a2420;color:#ffd9d6}.t-bon{background:#2f4f2f;color:#d4f0d4}.t-rea{background:#2d3f66;color:#d6e2ff}.t-pas{background:#3a3d44;color:#cfd3da}
+.lvl{color:var(--gold);font-weight:700;margin-right:6px}
+.mode{margin-top:8px;padding-left:10px;border-left:2px solid var(--line)}
+.mode b{color:var(--silver)}
+.mode.pot{border-left-color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;font-family:system-ui,sans-serif}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--gold)}
+.scroll{overflow-x:auto}
+.kv b{color:var(--silver)}
+.note{color:var(--mut);font-size:.9rem;font-style:italic}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0}
+.dice{display:flex;gap:8px;flex-wrap:wrap}
+.die{width:44px;height:44px;border-radius:8px;border:2px solid var(--gold);background:var(--panel2);color:var(--gold);display:flex;align-items:center;justify-content:center;font:700 .85rem system-ui;cursor:pointer;user-select:none}
+.die.spent{border-color:var(--line);color:#444;background:#111;text-decoration:line-through}
+.btn{background:var(--panel2);color:var(--silver);border:1px solid var(--line);padding:8px 12px;border-radius:6px;font:inherit;font-size:.85rem;cursor:pointer}
+.btn:hover{border-color:var(--gold)}
+select,input{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px;font:inherit;font-size:.9rem}
+.mark{padding:10px;border:1px dashed var(--red);border-radius:8px;color:#e8b4b0}
+.mark.empty{border-color:var(--line);color:var(--mut)}
+.log{font:.82rem system-ui;color:var(--mut);max-height:130px;overflow:auto;margin-top:8px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 10px;border:1px solid var(--line);border-radius:14px;font:.82rem system-ui;cursor:pointer;color:var(--silver);user-select:none}
+.chip.on{background:#2f4f2f;border-color:#5c8f5c;color:#e2f5e2}
+.tox{font:700 .9rem system-ui}
+.tox.full{color:#e8b4b0}
+blockquote{margin:12px 0;padding:10px 14px;border-left:3px solid var(--gold);background:var(--panel);color:var(--silver);font-style:italic}
+</style>
+</head>
+<body>
+<header>
+<h1>EL BRUJO</h1>
+<div class="sub">The Witcher — mutante, cazador a sueldo, último recurso contra lo que acecha en la noche</div>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<section id="clase">
+<h2>Concepto</h2>
+<p>Arrancado de su familia de niño, sometido a la Prueba de las Hierbas y entrenado en una fortaleza de su Escuela, el brujo es un <b>profesional</b>. Antes de luchar investiga el contrato, sigue el rastro y descubre qué es la criatura. Después medita, bebe sus elixires, unta el aceite adecuado en la hoja de plata y entra en combate sabiendo cómo va a ganar. En el combate se mueve entre espada y Signo sin pausa.</p>
+<p>Todo su oficio funciona con un único recurso, los <b>Dados del Oficio</b>. Los Signos básicos son gratis, y los dados son lo que convierte un buen brujo en uno letal.</p>
+
+<h2>Rasgos base</h2>
+<div class="card kv">
+<div><b>Dado de golpe:</b> d10 por nivel de Brujo</div>
+<div><b>PG nivel 1:</b> 10 + mod. Constitución</div>
+<div><b>PG por nivel superior:</b> 1d10 (o 6) + mod. Constitución</div>
+<div><b>Armaduras:</b> ligeras y medias</div>
+<div><b>Armas:</b> sencillas, marciales, ballesta de mano</div>
+<div><b>Herramientas:</b> útiles de alquimista, útiles de herbolario</div>
+<div><b>Salvaciones:</b> Constitución, Destreza</div>
+<div><b>Habilidades:</b> elige 3: Acrobacias, Atletismo, Arcanos, Investigación, Naturaleza, Percepción, Supervivencia, Medicina, Sigilo, Perspicacia, Intimidación</div>
+<div><b>Característica clave:</b> Inteligencia (Signos y Alquimia) y Destreza o Fuerza (combate)</div>
+<div><b>CD de Brujo:</b> 8 + competencia + mod. Inteligencia</div>
+</div>
+
+<h2>Equipo inicial</h2>
+<div class="card">Tu arma en dos versiones, acero y plata (lo tradicional son dos espadas largas, pero vale cualquier arma cuerpo a cuerpo) · ballesta de mano con 20 virotes · armadura de cuero tachonado · útiles de alquimista · paquete de explorador · el medallón de tu Escuela · 2d4 × 10 coronas.</div>
+
+<h2>El Camino</h2>
+<blockquote>Los brujos no se meten en política. Cazan monstruos, cobran y siguen su camino.</blockquote>
+<div class="card">
+<p>La clase no te obliga a nada, pero estas ideas ayudan a que el personaje se sienta brujo en la mesa:</p>
+<ul>
+<li><b>Contratos:</b> cobras por cazar. Negociar el precio forma parte del oficio, igual que rechazar un encargo turbio.</li>
+<li><b>Neutralidad:</b> en la mayoría de los lugares, un brujo no toma bandos. Cuando lo hace, tiene consecuencias.</li>
+<li><b>Desconfianza:</b> la gente teme a los mutantes. Te contratan, pero no te invitan a cenar.</li>
+<li><b>No todo monstruo es un monstruo:</b> a veces la maldición tiene cura, la bruja tiene razones y el asesino es el alcalde.</li>
+</ul>
+</div>
+</section>
+
+<section id="tabla">
+<h2>Tabla de la clase</h2>
+<div class="scroll"><table id="tbl"></table></div>
+<p class="note">Los Dados del Oficio se recuperan por completo con un descanso corto o largo.</p>
+</section>
+
+<section id="rasgos">
+<h2>Rasgos de clase</h2>
+<div id="feat"></div>
+</section>
+
+<section id="signos">
+<h2>Signos</h2>
+<p class="note">Conoces los cinco Signos desde el nivel 1. Cada uno tiene una forma <b>básica</b>, que puedes usar a voluntad, y una forma <b>potenciada</b>, que cuesta 1 Dado del Oficio. Las salvaciones usan tu CD de Brujo. Desde el nivel 5 puedes sustituir uno de tus ataques por un Signo que cueste una Acción.</p>
+<div id="signs"></div>
+</section>
+
+<section id="alquimia">
+<h2>Alquimia de Campo</h2>
+<p class="note">Cada fórmula cuesta 1 Dado del Oficio. Conoces 4 fórmulas a nivel 2 y aprendes una más a nivel 5, 9, 13 y 17. No necesitas materiales: los dados representan lo que preparaste de antemano.</p>
+<div class="card"><b>Toxicidad.</b> Puedes tener a la vez tantos elixires activos como tu modificador de Constitución (mínimo 1). Es un límite, no un castigo: si quieres beber otro, primero termina uno de los que tienes activos (sin acción).<br><br><b>Meditación.</b> Al terminar un descanso corto o largo, después de recuperar tus dados, puedes beber elixires y aplicar aceites gastando dados sin usar acciones. Así es como un brujo se prepara antes de entrar a la guarida.</div>
+<h3 style="color:var(--silver)">Elixires</h3><div id="elix"></div>
+<h3 style="color:var(--silver)">Aceites</h3><div id="oils"></div>
+<h3 style="color:var(--silver)">Bombas</h3><div id="bombs"></div>
+<h2>Decocciones (nivel 9)</h2>
+<p class="note">Elaboradas con el mutágeno de un monstruo que hayas matado. Solo puedes tener una activa, y no cuenta para la Toxicidad.</p>
+<div class="scroll"><table id="dec"></table></div>
+<h2>Mutaciones (niveles 13, 15 y 17)</h2>
+<p class="note">Experimentos que lleva tu cuerpo más allá de la Prueba de las Hierbas. Eliges una en cada uno de esos niveles. Todas son beneficios.</p>
+<div id="mut"></div>
+</section>
+
+<section id="escuelas">
+<h2>Escuelas (nivel 3)</h2>
+<p class="note">La Escuela determina cómo luchas, no qué eres. No añade recursos: solo cambia cómo gastas tus Dados del Oficio. Ninguna cuesta PG ni impone penalizadores. Rasgos en los niveles 3, 6, 10, 14 y 18.</p>
+<div id="schools"></div>
+</section>
+
+<section id="tracker">
+<h2>Hoja de sesión</h2>
+<div class="card">
+<div class="row">Nivel <input type="number" id="lv" min="1" max="20" value="1" style="width:66px"> Int <input type="number" id="im" min="-1" max="6" value="3" style="width:60px"> Con <input type="number" id="cm" min="-1" max="6" value="2" style="width:60px"></div>
+<div class="row note" id="info"></div>
+<div class="row"><b>Dados del Oficio</b> <span id="dinfo" class="note"></span></div>
+<div class="dice" id="dice"></div>
+<div class="row"><button class="btn" id="sr">Descanso corto</button><button class="btn" id="lr">Descanso largo</button></div>
+</div>
+<div class="card">
+<div class="row"><b>Elixires activos</b> <span id="toxv" class="tox"></span></div>
+<div class="chips" id="elixchips"></div>
+<div class="row"><b>Decocción</b> <select id="decsel"></select></div>
+</div>
+<div class="card">
+<div class="row"><b>Presa estudiada</b></div>
+<div class="row"><input id="prey" placeholder="Nombre de la criatura" style="flex:1;min-width:140px">
+<select id="ctype"></select>
+<button class="btn" id="study">Estudiar</button></div>
+<div class="mark empty" id="markbox">Ninguna presa estudiada.</div>
+</div>
+<div class="card">
+<div class="row"><b>Gastar un dado</b></div>
+<div class="row"><select id="spend"></select><button class="btn" id="spendbtn">Gastar y tirar</button></div>
+<div class="log" id="log"></div>
+</div>
+</section>
+
+</main>
+<script>
+const FEATS=[
+{l:1,n:"Prueba de las Hierbas",c:"pas",t:"Sobreviviste a las mutaciones que crean a un brujo. Tienes visión en la oscuridad a 60 pies y tus pupilas son verticales, como las de un gato. Tienes resistencia al daño de veneno y ventaja en las salvaciones contra veneno. Eres inmune a las enfermedades no mágicas y envejeces a un tercio del ritmo normal. Puedes beber elixires de brujo sin riesgo; cualquier otra criatura que beba uno debe superar una salvación de Constitución CD 15 o queda envenenada durante 1 hora y no gana el efecto."},
+{l:1,n:"Acero y Plata",c:"pas",t:"Llevas tu arma en dos versiones y cambias entre ellas sin gastar acción. <b>Plata</b>: contra cualquier criatura que no sea Humanoide ni Bestia, tus ataques cuentan como mágicos y de plata e ignoran la resistencia al daño contundente, cortante y perforante. <b>Acero</b>: contra Humanoides y Bestias, tienes +1 a las tiradas de ataque. Empuñar la equivocada no te penaliza, simplemente no ganas el beneficio."},
+{l:1,n:"Signos",c:"pas",t:"Conoces los cinco Signos: Aard, Igni, Quen, Yrden y Axii. Puedes usar su forma básica a voluntad, y su forma potenciada gastando 1 Dado del Oficio. Los tienes en la pestaña Signos."},
+{l:1,n:"Dados del Oficio",c:"pas",t:"Tu único recurso. La tabla indica cuántos tienes y de qué tipo. Se recuperan todos al terminar un descanso corto o largo. Los gastas en Signos potenciados, Golpe Informado y Alquimia de Campo."},
+{l:2,n:"Estudio de la Presa",c:"bon",t:"Elige una criatura que veas a 60 pies o menos. La estudias durante 1 minuto o hasta que estudies a otra. Aprendes su tipo, sus resistencias, inmunidades y vulnerabilidades, y cuál es su salvación más alta. Mientras la estudias, tienes ventaja en las pruebas de Arcanos, Naturaleza, Investigación y Supervivencia relacionadas con ella. No tiene límite de usos."},
+{l:2,n:"Golpe Informado",c:"pas",t:"Cuando impactas a tu presa estudiada con un ataque con arma, puedes gastar un Dado del Oficio (sin acción) y sumar su resultado al daño. Si el daño es de un tipo al que es vulnerable, tiras el dado dos veces y te quedas con el mayor."},
+{l:2,n:"Alquimia de Campo",c:"pas",t:"Conoces 4 fórmulas (elixires, aceites o bombas) y aprendes una más a nivel 5, 9, 13 y 17. Se rigen por las reglas de Toxicidad y Meditación descritas en la pestaña Alquimia."},
+{l:3,n:"Escuela",c:"pas",t:"Elige la Escuela en la que te entrenaste: Lobo, Gato, Grifo, Oso, Víbora o Manticora. Recibes rasgos en los niveles 3, 6, 10, 14 y 18."},
+{l:3,n:"Sentidos de Brujo",c:"pas",t:"Tienes ventaja en las pruebas de Percepción y Supervivencia para seguir un rastro por olfato, oído o huellas. Tu medallón vibra cuando hay magia activa a 60 pies o menos de ti (sabes que está, pero no qué es ni dónde exactamente).<br><b>Investigar el contrato:</b> si dedicas 10 minutos a examinar rastros, cadáveres o el lugar de un ataque, el DM te dice el tipo de criatura responsable y una de sus debilidades. Si te enfrentas a esa criatura en las 24 horas siguientes, empieza el combate ya estudiada, y tu primer Golpe Informado contra ella no gasta dado."},
+{l:4,n:"Mejora de característica",c:"pas",t:"Aumento de característica o dote (también a nivel 8, 12, 16 y 19)."},
+{l:5,n:"Ataque adicional",c:"pas",t:"Atacas dos veces cuando realizas la acción de Atacar. Puedes sustituir uno de esos ataques por un Signo que cueste una Acción, sea básico o potenciado. Tus dados pasan a d8."},
+{l:7,n:"Esquiva de Brujo",c:"rea",t:"Cuando una criatura que puedas ver te impacta con un ataque, reduces el daño a la mitad. Si además gastas un Dado del Oficio, el ataque falla y puedes moverte 5 pies sin provocar ataques de oportunidad."},
+{l:7,n:"Instinto",c:"pas",t:"Tienes ventaja en las tiradas de iniciativa y no puedes ser sorprendido mientras estés consciente."},
+{l:9,n:"Decocciones",c:"pas",t:"Cuando muere una criatura que estabas estudiando, que no sea Humanoide ni Bestia y cuyo VD sea al menos la mitad de tu nivel, puedes extraer su mutágeno. Durante un descanso corto o largo puedes beberlo como decocción, cuyo efecto depende del tipo de la criatura (tabla en la pestaña Alquimia) y dura hasta tu siguiente descanso largo. Solo puedes tener una decocción activa, y no cuenta para la Toxicidad. Además, al matar a tu presa estudiada recuperas 1 dado gastado (una vez por turno)."},
+{l:11,n:"Dos Presas",c:"pas",t:"Puedes estudiar a dos criaturas a la vez. Tus dados pasan a d10."},
+{l:13,n:"Mutación",c:"pas",t:"Eliges una mutación de la lista de la pestaña Alquimia. Eliges otra a nivel 15 y otra a nivel 17."},
+{l:17,n:"Bestiario Completo",c:"pas",t:"Ya no necesitas estudiar a una criatura de un tipo que hayas estudiado antes: tus rasgos pasivos la tratan como presa estudiada. Tus dados pasan a d12."},
+{l:20,n:"Leyenda del Camino",c:"pas",t:"Cuando tiras iniciativa, recuperas todos tus Dados del Oficio. Una vez por turno puedes usar un Signo básico como acción adicional. Esquiva de Brujo puede hacer fallar el ataque sin gastar dado."}
+];
+const SIGNS=[
+{n:"Aard",d:"Telequinesis. Derriba puertas, enemigos y muros débiles.",b:{c:"acc",t:"Cono de 15 pies. Las criaturas que fallen una salvación de Fuerza son empujadas 10 pies. Puede apagar llamas y romper objetos frágiles."},p:{c:"acc",t:"Cono de 15 pies. Salvación de Fuerza: las que fallen reciben daño de fuerza igual al dado + mod. Int, son empujadas 10 pies y quedan derribadas. Las que superen reciben la mitad y no se mueven."}},
+{n:"Igni",d:"Fuego.",b:{c:"acc",t:"Cono de 15 pies. Salvación de Destreza o 1d6 de daño de fuego (2d6 a partir del nivel 11). Prende objetos inflamables que no lleve nadie."},p:{c:"acc",t:"Cono de 15 pies. Salvación de Destreza: dado + mod. Int de daño de fuego, o la mitad si se supera. Las que fallen arden y reciben 1d4 de fuego al inicio de cada uno de sus turnos, hasta que una criatura use una acción para apagarlas."}},
+{n:"Quen",d:"Escudo protector.",b:{c:"acc",t:"Ganas PG temporales iguales a tu mod. Int + la mitad de tu nivel (mínimo 1), que duran 1 minuto."},p:{c:"rea",t:"Cuando recibes daño, absorbes una cantidad igual al dado + tu nivel. El resto lo recibes con normalidad."}},
+{n:"Yrden",d:"Glifo mágico. Ata a los espectros al mundo material.",b:{c:"acc",t:"Trazas un círculo de 5 pies de radio en un punto a 30 pies o menos, que dura hasta el inicio de tu próximo turno. Las criaturas dentro tienen la velocidad reducida a la mitad, y las incorpóreas o invisibles pierden esa condición mientras estén dentro."},p:{c:"acc",t:"Igual que el básico, pero con 10 pies de radio y una duración de 1 minuto. Los No muertos y los Demonios dentro del círculo además tienen desventaja en sus ataques."}},
+{n:"Axii",d:"Hipnosis. Calma, confunde o convence.",b:{c:"acc",t:"Una criatura a 30 pies o menos hace una salvación de Sabiduría. Si falla, no puede usar reacciones y tiene desventaja en su siguiente ataque antes del final de tu próximo turno. Fuera de combate puedes usarlo para tener ventaja en Persuasión o Engaño contra ella durante 1 minuto, y si falla no se da cuenta de que la has hechizado."},p:{c:"acc",t:"Una criatura a 30 pies o menos hace una salvación de Sabiduría. Si falla, queda hechizada o asustada (a tu elección) durante 1 minuto. Repite la salvación al final de cada uno de sus turnos, y el efecto termina si recibe daño."}}
+];
+const ELIX=[
+{n:"Golondrina",t:"Recuperas PG iguales al dado + tu nivel. Durante 1 minuto, al inicio de cada uno de tus turnos recuperas PG iguales a tu mod. Con."},
+{n:"Gato",t:"Durante 1 hora tu visión en la oscuridad pasa a 120 pies, ves a través de la oscuridad mágica y tienes ventaja en las pruebas de Percepción."},
+{n:"Trueno",t:"Durante 10 minutos tus ataques con arma suman tu mod. Int al daño."},
+{n:"Ventisca",t:"Durante 10 minutos tus ataques de oportunidad tienen ventaja y, una vez por ronda, puedes hacer uno sin gastar tu reacción."},
+{n:"Sangre Negra",t:"Durante 10 minutos, cuando una criatura te impacta con un ataque cuerpo a cuerpo, recibe el dado como daño de veneno. Si la criatura es un No muerto, recibe el doble."},
+{n:"Oropéndola",t:"Durante 1 hora eres inmune al daño de veneno y a la condición de envenenado. Bebida a tiempo, también termina un veneno que ya te esté afectando."},
+{n:"Luna Llena",t:"Durante 1 hora tus PG máximos y actuales aumentan en el doble de tu nivel."},
+{n:"Filtro de Petri",t:"Durante 10 minutos la CD de tus Signos aumenta en 1 y los Signos básicos que hacen daño suman tu mod. Int."},
+{n:"Miel Blanca",t:"Termina todos tus elixires activos y te cura de venenos y enfermedades. Este elixir no cuenta para la Toxicidad."}
+];
+const OILS=[
+{n:"Aceite contra [tipo]",t:"Al aplicarlo, eliges un tipo de criatura (Necrófago = No muerto, Espectro, Draconido, Híbrido = Monstruosidad, Maldito, etc.). Durante 1 hora tus ataques con arma contra criaturas de ese tipo tienen +1 al ataque y suman tu mod. Int al daño. Un arma solo puede llevar un aceite a la vez."},
+{n:"Aceite de Ahorcado",t:"Durante 1 hora tus ataques con arma contra Humanoides suman 1d6 de daño de veneno, y tus impactos críticos contra ellos les impiden recuperar PG hasta el final de su próximo turno."}
+];
+const BOMBS=[
+{n:"Metralla",t:"Esfera de 10 pies a 30 pies o menos. Salvación de Destreza: dado + mod. Int de daño de fuego, o la mitad si se supera."},
+{n:"Samum",t:"Esfera de 10 pies a 30 pies o menos. Salvación de Constitución o la criatura queda cegada hasta el final de tu próximo turno."},
+{n:"Viento del Norte",t:"Esfera de 10 pies a 30 pies o menos. Salvación de Constitución: si falla, recibe el dado de daño de frío y queda inmovilizada (congelada) hasta el final de tu próximo turno. Si supera, recibe la mitad del daño."},
+{n:"Polvo de Luna",t:"Nube de 10 pies de radio a 30 pies o menos, que dura 1 minuto. Dentro de ella ninguna criatura puede volverse invisible, incorpórea ni cambiar de forma. Las que ya lo eran pierden esa condición al entrar o al empezar su turno dentro."},
+{n:"Dimerita",t:"Nube de 10 pies de radio a 30 pies o menos, que dura 1 minuto. Cualquier criatura que intente lanzar un conjuro o usar un rasgo mágico dentro debe superar una salvación de Constitución o falla, y el intento se pierde. Tus Signos también se ven afectados, así que elige bien dónde la lanzas."}
+];
+const DEC=[
+["Aberración","Ventaja en salvaciones de Inteligencia y Sabiduría."],
+["Celestial / Demonio","Resistencia al daño radiante o necrótico (eliges al beberla)."],
+["Constructo","+1 a la CA."],
+["Dragón / Elemental","Resistencia a fuego, frío, relámpago o trueno (eliges al beberla)."],
+["Feérico","Ventaja en salvaciones contra hechizado y asustado."],
+["Gigante","Ventaja en pruebas y salvaciones de Fuerza; tus ataques con arma causan +2 de daño."],
+["Monstruosidad","Si empiezas tu turno con menos de la mitad de tus PG (y al menos 1), recuperas PG iguales a tu mod. Con."],
+["No muerto","Resistencia al daño necrótico, y tus PG máximos no pueden reducirse."],
+["Planta / Cieno","Inmunidad al daño de veneno y a la condición de envenenado."]
+];
+const MUTS=[
+{n:"Segunda Vida",t:"Una vez por descanso largo, cuando caes a 0 PG, quedas en su lugar con PG iguales a tu nivel."},
+{n:"Sangre Tóxica",t:"Cuando una criatura te impacta con un ataque cuerpo a cuerpo, recibe daño de ácido igual a tu mod. Con (mínimo 1)."},
+{n:"Conductores Mágicos",t:"Si has usado un Signo este turno, tus ataques con arma suman tu mod. Int al daño."},
+{n:"Piroquinesis",t:"Igni básico causa 2d6 + mod. Int e Igni potenciado puede ser un cono de 30 pies."},
+{n:"Reflejos Mutados",t:"Ganas una reacción adicional por ronda que solo puedes usar para Esquiva de Brujo o Quen potenciado."},
+{n:"Euforia",t:"Por cada elixir activo, tus ataques con arma causan +1 de daño."}
+];
+const SCH=[
+{n:"Escuela del Lobo",col:"#aab4c4",d:"Espada, Signo y elixir a partes iguales. El Lobo es el brujo más completo, el que siempre llega preparado.",f:[
+{l:3,n:"Maestro del Equilibrio",c:"bon",t:"Después de impactar con un ataque con arma, puedes usar un Signo potenciado como acción adicional (gastas su dado de forma normal)."},
+{l:3,n:"Preparación del Lobo",c:"pas",t:"Tu límite de Toxicidad aumenta en 1."},
+{l:6,n:"Combo del Lobo",c:"pas",t:"Si usas un Signo sobre una criatura y después la atacas en el mismo turno, tienes ventaja en ese ataque. Si la atacas primero y después usas un Signo sobre ella, tiene desventaja en la salvación."},
+{l:10,n:"Lobo Experimentado",c:"pas",t:"Tus Signos potenciados contra la presa estudiada tiran el dado dos veces y te quedas con el mayor. Tu medallón detecta magia a 120 pies."},
+{l:14,n:"Giro del Lobo",c:"rea",t:"Cuando una criatura a 5 pies o menos falla un ataque contra ti, puedes hacerle un ataque con arma."},
+{l:18,n:"Lobo Blanco",c:"pas",t:"Cuando tiras iniciativa, eliges un elixir que conozcas y un aceite: ambos se activan sin gastar dados ni contar para la Toxicidad, y duran 10 minutos. Además, la primera vez que te impacten en ese combate, absorbes el daño como un Quen potenciado sin gastar reacción ni dado."}]},
+{n:"Escuela del Gato",col:"#d4a24c",d:"Velocidad y ferocidad. Los brujos del Gato atacan antes de que la presa entienda qué está pasando.",f:[
+{l:3,n:"Estilo Felino",c:"pas",t:"Mientras lleves armadura ligera o ninguna, tu velocidad aumenta en 10 pies y tus ataques con arma contra la presa estudiada son críticos con 19–20."},
+{l:6,n:"Salto del Gato",c:"bon",t:"Gastas un dado: te mueves hasta tu velocidad sin provocar ataques de oportunidad y haces un ataque con arma contra la presa estudiada."},
+{l:10,n:"Carnicero",c:"pas",t:"Cuando haces un crítico contra la presa estudiada, tiras una vez más los dados de daño del arma y lo sumas."},
+{l:14,n:"Zarpazo Doble",c:"pas",t:"Una vez por turno, si impactas dos veces a la presa estudiada en el mismo turno, el segundo impacto suma un Golpe Informado sin gastar dado."},
+{l:18,n:"Pesadilla del Gato",c:"acc",t:"Gastas 3 dados y haces cuatro ataques con arma con ventaja contra la presa estudiada. Cada impacto suma un dado de daño. Una vez por descanso largo."}]},
+{n:"Escuela del Grifo",col:"#6a9ad8",d:"Eruditos de los Signos. Donde los demás desenvainan, el Grifo traza.",f:[
+{l:3,n:"Intensidad de Grifo",c:"pas",t:"Tus Signos básicos que hacen daño suman tu mod. Int, y tu CD de Brujo aumenta en 1."},
+{l:3,n:"Formas Alternas",c:"pas",t:"Al potenciar un Signo, puedes usar su forma alterna en lugar de la normal:<br><b>Aard · Onda:</b> afecta a todas las criaturas en un radio de 10 pies a tu alrededor.<br><b>Igni · Chorro:</b> línea de 30 pies × 5 pies.<br><b>Quen · Burbuja</b> (acción): absorbe el siguiente daño (dado + nivel), y recuperas PG iguales a la mitad de lo absorbido.<br><b>Yrden · Glifo Pulsante:</b> las criaturas que empiezan su turno dentro reciben el dado de daño de fuerza.<br><b>Axii · Títere:</b> la criatura hechizada usa su acción para atacar a quien tú elijas."},
+{l:6,n:"Doble Signo",c:"bon",t:"Después de usar un Signo, puedes gastar un dado para usar otro Signo distinto como acción adicional."},
+{l:10,n:"Quen Reforzado",c:"pas",t:"Quen potenciado absorbe el dado dos veces + tu nivel, y quien te atacó recibe daño de fuerza igual a tu mod. Int."},
+{l:14,n:"Signos Imparables",c:"pas",t:"El daño de tus Signos ignora resistencias, y las criaturas con ventaja contra magia no la tienen contra tus Signos."},
+{l:18,n:"Maestro de los Signos",c:"pas",t:"Una vez por turno puedes potenciar un Signo sin gastar dado."}]},
+{n:"Escuela del Oso",col:"#8b5a3c",d:"Resistencia y presión. El Oso aguanta lo que otros no y obliga al monstruo a mirarle a él.",f:[
+{l:3,n:"Piel de Hierro",c:"pas",t:"Ganas competencia con armadura pesada."},
+{l:3,n:"Provocar a la Presa",c:"pas",t:"Cuando impactas a la presa estudiada, puedes gastar un dado: tiene desventaja en sus ataques contra cualquiera que no seas tú hasta el inicio de tu próximo turno."},
+{l:6,n:"Pelaje del Oso",c:"rea",t:"Cuando la presa estudiada te impacta, gastas un dado y reduces el daño en el dado + tu mod. Con."},
+{l:10,n:"Embestida del Oso",c:"bon",t:"Gastas un dado: si la presa estudiada falla una salvación de Fuerza, la empujas hasta 15 pies. Si choca contra algo, recibe el dado como daño contundente."},
+{l:14,n:"Muralla de Brujo",c:"pas",t:"Mientras estés a 5 pies o menos de la presa estudiada, tus aliados a 10 pies o menos de ti tienen +1 a la CA."},
+{l:18,n:"Corazón del Oso",c:"pas",t:"Una vez por descanso largo, cuando caes a 0 PG, quedas a 1 PG y recuperas un dado."}]},
+{n:"Escuela de la Víbora",col:"#4d8a4a",d:"Precisión, venenos y golpes quirúrgicos. La Víbora mata como un asesino, no como un cazador.",f:[
+{l:3,n:"Hojas Gemelas",c:"pas",t:"Puedes usar Destreza en los ataques con cualquier arma de una mano. Cuando atacas con dos armas, añades tu modificador al daño del segundo ataque."},
+{l:3,n:"Dosis Ponzoñosa",c:"pas",t:"Cuando impactas a la presa estudiada, puedes gastar un dado: suma el dado como daño de veneno, y la criatura debe superar una salvación de Constitución o queda envenenada hasta el final de tu próximo turno."},
+{l:6,n:"Danza de la Víbora",c:"bon",t:"Gastas un dado: te mueves hasta tu velocidad sin provocar ataques de oportunidad de la presa estudiada y tienes ventaja en tu siguiente ataque contra ella."},
+{l:10,n:"Golpe Quirúrgico",c:"pas",t:"Tus ataques contra la presa estudiada son críticos con 19–20, y sumas tu mod. Int al daño de esos críticos."},
+{l:14,n:"Doble Dosis",c:"pas",t:"Al usar Dosis Ponzoñosa, tiras el dado dos veces y te quedas con el mayor."},
+{l:18,n:"Mordisco Final",c:"acc",t:"Gastas 3 dados y haces un ataque con ventaja. Si impacta, es crítico, y si a la criatura le quedan después menos PG que 5 × tu nivel, cae a 0. Una vez por descanso largo."}]},
+{n:"Escuela de la Manticora",col:"#a8322d",d:"Alquimistas por encima de todo. Para la Manticora, la preparación es el arma.",f:[
+{l:3,n:"Laboratorio Ambulante",c:"pas",t:"Aprendes 2 fórmulas adicionales, el alcance de tus bombas pasa a 60 pies y tu límite de Toxicidad aumenta en 1."},
+{l:3,n:"Carga Doble",c:"pas",t:"Al lanzar una bomba, puedes gastar un dado más para ampliar su radio a 20 pies."},
+{l:6,n:"Mutágeno Menor",c:"bon",t:"Gastas un dado: durante 1 minuto tienes ventaja en las pruebas de Fuerza y las salvaciones de Constitución, y tus ataques contra la presa estudiada causan 1d4 de daño adicional."},
+{l:10,n:"Detonación en Cadena",c:"pas",t:"Una vez por turno, cuando una de tus bombas mata a una criatura, lanzas otra bomba conocida sin gastar acción ni dado, centrada a 30 pies o menos del cadáver."},
+{l:14,n:"Reactivos Refinados",c:"pas",t:"El daño de tus bombas ignora resistencias, y los elixires que bebes duran el doble."},
+{l:18,n:"Mutación Superior",c:"bon",t:"Una vez por descanso largo, gastas 2 dados: durante 1 minuto el Mutágeno Menor te da además +2 a la CA y +10 pies de velocidad, y su daño pasa a 2d6."}]}
+];
+const DICE=l=>l>=17?7:l>=13?6:l>=9?5:l>=5?4:3;
+const dieFor=l=>l>=17?12:l>=11?10:l>=5?8:6;
+const prof=l=>Math.ceil(l/4)+1;
+const tc={acc:"Acción",bon:"Acción adicional",rea:"Reacción",pas:"Pasivo"};
+const tagc={acc:"t-acc",bon:"t-bon",rea:"t-rea",pas:"t-pas"};
+const tag=c=>c?`<span class="tag ${tagc[c]}">${tc[c]}</span>`:"";
+const $=id=>document.getElementById(id);
+const tabs=[["clase","Clase"],["tabla","Tabla"],["rasgos","Rasgos"],["signos","Signos"],["alquimia","Alquimia"],["escuelas","Escuelas"],["tracker","Hoja"]];
+tabs.forEach(([id,n],i)=>{const b=document.createElement("button");b.textContent=n;if(!i)b.className="on";b.onclick=()=>{document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));$("nav").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));window.scrollTo(0,0)};$("nav").appendChild(b)});
+$("clase").classList.add("on");
+// tabla
+let h="<tr><th>Niv</th><th>Comp.</th><th>Dados</th><th>Fórmulas</th><th>Rasgos</th></tr>";
+const form=l=>l<2?"—":4+[5,9,13,17].filter(x=>l>=x).length;
+for(let l=1;l<=20;l++){const f=FEATS.filter(x=>x.l===l).map(x=>x.n);
+if([6,10,14,18].includes(l))f.push("Rasgo de Escuela");
+if([15,17].includes(l))f.push("Mutación");
+if([8,12,16,19].includes(l))f.push("Mejora de característica");
+h+=`<tr><td>${l}</td><td>+${prof(l)}</td><td>${DICE(l)}d${dieFor(l)}</td><td>${form(l)}</td><td>${f.join(", ")}</td></tr>`}
+$("tbl").innerHTML=h;
+$("feat").innerHTML=FEATS.map(f=>`<div class="card"><span class="lvl">Niv. ${f.l}</span><b>${f.n}</b> ${tag(f.c)}<div>${f.t}</div></div>`).join("");
+$("signs").innerHTML=SIGNS.map(s=>`<div class="card"><b style="font-size:1.15rem;color:var(--gold)">${s.n}</b> <span class="note">— ${s.d}</span>
+<div class="mode"><b>Básico</b> ${tag(s.b.c)}<div>${s.b.t}</div></div>
+<div class="mode pot"><b>Potenciado · 1 dado</b> ${tag(s.p.c)}<div>${s.p.t}</div></div></div>`).join("");
+$("elix").innerHTML=ELIX.map(a=>`<div class="card"><b>${a.n}</b> ${tag("bon")}<div>${a.t}</div></div>`).join("");
+$("oils").innerHTML=OILS.map(a=>`<div class="card"><b>${a.n}</b> ${tag("bon")}<div>${a.t}</div></div>`).join("");
+$("bombs").innerHTML=BOMBS.map(a=>`<div class="card"><b>${a.n}</b> ${tag("acc")} <span class="note">puede sustituir un ataque</span><div>${a.t}</div></div>`).join("");
+$("dec").innerHTML="<tr><th>Mutágeno de…</th><th>Efecto hasta el siguiente descanso largo</th></tr>"+DEC.map(d=>`<tr><td>${d[0]}</td><td>${d[1]}</td></tr>`).join("");
+$("mut").innerHTML=MUTS.map(a=>`<div class="card"><b>${a.n}</b><div>${a.t}</div></div>`).join("");
+$("schools").innerHTML=SCH.map(s=>`<h3 style="color:${s.col}"><span class="sw" style="background:${s.col}"></span>${s.n}</h3><p class="note">${s.d}</p>`+s.f.map(f=>`<div class="card" style="border-left:3px solid ${s.col}"><span class="lvl">Niv. ${f.l}</span><b>${f.n}</b> ${tag(f.c)}<div>${f.t}</div></div>`).join("")).join("");
+// tracker
+const KEY="brujo_witcher_v2";let st={spent:0,elix:[],dec:""};
+try{st=Object.assign(st,JSON.parse(localStorage.getItem(KEY))||{})}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const log=m=>{const d=document.createElement("div");d.textContent=m;$("log").prepend(d)};
+["Aberración","Bestia","Celestial","Constructo","Dragón","Elemental","Feérico","Demonio","Gigante","Humanoide","Monstruosidad","Cieno","Planta","No muerto"].forEach(o=>$("ctype").add(new Option(o)));
+$("decsel").add(new Option("— ninguna —",""));DEC.forEach(d=>$("decsel").add(new Option(d[0]+": "+d[1],d[0])));
+$("decsel").value=st.dec||"";$("decsel").onchange=()=>{st.dec=$("decsel").value;save();if(st.dec)log("Decocción activa: "+st.dec)};
+const SP=["Golpe Informado",...SIGNS.map(s=>s.n+" potenciado"),...ELIX.map(e=>"Elixir: "+e.n),...OILS.map(o=>o.n),...BOMBS.map(b=>"Bomba: "+b.n),"Rasgo de Escuela","Esquiva de Brujo (fallo)"];
+SP.forEach(o=>$("spend").add(new Option(o)));
+const lvl=()=>Math.min(Math.max(+$("lv").value||1,1),20);
+const cap=()=>Math.max(1,+$("cm").value||0);
+function renderTox(){const c=cap();$("toxv").textContent=`${st.elix.length} / ${c}`;$("toxv").className="tox"+(st.elix.length>=c?" full":"");
+$("elixchips").innerHTML="";ELIX.filter(e=>e.n!=="Miel Blanca").forEach(e=>{const x=document.createElement("div");const on=st.elix.includes(e.n);x.className="chip"+(on?" on":"");x.textContent=e.n;x.onclick=()=>{if(on){st.elix=st.elix.filter(n=>n!==e.n)}else{if(st.elix.length>=cap()){log("Toxicidad al límite: termina un elixir antes.");return}st.elix.push(e.n)}save();renderTox()};$("elixchips").appendChild(x)})}
+function render(){const l=lvl(),n=DICE(l),d=dieFor(l),im=+$("im").value||0;
+if(st.spent>n)st.spent=n;
+$("dinfo").textContent=`${n-st.spent}/${n} disponibles (d${d})`;
+$("info").textContent=`Competencia +${prof(l)} · CD de Brujo ${8+prof(l)+im} · Toxicidad máx. ${cap()}`;
+$("dice").innerHTML="";
+for(let i=0;i<n;i++){const x=document.createElement("div");x.className="die"+(i<st.spent?" spent":"");x.textContent="d"+d;x.onclick=()=>{st.spent=i<st.spent?i:i+1;save();render()};$("dice").appendChild(x)}
+renderTox();save()}
+["lv","im","cm"].forEach(i=>$(i).onchange=render);
+$("sr").onclick=()=>{st.spent=0;render();log("Descanso corto: dados recuperados. Puedes meditar (elixires y aceites sin acción).")};
+$("lr").onclick=()=>{st.spent=0;st.elix=[];st.dec="";$("decsel").value="";render();log("Descanso largo: dados recuperados, elixires y decocción terminados.")};
+$("study").onclick=()=>{const nm=$("prey").value.trim()||"Criatura sin nombre",t=$("ctype").value;const silver=!["Humanoide","Bestia"].includes(t);const b=$("markbox");b.className="mark";
+b.innerHTML=`<b>${nm}</b> (${t})<br>Espada: <b>${silver?"Plata":"Acero"}</b> — ${silver?"cuenta como mágica e ignora resistencia a daño de arma":"+1 al ataque"}.${lvl()>=9&&silver?"<br>Si muere, puedes extraer su mutágeno para una decocción.":""}`;log("Estudio: "+nm+" ("+t+")")};
+$("spendbtn").onclick=()=>{const l=lvl(),n=DICE(l),d=dieFor(l);const o=$("spend").value;if(st.spent>=n){log("Sin dados disponibles.");return}
+if(o.startsWith("Elixir: ")){const e=o.slice(8);if(!st.elix.includes(e)){if(st.elix.length>=cap()){log("Toxicidad al límite: termina un elixir antes.");return}st.elix.push(e)}}
+st.spent++;const r=1+Math.floor(Math.random()*d),im=+$("im").value||0;let ex="";
+if(["Aard potenciado","Igni potenciado","Bomba: Metralla"].includes(o))ex=` + Int ${im} = ${r+im}`;
+if(o==="Quen potenciado")ex=` + nivel ${l} = ${r+l} absorbido`;
+if(o==="Elixir: Golondrina")ex=` + nivel ${l} = ${r+l} PG`;
+log(`${o}: d${d} → ${r}${ex}`);render()};
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

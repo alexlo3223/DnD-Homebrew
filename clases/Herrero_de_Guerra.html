@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Herrero de Guerra — Clase Homebrew D&D 5e</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --forja: #0d0d0d;
+    --carbon: #1a1a1a;
+    --brasa: #C1440E;
+    --incandescente: #E87722;
+    --acero: #8C8C8C;
+    --acero-claro: #b8b6b0;
+    --pergamino: #E8E6E0;
+    --oro-viejo: #c9a84c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--forja);
+    color: var(--pergamino);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center bottom, #2a0a00 0%, #0d0d0d 65%);
+    padding: 60px 20px;
+  }
+
+  /* Sword orbit ring */
+  .orbit-ring {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,119,34,0.15);
+    animation: spin-slow 20s linear infinite;
+  }
+  .orbit-ring-2 {
+    width: 340px;
+    height: 340px;
+    border-color: rgba(193,68,14,0.12);
+    animation: spin-slow 14s linear infinite reverse;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  .orbit-sword {
+    position: absolute;
+    font-size: 22px;
+    top: -12px;
+    left: 50%;
+    transform-origin: 0 210px;
+    filter: drop-shadow(0 0 6px var(--brasa));
+  }
+  .orbit-ring-2 .orbit-sword {
+    transform-origin: 0 170px;
+    font-size: 16px;
+    filter: drop-shadow(0 0 4px var(--incandescente));
+  }
+
+  /* Position swords around rings */
+  .orbit-sword:nth-child(1) { transform: rotate(0deg) translateX(-50%); }
+  .orbit-sword:nth-child(2) { transform: rotate(90deg) translateX(-50%); }
+  .orbit-sword:nth-child(3) { transform: rotate(180deg) translateX(-50%); }
+  .orbit-sword:nth-child(4) { transform: rotate(270deg) translateX(-50%); }
+  .orbit-ring-2 .orbit-sword:nth-child(1) { transform: rotate(45deg) translateX(-50%); }
+  .orbit-ring-2 .orbit-sword:nth-child(2) { transform: rotate(165deg) translateX(-50%); }
+  .orbit-ring-2 .orbit-sword:nth-child(3) { transform: rotate(285deg) translateX(-50%); }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: var(--brasa);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    background: linear-gradient(170deg, var(--pergamino) 30%, var(--incandescente) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-subtitle {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--acero-claro);
+    margin-top: 14px;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-divider {
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--brasa), transparent);
+    margin: 28px auto;
+  }
+
+  .hero-flavor {
+    max-width: 520px;
+    font-style: italic;
+    color: var(--acero-claro);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .tag {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    padding: 5px 14px;
+    border: 1px solid var(--brasa);
+    color: var(--brasa);
+    text-transform: uppercase;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 70px 24px 100px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--incandescente);
+    letter-spacing: 0.08em;
+    margin-top: 60px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(232,119,34,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 24px;
+    background: var(--brasa);
+    flex-shrink: 0;
+  }
+
+  .subsection-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--oro-viejo);
+    margin-top: 28px;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 12px; }
+
+  .flavor-block {
+    border-left: 3px solid var(--brasa);
+    padding: 16px 20px;
+    background: rgba(193,68,14,0.06);
+    font-style: italic;
+    color: var(--acero-claro);
+    margin: 20px 0;
+    line-height: 1.8;
+  }
+
+  /* ── TABLE ── */
+  .class-table-wrap {
+    overflow-x: auto;
+    margin: 28px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  thead {
+    background: #1f1f1f;
+  }
+
+  th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--incandescente);
+    text-align: center;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(232,119,34,0.4);
+    text-transform: uppercase;
+  }
+
+  th:first-child { text-align: left; }
+
+  td {
+    padding: 7px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--acero-claro);
+    vertical-align: middle;
+  }
+
+  td:first-child { text-align: left; color: var(--pergamino); font-weight: 500; }
+
+  tr:hover td { background: rgba(232,119,34,0.04); }
+
+  .feat-cell {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--pergamino);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feature {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid var(--brasa);
+    padding: 20px 22px;
+    margin: 18px 0;
+    transition: border-color 0.2s;
+  }
+
+  .feature:hover { border-color: var(--incandescente); }
+
+  .feature-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--pergamino);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .feature-level {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--brasa);
+    font-family: 'Cinzel', serif;
+    background: rgba(193,68,14,0.12);
+    padding: 2px 8px;
+    border: 1px solid rgba(193,68,14,0.3);
+  }
+
+  /* ── RESOURCE BOX ── */
+  .resource-box {
+    background: linear-gradient(135deg, rgba(193,68,14,0.12), rgba(232,119,34,0.06));
+    border: 1px solid rgba(232,119,34,0.3);
+    padding: 22px 24px;
+    margin: 24px 0;
+  }
+
+  .resource-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--incandescente);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SPELL LISTS ── */
+  .spell-list {
+    columns: 2;
+    column-gap: 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spell-list li {
+    font-size: 0.9rem;
+    padding: 3px 0;
+    color: var(--acero-claro);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    break-inside: avoid;
+  }
+
+  .spell-list li::before {
+    content: '⚔ ';
+    color: var(--brasa);
+    font-size: 0.75rem;
+  }
+
+  .spell-level-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--brasa);
+    text-transform: uppercase;
+    margin-top: 16px;
+    margin-bottom: 6px;
+  }
+
+  /* ── SUBCLASS CARDS ── */
+  .subclass-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 22px;
+  }
+
+  .subclass-card {
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 22px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .subclass-card:hover { transform: translateY(-2px); }
+
+  .subclass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .subclass-card.forja::before  { background: linear-gradient(to right, #C1440E, #E87722); }
+  .subclass-card.runa::before   { background: linear-gradient(to right, #4a7ab5, #8ab4e0); }
+  .subclass-card.sombra::before { background: linear-gradient(to right, #5a1a7a, #9b4dc4); }
+
+  .subclass-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .subclass-card.forja  .subclass-name { color: var(--incandescente); }
+  .subclass-card.runa   .subclass-name { color: #8ab4e0; }
+  .subclass-card.sombra .subclass-name { color: #9b4dc4; }
+
+  .subclass-flavor {
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--acero);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .subclass-perk {
+    font-size: 0.85rem;
+    color: var(--acero-claro);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .subclass-perk span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    margin-right: 6px;
+    opacity: 0.6;
+  }
+
+  /* ── STAT PILLS ── */
+  .stat-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .stat-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    line-height: 1.3;
+  }
+
+  .stat-pill strong {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--brasa);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 600px) {
+    .spell-list { columns: 1; }
+    .orbit-ring { width: 300px; height: 300px; }
+    .orbit-ring-2 { width: 230px; height: 230px; }
+    .orbit-sword { transform-origin: 0 150px; }
+    .orbit-ring-2 .orbit-sword { transform-origin: 0 115px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<header class="hero">
+  <div class="orbit-ring">
+    <span class="orbit-sword">🗡️</span>
+    <span class="orbit-sword">🗡️</span>
+    <span class="orbit-sword">🗡️</span>
+    <span class="orbit-sword">🗡️</span>
+  </div>
+  <div class="orbit-ring orbit-ring-2">
+    <span class="orbit-sword">✦</span>
+    <span class="orbit-sword">✦</span>
+    <span class="orbit-sword">✦</span>
+  </div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Clase Homebrew · D&D 5e</p>
+    <h1 class="hero-title">El Herrero<br>de Guerra</h1>
+    <p class="hero-subtitle">Dominus Ferri · Señor del Metal</p>
+    <div class="hero-divider"></div>
+    <p class="hero-flavor">
+      "El acero no es solo un arma. Es voluntad solidificada, furia hecha forma.<br>
+      Y yo soy su maestro, su forjador, su verdugo."
+    </p>
+    <div class="hero-tags">
+      <span class="tag">Control del Metal</span>
+      <span class="tag">Invocación de Hojas</span>
+      <span class="tag">Magia de Forja</span>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- Descripción -->
+  <section>
+    <div class="section-title">Descripción de Clase</div>
+    <p>Los Herreros de Guerra son maestros del metal vivo: guerreros que han fundido su alma con el acero, capaces de invocar espadas del éter, moverlas con el pensamiento y prenderles fuego con la misma llama que arde en su interior. No son magos ni guerreros al uso — son la unión de ambos, nacida en la fragua.</p>
+    <p>Su poder proviene del Vínculo de Hierro, una conexión espiritual con el metal mismo. A través de él, convocan hojas, las dirigen en enjambre sobre el campo de batalla y desatan el calor primitivo de la forja sobre sus enemigos.</p>
+
+    <div class="flavor-block">
+      Un herrero al que le roban el trabajo de su vida. Un soldado abandonado por el acero que juró proteger. Un discípulo que sobrevive a la destrucción de su arsenal. Todos ellos encontraron, en el dolor, una forma de hacer que el metal les obedezca — de que jamás vuelvan a estar sin arma.
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-pill"><strong>Dado de Golpe</strong>d10</div>
+      <div class="stat-pill"><strong>Aptitud Primaria</strong>Fuerza o Destreza</div>
+      <div class="stat-pill"><strong>Aptitud de Lanzamiento</strong>Inteligencia</div>
+      <div class="stat-pill"><strong>Salvaciones</strong>Constitución, Inteligencia</div>
+      <div class="stat-pill"><strong>Habilidades (elige 2)</strong>Atletismo, Historia, Arcanos, Percepción, Perspicacia, Intimidación</div>
+      <div class="stat-pill"><strong>Armadura</strong>Ligera, media, escudos</div>
+      <div class="stat-pill"><strong>Armas</strong>Armas sencillas, marciales</div>
+      <div class="stat-pill"><strong>Herramientas</strong>Herramientas de herrero</div>
+    </div>
+  </section>
+
+  <!-- Tabla de clase -->
+  <section>
+    <div class="section-title">Tabla de Clase</div>
+    <div class="class-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nivel</th>
+            <th>Bon. Comp.</th>
+            <th>Esquirlas</th>
+            <th>Espadas</th>
+            <th>Nivel de Conjuro</th>
+            <th>Rasgos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1º</td><td>+2</td><td>—</td><td>2</td><td>—</td><td class="feat-cell">Vínculo de Hierro, Espadas Invocadas</td></tr>
+          <tr><td>2º</td><td>+2</td><td>2</td><td>2</td><td>1º</td><td class="feat-cell">Magia de la Forja, Esquirlas de Metal</td></tr>
+          <tr><td>3º</td><td>+2</td><td>3</td><td>2</td><td>1º</td><td class="feat-cell">Senda del Herrero (Subclase)</td></tr>
+          <tr><td>4º</td><td>+2</td><td>3</td><td>2</td><td>1º</td><td class="feat-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>5º</td><td>+3</td><td>4</td><td>3</td><td>2º</td><td class="feat-cell">Ataque Extra, Tormenta de Hojas</td></tr>
+          <tr><td>6º</td><td>+3</td><td>4</td><td>3</td><td>2º</td><td class="feat-cell">Rasgo de Subclase, Acero Templado</td></tr>
+          <tr><td>7º</td><td>+3</td><td>5</td><td>3</td><td>2º</td><td class="feat-cell">Sentido del Metal</td></tr>
+          <tr><td>8º</td><td>+3</td><td>5</td><td>3</td><td>2º</td><td class="feat-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>9º</td><td>+4</td><td>6</td><td>4</td><td>3º</td><td class="feat-cell">Vuelo de Espadas Mejorado</td></tr>
+          <tr><td>10º</td><td>+4</td><td>6</td><td>4</td><td>3º</td><td class="feat-cell">Rasgo de Subclase, Piel de Acero</td></tr>
+          <tr><td>11º</td><td>+4</td><td>7</td><td>5</td><td>3º</td><td class="feat-cell">Enjambre Ardiente</td></tr>
+          <tr><td>12º</td><td>+4</td><td>7</td><td>5</td><td>3º</td><td class="feat-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>13º</td><td>+5</td><td>8</td><td>5</td><td>4º</td><td class="feat-cell">Forja de Batalla</td></tr>
+          <tr><td>14º</td><td>+5</td><td>8</td><td>6</td><td>4º</td><td class="feat-cell">Rasgo de Subclase, Cadenas de Hierro</td></tr>
+          <tr><td>15º</td><td>+5</td><td>9</td><td>6</td><td>4º</td><td class="feat-cell">Voluntad de Acero</td></tr>
+          <tr><td>16º</td><td>+5</td><td>9</td><td>6</td><td>4º</td><td class="feat-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>17º</td><td>+6</td><td>10</td><td>7</td><td>5º</td><td class="feat-cell">Tormenta de Hierro</td></tr>
+          <tr><td>18º</td><td>+6</td><td>10</td><td>7</td><td>5º</td><td class="feat-cell">Fusión de Armas</td></tr>
+          <tr><td>19º</td><td>+6</td><td>11</td><td>7</td><td>5º</td><td class="feat-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>20º</td><td>+6</td><td>12</td><td>8</td><td>5º</td><td class="feat-cell">Rey de la Forja (Capstone)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Rasgos de clase -->
+  <section>
+    <div class="section-title">Rasgos de Clase</div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 1</span> Vínculo de Hierro</div>
+      <p>Al finalizar un descanso corto o largo mientras estás en contacto con una o más armas de metal, estableces un vínculo telepático con ellas. Las armas vinculadas obedecen tu voluntad y no pueden ser desarmadas contra tu voluntad. Puedes tener vinculadas un número de armas igual a tu bonificador de competencia.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 1</span> Espadas Invocadas</div>
+      <p>Como acción adicional, puedes invocar <em>Espadas de Vínculo</em> en espacios que elijas a 30 pies, hasta el máximo de la columna Espadas de la tabla. Son espadas largas etéreas de metal incandescente (daño 1d8 cortante + tu modificador de Inteligencia). Persisten hasta que las desconvocas o caes inconsciente.</p>
+      <p><strong>Ordenar ataques.</strong> Cuando realizas la acción de Atacar, puedes usar tu acción adicional para ordenar a <strong>una</strong> espada invocada que ataque a un objetivo a 60 pies (tirada de ataque y daño con Inteligencia). A nivel 11 puedes ordenar a <strong>dos</strong> espadas con esa misma acción adicional. Las espadas que no reciben orden te rodean y defienden. Tener más espadas activas te da más opciones (Esquirlas, Enjambre Ardiente, escudo de Vuelo de Espadas), no más ataques por turno.</p>
+      <p><strong>Temple.</strong> Las espadas salen de la fragua y se calientan al trabajar: cada turno consecutivo en que una espada invocada impacta al mismo objetivo, sus impactos contra él infligen 1d4 de daño de fuego adicional acumulable (máximo 3d4). El calor se pierde si la espada ataca a otro objetivo o pasa un turno sin atacar.</p>
+      <p><strong>Resistencia de las espadas.</strong> Cada espada tiene CA igual a tu CD de conjuro y 5 + tu nivel de Herrero de Guerra en PG; si llega a 0 PG se disipa y puedes volver a invocarla con normalidad.</p>
+    </div>
+
+    <div class="resource-box">
+      <div class="resource-title">⚙ Esquirlas de Metal</div>
+      <p>Desde el nivel 2, tienes un número de <strong>Esquirlas de Metal</strong> según la tabla de clase. Se recuperan todas con un descanso largo, y 2 con un descanso corto. Las Esquirlas alimentan tus poderes más destructivos.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 2</span> Magia de la Forja</div>
+      <p>Accedes a una lista ampliada de conjuros de fuego y metal. Usas Inteligencia como característica de lanzamiento. Eres un semiconjurador: tienes los mismos espacios de conjuro que un Paladín de tu nivel, y la columna «Nivel de Conjuro» indica el nivel máximo que puedes lanzar. Preparas un número de conjuros de la lista de la forja igual a tu modificador de Inteligencia + la mitad de tu nivel de Herrero de Guerra (mínimo 1). Los espacios de conjuro se recuperan con un descanso largo.</p>
+      <p>Tus conjuros de fuego infligen daño adicional igual a la mitad de tu modificador de Inteligencia (mínimo 1).</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 2</span> Esquirlas — Acciones</div>
+      <p><strong>Lanzamiento Magnético (1 Esquirla).</strong> Acción adicional. Envías una espada invocada hacia un objetivo a 90 pies. El objetivo hace una salvación de Fuerza (CD 8 + tu bonificador de competencia + tu mod. de Inteligencia) o es empujado 10 pies en una dirección de tu elección y recibe 2d6 de daño contundente.</p>
+      <p><strong>Brasa de Hierro (1 Esquirla).</strong> Acción adicional. Todas las espadas invocadas se cubren de llamas hasta el inicio de tu siguiente turno, añadiendo 1d6 de daño de fuego a sus ataques.</p>
+      <p><strong>Escudo de Fragmentos (1 Esquirla).</strong> Reacción al ser atacado. Interpones esquirlas de metal ante el golpe: ganas +3 a la CA contra ese ataque. Si el ataque falla, las esquirlas se clavan en el atacante: 1d4 de daño perforante.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 5</span> Tormenta de Hojas</div>
+      <p>Una vez por turno, cuando una espada invocada y tú impactáis al mismo objetivo en el mismo turno, el objetivo tiene desventaja en su siguiente tirada de ataque antes del inicio de tu próximo turno.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 6</span> Acero Templado</div>
+      <p>Tus espadas invocadas cuentan como armas mágicas. Además, cuando realizas el ataque con tu arma y atacas con tus espadas invocadas en el mismo turno, el primer impacto de tus espadas ignora resistencia al daño cortante.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 7</span> Sentido del Metal</div>
+      <p>Puedes detectar la presencia de objetos de metal (incluidas armaduras y armas) a 30 pies aunque no los puedas ver. Además, una criatura que lleve armadura o armas de metal no puede beneficiarse de estar oculta frente a ti mientras esté a 30 pies o menos.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 9</span> Vuelo de Espadas Mejorado</div>
+      <p>El alcance de tus espadas invocadas aumenta a 120 pies. Puedes moverlas hasta 60 pies por turno como parte de la orden de ataque (sin coste de acción adicional). También puedes mantener espadas volando alrededor de ti como escudo activo: mientras haya al menos 2 espadas invocadas sin ataque pendiente, ganas +1 CA.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 10</span> Piel de Acero</div>
+      <p>Puedes usar una acción adicional y gastar 2 Esquirlas para cubrirte parcialmente de metal fundido durante 1 minuto. Mientras dura, tienes resistencia al daño cortante y perforante de ataques no mágicos, y los atacantes cuerpo a cuerpo reciben 1d6 de daño de fuego al impactarte.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 11</span> Enjambre Ardiente</div>
+      <p>Gastando 3 Esquirlas y tu acción, liberas todas tus espadas invocadas en un enjambre devastador. Cada criatura de tu elección en un radio de 20 pies hace una salvación de Destreza (tu CD de conjuro) o recibe 3d8 de daño cortante y 3d8 de daño de fuego, +1d8 de daño de fuego por cada espada invocada más allá de la primera (máximo +4d8). Con éxito, mitad de daño. Las espadas vuelven a ti al final del enjambre.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 13</span> Forja de Batalla</div>
+      <p>Durante un descanso corto, puedes invertir 1 Esquirla para forjar temporalmente un arma mágica a partir de metal cercano. El arma tiene una propiedad mágica menor (elige entre +1 a ataques y daño, daño de fuego adicional 1d4, o que ignore resistencia). El arma dura hasta tu próximo descanso largo.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 14</span> Cadenas de Hierro</div>
+      <p>Como acción, gastas 3 Esquirlas para lanzar cadenas de metal contra hasta 2 criaturas a 30 pies. Hacen una salvación de Fuerza (tu CD de conjuro) o quedan <em>restringidas</em> durante 1 minuto. Pueden repetir la salvación al final de cada uno de sus turnos.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 15</span> Voluntad de Acero</div>
+      <p>Eres inmune a los efectos de miedo y encantamiento. Además, cuando fallas una salvación contra un conjuro o efecto de control, puedes gastar 2 Esquirlas para repetirla.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 17</span> Tormenta de Hierro</div>
+      <p>Una vez por descanso largo, como acción, puedes desencadenar la Tormenta de Hierro. Durante 1 minuto, puedes invocar hasta el doble de tu máximo de espadas, sus ataques infligen daño de fuego adicional igual a tu modificador de Inteligencia, y el alcance de todas las habilidades de invocación aumenta en 30 pies.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 18</span> Fusión de Armas</div>
+      <p>Puedes fundir hasta 3 espadas invocadas en una <em>Gran Espada Etérea</em> (acción adicional, gratuito). La Gran Espada realiza ataques con ventaja, inflige 2d10 + mod. Inteligencia de daño cortante, y en un impacto crítico explota en fragmentos (3d6 daño cortante a cada criatura adyacente, salvación de Destreza para la mitad).</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-name"><span class="feature-level">Nivel 20</span> Rey de la Forja</div>
+      <p>Alcanzas la cima del dominio sobre el metal. Ganas los siguientes beneficios permanentes:</p>
+      <ul style="margin-left:20px; margin-top:8px; color: var(--acero-claro);">
+        <li>Tu número máximo de espadas invocadas aumenta en 2.</li>
+        <li>Al inicio de cada uno de tus turnos en combate, si tienes menos de la mitad de tus Esquirlas, recuperas 1.</li>
+        <li>Tus espadas invocadas infligen siempre 1d6 adicional de daño de fuego sin coste de Esquirlas.</li>
+        <li>Una vez por descanso largo, puedes convocar un <strong>Trono de Espadas</strong>: un anillo de espadas te rodea durante 1 minuto. Ganas +2 CA, puedes activar Tormenta de Hierro aunque ya la hayas usado, y tu velocidad de movimiento aumenta en 20 pies.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Magia de la Forja -->
+  <section>
+    <div class="section-title">Magia de la Forja — Lista de Conjuros</div>
+    <p>Preparas tus conjuros de esta lista (ver Magia de la Forja). Los trucos los conoces todos y no cuentan contra tu límite.</p>
+
+    <div class="spell-level-label">Trucos (cantrips)</div>
+    <ul class="spell-list">
+      <li>Chispa de Forja (nuevo; 1d8 fuego, rango 60 pies)</li>
+      <li>Descarga de fuego (fire bolt)</li>
+      <li>Conmoción (thunderclap)</li>
+      <li>Mano de mago (mage hand — solo metales)</li>
+    </ul>
+
+    <div class="spell-level-label">Nivel 1</div>
+    <ul class="spell-list">
+      <li>Absorber elementos</li>
+      <li>Manos ardientes</li>
+      <li>Escudo (shield) — aspecto de chispas de forja</li>
+      <li>Detectar magia</li>
+      <li>Castigo abrasador (searing smite)</li>
+    </ul>
+
+    <div class="spell-level-label">Nivel 2</div>
+    <ul class="spell-list">
+      <li>Arma mágica (magic weapon)</li>
+      <li>Calentar metal</li>
+      <li>Hoja de fuego (flame blade)</li>
+      <li>Rayo de debilidad</li>
+      <li>Esfera llameante (flaming sphere)</li>
+    </ul>
+
+    <div class="spell-level-label">Nivel 3</div>
+    <ul class="spell-list">
+      <li>Bola de fuego</li>
+      <li>Flecha de rayos</li>
+      <li>Arma elemental (elemental weapon)</li>
+      <li>Protección contra la energía (protection from energy)</li>
+      <li>Crear comida y agua (versión: crear acero puro)</li>
+    </ul>
+
+    <div class="spell-level-label">Nivel 4</div>
+    <ul class="spell-list">
+      <li>Muro de fuego</li>
+      <li>Fabricar</li>
+      <li>Tormenta de hielo (ice storm) — versión: granizo de acero</li>
+      <li>Libertad de movimiento</li>
+    </ul>
+
+    <div class="spell-level-label">Nivel 5</div>
+    <ul class="spell-list">
+      <li>Cono de frío (versión: cono de escoria)</li>
+      <li>Animar objetos (animate objects) — solo objetos metálicos</li>
+      <li>Ira del metal (nuevo; ver más adelante)</li>
+      <li>Telequinesis (telekinesis)</li>
+    </ul>
+  </section>
+
+  <!-- Subclases -->
+  <section>
+    <div class="section-title">Sendas del Herrero — Subclases</div>
+    <p>En el nivel 3, eliges la Senda que define cómo tu relación con el metal y la forja toma forma. Obtienes rasgos adicionales en los niveles 3, 6, 10 y 14.</p>
+
+    <div class="subclass-grid">
+
+      <!-- Forja Viva -->
+      <div class="subclass-card forja">
+        <div class="subclass-name">Forja Viva</div>
+        <p class="subclass-flavor">El calor primitivo de la creación vive en tu sangre. No solo controlas el metal — lo transformas, lo remodeleas en batalla.</p>
+        <div class="subclass-perk"><span>Nv 3</span> Espíritu de la Forja: tus ataques y conjuros de fuego ignoran resistencia al daño de fuego.</div>
+        <div class="subclass-perk"><span>Nv 3</span> Martillo de Herrero: puedes convocar un martillo etéreo como arma secundaria (2d6 contundente + fuego).</div>
+        <div class="subclass-perk"><span>Nv 6</span> Forja Acelerada: cuando lanzas un conjuro de fuego de 1.º o 2.º nivel, puedes hacerlo como acción adicional (1/turno).</div>
+        <div class="subclass-perk"><span>Nv 10</span> Armadura Fundida: puedes moldear metal cercano sobre ti como armadura. CA = 13 + mod. Constitución mientras dura (1h, 1 Esquirla).</div>
+        <div class="subclass-perk"><span>Nv 14</span> Corazón de Magma: inmune al daño de fuego. Tus espadas invocadas dañan con fuego en lugar de cortante si lo deseas.</div>
+      </div>
+
+      <!-- Lanza de Runa -->
+      <div class="subclass-card runa">
+        <div class="subclass-name">Lanza de Runa</div>
+        <p class="subclass-flavor">Grabas runas antiguas en tus espadas invocadas, cargándolas con efectos arcanos más allá del metal puro.</p>
+        <div class="subclass-perk"><span>Nv 3</span> Runas Inscritas: aprende 2 de estas runas; al invocar una espada, grabas en ella una runa que conozcas. Una vez por turno, cuando esa espada impacta, aplica su efecto — <em>Congelación</em>: la velocidad del objetivo se reduce 10 pies hasta el inicio de tu turno · <em>Impacto</em>: lo empujas 10 pies · <em>Destello</em>: desventaja en su siguiente tirada de ataque · <em>Corrosión</em>: −1 a su CA hasta el inicio de tu siguiente turno (no acumulable).</div>
+        <div class="subclass-perk"><span>Nv 3</span> Ecos Arcanos: tus espadas cuentan como conjuros para efectos de concentración adversa.</div>
+        <div class="subclass-perk"><span>Nv 6</span> Doble Runa: puedes activar dos runas simultáneamente en el mismo turno (1 Esquirla adicional).</div>
+        <div class="subclass-perk"><span>Nv 10</span> Runa Maestra: aprende 2 runas adicionales y puedes grabarlas permanentemente en objetos reales.</div>
+        <div class="subclass-perk"><span>Nv 14</span> Eco de la Antigua Forja: una vez por descanso largo, tus runas se replican en todas las superficies de metal en un radio de 30 pies durante 1 min.</div>
+      </div>
+
+      <!-- Sombra de Acero -->
+      <div class="subclass-card sombra">
+        <div class="subclass-name">Sombra de Acero</div>
+        <p class="subclass-flavor">Operas en las sombras. Tus espadas son silenciosas, tus movimientos invisibles. Eres el asesino que nadie puede rastrear, la hoja que no se ve venir.</p>
+        <div class="subclass-perk"><span>Nv 3</span> Espadas Silenciosas: tus espadas invocadas no hacen ruido y no pueden ser percibidas por sentidos no mágicos.</div>
+        <div class="subclass-perk"><span>Nv 3</span> Ventaja en las Sombras: cuando atacas con tus espadas invocadas a un objetivo que no es consciente de tu presencia, tienes ventaja.</div>
+        <div class="subclass-perk"><span>Nv 6</span> Parpadeo de Metal: cuando gastas 1 Esquirla, teleportas hasta 30 pies a un espacio vacío como acción adicional.</div>
+        <div class="subclass-perk"><span>Nv 10</span> Ejecución de Acero: una vez por turno, cuando una espada impacta a una criatura que no te ha visto o que está por debajo de la mitad de sus PG máximos, inflige 2d8 de daño cortante adicional.</div>
+        <div class="subclass-perk"><span>Nv 14</span> Sombra Forjada: puedes volverte invisible como acción (hasta que ataques o lances un conjuro). 1/descanso corto.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Conjuro nuevo -->
+  <section>
+    <div class="section-title">Conjuro Exclusivo: Ira del Metal</div>
+    <div class="resource-box">
+      <div class="resource-title">Ira del Metal</div>
+      <p><strong>Conjuro de 5.º nivel · Evocación</strong><br>
+      Tiempo de lanzamiento: 1 acción · Rango: 60 pies · Componentes: V, S · Duración: Instantáneo</p>
+      <br>
+      <p>Convocas una lluvia de fragmentos de metal incandescente sobre un punto que puedas ver a 60 pies. Cada criatura en una esfera de 20 pies de radio hace una salvación de Destreza (CD de conjuro) o recibe 4d8 de daño cortante y 4d8 de daño de fuego. Con éxito, la mitad. Las criaturas que fallen son empujadas 10 pies hacia los bordes de la esfera.</p>
+      <br>
+      <p><strong>A niveles superiores.</strong> Cuando lanzas este conjuro con un espacio de conjuro de 6.º nivel o superior, el daño cortante y el daño de fuego aumentan cada uno en 1d8 por nivel de espacio por encima del 5.º.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>El Herrero de Guerra · Homebrew D&D 5e · Uso personal</p>
+  <p style="margin-top:6px; font-size:0.62rem; opacity:0.6;">Dominus Ferri — El Acero Obedece</p>
+</footer>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

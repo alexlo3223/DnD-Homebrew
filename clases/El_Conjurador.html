@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Conjurador — Clase Homebrew D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:     #0D0D0D;
+    --paper:     #E8DFC0;
+    --paper-dark:#D4C9A0;
+    --nicotine:  #C9A84C;
+    --blood:     #8B1A1A;
+    --lead:      #4A4A4A;
+    --smoke:     #2A2A2A;
+    --ash:       #6B6B6B;
+    --ember:     #A63A1E;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--paper);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  /* ── PORTADA ── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 2.5rem 3.5rem;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--nicotine);
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 70% 30%, rgba(139,26,26,0.12) 0%, transparent 60%),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.012) 2px,
+        rgba(255,255,255,0.012) 4px
+      );
+    pointer-events: none;
+  }
+
+  /* Pentagram watermark */
+  .cover::after {
+    content: '✦';
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-60%) rotate(15deg);
+    font-size: 22rem;
+    color: rgba(139,26,26,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .cover-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 1.2rem;
+  }
+
+  .cover-title {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    line-height: 0.9;
+    color: var(--paper);
+    text-shadow: 0 0 60px rgba(201,168,76,0.15);
+    letter-spacing: -0.01em;
+    margin-bottom: 0.6rem;
+  }
+
+  .cover-title span {
+    display: block;
+    color: var(--nicotine);
+  }
+
+  .cover-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ash);
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+  }
+
+  .cover-tags {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid;
+    padding: 0.25rem 0.7rem;
+  }
+
+  .tag-blood  { border-color: var(--blood);    color: var(--blood); }
+  .tag-gold   { border-color: var(--nicotine); color: var(--nicotine); }
+  .tag-lead   { border-color: var(--ash);      color: var(--ash); }
+
+  /* ── LAYOUT ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3.5rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  .section-header::before {
+    content: attr(data-glyph);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--blood);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.6rem;
+    color: var(--paper);
+    font-weight: normal;
+    letter-spacing: 0.03em;
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--nicotine), transparent);
+  }
+
+  /* ── PROSE ── */
+  p { margin-bottom: 0.9rem; color: var(--paper); }
+  p:last-child { margin-bottom: 0; }
+
+  em { color: var(--nicotine); font-style: italic; }
+
+  strong { color: var(--paper); font-weight: 600; }
+
+  /* ── FLAVOUR QUOTE ── */
+  .flavour {
+    border-left: 3px solid var(--blood);
+    padding: 1rem 1.5rem;
+    margin: 1.8rem 0;
+    background: rgba(139,26,26,0.06);
+    font-style: italic;
+    color: var(--paper-dark);
+    font-size: 1.05rem;
+    position: relative;
+  }
+  .flavour::before {
+    content: '"';
+    font-family: 'Special Elite', cursive;
+    font-size: 4rem;
+    color: var(--blood);
+    position: absolute;
+    top: -0.6rem;
+    left: 0.8rem;
+    opacity: 0.4;
+    line-height: 1;
+  }
+
+  /* ── STAT BLOCK ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
+    gap: 1px;
+    background: var(--smoke);
+    border: 1px solid var(--smoke);
+    margin: 1.5rem 0;
+  }
+
+  .stat-cell {
+    background: var(--black);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-value {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.35rem;
+    color: var(--nicotine);
+  }
+
+  /* ── LEVEL TABLE ── */
+  .level-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  thead tr {
+    background: var(--smoke);
+  }
+
+  thead th {
+    padding: 0.65rem 0.8rem;
+    text-align: left;
+    color: var(--nicotine);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--blood);
+  }
+
+  tbody tr:nth-child(odd)  { background: rgba(255,255,255,0.02); }
+  tbody tr:nth-child(even) { background: rgba(0,0,0,0.2); }
+
+  tbody tr:hover { background: rgba(201,168,76,0.06); }
+
+  tbody td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--paper);
+    vertical-align: middle;
+  }
+
+  tbody td:first-child {
+    color: var(--ash);
+    font-size: 0.75rem;
+  }
+
+  tbody td.highlight {
+    color: var(--nicotine);
+    font-weight: bold;
+  }
+
+  .sub-row td {
+    background: rgba(139,26,26,0.08) !important;
+    border-left: 2px solid var(--blood);
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feature {
+    border: 1px solid var(--smoke);
+    margin: 1.4rem 0;
+    position: relative;
+  }
+
+  .feature-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--smoke);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .feature-level {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--blood);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .feature-name {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.15rem;
+    color: var(--paper);
+    font-weight: normal;
+  }
+
+  .feature-body {
+    padding: 1rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .feature-body p { margin-bottom: 0.7rem; }
+
+  /* ── PACTO BOX — the signature element ── */
+  .pacto-box {
+    border: 1px solid var(--blood);
+    margin: 1.8rem 0;
+    background: rgba(139,26,26,0.04);
+    position: relative;
+  }
+
+  .pacto-box::before {
+    content: 'CONTRATO';
+    position: absolute;
+    top: -0.55rem;
+    left: 1.5rem;
+    background: var(--black);
+    padding: 0 0.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    color: var(--blood);
+  }
+
+  .pacto-box-title {
+    padding: 0.85rem 1.3rem 0.5rem;
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    color: var(--nicotine);
+    border-bottom: 1px solid rgba(139,26,26,0.3);
+  }
+
+  .pacto-box-body {
+    padding: 0.9rem 1.3rem;
+    font-size: 0.92rem;
+  }
+
+  .pacto-cost {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--blood);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(139,26,26,0.2);
+  }
+
+  /* ── SUBCLASS PANEL ── */
+  .subclass-panel {
+    border: 1px solid var(--nicotine);
+    margin: 1.5rem 0;
+    padding: 1.4rem 1.5rem;
+    background: rgba(201,168,76,0.04);
+    position: relative;
+  }
+
+  .subclass-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 60px; height: 60px;
+    border-right: 2px solid var(--nicotine);
+    border-bottom: 2px solid var(--nicotine);
+  }
+
+  .subclass-name {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.35rem;
+    color: var(--nicotine);
+    margin-bottom: 0.3rem;
+  }
+
+  .subclass-flavour {
+    font-style: italic;
+    color: var(--ash);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  .subclass-feature-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--nicotine);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 1rem 0 0.3rem;
+  }
+
+  /* ── LISTA DE HECHIZOS ── */
+  .spell-list {
+    columns: 2;
+    column-gap: 2rem;
+    font-size: 0.88rem;
+    list-style: none;
+    margin: 0.8rem 0;
+  }
+
+  .spell-list li {
+    padding: 0.2rem 0;
+    color: var(--paper);
+    break-inside: avoid;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .spell-list li::before {
+    content: '—';
+    color: var(--blood);
+    flex-shrink: 0;
+  }
+
+  .spell-level-head {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--nicotine);
+    margin: 1rem 0 0.4rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  /* ── MISC ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--smoke);
+    margin: 2rem 0;
+  }
+
+  .inline-tag {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--blood);
+    border: 1px solid rgba(139,26,26,0.4);
+    padding: 0.1rem 0.4rem;
+    vertical-align: middle;
+  }
+
+  .note-box {
+    border-left: 3px solid var(--nicotine);
+    padding: 0.8rem 1.2rem;
+    background: rgba(201,168,76,0.05);
+    margin: 1.2rem 0;
+    font-size: 0.92rem;
+    color: var(--paper-dark);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin: 1.2rem 0;
+  }
+
+  @media (max-width: 620px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .spell-list { columns: 1; }
+    .cover { padding: 2rem 1.5rem 2.5rem; }
+    .content { padding: 0 1.2rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════ PORTADA -->
+<header class="cover">
+  <div class="cover-eyebrow">Clase Homebrew D&D 5e · Compatible con 2024</div>
+  <h1 class="cover-title">El<span>Conjurador</span></h1>
+  <p class="cover-subtitle">
+    "No soy un héroe. Soy el tipo que hace tratos con lo que mató al héroe y sobrevive para contarlo."
+  </p>
+  <div class="cover-tags">
+    <span class="tag tag-blood">Magia de Pactos</span>
+    <span class="tag tag-gold">Engaño Planar</span>
+    <span class="tag tag-lead">INT</span>
+    <span class="tag tag-lead">Dado de Golpe d8</span>
+  </div>
+</header>
+
+<div class="content">
+
+  <!-- ══════ DESCRIPCIÓN DE CLASE -->
+  <div class="section-header" data-glyph="§ 01"><h2>El Conjurador</h2></div>
+
+  <div class="flavour">
+    Los magos estudian en torres de marfil. Los clérigos rezan de rodillas. El Conjurador fuma un cigarrillo barato mientras negocia con el demonio que acaba de invocar, convenciéndolo de hacer el trabajo sucio a cambio de una promesa que ya sabe cómo incumplir.
+  </div>
+
+  <p>
+    El Conjurador no es un erudito de la magia ni un devoto de ningún dios. Es un <em>operador</em>: alguien que conoce el submundo planar con la misma familiaridad con la que un detective conoce los bajos fondos de su ciudad. Hace tratos, acumula deudas y sobrevive por una combinación de astucia, audacia y una suerte que, tarde o temprano, se agotará.
+  </p>
+  <p>
+    Sus hechizos no son maravillas académicas — son trucos sucios aprendidos de entidades que cobran caro. Su poder real reside en los <em>Pactos</em>: acuerdos vinculantes con fuerzas planares que otorgan habilidades extraordinarias a cambio de consecuencias muy reales.
+  </p>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="stat-label">Dado de Golpe</div>
+      <div class="stat-value">d8</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Habilidad Primaria</div>
+      <div class="stat-value">INT</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Salvaciones</div>
+      <div class="stat-value">INT · CAR</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Armadura</div>
+      <div class="stat-value">Ligera</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Armas</div>
+      <div class="stat-value">Simples</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-label">Componente Clave</div>
+      <div class="stat-value">VOZ</div>
+    </div>
+  </div>
+
+  <p><strong>Habilidades:</strong> Elige cuatro entre Arcanos, Engaño, Historia, Investigación, Perspicacia, Persuasión, Religión e Interpretación.</p>
+  <p><strong>Equipo inicial:</strong> Una chaqueta o gabardina de cuero (como armadura de cuero), un arma simple a tu elección, un grimorio de bolsillo lleno de anotaciones ilegibles, y componentes para hechizos por valor de 15 po.</p>
+
+  <!-- ══════ MECÁNICA DE PACTOS -->
+  <div class="section-header" data-glyph="§ 02"><h2>Los Pactos</h2></div>
+
+  <p>
+    Los Pactos son el núcleo del Conjurador. No son meras habilidades — son <em>contratos</em> con entidades planares. Cuando activas un Pacto, la entidad cumple su parte del trato. Cuando el Pacto vence o fracasa, tú pagas el precio.
+  </p>
+
+  <p>
+    Tienes un número de <strong>Fichas de Pacto</strong> igual al valor de la tabla: tu modificador de Inteligencia + el número indicado (mínimo 2). Las recuperas completamente tras un <em>descanso largo</em>. Algunos Pactos también requieren <em>Deuda Planar</em> — marcas narrativas que el DM gestiona y que pueden materializarse en cualquier momento.
+  </p>
+
+  <div class="pacto-box">
+    <div class="pacto-box-title">Ejemplo: Pacto del Portero</div>
+    <div class="pacto-box-body">
+      <p>Invocas la presencia de una entidad que abre (o cierra) un portal a cualquier plano que conozcas. El portal dura 1 minuto y puede ser cruzado por un número de criaturas igual a tu nivel de Conjurador.</p>
+      <div class="pacto-cost">Coste: 2 Fichas de Pacto · Deuda Planar: la entidad puede llamarte cuando lo necesite, y deberás acudir.</div>
+    </div>
+  </div>
+
+  <div class="note-box">
+    <strong>Nota de diseño:</strong> La Deuda Planar es una herramienta narrativa, no un sistema de puntos. El DM decide cuándo y cómo se cobra. Los Pactos más poderosos acumulan deudas mayores. Un Conjurador sobrecargado de deudas vive con consecuencias — no con la certeza de la muerte, sino con la incomodidad permanente de lo que debe.
+  </div>
+
+  <!-- ══════ TABLA DE NIVEL -->
+  <div class="section-header" data-glyph="§ 03"><h2>Progresión de Clase</h2></div>
+
+  <div class="level-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nivel</th>
+          <th>Bon. Comp.</th>
+          <th>Fichas de Pacto</th>
+          <th>Espacios (Nivel)</th>
+          <th>Trucos</th>
+          <th>Rasgos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td>INT+2</td><td>1 (1º)</td><td>2</td><td class="highlight">Grimorio Sucio, Voz de Mando</td></tr>
+        <tr><td>2</td><td>+2</td><td>INT+2</td><td>2 (1º)</td><td>2</td><td>Primer Pacto, Trampa Arcana</td></tr>
+        <tr><td>3</td><td>+2</td><td>INT+2</td><td>2 (2º)</td><td>2</td><td class="highlight">Especialidad del Conjurador (subclase)</td></tr>
+        <tr><td>4</td><td>+2</td><td>INT+3</td><td>2 (2º)</td><td>3</td><td>Mejora de Característica</td></tr>
+        <tr><td>5</td><td>+3</td><td>INT+3</td><td>2 (3º)</td><td>3</td><td>Renegociación, Lectura de Auras</td></tr>
+        <tr><td>6</td><td>+3</td><td>INT+4</td><td>2 (3º)</td><td>3</td><td class="highlight">Rasgo de Especialidad</td></tr>
+        <tr><td>7</td><td>+3</td><td>INT+4</td><td>2 (4º)</td><td>3</td><td>Marca del Operador</td></tr>
+        <tr><td>8</td><td>+3</td><td>INT+4</td><td>2 (4º)</td><td>3</td><td>Mejora de Característica</td></tr>
+        <tr><td>9</td><td>+4</td><td>INT+5</td><td>2 (5º)</td><td>3</td><td>Pacto Mayor</td></tr>
+        <tr><td>10</td><td>+4</td><td>INT+5</td><td>2 (5º)</td><td>4</td><td class="highlight">Rasgo de Especialidad</td></tr>
+        <tr><td>11</td><td>+4</td><td>INT+6</td><td>3 (5º)</td><td>4</td><td>Voz del Abismo</td></tr>
+        <tr><td>12</td><td>+4</td><td>INT+6</td><td>3 (5º)</td><td>4</td><td>Mejora de Característica</td></tr>
+        <tr><td>13</td><td>+5</td><td>INT+7</td><td>3 (5º)</td><td>4</td><td>Nombre Verdadero</td></tr>
+        <tr><td>14</td><td>+5</td><td>INT+7</td><td>3 (5º)</td><td>4</td><td class="highlight">Rasgo de Especialidad</td></tr>
+        <tr><td>15</td><td>+5</td><td>INT+8</td><td>3 (5º)</td><td>4</td><td>Deuda Cancelada</td></tr>
+        <tr><td>16</td><td>+5</td><td>INT+8</td><td>3 (5º)</td><td>4</td><td>Mejora de Característica</td></tr>
+        <tr><td>17</td><td>+6</td><td>INT+9</td><td>4 (5º)</td><td>4</td><td>El Último Truco</td></tr>
+        <tr><td>18</td><td>+6</td><td>INT+9</td><td>4 (5º)</td><td>4</td><td>Señor de los Contratos</td></tr>
+        <tr><td>19</td><td>+6</td><td>INT+10</td><td>4 (5º)</td><td>4</td><td>Mejora de Característica</td></tr>
+        <tr><td>20</td><td>+6</td><td>INT+12</td><td>4 (5º)</td><td>4</td><td class="highlight">Ultimátum Eterno</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-box">
+    <strong>Hechizos:</strong> El Conjurador usa <em>Inteligencia</em> como característica de lanzamiento (el Carisma solo interviene en sus pruebas sociales). CD de conjuro = 8 + bonificador de competencia + mod. INT. Tienes los espacios indicados en la tabla, todos del nivel señalado entre paréntesis, y los recuperas con un descanso corto o largo. Conoces 2 conjuros a nivel 1 y aprendes uno más en cada nivel de Conjurador (máximo 15); al subir de nivel puedes cambiar uno conocido por otro de la lista.<br><br><strong>Contratos Mayores:</strong> a los niveles 11, 13, 15 y 17 aprendes un conjuro de nivel 6, 7, 8 y 9 respectivamente de la lista del Conjurador. Puedes lanzar cada uno una vez sin gastar espacio y recuperas el uso tras un descanso largo.
+  </div>
+
+  <!-- ══════ RASGOS DE CLASE -->
+  <div class="section-header" data-glyph="§ 04"><h2>Rasgos de Clase</h2></div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 1</span>
+      <span class="feature-name">Grimorio Sucio</span>
+    </div>
+    <div class="feature-body">
+      <p>Tu grimorio no es un tomo académico — es una libreta destartalada llena de anotaciones, símbolos garabateados en márgenes y notas escritas con sangre, tinta y cosas peores. Contiene tus rituales y los registros de tus pactos anteriores.</p>
+      <p>Puedes lanzar cualquier hechizo de tu grimorio como <em>ritual</em> si tiene el rasgo de ritual. Además, cuando estudias una entidad planar (gastando 10 minutos y superando una prueba de Arcanos CD 15), puedes anotar una de sus debilidades en el grimorio: la primera vez que la atacas en cada combate, añades 1d6 al daño.</p>
+      <p>Si pierdes el grimorio puedes reconstruirlo en 1 semana de trabajo (los pactos quedan grabados en tu memoria). Si lo destruyen deliberadamente, un día perderás algo que aún no sabes que tenías.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 1</span>
+      <span class="feature-name">Voz de Mando</span>
+    </div>
+    <div class="feature-body">
+      <p>Sabes que las palabras correctas, dichas de la manera correcta, doblan la voluntad de cualquier ser — mortal o no. Cuando te diriges a una criatura en Común, Infracomún o cualquier idioma planar que conozcas, obtienes ventaja en las pruebas de Persuasión y Engaño contra ella durante la primera ronda de interacción.</p>
+      <p>Además, puedes usar Carisma en lugar de Fuerza para las pruebas de Intimidación. No necesitas alzar la voz para que sepan exactamente lo que podrías hacerles.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 2</span>
+      <span class="feature-name">Primer Pacto</span>
+    </div>
+    <div class="feature-body">
+      <p>Al alcanzar el nivel 2, formalizas tu primer acuerdo con una entidad planar. Elige uno de los Pactos disponibles de la lista. Aprendes un Pacto adicional en los niveles 5, 9, 13 y 17.</p>
+      <p>Cuando activas un Pacto en combate, lo haces como <em>acción</em> a menos que se especifique lo contrario. Fuera de combate, la activación puede ser instantánea o requerir un breve ritual de 1 minuto, según el Pacto.</p>
+    </div>
+  </div>
+
+  <!-- PACTOS -->
+  <div class="section-header" data-glyph="§ 05"><h2>Lista de Pactos</h2></div>
+
+  <div class="grid-2">
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Cancerbero</div>
+      <div class="pacto-box-body">
+        <p>Una sombra canina te sigue. Como acción adicional, la envías contra una criatura a 9 m: debe superar una salvación de Sabiduría (CD conjuro) o quedar <em>asustada</em> de ti hasta el final de tu próximo turno.</p>
+        <div class="pacto-cost">Coste: 1 Ficha · Deuda: la entidad puede pedir que guardes algo que no quieres guardar.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Falsario</div>
+      <div class="pacto-box-body">
+        <p>Durante 1 hora asumes el aspecto exacto de una criatura que hayas observado durante al menos 1 minuto. El efecto es mágico pero resiste <em>Detectar Magia</em> salvo que la CD supere 15 + tu nivel.</p>
+        <div class="pacto-cost">Coste: 2 Fichas · Deuda: alguien cercano a ti ve tu verdadera cara en el peor momento.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Exorcista</div>
+      <div class="pacto-box-body">
+        <p>Obligas a una entidad de tipo aberración, celestial, demonio, diablo o no muerto a revelar su nombre verdadero o su debilidad (tu elección). La criatura debe superar una salvación de Carisma o te proporciona la información.</p>
+        <div class="pacto-cost">Coste: 2 Fichas · Deuda: la entidad recuerda tu nombre y lo comparte con sus semejantes.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Mediador</div>
+      <div class="pacto-box-body">
+        <p>Contactas con una entidad planar menor para pedirle información. Formulas hasta tres preguntas de sí/no sobre un tema que ella podría conocer. Responde honestamente pero sólo dentro de su conocimiento.</p>
+        <div class="pacto-cost">Coste: 1 Ficha · Deuda: debes un favor sin especificar. Lo reclamarán.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Verdugo</div>
+      <div class="pacto-box-body">
+        <p>Marcas a una criatura que puedas ver a 18 m. Durante 1 minuto, cuando la reduces a 0 PG, recuperas 1 Ficha de Pacto y puedes hacer una pregunta a su alma antes de que parta (siempre responde con la verdad que conocía).</p>
+        <div class="pacto-cost">Coste: 2 Fichas · Deuda: las almas que liberas no siempre van adonde deberían.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Umbral</div>
+      <div class="pacto-box-body">
+        <p>Redactas una <em>cláusula de exclusión</em> contra una entidad concreta que puedas ver o cuyo nombre conozcas: durante 10 minutos no puede acercarse a menos de 9 m de ti sin superar una salvación de Carisma (CD conjuro). Si conoces su nombre verdadero, la salvación se hace con desventaja. Como todo contrato, obliga a ambas partes: si atacas tú primero a esa entidad, la cláusula se anula.</p>
+        <div class="pacto-cost">Coste: 3 Fichas · Deuda: alguien de su corte se entera de que tienes ese contrato. Y querrá uno igual contra ti.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Espejo Negro</div>
+      <div class="pacto-box-body">
+        <p>Ves a través de los ojos de cualquier espejo, superficie de agua quieta o ventana oscura que hayas tocado en los últimos 7 días. La visión dura hasta 10 minutos y puedes escuchar también. Usable una vez entre descansos cortos sin coste.</p>
+        <div class="pacto-cost">Coste: 0 (1 vez) / 1 Ficha (usos adicionales) · Deuda: a veces algo te devuelve la mirada.</div>
+      </div>
+    </div>
+
+    <div class="pacto-box">
+      <div class="pacto-box-title">Pacto del Último Recurso</div>
+      <div class="pacto-box-body">
+        <p><span class="inline-tag">Reacción</span> Cuando caes a 0 PG, puedes activar este Pacto. Recuperas PG iguales a tu nivel de Conjurador × 3 y la criatura que te redujo a 0 PG queda <em>asustada</em> de ti hasta el inicio de su próximo turno.</p>
+        <div class="pacto-cost">Coste: 3 Fichas · Deuda: la entidad se lleva algo tuyo que no vuelve. El DM elige qué.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RASGOS ADICIONALES -->
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 2</span>
+      <span class="feature-name">Trampa Arcana</span>
+    </div>
+    <div class="feature-body">
+      <p>Puedes preparar una zona de 1,5 m de radio en un punto que toques. Cualquier criatura que entre en ella durante las próximas 24 horas debe superar una salvación de Inteligencia (CD conjuro) o quedar <em>apresada</em> hasta el inicio de su próximo turno.</p>
+      <p>Puedes tener activas un número máximo de trampas igual a tu bonificador de competencia. Preparar una trampa requiere 1 minuto.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 5</span>
+      <span class="feature-name">Renegociación</span>
+    </div>
+    <div class="feature-body">
+      <p>Una vez por descanso largo, cuando activas un Pacto, puedes intentar <em>renegociar</em> el coste. Haz una prueba de Engaño o Persuasión contra una CD igual a 8 + el coste en Fichas del Pacto × 3. Si tienes éxito, reduces el coste en 1 Ficha de Pacto. Si fallas, la Deuda Planar se duplica esta vez.</p>
+      <p>Algunas entidades recuerdan perfectamente si intentaste engañarlas. Otras lo esperan.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 5</span>
+      <span class="feature-name">Lectura de Auras</span>
+    </div>
+    <div class="feature-body">
+      <p>Como acción puedes concentrarte en una criatura a 9 m o menos. Percibes su tipo (celestial, demonio, diablo, bestia, humanoide...), si está bajo efectos mágicos, y si lleva algún pacto activo con otra entidad. Esta percepción no requiere conjuro y no puede ser bloqueada por <em>Mente en Blanco</em> ni similares, ya que no es un efecto de adivinación sino una habilidad innata del Conjurador.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 7</span>
+      <span class="feature-name">Marca del Operador</span>
+    </div>
+    <div class="feature-body">
+      <p>Tu reputación en los planos se ha solidificado. Cuando encuentras por primera vez a una entidad de tipo demonio, diablo, no muerto o aberración, puede reconocerte si tu nombre es conocido en su plano. Entidades de CR 10 o inferior que te reconozcan tienen desventaja en el primer ataque que realicen contra ti — prefieren no enemistarse con alguien con tus contactos.</p>
+      <p>Esto puede ser un arma o una maldición, según con qué entidades hayas tratado.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 9</span>
+      <span class="feature-name">Pacto Mayor</span>
+    </div>
+    <div class="feature-body">
+      <p>Al alcanzar el nivel 9, puedes formalizar un <em>Pacto Mayor</em>: un acuerdo con una entidad de gran poder (CR 15+) que otorga una habilidad única y permanente que diseñas junto con el DM. Los Pactos Mayores tienen Deuda Planar permanente y abierta — la entidad puede reclamarte en cualquier momento de la campaña.</p>
+      <p>Solo puedes tener activo un Pacto Mayor a la vez. Si lo rompes, pierdes la habilidad permanentemente y la entidad se convierte en tu enemiga declarada.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 11</span>
+      <span class="feature-name">Voz del Abismo</span>
+    </div>
+    <div class="feature-body">
+      <p>Puedes hablar Infracomún, Celestial y la lengua de los No Muertos como si fueran tu lengua materna, sin necesidad de haberlas aprendido antes. Además, cuando lanzas hechizos con el descriptor verbal, puedes susurrarlos — no tienes que pronunciarlos en voz alta, lo que permite lanzar conjuros en situaciones donde el sonido sería un problema.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 13</span>
+      <span class="feature-name">Nombre Verdadero</span>
+    </div>
+    <div class="feature-body">
+      <p>A lo largo de años de operaciones, has descubierto o deducido el nombre verdadero de una entidad poderosa. Este nombre es un arma de doble filo: pronunciarlo correctamente te otorga ventaja en todas las pruebas de Carisma contra esa entidad y reduce a la mitad cualquier daño que ella te inflija. Pero si alguien descubre que conoces su nombre, la entidad te considerará una amenaza existencial.</p>
+      <p>Puedes conocer un número de nombres verdaderos igual a tu modificador de Inteligencia.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 15</span>
+      <span class="feature-name">Deuda Cancelada</span>
+    </div>
+    <div class="feature-body">
+      <p>Una vez por descanso largo, puedes cancelar una Deuda Planar activa sin pagar el precio. El proceso no es gratuito: la entidad lo sabe, y lo recordará. Pero a veces sobrevivir hoy es más importante que las consecuencias de mañana.</p>
+      <p>Esta capacidad no cancela Pactos Mayores ni Deudas marcadas como <em>irrevocables</em> por el DM.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 17</span>
+      <span class="feature-name">El Último Truco</span>
+    </div>
+    <div class="feature-body">
+      <p>Una vez por semana, cuando alguien (o algo) te mata, puedes declarar que tenías un trato con una entidad para este momento exacto. No mueres — en cambio, la entidad hace lo que sea necesario para que sobrevivas, sin coste de Fichas de Pacto. La Deuda que esto genera está completamente fuera de tu control. El DM decide qué se lleva la entidad como pago.</p>
+      <p>No abuses de esto. Incluso el Conjurador tiene un límite de cuántas veces puede escabullirse de la muerte antes de que el precio supere todo lo que tenía.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 18</span>
+      <span class="feature-name">Señor de los Contratos</span>
+    </div>
+    <div class="feature-body">
+      <p>Ya no eres solo un operador — eres una figura de poder en el submundo planar. Las entidades de CR 20 o inferior que no sean tus enemigas declaradas te reconocen como alguien con quien <em>se puede negociar</em>. En lugar de atacarte por defecto, prefieren escucharte. Ganas ventaja en todas las pruebas de Carisma contra este tipo de entidades.</p>
+      <p>Además, una vez por descanso largo, puedes forzar a una entidad de cualquier tipo a escucharte durante 1 minuto antes de tomar cualquier acción hostil contra ti.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header">
+      <span class="feature-level">Nivel 20</span>
+      <span class="feature-name">Ultimátum Eterno</span>
+    </div>
+    <div class="feature-body">
+      <p>Has llegado al punto en que los planos enteros conocen tu nombre. Una vez por campaña (no por descanso — <em>por campaña</em>), puedes pronunciar el Ultimátum Eterno: una declaración vinculante de que una entidad cumplirá tu voluntad en un asunto concreto, sin coste de Fichas, sin Deuda negociable.</p>
+      <p>La entidad no puede negarse. Pero lo que pidas no puede ir en contra de su naturaleza fundamental — no puedes pedirle a un demonio que sea benevolente, pero sí que se retire, que libere a alguien, que firme un tratado.</p>
+      <p>El precio es simple: cuando mueras — y morirás — tu alma no irá adonde debería. Las entidades que has desafiado llevan décadas esperando ese momento.</p>
+    </div>
+  </div>
+
+  <!-- ══════ SUBCLASES -->
+  <div class="section-header" data-glyph="§ 06"><h2>Especialidades del Conjurador</h2></div>
+  <p>Al alcanzar el nivel 3, eliges una especialidad que define <em>cómo</em> operas en el submundo planar. Obtienes rasgos adicionales en los niveles 3, 6, 10 y 14.</p>
+
+  <!-- SUBCLASE 1 -->
+  <div class="subclass-panel">
+    <div class="subclass-name">El Exorcista de Londres</div>
+    <div class="subclass-flavour">
+      Alguien tiene que hacer el trabajo sucio. Expulsas entidades, limpias casas malditas, sacas demonios de los cuerpos de inocentes... y cobras por ello, aunque el precio nunca sea suficiente para compensar lo que ves.
+    </div>
+
+    <div class="subclass-feature-name">Nivel 3 — Rito de Expulsión</div>
+    <p>Aprendes el hechizo <em>Destierro</em> y no cuenta para tu número de hechizos conocidos. Tú no expulsas con fe: <strong>desahucias</strong>. Cuando lanzas <em>Destierro</em> sobre un demonio, diablo o no muerto, puedes gastar 1 Ficha de Pacto para que, en lugar de su salvación de Carisma, haga una prueba de Carisma enfrentada a tu Engaño o Persuasión: le estás demostrando que su contrato con este plano ha vencido.</p>
+
+    <div class="subclass-feature-name">Nivel 3 — Sentido de Posesión</div>
+    <p>Como acción puedes detectar si una criatura está poseída, maldita o bajo control de una entidad exterior. Si lo está, conoces el tipo de entidad, una debilidad básica del proceso de posesión y <strong>quién paga</strong>: si la posesión se sostiene sobre un pacto, sabes si fue la víctima, un tercero o la propia entidad quien lo firmó.</p>
+
+    <div class="subclass-feature-name">Nivel 6 — Círculo de Protección Reforzado</div>
+    <p>Cuando lanzas <em>Círculo Mágico</em>, su efecto se extiende a una segunda categoría de criatura de tu elección (además de la primera). Además, el círculo puede ser tan pequeño como 0,3 m de radio para encerrar una sola criatura, sin importar su tamaño.</p>
+
+    <div class="subclass-feature-name">Nivel 10 — Eco del Exorcismo</div>
+    <p>Cuando expulsas con éxito a una entidad de un cuerpo poseído, la energía residual te otorga ventaja en todos los ataques y salvaciones contra ese tipo de entidad durante las próximas 24 horas. Además, recuperas 1d6 + tu mod. Inteligencia en Puntos de Golpe.</p>
+
+    <div class="subclass-feature-name">Nivel 14 — Nombre Prohibido</div>
+    <p>Aprendes el nombre verdadero de una entidad del tipo que elijas (demonio, diablo, celestial caído, etc.) directamente de un ritual que diseñas con el DM. Pronunciar su nombre como acción adicional obliga a la entidad a hacer una salvación de Carisma (CD conjuro) o quedar <em>incapacitada</em> durante 1 minuto.</p>
+  </div>
+
+  <!-- SUBCLASE 2 -->
+  <div class="subclass-panel">
+    <div class="subclass-name">El Negociador Infernal</div>
+    <div class="subclass-flavour">
+      No eres un guerrero. No eres un mago de batalla. Eres alguien que convierte cada encuentro en una mesa de negociación, y que casi siempre se levanta de esa mesa con más de lo que traía. Casi.
+    </div>
+
+    <div class="subclass-feature-name">Nivel 3 — Labia de Supervivencia</div>
+    <p>Cuando eres objetivo de un ataque de una criatura inteligente (INT 6+), puedes usar tu <em>reacción</em> para intentar hablar con ella antes de que ataque: haz una prueba de Persuasión o Engaño (CD = 10 + CR de la criatura). Si tienes éxito, tiene desventaja en el ataque. Usable una vez por turno.</p>
+
+    <div class="subclass-feature-name">Nivel 3 — Oferta Imposible</div>
+    <p>Una vez por descanso corto, puedes hacer una propuesta a cualquier entidad inteligente que no sea hostil activa. Si la entidad la acepta, queda vinculada por un contrato mágico durante 24 horas: no puede atacarte ni a tus aliados mientras el trato esté vigente, aunque sigue siendo capaz de actuar de forma hostil contra otros.</p>
+
+    <div class="subclass-feature-name">Nivel 6 — Precio Justo</div>
+    <p>Cuando usas Renegociación, puedes reducir el coste en 2 Fichas en lugar de 1 si superas la CD por 5 o más. Además, puedes intentar Renegociación dos veces por descanso largo en lugar de una.</p>
+
+    <div class="subclass-feature-name">Nivel 10 — Contrato Vinculante</div>
+    <p>Puedes escribir un contrato mágico en 10 minutos. Cualquier criatura inteligente que lo firme queda vinculada a sus términos durante 30 días. Si rompe el contrato, sufre 10d10 de daño psíquico y queda <em>aturdida</em> durante 1 minuto. Solo puedes tener activos un número de contratos igual a tu mod. Carisma.</p>
+
+    <div class="subclass-feature-name">Nivel 14 — El Último Argumento</div>
+    <p>Una vez por descanso largo, puedes hacer una proclama de un minuto ante una o más criaturas que te oigan. Todas las criaturas de CR igual o inferior a tu nivel que fallen una salvación de Sabiduría (CD conjuro) quedan <em>convencidas</em> de que lo que dices es cierto durante 1 hora. Este efecto termina si las criaturas reciben daño o ven evidencia física de que mentiste.</p>
+  </div>
+
+  <!-- SUBCLASE 3 -->
+  <div class="subclass-panel">
+    <div class="subclass-name">El Ocultista de Calle</div>
+    <div class="subclass-flavour">
+      La magia no viene de libros de hechizos ni de dioses benevolentes. Viene de la sangre en los callejones, de los símbolos grabados en paredes de ladrillo, de saber exactamente qué palabras pronunciar en el idioma correcto en el momento exacto. Tú aprendiste a la mala.
+    </div>
+
+    <div class="subclass-feature-name">Nivel 3 — Magia Improvisada</div>
+    <p>Una vez por descanso corto, cuando lanzas un conjuro que requiere materiales, puedes sustituir los materiales con cualquier objeto que tengas a mano (un cigarrillo, una moneda, sangre de tu propia mano). El conjuro funciona igual. Sin embargo, la improvisación tiene un coste: tiras 1d6. Con un 1, el conjuro falla y no gastas el espacio de hechizo.</p>
+
+    <div class="subclass-feature-name">Nivel 3 — Simbolismo</div>
+    <p>Aprendes el truco <em>Taumaturgia</em> y <em>Mensaje</em> si no los conocías. Puedes lanzar <em>Taumaturgia</em> como acción adicional y sus efectos duran 10 minutos sin concentración. Además, puedes grabar símbolos mágicos en superficies — cualquier criatura que los estudie debe superar una salvación de Sabiduría (CD conjuro) o quedar <em>asustada</em> durante 1 minuto.</p>
+
+    <div class="subclass-feature-name">Nivel 6 — Sangre y Asfalto</div>
+    <p>Ganas competencia en Herramientas de Ladrón y Herramientas de Falsificación. Además, cuando lanzas un hechizo de transmutación, su CD de salvación aumenta en 2.</p>
+
+    <div class="subclass-feature-name">Nivel 10 — Conocimiento Prohibido</div>
+    <p>Puedes acceder al conocimiento de entidades que han observado el mundo durante eones. Una vez por descanso largo, puedes hacer una pregunta al DM sobre cualquier tema de juego — lore del mundo, propósito de un objeto, debilidad de un enemigo — y obtendrás una respuesta veraz, aunque quizás incompleta o críptica. La información viene de algún lugar, y ese lugar sabe que la pediste.</p>
+
+    <div class="subclass-feature-name">Nivel 14 — Círculo de Sangre</div>
+    <p>Si conoces <em>Símbolo</em> como Contrato Mayor, puedes lanzarlo sin componentes de material usando 3 Fichas de Pacto en lugar del diamante requerido. Además, puedes preparar un Círculo de Sangre en 1 minuto: una zona de 6 m de radio que funciona como <em>Santuario</em> (CD tu conjuro) para ti y los aliados que elijas, durante 1 hora. Fuera de este círculo, tienes desventaja en las salvaciones de Constitución.</p>
+  </div>
+
+  <!-- ══════ LISTA DE HECHIZOS -->
+  <div class="section-header" data-glyph="§ 07"><h2>Lista de Hechizos del Conjurador</h2></div>
+
+  <div class="spell-level-head">Trucos (nivel 0)</div>
+  <ul class="spell-list">
+    <li>Taumaturgia</li>
+    <li>Ilusión Menor</li>
+    <li>Mensaje</li>
+    <li>Rayo de Escarcha</li>
+    <li>Toque Escalofriante</li>
+    <li>Toque Venenoso</li>
+    <li>Ráfaga Eldritch</li>
+    <li>Prestidigitación</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 1</div>
+  <ul class="spell-list">
+    <li>Armadura de Mago</li>
+    <li>Causar Miedo</li>
+    <li>Comprensión de Idiomas</li>
+    <li>Detectar Magia</li>
+    <li>Detectar el Bien y el Mal</li>
+    <li>Escudo</li>
+    <li>Hechizar Persona</li>
+    <li>Imagen silenciosa</li>
+    <li>Infligir Heridas</li>
+    <li>Maleficio</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 2</div>
+  <ul class="spell-list">
+    <li>Ceguera/Sordera</li>
+    <li>Paso brumoso</li>
+    <li>Detectar Pensamientos</li>
+    <li>Imagen múltiple</li>
+    <li>Invisibilidad</li>
+    <li>Localizar Objeto</li>
+    <li>Oscuridad</li>
+    <li>Rayo debilitante</li>
+    <li>Sugestión</li>
+    <li>Ver Invisibilidad</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 3</div>
+  <ul class="spell-list">
+    <li>Contrahechizo</li>
+    <li>Disipar Magia</li>
+    <li>Enviar Mensaje</li>
+    <li>Hablar con los Muertos</li>
+    <li>Miedo</li>
+    <li>Círculo Mágico</li>
+    <li>Lanzar maldición</li>
+    <li>Glifo custodio</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 4</div>
+  <ul class="spell-list">
+    <li>Adivinación</li>
+    <li>Ojo arcano</li>
+    <li>Libertad de Movimiento</li>
+    <li>Destierro</li>
+    <li>Puerta dimensional</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 5</div>
+  <ul class="spell-list">
+    <li>Comunión</li>
+    <li>Contactar con otro plano</li>
+    <li>Dominar Persona</li>
+    <li>Escrutinio</li>
+    <li>Vínculo planar</li>
+    <li>Geas</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 6 (Contrato Mayor)</div>
+  <ul class="spell-list">
+    <li>Círculo de Muerte</li>
+    <li>Proyección Astral</li>
+    <li>Trampa del Alma</li>
+    <li>Visión Verdadera</li>
+  </ul>
+
+  <div class="spell-level-head">Nivel 7–9 (Contratos Mayores)</div>
+  <ul class="spell-list">
+    <li>Jaula de Fuerza</li>
+    <li>Símbolo</li>
+    <li>Desplazamiento entre planos</li>
+    <li>Laberinto</li>
+    <li>Presciencia</li>
+    <li>Encarcelamiento</li>
+  </ul>
+
+  <!-- ══════ NOTAS DE DISEÑO -->
+  <div class="section-header" data-glyph="§ 08"><h2>Notas para el DM</h2></div>
+
+  <div class="note-box">
+    <strong>Sobre la Deuda Planar:</strong> No es un contador. Es una herramienta narrativa. Úsala cuando la historia lo pida, no cada turno. La mejor Deuda es la que el jugador olvidó temporalmente y que reaparece en el peor momento posible.
+  </div>
+
+  <div class="note-box">
+    <strong>Sobre los Pactos Mayores:</strong> Diseñalos con el jugador. Son únicos e irrepetibles. Un Pacto Mayor bien construido es el arco narrativo del personaje — no una habilidad, sino una historia.
+  </div>
+
+  <div class="note-box">
+    <strong>Sobre el Ultimátum Eterno:</strong> Uno por campaña no es un error de diseño — es una declaración de intenciones. Cuando el jugador lo use, que sea un momento que nadie olvide. Y recuerda: el precio viene después. Siempre.
+  </div>
+
+  <hr class="divider">
+  <p style="text-align:center; font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--ash); letter-spacing:0.15em;">
+    EL CONJURADOR · HOMEBREW D&D 5E · COMPATIBLE CON 2024 · EN ESPAÑOL
+  </p>
+
+</div><!-- /content -->
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Portadora de Glifos — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#c8264a;--acc2:#f39aac;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:'IM Fell English SC','IM Fell English',Georgia,serif;--f-body:'Crimson Text',Georgia,serif;--f-label:'Cinzel','Trajan Pro',Georgia,serif;}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+body{background:radial-gradient(circle at 84% 9%,rgba(235,228,210,.16) 0 54px,rgba(235,228,210,.05) 55px,transparent 140px),radial-gradient(ellipse 80% 45% at 50% 0%,color-mix(in srgb,#6e1230 35%,transparent),transparent 70%),var(--bg)}
+.hero h1{font-family:'UnifrakturCook','IM Fell English',serif;font-weight:700;text-shadow:0 0 28px color-mix(in srgb,#6e1230 40%,transparent),0 2px 0 #000}
+.cv-rosa{position:absolute;top:-180px;left:50%;width:620px;height:620px;transform:translateX(-50%);border-radius:50%;z-index:-1;pointer-events:none;opacity:.12;
+ background:repeating-conic-gradient(from 0deg,#6e1230 0 10deg,#1a0f0a 10deg 12deg,#3b2a5a 12deg 22deg,#1a0f0a 22deg 24deg);
+ -webkit-mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 21%,#000 22% 70%,transparent 71%)}
+.cv-murcielagos{position:absolute;top:30px;right:40px;width:420px;height:260px;z-index:-1;pointer-events:none;opacity:.8;
+ background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cg fill='%23c9a84c' opacity='.35'%3E%3Cpath d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(250 30) scale(.7)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3Cpath transform='translate(330 150) scale(.5)' d='M40 60 q12-14 24-2 q6-10 12 0 q12-12 24 2 q-14-2-18 8 q-6-6-12 0 q-6-6-12 0 q-4-10-18-8z'/%3E%3C/g%3E%3C/svg%3E") no-repeat}
+h2::before{content:"✠";margin-right:10px;color:var(--acc)}
+@media (max-width:700px){.cv-rosa{width:420px;height:420px;top:-140px}.cv-murcielagos{right:0;transform:scale(.6);transform-origin:top right}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="cv-rosa" aria-hidden="true"></div><div class="cv-murcielagos" aria-hidden="true"></div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Castlevania · Inspirada en Shanoa y la Orden de Ecclesia</p>
+  <h1>La Portadora de Glifos</h1>
+  
+  <p class="lema">«No llevo armas. Llevo marcas. Y cada vez que alguien me ataca, me enseña una nueva.»</p>
+  <div class="tags"><span>Glifos</span><span>Absorción</span><span>Diestra · Siniestra · Espalda</span><span>Uniones de Glifos</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Glifos</button><button type="button" data-p="subs" aria-selected="false">Órdenes del Glifo</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>Los Portadores de Glifos llevan en la piel signos mágicos que se convierten en armas. No cargan con espadas ni arcos: cuando atacan, el glifo de su mano derecha se vuelve una hoja, el de la izquierda una lanza y el de la espalda les da alas o los arrastra hacia un imán.</p><p>Lo que los hace únicos es cómo aprenden. Un Portador <strong>absorbe glifos de los ataques enemigos</strong>: cuando un esqueleto le lanza un hueso o un mago una bola de fuego, puede tragarse ese patrón y quedárselo para siempre. Lleva tres equipados a la vez (<strong>Diestra, Siniestra y Espalda</strong>) y los cambia entre combates.</p><p>Cuando junta dos glifos, desata una <strong>Unión</strong>: un ataque enorme que se paga con <strong>Corazones</strong>.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Destreza + Inteligencia</b></div><div><span>Salvaciones</span><b>Destreza · Inteligencia</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Ninguna (tus glifos son tus armas)</b></div><div><span>Habilidades</span><b>2 de: Acrobacias, Arcanos, Atletismo, Investigación, Percepción, Sigilo</b></div><div><span>Subclase</span><b>Orden del Glifo (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Corazones máx.</th><th>Dados de glifo</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>2 + INT</td><td>1</td><td class="col-f">Glifos, Tres Huecos, Absorber</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>2 + INT</td><td>1</td><td class="col-f">Unión de Glifos, Corazones</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>2 + INT</td><td>1</td><td class="col-f">Orden del Glifo</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>2 + INT</td><td>1</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>3 + INT</td><td>2</td><td class="col-f">Ataque Adicional</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>3 + INT</td><td>2</td><td class="col-f">Rasgo de Orden</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>3 + INT</td><td>2</td><td class="col-f">Cambio Rápido</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>3 + INT</td><td>2</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>4 + INT</td><td>2</td><td class="col-f">Absorción Instintiva</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>4 + INT</td><td>2</td><td class="col-f">Rasgo de Orden</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>4 + INT</td><td>3</td><td class="col-f">Glifos Templados</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>4 + INT</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>5 + INT</td><td>3</td><td class="col-f">Unión Mayor</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>5 + INT</td><td>3</td><td class="col-f">Rasgo de Orden</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>5 + INT</td><td>3</td><td class="col-f">Cuarto Hueco</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>5 + INT</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>6 + INT</td><td>4</td><td class="col-f">—</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>6 + INT</td><td>4</td><td class="col-f">Absorción Perfecta</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>6 + INT</td><td>4</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>6 + INT</td><td>4</td><td class="col-f">Dominus</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Cómo funcionan los glifos</h3><p><strong>Glifos de mano (Diestra y Siniestra).</strong> Son tus armas. Atacar con uno es un ataque normal con la acción de Atacar. Usas Destreza o Inteligencia, la que prefieras, para la tirada de ataque y el daño, y tienes competencia. El número de dados de daño de cada glifo crece con la tabla (columna «Dados de glifo»).</p><p><strong>Glifo de Espalda.</strong> Te da una capacidad de movimiento o de apoyo y no ataca.</p><p><strong>Atacar con las dos manos.</strong> Si llevas glifos de ataque en Diestra y Siniestra, al realizar la acción de Atacar puedes alternar entre ellos ataque a ataque. Sin coste.</p><p><strong>Cambiar glifos.</strong> Cambias los glifos equipados durante un descanso corto, o con Cambio Rápido desde el nivel 7. Puedes conocer cualquier número de glifos.</p></div>
+    <article class="rasgo"><header><h3>Glifos</h3><span class="nivel">Nivel 1</span></header><p>Empiezas conociendo tres glifos de la pestaña Glifos: dos de mano y uno de espalda, con «Fuente: inicial».</p></article><article class="rasgo"><header><h3>Tres Huecos</h3><span class="nivel">Nivel 1</span></header><p>Llevas equipados un glifo en Diestra, otro en Siniestra y otro en Espalda.</p></article><article class="rasgo"><header><h3>Absorber</h3><span class="nivel">Nivel 1</span><span class="coste reaccion">Reacción</span></header><p>Cuando una criatura a 30 pies hace un ataque o usa una capacidad que corresponda a un glifo que no conoces (su «Fuente»), puedes intentar absorberlo. Haz una prueba de Inteligencia (Arcanos) con CD 10 + el desafío de la criatura. Si la superas, aprendes el glifo y, si el ataque iba contra ti, su daño se reduce a la mitad.</p><p>Fuera de combate, durante un descanso corto, puedes absorber el glifo que dejó una criatura recién vencida con CD 10.</p></article><article class="rasgo"><header><h3>Unión de Glifos</h3><span class="nivel">Nivel 2</span><span class="coste accion">Acción</span></header><p>Gastas 2 Corazones y combinas los glifos de Diestra y Siniestra en una Unión. El efecto depende de qué tipo de glifos combines (ver la tabla de Uniones en la pestaña Glifos).</p></article><article class="rasgo"><header><h3>Corazones</h3><span class="nivel">Nivel 2</span></header><p>Tu recurso para las Uniones son los <strong>Corazones</strong>. Tu máximo es tu bonificador de competencia + tu modificador de Inteligencia. Los recuperas todos con un descanso largo. Además, ganas 1 Corazón cada vez que reduces a una criatura a 0 puntos de golpe con un glifo.</p></article><article class="rasgo"><header><h3>Ataque Adicional</h3><span class="nivel">Nivel 5</span></header><p>Atacas dos veces cuando realizas la acción de Atacar.</p></article><article class="rasgo"><header><h3>Cambio Rápido</h3><span class="nivel">Nivel 7</span><span class="coste adicional">Acción adicional</span></header><p>Cambias el glifo de un hueco por otro que conozcas. Una vez por turno.</p></article><article class="rasgo"><header><h3>Absorción Instintiva</h3><span class="nivel">Nivel 9</span></header><p>Tienes ventaja en las pruebas para Absorber, y absorber un ataque dirigido a ti también te da 1 Corazón.</p></article><article class="rasgo"><header><h3>Glifos Templados</h3><span class="nivel">Nivel 11</span></header><p>Tus ataques con glifos de mano cuentan como mágicos y suman +1 a las tiradas de ataque y daño.</p></article><article class="rasgo"><header><h3>Unión Mayor</h3><span class="nivel">Nivel 13</span></header><p>Tus Uniones añaden dos dados más de daño del glifo correspondiente.</p></article><article class="rasgo"><header><h3>Cuarto Hueco</h3><span class="nivel">Nivel 15</span></header><p>Ganas un segundo hueco de Espalda. Los dos glifos de espalda funcionan a la vez.</p></article><article class="rasgo"><header><h3>Absorción Perfecta</h3><span class="nivel">Nivel 18</span></header><p>Cuando absorbes un ataque dirigido a ti, su daño se reduce a 0 en lugar de a la mitad.</p></article><article class="rasgo"><header><h3>Dominus</h3><span class="nivel">Nivel 20</span><span class="coste accion">Acción</span></header><p>Conoces los tres glifos de Dominus. Una vez por descanso largo, gastas todos tus Corazones (al menos 4) y desatas la Unión de Dominus: cada criatura que elijas a 60 pies hace una salvación de Constitución. Sufre 2d10 de daño necrótico por cada Corazón gastado si la falla, o la mitad si la supera. Los Dominus no se pueden absorber ni equipar.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Glifos</h2>
+    <p>«Dados» se refiere a la columna «Dados de glifo» de la tabla: con 2 dados, un glifo de 1d8 inflige 2d8. Cada glifo indica su «Fuente», es decir, de qué enemigos puedes absorberlo.</p>
+    <article class="tecnica"><header><h3>Confodere (mano)</h3><span class="precio">Dados × d8 perforante</span></header><p>Un estoque de luz. Crítico con 19–20. Fuente: inicial, o duelistas y esgrimistas.</p></article><article class="tecnica"><header><h3>Secare (mano)</h3><span class="precio">Dados × d10 cortante</span></header><p>Una espada larga. Fuente: inicial, o guerreros con espada.</p></article><article class="tecnica"><header><h3>Macir (mano)</h3><span class="precio">Dados × d12 contundente</span></header><p>Un mazo pesado. Al impactar puedes empujar al objetivo 10 pies. Pesado: no puedes alternar con él en el mismo turno. Fuente: gigantes, golems y armaduras vivientes.</p></article><article class="tecnica"><header><h3>Hasta (mano)</h3><span class="precio">Dados × d10 perforante</span></header><p>Una lanza con alcance de 10 pies. Fuente: lanceros y caballeros.</p></article><article class="tecnica"><header><h3>Arcus (mano)</h3><span class="precio">Dados × d8 perforante</span></header><p>Un arco de luz con alcance de 150 pies. Fuente: arqueros y tiradores.</p></article><article class="tecnica"><header><h3>Culter (mano)</h3><span class="precio">Dados × d4 perforante, dos veces</span></header><p>Lanzas dos dagas a una o dos criaturas a 30 pies, con una tirada de ataque por daga. Fuente: inicial, o ladrones y asesinos.</p></article><article class="tecnica"><header><h3>Ignis (mano)</h3><span class="precio">Dados × d10 fuego</span></header><p>Una llamarada a 30 pies. Fuente: magos de fuego, demonios y salamandras.</p></article><article class="tecnica"><header><h3>Grando (mano)</h3><span class="precio">Dados × d8 frío</span></header><p>Un fragmento de hielo a 60 pies. El objetivo pierde 10 pies de velocidad hasta el final de su siguiente turno. Fuente: espectros de hielo y magos de escarcha.</p></article><article class="tecnica"><header><h3>Fulgur (mano)</h3><span class="precio">Dados × d10 rayo</span></header><p>Un rayo corto a 15 pies. El objetivo no puede usar reacciones. Fuente: magos del rayo y criaturas de tormenta.</p></article><article class="tecnica"><header><h3>Luminatio (mano)</h3><span class="precio">Dados × d8 radiante</span></header><p>Un haz de luz a 60 pies. Contra no muertos, cada dado es un d12. Fuente: ángeles, sacerdotes y la propia Orden.</p></article><article class="tecnica"><header><h3>Magnes (espalda)</h3><span class="precio">—</span><span class="coste adicional">Acción adicional</span></header><p>Te atraes hacia un objeto metálico o una superficie a 30 pies, o atraes hacia ti un objeto suelto de hasta 10 kg. Fuente: inicial.</p></article><article class="tecnica"><header><h3>Volaticus (espalda)</h3><span class="precio">—</span></header><p>Puedes saltar otra vez en el aire y planear: velocidad de vuelo de 30 pies, pero debes acabar tu turno en el suelo. Fuente: arpías y criaturas aladas.</p></article><article class="tecnica"><header><h3>Scutum (espalda)</h3><span class="precio">—</span><span class="coste reaccion">Reacción</span></header><p>Cuando te atacan, sumas 2 a tu CA contra ese ataque. Una vez por ronda. Fuente: caballeros con escudo.</p></article><article class="tecnica"><header><h3>Refectio (espalda)</h3><span class="precio">—</span><span class="coste adicional">Acción adicional</span></header><p>Recuperas tu bonificador de competencia + tu modificador de Inteligencia de puntos de golpe. Un número de veces igual a tu bonificador de competencia por descanso largo. Fuente: hadas y sanadores.</p></article><article class="tecnica"><header><h3>Paries (espalda)</h3><span class="precio">—</span></header><p>Puedes atravesar puertas y paredes de hasta 1 pie de grosor como si fueran terreno difícil. Fuente: fantasmas.</p></article><div class="caja"><h3>Uniones de Glifos</h3>
+ <p><strong>Arma + arma</strong> (Confodere, Secare, Macir, Hasta, Arcus, Culter): haces un ataque contra cada criatura que elijas a 10 pies (30 pies si alguno es Arcus o Culter). Cada impacto suma los dados de los dos glifos y se duplica.</p>
+ <p><strong>Elemento + elemento</strong> (Ignis, Grando, Fulgur, Luminatio): esfera de 20 pies en un punto a 60 pies. Cada criatura hace una salvación de Destreza: sufre los dados de los dos glifos, duplicados, si la falla, o la mitad si la supera. Si los dos elementos son distintos, mezcla los tipos de daño.</p>
+ <p><strong>Arma + elemento</strong>: durante 1 minuto, tus ataques con el glifo de arma añaden los dados del glifo de elemento, de su tipo de daño.</p>
+ <p><strong>El mismo glifo en las dos manos</strong>: la Unión cuesta 1 Corazón menos.</p></div>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Órdenes del Glifo</h2>
+    <p>Al nivel 3 eliges a qué escuela de glifos perteneces. Obtienes rasgos de Orden a los niveles 3, 6, 10 y 14.</p>
+    <div class="subs"><section class="sub" style="--sc:#e8486a">
+      <header><span class="sub-eyebrow">Orden del Glifo</span><h3>Orden de Ecclesia</h3><p class="sub-fuente">La escuela de Shanoa</p></header>
+      <p class="sub-intro">La Orden te entrenó para ser el recipiente perfecto de los glifos. Equilibras ataque, defensa y Uniones como nadie.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Recipiente de la Orden</strong><p>Tus Uniones cuestan 1 Corazón menos (mínimo 1). Conoces un glifo de espalda adicional.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Pausa entre Glifos</strong><p>Cuando haces una Unión, ganas puntos de golpe temporales iguales a tu nivel.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Memoria del Glifo</strong><p>Al terminar un descanso largo, eliges un glifo que no conozcas pero que hayas visto usar. Lo conoces hasta tu siguiente descanso largo.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Unión Perfecta</strong><p>Una vez por descanso corto, puedes hacer una Unión sin gastar Corazones.</p></div></li></ul></section><section class="sub" style="--sc:#9fb8ff">
+      <header><span class="sub-eyebrow">Orden del Glifo</span><h3>El Tirador de Agartha</h3><p class="sub-fuente">La escuela de Albus</p></header>
+      <p class="sub-intro">Aprendiste un glifo que nadie más quería llevar: un arma de fuego hecha de luz. Disparas, te mueves y vuelves a disparar.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Agartha</strong><p>Conoces el glifo de mano Agartha: dados × d10 de daño perforante a 120 pies. Ignora la media cobertura. Tus ataques a distancia con glifos no tienen desventaja aunque haya enemigos a 5 pies.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Disparo y Salto</strong><p>Después de impactar con un ataque a distancia de glifo, puedes moverte 10 pies sin provocar ataques de oportunidad. Una vez por turno.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Bala Cargada</strong><span class="coste adicional">Acción adicional</span><p>Gastas 1 Corazón: tu siguiente ataque a distancia de glifo este turno es un crítico si impacta.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Lluvia de Luz</strong><span class="coste accion">Acción</span><p>Una vez por descanso corto, haces un ataque a distancia de glifo contra cada criatura que elijas en un cono de 60 pies.</p></div></li></ul></section><section class="sub" style="--sc:#b5a8d6">
+      <header><span class="sub-eyebrow">Orden del Glifo</span><h3>Sombra de Dominus</h3><p class="sub-fuente">La tentación del glifo de Drácula</p></header>
+      <p class="sub-intro">Has rozado los glifos de Dominus antes de tiempo. Su poder sale de la vida, y tú has decidido pagarla.</p>
+      <ul><li><span class="sf-n">Nv. 3</span><div><strong>Precio de Sangre</strong><p>Cuando no te quedan Corazones, puedes pagar cada Corazón de una Unión con 1d10 puntos de golpe. Este daño no se puede reducir.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Hambre de Glifo</strong><p>Cuando haces una Unión, recuperas puntos de golpe iguales a la mitad del daño que inflige a la criatura más dañada.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Dominus Agnus</strong><span class="coste adicional">Acción adicional</span><p>Conoces este glifo de espalda, que puedes equipar: mientras lo llevas, tus glifos de mano infligen 1d8 de daño necrótico adicional.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Dominus Anger</strong><p>Tu rasgo Dominus de nivel 20 llega antes: puedes usarlo desde ahora, gastando al menos 3 Corazones.</p></div></li></ul></section></div>
+    <div class="caja"><h3>Regla opcional: glifos en el entorno</h3><p>El DM puede esconder glifos en ruinas, altares y bibliotecas de la Orden. Un glifo encontrado se aprende con una prueba de Arcanos CD 12 tras 10 minutos de estudio, sin necesidad de absorberlo de un enemigo.</p></div>
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Inteligencia</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p>
+      <div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Inteligencia</label><input type="number" id="mod" value="3" min="-5" max="10"></div>
+      <div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>Dados de glifo</span><b id="dv1">–</b></div><div><span>CD de Absorber</span><b id="dv2">–</b></div><div><span>CD de Unión</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Corazones</h3><p class="sub-t">Desde nivel 2. Ganas 1 al derribar con un glifo.</p>
+          <div class="cuenta" id="cnt-cor"></div><div class="pips" id="pips-cor"></div><div class="btns"><button class="btn" type="button" data-act="r:cor:largo">Descanso largo</button><button class="btn" type="button" data-act="r:cor:1">+1 derribo</button><button class="btn" type="button" data-act="r:cor:-1">Gastar 1</button><button class="btn" type="button" data-act="r:cor:-2">Unión (2)</button></div></div><div class="card"><h3>Unión Perfecta / Lluvia de Luz</h3><p class="sub-t">Si tu Orden lo da: una vez por descanso corto.</p><div class="estado" id="tv-union"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:union:no">Usar</button><button class="btn" type="button" data-act="t:union:si">Descanso corto</button></div></div><div class="card"><h3>Dominus</h3><p class="sub-t">Nivel 20 (14 con Sombra de Dominus). Una vez por descanso largo.</p><div class="estado" id="tv-dom"></div>
+          <div class="btns"><button class="btn" type="button" data-act="t:dom:no">Desatar</button><button class="btn" type="button" data-act="t:dom:si">Descanso largo</button></div></div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "T.dad[L-1]"}, {"v": "'10 + desafío'"}, {"v": "8+P+M"}], "recursos": [{"id": "cor", "n": "Corazones", "max": "L>=2?Math.max(1,P+M):0"}], "contadores": [], "interruptores": [{"id": "union", "si": "Disponible", "no": "Usada"}, {"id": "dom", "si": "Disponible", "no": "Usado"}], "tablas": {"dad": [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

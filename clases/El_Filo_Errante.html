@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Filo Errante — Clase de D&D 5e</title>
+<style>
+  :root{
+    --bg: #0d0f12;
+    --panel: #16191d;
+    --panel-2: #1c2024;
+    --steel: #8a95a1;
+    --iron: #b23a2f;
+    --neon: #3ea8a0;
+    --bone: #e4e1d8;
+    --bone-dim: #a9a49874;
+    --line: #2a2e33;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--bone);
+    font-family:'Crimson Pro', Georgia, serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4,.label,.tag,.btn,.tabbtn,th{
+    font-family:'Oswald', 'Arial Narrow', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  a{color:var(--neon);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:78vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    padding:6vw;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(13,15,18,0.4), rgba(13,15,18,0.95)),
+      repeating-linear-gradient(115deg, #14171b 0px, #14171b 2px, #0d0f12 2px, #0d0f12 40px);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:56px 56px;
+    opacity:0.18;
+    animation: drift 26s linear infinite;
+  }
+  @keyframes drift{
+    0%{ background-position:0 0, 0 0; }
+    100%{ background-position:-56px -56px, -56px -56px; }
+  }
+  .hero-scan{
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--neon), transparent);
+    opacity:0.5;
+    animation: scan 6s ease-in-out infinite;
+  }
+  @keyframes scan{
+    0%,100%{ top:8%; opacity:0; }
+    50%{ top:88%; opacity:0.6; }
+  }
+  .eyebrow{
+    color:var(--iron);
+    font-size:0.85rem;
+    letter-spacing:0.35em;
+    margin-bottom:1rem;
+    z-index:2;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 8vw, 6rem);
+    margin:0;
+    color:var(--bone);
+    z-index:2;
+    line-height:0.95;
+    text-shadow: 0 0 40px rgba(62,168,160,0.15);
+  }
+  .hero h1 span{ color:var(--iron); }
+  .hero .sub{
+    max-width:640px;
+    margin-top:1.4rem;
+    font-size:1.25rem;
+    color:var(--bone-dim);
+    font-style:italic;
+    z-index:2;
+    border-left:2px solid var(--iron);
+    padding-left:1rem;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{ max-width:980px; margin:0 auto; padding:0 6vw; }
+  section{ padding:5rem 0; border-bottom:1px solid var(--line); }
+  h2.section-title{
+    font-size:1.9rem;
+    color:var(--bone);
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    margin-bottom:2rem;
+  }
+  h2.section-title::before{
+    content:"";
+    width:28px; height:2px; background:var(--iron);
+  }
+  .lede{ font-size:1.15rem; color:var(--bone-dim); max-width:70ch; }
+
+  /* ---------- DOSSIER / STATBLOCK ---------- */
+  .dossier{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:3px solid var(--iron);
+    padding:2rem;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:1.6rem;
+  }
+  .dossier .field .label{ color:var(--neon); font-size:0.78rem; margin-bottom:0.35rem; }
+  .dossier .field div.val{ color:var(--bone); font-size:1rem; }
+
+  /* ---------- STANCE SELECTOR (signature element) ---------- */
+  .dial-shell{
+    background:radial-gradient(circle at 30% 20%, #1a1e22, #0d0f12 70%);
+    border:1px solid var(--line);
+    padding:2.4rem;
+    position:relative;
+  }
+  .stance-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(210px,1fr));
+    gap:1rem;
+    margin-top:1.6rem;
+  }
+  .stance-card{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    padding:1.2rem 1.1rem;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    position:relative;
+  }
+  .stance-card .lvl-tag{
+    position:absolute; top:0.7rem; right:0.8rem;
+    font-size:0.68rem; color:var(--bone-dim);
+    font-family:'Oswald',sans-serif;
+  }
+  .stance-card h4{
+    margin:0 0 0.4rem 0;
+    color:var(--steel);
+    font-size:1rem;
+    letter-spacing:0.05em;
+  }
+  .stance-card p{
+    margin:0;
+    font-size:0.92rem;
+    color:var(--bone-dim);
+    display:none;
+  }
+  .stance-card.active{
+    border-color:var(--neon);
+    background:#152023;
+    box-shadow:0 0 0 1px var(--neon) inset, 0 0 24px rgba(62,168,160,0.12);
+  }
+  .stance-card.active h4{ color:var(--neon); }
+  .stance-card.active p{ display:block; margin-top:0.6rem; }
+  .dial-hint{
+    font-family:'Oswald',sans-serif;
+    font-size:0.78rem;
+    color:var(--bone-dim);
+    letter-spacing:0.08em;
+    margin-top:1.4rem;
+  }
+
+  /* ---------- TABLE ---------- */
+  table{ width:100%; border-collapse:collapse; font-family:'Oswald',sans-serif; font-size:0.88rem; }
+  th{ text-align:left; color:var(--iron); padding:0.7rem 0.6rem; border-bottom:2px solid var(--line); font-size:0.75rem; }
+  td{ padding:0.6rem; border-bottom:1px solid var(--line); color:var(--bone-dim); }
+  tr:hover td{ color:var(--bone); background:#141719; }
+
+  /* ---------- FEATURE BLOCKS ---------- */
+  .feature{ margin-bottom:1.8rem; padding-left:1.2rem; border-left:2px solid var(--line); }
+  .feature:hover{ border-left-color:var(--steel); }
+  .feature h4{
+    color:var(--bone); font-size:1.05rem; margin:0 0 0.35rem 0;
+    display:flex; align-items:baseline; gap:0.6rem;
+  }
+  .feature h4 .lvl{ color:var(--iron); font-size:0.78rem; font-family:'Oswald',sans-serif; }
+  .feature p{ margin:0.3rem 0; color:var(--bone-dim); }
+
+  /* ---------- SCHOOL TABS ---------- */
+  .tabs{ display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .tabbtn{
+    background:var(--panel); border:1px solid var(--line); color:var(--bone-dim);
+    padding:0.7rem 1.2rem; cursor:pointer; font-size:0.8rem;
+  }
+  .tabbtn.active{ border-color:var(--iron); color:var(--iron); background:#1a1416; }
+  .school-panel{ display:none; }
+  .school-panel.active{ display:block; }
+  .school-flavor{ font-style:italic; color:var(--steel); margin-bottom:1.6rem; font-size:1.05rem; }
+
+  footer{ padding:3rem 6vw 5rem; color:var(--bone-dim); font-size:0.85rem; text-align:center; }
+
+  @media (max-width:600px){
+    .hero{ padding:8vw 6vw; }
+    section{ padding:3rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-scan"></div>
+  <div class="eyebrow">Clase de Personaje — Nivel 1 a 20</div>
+  <h1>EL FILO<br><span>ERRANTE</span></h1>
+  <p class="sub">"No preguntes de qué mundo vengo. Pregunta cuánto cobro."</p>
+</div>
+
+<div class="wrap">
+
+  <section id="lore">
+    <h2 class="section-title">Quién es</h2>
+    <p class="lede">
+      Nadie sabe qué puerta se abrió, ni por qué se cerró detrás de él. El Filo Errante no lo explica,
+      y ha dejado de intentarlo: la gente de este mundo escucha "otro plano de existencia" del mismo modo
+      que escucha a un borracho hablar de extraterrestres. Así que simplifica. Es un profesional. Cobra por
+      trabajos que requieren un acero de verdad y una cabeza fría, y este mundo —con sus cámaras, sus contratos
+      y sus normas nuevas— resulta que también los necesita.
+    </p>
+    <p class="lede" style="margin-top:1rem;">
+      No llora su mundo perdido en cada escena. Ya se adaptó: sabe pedir un café, sabe qué es un semáforo,
+      sabe que un arma envainada en la calle asusta más que un arma desenvainada en un campo de batalla.
+      Lo único que no ha cambiado es el arma que lleva al cinto, y el modo en que se mueve cuando alguien
+      la desenfunda primero.
+    </p>
+  </section>
+
+  <section id="dossier">
+    <h2 class="section-title">Rasgos Fundamentales</h2>
+    <div class="dossier">
+      <div class="field"><div class="label">Dado de golpe</div><div class="val">d10</div></div>
+      <div class="field"><div class="label">Salvaciones</div><div class="val">Fuerza y Constitución</div></div>
+      <div class="field"><div class="label">Armadura</div><div class="val">Todas las armaduras, escudos</div></div>
+      <div class="field"><div class="label">Armas</div><div class="val">Armas simples y marciales</div></div>
+      <div class="field"><div class="label">Habilidades</div><div class="val">Elige 2: Atletismo, Engaño, Intimidación, Investigación, Perspicacia, Persuasión, Sigilo, Supervivencia</div></div>
+      <div class="field"><div class="label">Equipo inicial</div><div class="val">Tu Arma Vinculada · armadura ligera o media · una muda de ropa de calle que "cuela" · un teléfono de prepago (o el equivalente en tu ambientación) · 2d4 × 10 en efectivo</div></div>
+    </div>
+  </section>
+
+  <section id="estilos">
+    <h2 class="section-title">Estilos de Combate</h2>
+    <p class="lede">
+      Tu técnica no es magia: es kilometraje. Como acción adicional, puedes cambiar entre los Estilos de
+      Combate que conoces. Solo un estilo está activo a la vez (salvo que un rasgo indique lo contrario),
+      y permanece activo hasta que lo cambies o termine el combate.
+    </p>
+    <div class="dial-shell">
+      <div class="stance-grid" id="stanceGrid">
+        <div class="stance-card active" data-s="vanguardia">
+          <span class="lvl-tag">Nv. 1</span>
+          <h4>Estilo Vanguardia</h4>
+          <p>Tus ataques cuerpo a cuerpo con armas en las que tienes competencia infligen +1d4 de daño
+          adicional. Peleas abierto, a propósito: cada golpe busca terminar el intercambio.</p>
+        </div>
+        <div class="stance-card" data-s="guardia">
+          <span class="lvl-tag">Nv. 1</span>
+          <h4>Estilo Guardia</h4>
+          <p>Ganas +2 a la CA y ventaja en salvaciones de Fuerza y Constitución para evitar ser derribado,
+          empujado o agarrado. No es la postura que gana peleas; es la que te asegura seguir en pie para la siguiente.</p>
+        </div>
+        <div class="stance-card" data-s="precision">
+          <span class="lvl-tag">Nv. 3</span>
+          <h4>Estilo Precisión</h4>
+          <p>Tus ataques cuerpo a cuerpo obtienen un golpe crítico con un resultado de 19 o 20 en el dado,
+          e ignoras los efectos de media cobertura. Cortas donde otros solo ven un hueco.</p>
+        </div>
+        <div class="stance-card" data-s="cazador">
+          <span class="lvl-tag">Nv. 6</span>
+          <h4>Estilo Cazador</h4>
+          <p>Tienes ventaja en las tiradas de ataque contra cualquier criatura que no tenga ningún aliado
+          a 3 metros o menos de ella, y tu Percepción pasiva aumenta en 5. Buscas al que se separó del grupo.</p>
+        </div>
+        <div class="stance-card" data-s="corriente">
+          <span class="lvl-tag">Nv. 9</span>
+          <h4>Estilo Corriente</h4>
+          <p>Tu velocidad aumenta en 10 pies, no provocas ataques de oportunidad al alejarte de un enemigo
+          cuerpo a cuerpo, y tienes ventaja en pruebas de Acrobacias. Nunca estás donde te esperan.</p>
+        </div>
+        <div class="stance-card" data-s="tempestad">
+          <span class="lvl-tag">Nv. 12</span>
+          <h4>Estilo Tempestad</h4>
+          <p>Una vez en cada uno de tus turnos, cuando impactes con un ataque cuerpo a cuerpo, puedes hacer
+          de inmediato un ataque adicional (sin gastar tu acción adicional) contra una criatura distinta
+          a 1,5 metros de la primera.</p>
+        </div>
+        <div class="stance-card" data-s="fantasma">
+          <span class="lvl-tag">Nv. 15</span>
+          <h4>Estilo Fantasma</h4>
+          <p>Cuando una criatura haga un ataque cuerpo a cuerpo contra ti, puedes usar tu reacción para
+          retroceder 1,5 metros sin provocar ataques de oportunidad; ese ataque tiene desventaja. Además,
+          tienes ventaja en las pruebas de Sigilo.</p>
+        </div>
+      </div>
+      <div class="dial-hint">▸ toca una postura para ver su efecto</div>
+    </div>
+  </section>
+
+  <section id="combos">
+    <h2 class="section-title">Encadenar Estilos</h2>
+    <p class="lede">
+      Ningún estilo te define por completo: te defines por cómo pasas de uno a otro. Una vez en cada uno de
+      tus turnos, después de activar un Estilo con tu acción adicional, puedes gastar tu <strong>reacción</strong>
+      para activar un segundo Estilo de los que conoces. Si la pareja de estilos activados en ese orden
+      coincide con la tabla de abajo, desatas el Combo correspondiente además de dejar activo el segundo
+      estilo. Para cualquier pareja que no aparezca en la tabla, el DM puede improvisar un efecto menor
+      acorde al espíritu de ambos estilos.
+    </p>
+    <table style="margin-top:1.6rem;">
+      <thead><tr><th>Combo</th><th>Estilos</th><th>Efecto</th></tr></thead>
+      <tbody>
+        <tr><td>Muro de Acero</td><td>Vanguardia → Guardia</td><td>Hasta el inicio de tu siguiente turno, reduces en tu nivel de Filo Errante el daño del próximo ataque que recibas.</td></tr>
+        <tr><td>Represalia</td><td>Guardia → Vanguardia</td><td>Tu próximo ataque este turno contra una criatura que te haya atacado desde el final de tu último turno inflige daño adicional igual a tu bono de competencia.</td></tr>
+        <tr><td>Estocada Letal</td><td>Vanguardia → Precisión</td><td>Tu próximo ataque impactado este turno se considera un golpe crítico.</td></tr>
+        <tr><td>Retirada Táctica</td><td>Guardia → Corriente</td><td>Puedes moverte de inmediato hasta la mitad de tu velocidad sin provocar ataques de oportunidad.</td></tr>
+        <tr><td>Ojo del Cazador</td><td>Precisión → Cazador</td><td>Tu próximo ataque contra una criatura aislada (sin aliados a 3 metros) tiene ventaja y suma 1d6 de daño.</td></tr>
+        <tr><td>Torbellino</td><td>Corriente → Tempestad</td><td>Si el ataque adicional de Tempestad falla, puedes repetirlo de inmediato contra una tercera criatura a 1,5 metros de la segunda.</td></tr>
+        <tr><td>Depredador Silencioso</td><td>Cazador → Fantasma</td><td>Hasta el final de tu siguiente turno, tu primer ataque contra una criatura que no te haya detectado tiene ventaja y esa criatura no puede usar reacciones contra él.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="tabla">
+    <h2 class="section-title">Progresión</h2>
+    <table>
+      <thead><tr><th>Nv.</th><th>Bono Comp.</th><th>Rasgos</th><th>Estilos conocidos</th><th>Ataques</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td>Arma Vinculada, Estilos de Combate, Encadenar Estilos</td><td>2</td><td>1</td></tr>
+        <tr><td>2</td><td>+2</td><td>Aguante</td><td>2</td><td>1</td></tr>
+        <tr><td>3</td><td>+2</td><td>Escuela Elegida, Estilo: Precisión</td><td>3</td><td>1</td></tr>
+        <tr><td>4</td><td>+2</td><td>Mejora de Puntuación de Característica</td><td>3</td><td>1</td></tr>
+        <tr><td>5</td><td>+3</td><td>Ataque Adicional</td><td>3</td><td>2</td></tr>
+        <tr><td>6</td><td>+3</td><td>Rasgo de Escuela, Estilo: Cazador</td><td>4</td><td>2</td></tr>
+        <tr><td>7</td><td>+3</td><td>Instinto Pragmático</td><td>4</td><td>2</td></tr>
+        <tr><td>8</td><td>+3</td><td>Mejora de Puntuación de Característica</td><td>4</td><td>2</td></tr>
+        <tr><td>9</td><td>+4</td><td>Estilo: Corriente</td><td>5</td><td>2</td></tr>
+        <tr><td>10</td><td>+4</td><td>Rasgo de Escuela</td><td>5</td><td>2</td></tr>
+        <tr><td>11</td><td>+4</td><td>Golpe Certero</td><td>5</td><td>2</td></tr>
+        <tr><td>12</td><td>+4</td><td>Mejora de Puntuación de Característica, Estilo: Tempestad</td><td>6</td><td>2</td></tr>
+        <tr><td>13</td><td>+5</td><td>Cambio Libre</td><td>6</td><td>2</td></tr>
+        <tr><td>14</td><td>+5</td><td>Rasgo de Escuela</td><td>6</td><td>2</td></tr>
+        <tr><td>15</td><td>+5</td><td>Voluntad Inquebrantable, Estilo: Fantasma</td><td>7</td><td>2</td></tr>
+        <tr><td>16</td><td>+5</td><td>Mejora de Puntuación de Característica</td><td>7</td><td>2</td></tr>
+        <tr><td>17</td><td>+6</td><td>Maestría de Estilos</td><td>7</td><td>2</td></tr>
+        <tr><td>18</td><td>+6</td><td>Rasgo de Escuela</td><td>7</td><td>2</td></tr>
+        <tr><td>19</td><td>+6</td><td>Mejora de Puntuación de Característica</td><td>7</td><td>2</td></tr>
+        <tr><td>20</td><td>+6</td><td>Leyenda del Filo Errante</td><td>7</td><td>2</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="rasgos">
+    <h2 class="section-title">Rasgos de Clase</h2>
+
+    <div class="feature">
+      <h4>Arma Vinculada <span class="lvl">Nivel 1</span></h4>
+      <p>Al crear tu personaje, define el arma marcial que trajiste contigo y dale un nombre. Es un arma
+      normal en cuanto a daño y propiedades, pero está atada a ti: si la sueltas, es desarmado, o la lanzas,
+      puedes recuperarla en tu mano como parte de cualquier movimiento, siempre que esté a 18 metros o menos.
+      Si es destruida, se reforma junto a ti tras completar un descanso largo. No es un arma mágica —de momento—,
+      pero jamás será solo "una espada más" para nadie que la vea de cerca.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Encadenar Estilos <span class="lvl">Nivel 1</span></h4>
+      <p>Una vez en cada uno de tus turnos, después de activar un Estilo de Combate con tu acción adicional,
+      puedes gastar tu reacción para activar un segundo Estilo que conozcas. Si la pareja coincide con un
+      Combo (ver tabla en "Encadenar Estilos"), desatas su efecto. El segundo estilo pasa a ser tu estilo
+      activo. No puedes usar este rasgo si ya gastaste tu reacción por otro motivo este turno.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Aguante <span class="lvl">Nivel 2</span></h4>
+      <p>Como acción adicional, puedes recuperar 1d10 + tu nivel de Filo Errante en puntos de golpe.
+      Puedes usar este rasgo una vez; recuperas su uso al completar un descanso corto o largo.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Instinto Pragmático <span class="lvl">Nivel 7</span></h4>
+      <p>Has aprendido a improvisar en terreno que no es el tuyo. Elige una habilidad en la que no tengas
+      competencia: la ganas. Además, una vez por descanso corto, puedes añadir tu bono de competencia a
+      cualquier prueba de característica que hagas, aunque no seas competente en ella: a veces basta con
+      no dudar.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Golpe Certero <span class="lvl">Nivel 11</span></h4>
+      <p>Una vez en cada uno de tus turnos, cuando hagas un ataque con arma y no te guste el resultado del
+      dado de daño, puedes volver a tirar ese dado. Debes quedarte con el nuevo resultado.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Cambio Libre <span class="lvl">Nivel 13</span></h4>
+      <p>Cuando uses Encadenar Estilos, la segunda activación ya no cuesta tu reacción. Puedes reservarla
+      para lo que haga falta, y seguir encadenando tus Estilos igual.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Voluntad Inquebrantable <span class="lvl">Nivel 15</span></h4>
+      <p>Tienes ventaja en las tiradas de salvación de muerte y en las tiradas de salvación contra ser
+      asustado. Has estado más solo que esto y sigues aquí.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Maestría de Estilos <span class="lvl">Nivel 17</span></h4>
+      <p>Una vez en cada uno de tus turnos, después de resolver un Combo, puedes activar un tercer Estilo
+      sin coste alguno. Si la pareja formada por el segundo y el tercer estilo también coincide con un
+      Combo, lo desatas igualmente: encadenas dos Combos en el mismo turno.</p>
+    </div>
+
+    <div class="feature">
+      <h4>Leyenda del Filo Errante <span class="lvl">Nivel 20</span></h4>
+      <p>Una vez por descanso largo, como acción adicional, puedes tener activos a la vez todos los Estilos de
+      Combate que conoces durante 1 minuto, sin necesidad de encadenarlos ni gastar tu reacción. Mientras dure, tus
+      ataques con tu Arma Vinculada infligen 1d6 de daño adicional del tipo que elijas al activarlo. Ya no
+      finges adaptarte: este mundo se adapta a ti.</p>
+    </div>
+  </section>
+
+  <section id="escuelas">
+    <h2 class="section-title">Escuelas — Nivel 3</h2>
+    <p class="lede" style="margin-bottom:2rem;">
+      En algún punto, todo mercenario elige cómo se gana la vida. No es una filosofía: es un modelo de negocio.
+    </p>
+
+    <div class="tabs">
+      <button class="tabbtn active" data-t="duelo">Escuela de la Hoja Sola</button>
+      <button class="tabbtn" data-t="contrato">Escuela del Contrato Sellado</button>
+      <button class="tabbtn" data-t="guardian">Escuela del Muro Viviente</button>
+    </div>
+
+    <div class="school-panel active" id="p-duelo">
+      <p class="school-flavor">Cobra por eliminar a una sola persona, y trata cada encargo como un duelo
+      personal, aunque la otra parte no sepa que está en uno.</p>
+      <div class="feature"><h4>Marca del Duelo <span class="lvl">Nv. 3</span></h4>
+        <p>Como acción adicional, marcas a una criatura que puedas ver a 9 metros o menos. Mientras ninguna
+        otra criatura esté a 1,5 metros de ti, tienes ventaja en los ataques contra el objetivo marcado.
+        Mientras estés a 1,5 metros de él, tiene desventaja en los ataques contra cualquiera que no seas tú.
+        La marca dura hasta que marques a otro objetivo o termine el combate.</p></div>
+      <div class="feature"><h4>Riposte <span class="lvl">Nv. 6</span></h4>
+        <p>Cuando tu objetivo marcado falle un ataque cuerpo a cuerpo contra ti, puedes usar tu reacción
+        para hacer un ataque con arma contra él.</p></div>
+      <div class="feature"><h4>Golpe Implacable <span class="lvl">Nv. 10</span></h4>
+        <p>Cuando consigas un golpe crítico contra tu objetivo marcado, en lugar de tirar los dados de daño
+        adicionales del crítico, usa el valor máximo posible.</p></div>
+      <div class="feature"><h4>Lectura del Rival <span class="lvl">Nv. 14</span></h4>
+        <p>Tienes ventaja en las tiradas de salvación contra efectos creados por tu objetivo marcado. Cuando tu objetivo marcado falla un ataque contra ti, ganas +2 a la CA contra él hasta el final del turno.</p></div>
+      <div class="feature"><h4>Duelo a Muerte <span class="lvl">Nv. 18</span></h4>
+        <p>Una vez por descanso largo, como acción, invocas un vínculo que ata a ti y a tu objetivo marcado:
+        durante 1 minuto, ninguno de los dos puede alejarse voluntariamente más de 9 metros del otro (efectos
+        de teletransporte lo ignoran). Mientras el vínculo dure, tienes ventaja en todos los ataques contra
+        él, y él tiene desventaja en los ataques contra cualquiera que no seas tú. El vínculo termina antes
+        si uno de los dos cae a 0 puntos de golpe.</p></div>
+    </div>
+
+    <div class="school-panel" id="p-contrato">
+      <p class="school-flavor">Cobra por resolver problemas ajenos, y ha aprendido que un buen contrato
+      necesita información, apoyo y alguien dispuesto a cubrir la retaguardia.</p>
+      <div class="feature"><h4>Coordinación Táctica <span class="lvl">Nv. 3</span></h4>
+        <p>Como acción adicional, un aliado a 9 metros o menos que pueda verte y oírte gana ventaja en el
+        próximo ataque que haga antes del inicio de tu siguiente turno. Puedes usar este rasgo un número de
+        veces igual a tu bono de competencia; recuperas los usos tras un descanso largo.</p></div>
+      <div class="feature"><h4>Red de Informantes <span class="lvl">Nv. 6</span></h4>
+        <p>Tienes ventaja en las pruebas de Investigación y Persuasión para obtener información sobre una
+        persona o lugar. Además, tras observar a una criatura durante al menos 1 minuto en combate, puedes
+        usar tu reacción para identificar una resistencia, inmunidad o vulnerabilidad al daño que tenga, si
+        posee alguna.</p></div>
+      <div class="feature"><h4>Refuerzo Puntual <span class="lvl">Nv. 10</span></h4>
+        <p>Una vez por descanso largo, puedes hacer una llamada y conseguir que un contacto profesional
+        aparezca en el plazo de 1 hora para ayudarte en una tarea concreta (conducir, vigilar, hackear,
+        cargar peso, hacer de coartada). Usa el bloque de estadísticas de un Esbirro o Explorador, a criterio
+        del DM, y permanece contigo mientras dure el trabajo.</p></div>
+      <div class="feature"><h4>Plan B <span class="lvl">Nv. 14</span></h4>
+        <p>Una vez por descanso corto, cuando un aliado que puedas ver a 9 metros o menos falle una tirada de ataque, salvación o prueba de característica, puedes usar tu reacción para que la repita y se quede con el nuevo resultado.</p></div>
+      <div class="feature"><h4>Compañía Completa <span class="lvl">Nv. 18</span></h4>
+        <p>Una vez por descanso largo, tu llamada trae a un equipo completo en lugar de un solo contacto:
+        el DM y tú acuerdan 2 o 3 aliados temporales adecuados al trabajo, disponibles durante 1 hora.</p></div>
+    </div>
+
+    <div class="school-panel" id="p-guardian">
+      <p class="school-flavor">Cobra por mantener viva a otra persona. En este mundo eso se llama seguridad
+      privada; en el suyo, se llamaba juramento.</p>
+      <div class="feature"><h4>Postura Inquebrantable <span class="lvl">Nv. 3</span></h4>
+        <p>Mientras el Estilo Guardia esté activo, los aliados a 1,5 metros de ti ganan +1 a la CA. Además,
+        elige un tipo de daño al terminar un descanso largo: ganas resistencia a ese tipo de daño hasta tu
+        próximo descanso largo.</p></div>
+      <div class="feature"><h4>Interposición <span class="lvl">Nv. 6</span></h4>
+        <p>Cuando una criatura a 1,5 metros de un aliado que puedas ver sea objetivo de un ataque, puedes
+        usar tu reacción para moverte hasta 1,5 metros (sin provocar ataques de oportunidad) y convertirte
+        tú en el nuevo objetivo, si con ello quedas al alcance del atacante.</p></div>
+      <div class="feature"><h4>Muro Inamovible <span class="lvl">Nv. 10</span></h4>
+        <p>Tienes ventaja en las salvaciones para evitar ser movido, derribado o empujado contra tu voluntad.
+        Las criaturas de tu tamaño o menores no pueden atravesar tu espacio.</p></div>
+      <div class="feature"><h4>Guardián Incansable <span class="lvl">Nv. 14</span></h4>
+        <p>Interposición te permite moverte hasta 4,5 metros en lugar de 1,5, y cuando recibes un ataque redirigido con ella reduces su daño en 1d10 + tu nivel de Filo Errante.</p></div>
+      <div class="feature"><h4>Bastión Errante <span class="lvl">Nv. 18</span></h4>
+        <p>Una vez por descanso largo, como acción, tú y los aliados a 3 metros o menos de ti ganáis
+        resistencia a todo el daño durante 1 minuto o hasta que quedes inconsciente.</p></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>El Filo Errante — homebrew para D&D 5e · uso personal en mesa</footer>
+
+<script>
+  document.querySelectorAll('.stance-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      document.querySelectorAll('.stance-card').forEach(c=>c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.tabbtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.school-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('p-'+btn.dataset.t).classList.add('active');
+    });
+  });
+</script>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadena Escarlata — Clase Homebrew D&D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07090b; --bg-deep:#030405; --panel:#0e1316; --panel-2:#121820;
+    --line:rgba(138,164,179,.16); --ink:#eef2f4; --ink-dim:#a9b8bf; --ink-faint:#67757c;
+    --slate:#8aa4b3; --slate-soft:#c2d6de; --slate-glow:rgba(138,164,179,.28);
+    --scarlet:#c23a3a; --scarlet-soft:#e69a9a; --scarlet-glow:rgba(194,58,58,.32);
+    --gold:#c9a84a; --gold-dim:#8a7233;
+    --display:'Cinzel',serif; --display-deco:'Cinzel Decorative',serif;
+    --body:'EB Garamond',serif; --stamp:'Special Elite',monospace;
+  }
+  *{box-sizing:border-box;} html{scroll-behavior:smooth;}
+  body{margin:0;background:radial-gradient(ellipse 90% 50% at 50% -10%,rgba(138,164,179,.07),transparent 60%),radial-gradient(ellipse 60% 30% at 90% 10%,rgba(201,168,74,.05),transparent 60%),var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--slate-glow);color:var(--bg);}
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px;}
+
+  /* atoms */
+  .divider{display:flex;align-items:center;justify-content:center;gap:18px;margin:56px 0 36px;}
+  .divider .line{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line),transparent);max-width:280px;}
+  .eyebrow{font-family:var(--stamp);letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--slate-soft);display:flex;align-items:center;gap:10px;}
+  .eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--slate);box-shadow:0 0 8px var(--slate);flex-shrink:0;}
+  h1,h2,h3,h4{font-family:var(--display);margin:0;letter-spacing:.01em;color:var(--ink);font-weight:600;}
+
+  /* HERO */
+  .hero{position:relative;padding:86px 0 64px;border-bottom:1px solid var(--line);overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent,transparent 64px,rgba(138,164,179,.025) 64px,rgba(138,164,179,.025) 65px);pointer-events:none;}
+  .license-stamp{position:absolute;top:34px;right:28px;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--stamp);font-size:10.5px;letter-spacing:.12em;padding:9px 13px;transform:rotate(3deg);opacity:.75;text-align:center;line-height:1.7;background:rgba(201,168,74,.03);}
+  .hero-inner{position:relative;text-align:center;}
+  .kicker{font-family:var(--stamp);color:var(--slate-soft);letter-spacing:.32em;text-transform:uppercase;font-size:12px;margin-bottom:18px;}
+  .hero h1{font-family:var(--display-deco);font-size:clamp(2.6rem,6vw,4.4rem);text-shadow:0 0 38px var(--slate-glow);line-height:1.08;}
+  .hero h1 span{color:var(--scarlet);}
+  .hero .sub{font-style:italic;color:var(--ink-dim);font-size:1.2rem;max-width:560px;margin:20px auto 0;}
+  .badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:38px;}
+  .badge{border:1px solid var(--line);background:var(--panel);padding:9px 16px;border-radius:3px;font-family:var(--stamp);font-size:11.5px;letter-spacing:.06em;color:var(--ink-dim);text-transform:uppercase;}
+  .badge b{color:var(--slate-soft);}
+
+  /* LORE */
+  .lore{padding:58px 0 10px;}
+  .lore p{font-size:1.18rem;color:var(--ink-dim);margin:0 0 20px;}
+  .lore p:first-of-type::first-letter{font-family:var(--display-deco);font-size:3.6rem;color:var(--slate);float:left;line-height:.8;padding:6px 10px 0 0;text-shadow:0 0 20px var(--slate-glow);}
+  .lore p.red{color:var(--scarlet-soft);}
+  .lore .signed{font-family:var(--stamp);color:var(--ink-faint);font-size:12.5px;letter-spacing:.06em;text-align:right;margin-top:28px;}
+
+  /* SECTION HEAD */
+  .section-head{text-align:center;margin-bottom:38px;}
+  .section-head h2{font-size:clamp(1.7rem,3.4vw,2.3rem);margin-top:12px;}
+  .section-head .desc{color:var(--ink-dim);max-width:640px;margin:14px auto 0;font-size:1.05rem;}
+
+  /* TABLE */
+  .table-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.2),0 30px 60px -30px rgba(0,0,0,.6);}
+  table{width:100%;border-collapse:collapse;}
+  thead th{font-family:var(--stamp);text-transform:uppercase;font-size:11px;letter-spacing:.1em;color:var(--bg);background:var(--slate);padding:12px 10px;text-align:left;}
+  thead th:first-child{padding-left:18px;}
+  tbody td{padding:10px 10px;border-bottom:1px solid var(--line);font-size:.96rem;color:var(--ink-dim);}
+  tbody td:first-child{padding-left:18px;font-family:var(--stamp);color:var(--slate-soft);width:50px;}
+  tbody tr:nth-child(odd){background:rgba(255,255,255,.012);}
+  tbody tr:hover{background:var(--slate-glow);}
+  tbody tr:hover td{color:var(--ink);}
+  td.feat{color:var(--ink);}
+  .table-foot{font-size:.85rem;color:var(--ink-faint);padding:14px 18px;border-top:1px solid var(--line);font-style:italic;}
+
+  /* FEAT CARDS */
+  .core-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+  .feat-card{position:relative;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--slate);border-radius:3px;padding:22px 24px;}
+  .feat-card .lvl{font-family:var(--stamp);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-soft);display:block;margin-bottom:6px;}
+  .feat-card h4{font-size:1.18rem;margin-bottom:8px;}
+  .feat-card p{margin:0;color:var(--ink-dim);font-size:1rem;}
+  .feat-card p+p{margin-top:10px;}
+  .feat-card ul{margin:8px 0 0;padding-left:18px;color:var(--ink-dim);font-size:1rem;}
+  .feat-card li{margin-bottom:6px;}
+
+  /* COMBAT OPTIONS — coloured block inside feat-card */
+  .combat-block{margin-top:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:14px 16px;}
+  .combat-block h5{font-family:var(--stamp);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-soft);margin:0 0 10px;}
+  .combat-row{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;align-items:start;margin-bottom:8px;}
+  .combat-row:last-child{margin-bottom:0;}
+  .combat-tag{font-family:var(--stamp);font-size:11px;letter-spacing:.06em;color:var(--scarlet-soft);white-space:nowrap;padding-top:2px;}
+  .combat-desc{color:var(--ink-dim);font-size:.97rem;}
+
+  /* CADENAS APRENDIDAS */
+  .chains-intro{text-align:center;padding:60px 0 30px;}
+  .chains-intro h2{font-size:clamp(1.9rem,4vw,2.6rem);margin-top:14px;}
+  .chains-intro p{color:var(--ink-dim);max-width:640px;margin:16px auto 0;}
+  .learn-track{display:flex;gap:0;justify-content:center;margin-top:36px;flex-wrap:wrap;border:1px solid var(--line);border-radius:4px;overflow:hidden;max-width:660px;margin-left:auto;margin-right:auto;}
+  .learn-step{flex:1;min-width:80px;padding:14px 10px;text-align:center;border-right:1px solid var(--line);background:var(--panel);}
+  .learn-step:last-child{border-right:none;}
+  .learn-step .lv{font-family:var(--stamp);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;}
+  .learn-step .n{font-family:var(--display-deco);font-size:1.5rem;color:var(--scarlet);line-height:1;}
+  .learn-step .label{font-family:var(--stamp);font-size:10px;letter-spacing:.06em;color:var(--slate-soft);margin-top:4px;display:block;}
+
+  /* CHAIN CARDS GRID */
+  .chains-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:10px;}
+  .chain-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;position:relative;}
+  .chain-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--scarlet),transparent);}
+  .chain-head{padding:20px 22px 16px;}
+  .chain-head .finger{font-family:var(--stamp);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--scarlet-soft);margin-bottom:6px;display:block;}
+  .chain-head h3{font-size:1.22rem;margin-bottom:4px;}
+  .chain-head .epithet{color:var(--ink-faint);font-style:italic;font-size:.95rem;}
+  .chain-body{padding:0 22px 20px;}
+  .chain-body p{margin:0;color:var(--ink-dim);font-size:.98rem;}
+  .chain-body p+p{margin-top:10px;}
+  .chain-body .restriction{margin-top:12px;border-left:2px solid var(--scarlet);padding:8px 12px;background:rgba(194,58,58,.07);border-radius:0 3px 3px 0;color:var(--scarlet-soft);font-size:.94rem;font-style:italic;}
+  .chain-body ul{margin:8px 0 0;padding-left:18px;color:var(--ink-dim);font-size:.97rem;}
+  .chain-body li{margin-bottom:6px;}
+
+  /* CAPSTONE */
+  .capstone{margin:0 -28px;padding:80px 28px;background:radial-gradient(ellipse 70% 60% at 50% 30%,rgba(194,58,58,.14),transparent 65%),var(--bg-deep);border-top:1px solid rgba(194,58,58,.3);border-bottom:1px solid rgba(194,58,58,.3);text-align:center;}
+  .capstone svg{width:64px;margin:0 auto 20px;display:block;}
+  .capstone h2{font-family:var(--display-deco);font-size:clamp(2rem,5vw,3.2rem);color:var(--scarlet-soft);text-shadow:0 0 40px var(--scarlet-glow);}
+  .capstone .lvl-tag{font-family:var(--stamp);color:var(--gold);letter-spacing:.18em;text-transform:uppercase;font-size:12px;margin-bottom:16px;display:block;}
+  .capstone p{max-width:680px;margin:22px auto 0;color:var(--ink-dim);font-size:1.08rem;text-align:left;}
+  .capstone p:first-of-type{margin-top:28px;}
+
+  /* EXTRAS */
+  .extras{padding:60px 0 20px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .extra-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:22px 24px;}
+  .extra-card h4{font-size:1.05rem;margin-bottom:10px;color:var(--slate-soft);}
+  .extra-card p{margin:0;color:var(--ink-dim);font-size:.96rem;}
+
+  footer{text-align:center;padding:50px 28px 70px;color:var(--ink-faint);font-size:.82rem;font-style:italic;}
+  footer svg{width:34px;margin:0 auto 16px;display:block;opacity:.5;}
+
+  @media(max-width:720px){
+    .chains-grid{grid-template-columns:1fr;}
+    .license-stamp{position:static;margin:0 auto 28px;width:max-content;transform:none;}
+    table{font-size:.85rem;}
+    .extras{grid-template-columns:1fr;}
+    .combat-row{grid-template-columns:1fr;}
+    .learn-track{flex-direction:column;}
+    .learn-step{border-right:none;border-bottom:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="license-stamp">LICENCIA DE CAZADOR<br>CLASE HOMEBREW · D&amp;D 5E<br>Nº 037-CE</div>
+  <div class="wrap hero-inner">
+    <svg style="width:108px;margin:0 auto 22px;display:block;" viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 35C18 8 45 2 60 2C75 2 102 8 118 35C102 62 75 68 60 68C45 68 18 62 2 35Z" stroke="var(--slate)" stroke-width="1.4" opacity="0.75"/>
+      <circle cx="60" cy="35" r="17" fill="none" stroke="var(--slate)" stroke-width="1.4"/>
+      <circle cx="60" cy="35" r="6" fill="var(--scarlet)"/>
+      <g stroke="var(--slate)" stroke-width="1" opacity="0.5">
+        <path d="M60 2V12"/><path d="M60 58V68"/>
+        <path d="M14 35C9 30 6 22 6 22"/><path d="M14 35C9 40 6 48 6 48"/>
+        <path d="M106 35C111 30 114 22 114 22"/><path d="M106 35C111 40 114 48 114 48"/>
+      </g>
+    </svg>
+    <div class="kicker">Clase Completa · Nivel 1–20</div>
+    <h1>CADENA<br><span>ESCARLATA</span></h1>
+    <p class="sub">Una promesa no se rompe. Se cobra, eslabón a eslabón.</p>
+    <div class="badges">
+      <span class="badge">Dado de Golpe <b>1d8</b></span>
+      <span class="badge">Característica Primaria <b>Sabiduría</b></span>
+      <span class="badge">Salvaciones <b>Sab · Con</b></span>
+      <span class="badge">Recurso <b>Puntos de Aura</b></span>
+      <span class="badge">4 Cadenas elegidas <b>al progresar</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- LORE -->
+<section class="lore">
+  <div class="wrap">
+    <p>Algunos pierden una posesión. Tú perdiste un pueblo entero — y con él, el derecho a mirar el mundo sin cuentas pendientes. Lo único que quedó fue la promesa, y el aura, que aprendió a obedecerla.</p>
+    <p>Tus cadenas no son magia prestada: son tu voluntad vuelta eslabón, moldeada por años de entrenamiento y por una furia tan fría que casi parece calma. Cada cadena que aprendes nace de un propósito distinto — apresar, sanar, rastrear, juzgar, robar — y tú eliges cuáles desarrollar, porque ninguna persona puede sostener todas a la vez sin romperse.</p>
+    <p class="red">La mayor parte del tiempo, tus ojos son grises, calculados, quietos. Pero hay un límite — un solo nombre, una sola cara — que basta para teñirlos de escarlata. Cuando eso ocurre, ya no hay negociación. Solo queda cobrar la deuda hasta el último eslabón.</p>
+    <p class="signed">— Manual de Cazadores, anotación sobre juramentos de aura</p>
+  </div>
+</section>
+
+<!-- TABLA -->
+<section class="wrap" id="tabla">
+  <div class="divider">
+    <div class="line"></div>
+    <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="3" fill="var(--slate)"/><circle cx="11" cy="11" r="9" stroke="var(--slate)" stroke-width="1" fill="none" opacity=".5"/></svg>
+    <div class="line"></div>
+  </div>
+  <div class="section-head">
+    <span class="eyebrow" style="justify-content:center;">Progresión</span>
+    <h2>La Cadena, eslabón a eslabón</h2>
+    <p class="desc">A lo largo de 20 niveles, aprendes cuatro Cadenas Nombradas de la lista disponible. El resto de tus rasgos son el núcleo compartido que sostiene cualquier combinación de cadenas que elijas.</p>
+  </div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr><th>Nv.</th><th>Bono</th><th>Rasgos</th><th>PA</th><th>D. Hatsu</th><th>Cadenas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td class="feat">Cadenas Espectrales, PA, Ten, Juramento de Sangre</td><td>2</td><td>1d6</td><td>—</td></tr>
+        <tr><td>2</td><td>+2</td><td class="feat">Gyo</td><td>3</td><td>1d6</td><td>—</td></tr>
+        <tr><td>3</td><td>+2</td><td class="feat">Cadena Aprendida</td><td>4</td><td>1d6</td><td>1</td></tr>
+        <tr><td>4</td><td>+2</td><td class="feat">Mejora de Característica</td><td>5</td><td>1d6</td><td>1</td></tr>
+        <tr><td>5</td><td>+3</td><td class="feat">Ataque Adicional</td><td>6</td><td>1d8</td><td>1</td></tr>
+        <tr><td>6</td><td>+3</td><td class="feat">Cadena Aprendida</td><td>7</td><td>1d8</td><td>2</td></tr>
+        <tr><td>7</td><td>+3</td><td class="feat">Ken</td><td>8</td><td>1d8</td><td>2</td></tr>
+        <tr><td>8</td><td>+3</td><td class="feat">Mejora de Característica</td><td>9</td><td>1d8</td><td>2</td></tr>
+        <tr><td>9</td><td>+4</td><td class="feat">En</td><td>10</td><td>1d8</td><td>2</td></tr>
+        <tr><td>10</td><td>+4</td><td class="feat">Cadena Aprendida</td><td>11</td><td>1d8</td><td>3</td></tr>
+        <tr><td>11</td><td>+4</td><td class="feat">Maestría de Cadenas</td><td>12</td><td>1d10</td><td>3</td></tr>
+        <tr><td>12</td><td>+4</td><td class="feat">Mejora de Característica</td><td>13</td><td>1d10</td><td>3</td></tr>
+        <tr><td>13</td><td>+5</td><td class="feat">Zetsu Reflexivo</td><td>14</td><td>1d10</td><td>3</td></tr>
+        <tr><td>14</td><td>+5</td><td class="feat">Cadena Aprendida</td><td>15</td><td>1d10</td><td>4</td></tr>
+        <tr><td>15</td><td>+5</td><td class="feat">Ira Contenida</td><td>16</td><td>1d10</td><td>4</td></tr>
+        <tr><td>16</td><td>+5</td><td class="feat">Mejora de Característica</td><td>17</td><td>1d10</td><td>4</td></tr>
+        <tr><td>17</td><td>+6</td><td class="feat">Cadena Trascendente</td><td>18</td><td>1d12</td><td>4</td></tr>
+        <tr><td>18</td><td>+6</td><td class="feat">Maestro del Ten</td><td>19</td><td>1d12</td><td>4</td></tr>
+        <tr><td>19</td><td>+6</td><td class="feat">Mejora de Característica</td><td>20</td><td>1d12</td><td>4</td></tr>
+        <tr><td>20</td><td>+6</td><td class="feat">Tiempo de Emperador</td><td>21</td><td>1d12</td><td>4</td></tr>
+      </tbody>
+    </table>
+    <div class="table-foot">PA = Puntos de Aura. D. Hatsu = dado de daño adicional de tus rasgos. CD de Técnica = 8 + bonificador de competencia + modificador de Sabiduría. Cadenas = número de Cadenas Aprendidas que conoces.</div>
+  </div>
+</section>
+
+<!-- RASGOS BASE -->
+<section class="wrap" id="rasgos">
+  <div class="divider">
+    <div class="line"></div>
+    <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="3" fill="var(--slate)"/><circle cx="11" cy="11" r="9" stroke="var(--slate)" stroke-width="1" fill="none" opacity=".5"/></svg>
+    <div class="line"></div>
+  </div>
+  <div class="section-head">
+    <span class="eyebrow" style="justify-content:center;">Núcleo de Clase</span>
+    <h2>Rasgos de Cadena Escarlata</h2>
+    <p class="desc">Los rasgos que comparte cualquier combinación de cadenas. Son la base del juramento, no la naturaleza de él.</p>
+  </div>
+
+  <div class="core-grid">
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Competencia y Equipo</h4>
+      <p><b>Dado de golpe:</b> 1d8. <b>PG a nivel 1:</b> 8 + mod. Con. <b>PG siguientes:</b> 1d8 (o 5) + mod. Con.</p>
+      <p><b>Armadura:</b> ninguna. <b>Armas:</b> sencillas. <b>Herramientas:</b> herramientas de cazador o de ladrón (a elección). <b>Salvaciones:</b> Sabiduría, Constitución. <b>Habilidades:</b> elige dos entre Acrobacias, Atletismo, Perspicacia, Intimidación, Investigación, Percepción, Sigilo y Supervivencia.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Puntos de Aura</h4>
+      <p>Tu cuerpo es un depósito de fuerza vital. Tienes una reserva de Puntos de Aura (PA) indicada en la tabla, que recuperas por completo tras un descanso largo y a la mitad (redondeando hacia arriba) tras un descanso corto.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Ten — Templanza del Aura</h4>
+      <p>Has aprendido a mantener una fina película de aura sobre tu piel. Mientras no lleves armadura ni escudo, tu CA es igual a <b>10 + modificador de Destreza + modificador de Sabiduría</b>.</p>
+      <p>Además, como <b>reacción</b> cuando recibes daño, puedes gastar 1 PA para reducir ese daño en una cantidad igual a tu dado de Hatsu + modificador de Sabiduría.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Cadenas Espectrales</h4>
+      <p>Como parte de una acción de Atacar, conjuras una o más cadenas de aura sólida desde tus dedos. Funcionan como armas cuerpo a cuerpo sutiles y ligeras con un alcance de <b>15 pies</b>, que infligen <b>1d8 de daño de fuerza</b>, usando tu modificador de Destreza o Sabiduría (a elección) para ataque y daño. (Los rasgos que indican 30 pies, como Balanceo, extienden la cadena solo para ese uso.) Regresan a tu mano al final del ataque; desaparecen si quedas inconsciente.</p>
+      <div class="combat-block">
+        <h5>Usos de Combate — todos cuestan 1 PA salvo que se indique</h5>
+        <div class="combat-row">
+          <span class="combat-tag">Atrapar</span>
+          <span class="combat-desc">En vez de infligir daño, el objetivo hace una salvación de Fuerza (CD de Técnica) o queda <b>apresado</b> (CD de Técnica para escapar como acción). Puedes mantener hasta dos criaturas apresadas simultáneamente.</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Desarmar</span>
+          <span class="combat-desc">En vez de infligir daño, el objetivo hace una salvación de Fuerza (CD de Técnica) o suelta un objeto que lleva en la mano. El objeto cae a sus pies o en tus manos (a tu elección).</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Interceptar</span>
+          <span class="combat-desc">Como <b>reacción</b> (no como parte de tu turno), cuando seas objetivo de un ataque cuerpo a cuerpo, interpones una cadena para desviar el golpe. El atacante tiene desventaja en esa tirada de ataque.</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Balanceo</span>
+          <span class="combat-desc"><b>Sin coste de PA:</b> como parte de tu movimiento, anclas una cadena a una superficie sólida a 30 pies y te balanceas hasta ella, ignorando el terreno difícil en la trayectoria. No provoca ataques de oportunidad durante el balanceo.</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Empuje</span>
+          <span class="combat-desc">Tras impactar con un ataque, empujas al objetivo 10 pies en una dirección que elijas, o lo derriba (a tu elección).</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Atar</span>
+          <span class="combat-desc">Gastas 2 PA en lugar de 1. En vez de daño, envuelves los brazos o las piernas del objetivo con cadenas: hace una salvación de Fuerza (CD de Técnica). Si falla, queda apresado <i>y</i> no puede realizar componentes somáticos ni usar objetos con las manos hasta que escape. Escapar requiere una acción y una prueba de Atletismo (CD de Técnica) o que un aliado le ayude.</span>
+        </div>
+        <div class="combat-row">
+          <span class="combat-tag">Contragolpe</span>
+          <span class="combat-desc">Como <b>reacción</b> (1 PA) cuando una criatura a 15 pies de ti te golpea en cuerpo a cuerpo, sacudes una cadena contra ella tras el impacto: inflige daño de fuerza igual a tu dado de Hatsu y la empujas 5 pies lejos de ti. No requiere una tirada de ataque.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Marca de Cacería</h4>
+      <p>Has aprendido a concentrar tu aura sobre un objetivo para analizar su ritmo, sus reflejos y sus puntos débiles en tiempo real. Como <b>acción adicional sin coste de PA</b>, puedes marcar a una criatura que puedas ver (solo una a la vez). Mientras esté marcada:</p>
+      <ul>
+        <li>Tus Cadenas Espectrales le infligen <b>1d6 de daño de fuerza adicional</b>.</li>
+        <li>Tienes ventaja en Perspicacia e Investigación para leer sus intenciones, anticipar sus movimientos o localizarla.</li>
+        <li>Puedes usar la técnica <b>Interceptar</b> contra sus ataques sin gastar PA.</li>
+      </ul>
+      <p>La marca dura hasta que la criatura muera, quede inconsciente, o marques a otra. Puedes cambiar de objetivo marcado una vez por turno como acción adicional.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 1</span>
+      <h4>Juramento de Sangre</h4>
+      <p>Al crear tu personaje, defines tu juramento: la razón última de tu fuerza, expresada en un nombre, un clan o una deuda sin saldar. Este trasfondo no es un requisito para combatir: es una capa de poder adicional que se activa cuando la situación lo justifica.</p>
+      <p>Cuando marcas con <b>Marca de Cacería</b> a una criatura directamente vinculada a tu juramento (a discreción del DM), los beneficios de la marca se potencian:</p>
+      <ul>
+        <li>El daño adicional aumenta a <b>2d6</b> en lugar de 1d6.</li>
+        <li>Si la criatura intenta alejarse (mover fuera de 30 pies de ti), puedes usar tu reacción para lanzar una cadena y reducir su velocidad a 0 hasta el final de su turno, sin gastar PA.</li>
+        <li>Tus salvaciones contra cualquier efecto que ella provoque se realizan con ventaja.</li>
+      </ul>
+      <p>Si no hay ninguna criatura del juramento en el encuentro, Marca de Cacería funciona con normalidad. El juramento amplifica, no habilita.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 2</span>
+      <h4>Gyo — Mirada Concentrada</h4>
+      <p>Como <b>acción adicional</b>, gastas 1 PA para concentrar tu aura en los ojos durante 1 minuto. Mientras dura, tienes ventaja en Percepción para detectar criaturas u objetos ocultos o invisibles, y tienes visión verdadera (solo a efectos de ilusiones y auras mágicas) a 10 pies.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 5</span>
+      <h4>Ataque Adicional</h4>
+      <p>Puedes atacar dos veces, en lugar de una, cada vez que realizas la acción de Atacar en tu turno.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 7</span>
+      <h4>Ken — Aura Total</h4>
+      <p>Como <b>acción adicional</b>, gastas 2 PA para envolver todo tu cuerpo en aura durante 1 minuto. Mientras dura, ganas +1 a la CA y resistencia al daño contundente, perforante y cortante no mágico.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 9</span>
+      <h4>En — Campo de Percepción</h4>
+      <p>Mientras Gyo o Ken estén activos, expandes tu aura en un campo de detección de 15 pies. Puedes sentir la posición exacta de toda criatura dentro de ese radio, aunque esté oculta, invisible o no puedas verla, siempre que no use Zetsu o efecto equivalente para suprimir su aura.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 11</span>
+      <h4>Maestría de Cadenas</h4>
+      <p>Tu dado de Hatsu mejora (ver tabla). Además, cuando impactas con Cadenas Espectrales, puedes gastar 1 PA para añadir a tu elección uno de los usos de Combate de la lista de Cadenas Espectrales <i>sin</i> coste adicional de PA (es decir, el impacto y el efecto de control cuestan juntos solo 1 PA).</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 13</span>
+      <h4>Zetsu Reflexivo</h4>
+      <p>Cuando se te reduzcan los PG a 0 o falles una salvación contra muerte, puedes usar tu <b>reacción</b> (sin coste de PA, una vez por descanso largo) para suprimir por completo tu aura: te vuelves indetectable por sentidos basados en aura y ganas resistencia a todo daño hasta el inicio de tu siguiente turno.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 15</span>
+      <h4>Ira Contenida</h4>
+      <p>Tienes ventaja en las salvaciones contra ser asustado o hechizado. Además, ahora recuperas todos tus Puntos de Aura tras un descanso corto, en lugar de solo la mitad.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 17</span>
+      <h4>Cadena Trascendente</h4>
+      <p>Tu dado de Hatsu mejora de nuevo. Además, una vez en cada uno de tus turnos puedes aplicar uno de los Usos de Combate de Cadenas Espectrales sin gastar PA. Los costes de tus Cadenas Aprendidas no cambian.</p>
+    </div>
+
+    <div class="feat-card">
+      <span class="lvl">Nivel 18</span>
+      <h4>Maestro del Ten</h4>
+      <p>Ya no necesitas gastar PA para usar la reacción de Ten: puedes activarla a voluntad siempre que tengas al menos 1 PA en tu reserva.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CADENAS APRENDIDAS INTRO -->
+<div class="chains-intro wrap">
+  <span class="eyebrow" style="justify-content:center;">Niveles 3 · 6 · 10 · 14</span>
+  <h2>Cadenas Aprendidas</h2>
+  <p>En los niveles 3, 6, 10 y 14, aprendes una <b>Cadena Nombrada</b> de la lista siguiente. Cada una es una técnica distinta, nacida de años de entrenamiento o de una necesidad concreta. No puedes aprender la misma Cadena dos veces. Las cuatro que elijas definirán cómo juegas este personaje — y ninguna partida repetirá la misma combinación.</p>
+  <div class="learn-track">
+    <div class="learn-step"><span class="lv">Nivel</span><span class="n">3</span><span class="label">1ª Cadena</span></div>
+    <div class="learn-step"><span class="lv">Nivel</span><span class="n">6</span><span class="label">2ª Cadena</span></div>
+    <div class="learn-step"><span class="lv">Nivel</span><span class="n">10</span><span class="label">3ª Cadena</span></div>
+    <div class="learn-step"><span class="lv">Nivel</span><span class="n">14</span><span class="label">4ª Cadena</span></div>
+  </div>
+</div>
+
+<!-- CADENAS LISTA -->
+<section class="wrap" id="cadenas">
+  <div class="chains-grid">
+
+    <!-- 1. CADENA CARCELERA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Índice · Prisión</span>
+        <h3>Cadena Carcelera</h3>
+        <span class="epithet">Una jaula que el aura no puede romper</span>
+      </div>
+      <div class="chain-body">
+        <p>Como acción, gastas 3 PA y lanzas la Cadena Carcelera contra una criatura a 30 pies. Hace una salvación de Fuerza (CD de Técnica). Si falla, queda <b>apresada e incapacitada</b> durante 1 minuto (debes mantener la concentración, como en un conjuro). Mientras está apresada así, no puede activar capacidades mágicas ni de aura propias, no puede teleportarse, y cualquier conjuro que intente lanzar falla automáticamente. La criatura puede repetir la salvación al final de cada uno de sus turnos.</p>
+        <p>Puedes cancelar el efecto como acción adicional sin coste.</p>
+        <div class="restriction">
+          <b>Potencia máxima contra el juramento:</b> cuando la Cadena Carcelera atrapa a una criatura vinculada a tu Juramento de Sangre que tengas marcada con Marca de Cacería, la salvación inicial se realiza con desventaja, y las repeticiones al final de su turno también. La cadena sabe a quién ha estado esperando.
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CADENA DE JUICIO -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Meñique · Sentencia</span>
+        <h3>Cadena de Juicio</h3>
+        <span class="epithet">La condena no negocia</span>
+      </div>
+      <div class="chain-body">
+        <p>Como acción, gastas 2 PA y declaras una condición en voz alta («no atacarás a mis aliados», «responderás mis preguntas con verdad», «no intentarás huir»). Una criatura apresada o incapacitada a 30 pies hace una salvación de Constitución (CD de Técnica). Si falla, la condición queda grabada en su aura durante 24 horas.</p>
+        <p>Si la criatura actúa en contra de la condición en cualquier momento, sufre de forma inmediata <b>4d10 de daño de fuerza</b> y la cadena se destruye. El daño escala a 6d10 en nivel 11 y a 8d10 en nivel 17.</p>
+        <p>Solo puedes mantener una condena activa a la vez.</p>
+      </div>
+    </div>
+
+    <!-- 3. CADENA ZAHORÍ -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Corazón · Péndulo</span>
+        <h3>Cadena Zahorí</h3>
+        <span class="epithet">La cadena que nunca miente</span>
+      </div>
+      <div class="chain-body">
+        <p>Sostienes la cadena como un péndulo y la dejas oscilar. Tiene tres funciones, cada una como acción:</p>
+        <ul>
+          <li><b>Localizar (1 PA):</b> nombras una persona, objeto o lugar que hayas visto antes. El péndulo te indica dirección y distancia aproximada, siempre que estén en el mismo plano. Si están bajo un efecto de ocultación mágica, puedes hacer una prueba de Sabiduría (CD del conjuro de ocultación) para detectarlos igualmente.</li>
+          <li><b>Verdad (1 PA):</b> sostienes la cadena frente a alguien que está hablando voluntariamente. El péndulo oscila en verde (verdad) o rojo (mentira). La criatura puede intentar engañar al péndulo con una prueba de Engaño enfrentada a tu Perspicacia pasiva.</li>
+          <li><b>Oráculo (2 PA):</b> formulas una pregunta sobre el presente o el pasado inmediato (no el futuro) que pueda responderse con sí o no. Recibes la respuesta del DM, que siempre es veraz pero puede ser incompleta si la situación es ambigua. Puedes usar esto 3 veces por descanso largo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. CADENA CURATIVA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Anular · Sanación</span>
+        <h3>Cadena Curativa</h3>
+        <span class="epithet">El aura puede cerrar lo que el acero abre</span>
+      </div>
+      <div class="chain-body">
+        <p>Tu aura puede reparar heridas físicas, incluso las tuyas propias. Tienes dos usos:</p>
+        <ul>
+          <li><b>Curación de Urgencia (acción, 2 PA):</b> tocas a una criatura dispuesta. Recupera <b>3d8 + modificador de Sabiduría</b> puntos de golpe. También puedes curar venenos y enfermedades no mágicas gastando 1 PA adicional.</li>
+          <li><b>Estabilización (acción adicional, 1 PA):</b> tocas a una criatura con 0 PG. Queda estabilizada sin necesidad de tirada de muerte.</li>
+        </ul>
+        <p>Puedes usar Curación de Urgencia un número de veces igual a tu modificador de Sabiduría por descanso largo (mínimo 1).</p>
+        <div class="restriction">
+          <b>Anclaje al Corazón (nivel 10, opcional):</b> una vez aprendida esta Cadena, puedes anclarla a tu propio corazón como acción durante un descanso largo. Mientras está anclada, tu cuerpo se estabiliza automáticamente cuando llegas a 0 PG una vez por combate, sin gastar PA. Sin embargo, llevas una condena de Juicio sobre ti mismo: si mueres por daño cuando la cadena está anclada, el daño de esa muerte ignora toda resistencia o inmunidad.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. CADENA LADRONA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Pulgar · Robo</span>
+        <h3>Cadena Ladrona</h3>
+        <span class="epithet">Lo que es tuyo ya no lo es</span>
+      </div>
+      <div class="chain-body">
+        <p>Cuando impactas con tus Cadenas Espectrales, puedes gastar 3 PA para intentar robar una capacidad a tu objetivo. Hace una salvación de Constitución (CD de Técnica). Si falla, copias uno de sus rasgos, acciones especiales o conjuros de nivel 3 o inferior, a elección del DM entre las opciones disponibles. Puedes usar la capacidad robada una vez antes de tu próximo descanso largo, contando como si fueras tú quien la posee (usando tus estadísticas).</p>
+        <p>Solo puedes tener una capacidad robada a la vez. Adquirir una nueva descarta la anterior.</p>
+        <div class="restriction">
+          <b>Robo Permanente:</b> si reduces a 0 PG a una criatura mientras tienes activa su capacidad robada (es decir, antes de haberla usado), el robo se vuelve permanente: el rasgo pasa a ser tuyo para siempre, sujeto a aprobación de la mesa. Solo puedes hacer permanente un rasgo de esta forma.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. CADENA SAGRADA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Índice · Escudo</span>
+        <h3>Cadena Sagrada</h3>
+        <span class="epithet">Lo que perdiste no se puede repetir</span>
+      </div>
+      <div class="chain-body">
+        <p>Has aprendido a usar tus cadenas como barrera protectora para los demás. Tienes tres aplicaciones:</p>
+        <ul>
+          <li><b>Escudo de Reacción (reacción, 1 PA):</b> cuando una criatura a 30 pies de ti recibe daño, interpones una cadena. Esa criatura gana resistencia al daño de ese ataque. Puedes hacerlo aunque la criatura no sepa que la proteges.</li>
+          <li><b>Red Protectora (acción adicional, 2 PA):</b> envuelves a hasta tres criaturas contiguas en cadenas de aura. Todas ellas obtienen +2 a la CA durante 1 minuto o hasta que las abandones.</li>
+          <li><b>Extracción (acción, 2 PA):</b> envías una cadena a una criatura apresada o inmovilizada a 30 pies y la arrastras hasta un espacio libre adyacente a ti, sin provocar ataques de oportunidad en la trayectoria.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 7. CADENA DE RASTREO -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Meñique · Caza</span>
+        <h3>Cadena de Rastreo</h3>
+        <span class="epithet">No hay donde esconderse del aura que conoce tu nombre</span>
+      </div>
+      <div class="chain-body">
+        <p>Has desarrollado la cadena más sutil: una que sigue a tu presa aunque tú no la veas.</p>
+        <ul>
+          <li><b>Marca de Rastreo (acción adicional, 1 PA):</b> cuando impactas con Cadenas Espectrales o tocas a una criatura voluntaria, dejas una marca de aura invisible sobre ella. Puedes rastrear la dirección y distancia de una criatura marcada en cualquier momento, sin gastar acción, mientras estéis en el mismo plano. La marca dura hasta que la criatura muera, te desmaye, o pasen 30 días.</li>
+          <li><b>Teletransporte por Cadena (acción, 3 PA):</b> mientras tengas a alguien marcado, puedes enviar una cadena a través del espacio hasta su posición y aparecer hasta 10 pies de ella (como el conjuro paso brumoso). No funciona si la criatura está en otro plano o bajo efectos de protección contra adivinación.</li>
+          <li><b>Red de Marcas:</b> puedes mantener un número de marcas simultáneas igual a tu modificador de Sabiduría (mínimo 1).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 8. COLMILLOS DE CADENA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Todos los dedos · Tormenta</span>
+        <h3>Colmillos de Cadena</h3>
+        <span class="epithet">Ocho brazos y una sola voluntad</span>
+      </div>
+      <div class="chain-body">
+        <p>Has aprendido a manifestar múltiples cadenas simultáneamente, convirtiéndote en un torbellino de eslabones.</p>
+        <ul>
+          <li><b>Latigazo Múltiple (acción, 2 PA):</b> envías hasta cuatro cadenas contra hasta cuatro objetivos distintos dentro de 30 pies. Realiza una tirada de ataque separada para cada uno. Cada impacto inflige 1d6 de daño de fuerza (no el dado de 1d8 base). No puedes combinar este ataque con los Usos de Combate de Cadenas Espectrales.</li>
+          <li><b>Muro de Eslabones (acción, 2 PA):</b> anclas múltiples cadenas en un área de 10 × 10 pies dentro de 30 pies, creando terreno difícil hasta el inicio de tu siguiente turno. Toda criatura que intente moverse a través del muro hace una salvación de Destreza (CD de Técnica) o queda apresada hasta el final de su turno.</li>
+          <li><b>Tormenta de Cadenas (acción, 4 PA):</b> liberas todas tus cadenas en un radio de 15 pies. Todas las criaturas en el área (excepto tú) hacen una salvación de Destreza (CD de Técnica): si fallan, sufren 4d8 de daño de fuerza y quedan derribadas; si tienen éxito, la mitad de daño y permanecen de pie. Utilizable una vez por descanso largo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 9. CADENA INVISIBLE -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Zetsu · Sombra</span>
+        <h3>Cadena Invisible</h3>
+        <span class="epithet">Lo que no se ve no se puede esquivar</span>
+      </div>
+      <div class="chain-body">
+        <p>Has aprendido a recubrir tus cadenas con Zetsu, suprimiendo su aura hasta volverlas indetectables a ojos, hechizos y sentidos de aura. Para quien no pueda percibir físicamente los eslabones, no existen.</p>
+        <ul>
+          <li><b>Ataque Invisible (1 PA):</b> cuando realizas un ataque con Cadenas Espectrales, puedes suprimir su aura en el instante del lanzamiento. El objetivo no puede reaccionar ante el ataque aunque te vea: no puede usar reacciones ni rasgos de esquiva activados por ataques cuerpo a cuerpo antes de que el ataque se resuelva.</li>
+          <li><b>Trampa de Cadena (acción, 2 PA):</b> anclas una o varias cadenas invisibles en un área de 10 pies de radio dentro de 30 pies. Las cadenas se activan cuando una criatura que no elijas entra en el área: hace una salvación de Destreza (CD de Técnica) o queda apresada y te alertas mentalmente de su presencia. La trampa dura hasta 1 hora, hasta que se active, o hasta que uses esta habilidad de nuevo.</li>
+          <li><b>Estrangulamiento Silencioso (2 PA):</b> si una criatura está apresada por cualquier cadena tuya, puedes gastarlos como acción adicional para aplicar Zetsu directamente a su cuello. Debe superar una salvación de Constitución (CD de Técnica) o queda silenciada (no puede hablar ni lanzar conjuros con componente verbal) durante 1 minuto.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 10. CADENA MALDITA -->
+    <div class="chain-card">
+      <div class="chain-head">
+        <span class="finger">Dedo Índice · Maldición</span>
+        <h3>Cadena Maldita</h3>
+        <span class="epithet">La deuda no para de crecer</span>
+      </div>
+      <div class="chain-body">
+        <p>Has aprendido a impregnar tus cadenas con aura corrompida, dejando una marca que debilita al objetivo con el paso del tiempo — como si su propio nen empezara a darse la vuelta contra él.</p>
+        <ul>
+          <li><b>Marca Corrosiva (1 PA):</b> cuando impactas con Cadenas Espectrales, puedes marcar al objetivo con aura corrosiva. Al inicio de cada uno de sus turnos, sufre daño de fuerza igual a tu dado de Hatsu. La marca dura 1 minuto o hasta que el objetivo reciba curación mágica (una curación mágica elimina la marca además de recuperar PG). Solo puedes mantener una marca activa a la vez.</li>
+          <li><b>Contagio de Aura (2 PA):</b> mientras un objetivo tenga una Marca Corrosiva activa, como acción adicional puedes transferirla a otra criatura a 10 pies del objetivo marcado. El nuevo objetivo hace una salvación de Constitución (CD de Técnica); si falla, la marca pasa a él. Si tiene éxito, la marca original se mantiene donde estaba.</li>
+          <li><b>Detonación de Marca (acción, 3 PA):</b> haces estallar la Marca Corrosiva de una criatura que puedas ver dentro de 60 pies. La marca se destruye e inflige de golpe todo el daño que habría infligido durante los próximos 3 turnos (3 × tu dado de Hatsu). La criatura hace una salvación de Constitución (CD de Técnica) para recibir solo la mitad.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CAPSTONE -->
+<section class="capstone">
+  <svg viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 35C18 8 45 2 60 2C75 2 102 8 118 35C102 62 75 68 60 68C45 68 18 62 2 35Z" stroke="var(--scarlet)" stroke-width="1.6"/>
+    <circle cx="60" cy="35" r="17" fill="none" stroke="var(--scarlet)" stroke-width="1.6"/>
+    <circle cx="60" cy="35" r="7" fill="var(--scarlet)"/>
+  </svg>
+  <span class="lvl-tag">Nivel 20 · Capstone</span>
+  <h2>Tiempo de Emperador</h2>
+  <p>Una vez por descanso largo, como <b>acción adicional</b>, tus ojos se tiñen de escarlata. Durante <b>1 minuto</b> tu dominio del aura alcanza su pico absoluto:</p>
+  <p>— Tus Cadenas Espectrales cuentan como armas mágicas +2 y su dado de Hatsu se <b>duplica</b>.<br>
+  — Tus Cadenas Aprendidas no cuestan Puntos de Aura.<br>
+  — Tu Marca de Cacería activa los beneficios potenciados de <b>Juramento de Sangre</b> sobre cualquier criatura que marques, no solo las vinculadas al trasfondo: durante este minuto, todo enemigo es la deuda.<br>
+  — Si tienes la <b>Cadena de Juicio</b>, el daño de la condena se convierte en muerte instantánea (tirada de muerte fallada automáticamente) en lugar de daño numérico.<br>
+  — Si tienes la <b>Cadena Ladrona</b>, puedes intentar robar una capacidad sin coste de PA una vez por turno.</p>
+  <p>Al terminar el efecto, ganas <b>dos niveles de Agotamiento</b> si no has descansado desde la activación. Ningún poder se cobra sin precio — ni siquiera el tuyo.</p>
+</section>
+
+<!-- EXTRAS -->
+<section class="wrap">
+  <div class="divider">
+    <div class="line"></div>
+    <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="3" fill="var(--slate)"/><circle cx="11" cy="11" r="9" stroke="var(--slate)" stroke-width="1" fill="none" opacity=".5"/></svg>
+    <div class="line"></div>
+  </div>
+  <div class="extras">
+    <div class="extra-card">
+      <h4>Construcción Rápida</h4>
+      <p>Sabiduría debería ser tu característica más alta, seguida de Destreza. Elige el trasfondo Forastero o Ermitaño. Combinaciones de ejemplo: <b>Carcelera + Juicio</b> (control de combate: atrapa y condena a cualquier enemigo); <b>Zahorí + Rastreo</b> (investigador imparable dentro y fuera del combate); <b>Curativa + Colmillos</b> (combatiente versátil con soporte); <b>Ladrona + Carcelera</b> (inmoviliza, roba la habilidad que necesitas y úsala); <b>Invisible + Maldita</b> (envenena desde las sombras sin que puedan reaccionar, detona al salir).</p>
+    </div>
+    <div class="extra-card">
+      <h4>Multiclase</h4>
+      <p><b>Prerrequisito:</b> Sabiduría 13. <b>Competencias ganadas al multiclasificar:</b> armas sencillas. Tu reserva de Puntos de Aura se calcula solo con tus niveles de Cadena Escarlata. Tus Cadenas Aprendidas se aprenden solo con niveles de Cadena Escarlata (los niveles de multiclase no te dan acceso a nuevas cadenas).</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <svg viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 35C18 8 45 2 60 2C75 2 102 8 118 35C102 62 75 68 60 68C45 68 18 62 2 35Z" stroke="var(--slate)" stroke-width="1.4"/>
+    <circle cx="60" cy="35" r="6" fill="var(--scarlet)"/>
+  </svg>
+  Contenido no oficial creado por aficionados para uso personal en mesas de Dungeons &amp; Dragons 5ª edición, inspirado en Kurapika y el sistema de Nen de Hunter × Hunter (Yoshihiro Togashi).
+</footer>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

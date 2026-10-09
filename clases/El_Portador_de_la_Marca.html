@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Portador de la Marca — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#c9a84c;--acc2:#ecd9a0;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:Georgia,serif;--f-body:Georgia,serif;--f-label:Georgia,serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.caja ul{margin:6px 0 10px 20px}.caja li{margin-bottom:4px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+:root{--f-title:'Cormorant Garamond',Georgia,serif;--f-body:'Spectral',Georgia,serif;--f-label:'Cinzel','Trajan Pro',Georgia,serif;--bg:#0c0b0a;--card:#16130f;--card2:#1e1a14;--ink:#efe6d4;--dim:#a99d86;--acc:#c8a24a;--acc2:#f0dd9a;--line:rgba(239,230,212,.09);--line2:rgba(200,162,74,.30);--navbg:rgba(12,11,10,.93);--sel:rgba(200,162,74,.10);--glow:#8a6a2a;}
+
+body{background:linear-gradient(180deg,color-mix(in srgb,var(--glow,#8a6a2a) 22%,transparent),transparent 420px),var(--bg)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 78px,color-mix(in srgb,var(--acc) 10%,transparent) 78px 79px)}
+.hero h1{font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-shadow:0 2px 0 #000,0 0 26px color-mix(in srgb,var(--glow,#8a6a2a) 50%,transparent)}
+.hero{border-bottom:1px solid var(--line2);background:radial-gradient(ellipse 60% 100% at 50% 0%,color-mix(in srgb,var(--glow,#8a6a2a) 18%,transparent),transparent 70%)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--acc) 0 14px,transparent 14px 22px);opacity:.35}
+.eb-marca{position:absolute;top:18px;left:50%;width:300px;height:300px;transform:translateX(-50%);z-index:-1;pointer-events:none;opacity:.14}
+h2::before{content:"❖";margin-right:10px;color:var(--acc)}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="eb-marca" viewBox="0 0 200 200" aria-hidden="true" style="color:var(--acc)"><g fill="none" stroke="currentColor" stroke-width="2"><polygon points="100,10 178,55 178,145 100,190 22,145 22,55"/><polygon points="100,38 154,69 154,131 100,162 46,131 46,69" opacity=".6"/><path d="M100 38 L100 162 M46 69 L154 131 M154 69 L46 131" opacity=".5"/><circle cx="100" cy="100" r="18"/><path d="M100 82 q22 8 0 36 q-22 -8 0 -36" opacity=".8"/></g></svg>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Eberron · Casas con Marca del Dragón</p>
+  <h1>El Portador de la Marca</h1>
+  <p class="lema">«La marca no te hace mejor que nadie. Te hace responsable de lo que tu Casa le debe al mundo.»</p>
+  <div class="tags"><span>Marca del Dragón</span><span>Pulsos</span><span>Fragmento de Dragón</span><span>Casa y linaje</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Dones</button><button type="button" data-p="subs" aria-selected="false">Marcas</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>En Khorvaire, las Casas con Marca del Dragón son las que sostienen el mundo moderno: hacen que los barcos naveguen, que las armas se forjen, que los heridos se curen. La <strong>Marca del Dragón</strong> es un dibujo que nace en la piel de ciertos herederos y que despierta, con la edad, un poder concreto y siempre útil. No es un don heroico: es una herencia de oficio. Quien la porta responde ante su Casa.</p><p>El Portador de la Marca es la clase de ese heredero. Lleva una <strong>Marca</strong> (Tormenta, Centinela o Curación) que define sus Dones, y un recurso, los <strong>Pulsos de la Marca</strong>, que se recargan <em>cuando el portador pone la Marca al servicio de otros</em>: cuando protege a un aliado, cura a quien lo necesita o abre camino a la compañía. Es una clase de oficio y de intriga, donde la reputación de la Casa pesa tanto como la espada.</p><p>No hay penalizaciones pasivas. La Marca no castiga, y la Casa no exige nada que el portador no quiera dar. Pero un buen portador sabe que el poder de la Marca sirve a los demás, y el juego premia exactamente eso.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Carisma + Constitución</b></div><div><span>Salvaciones</span><b>Constitución · Carisma</b></div><div><span>Armadura</span><b>Ligera, media, escudos</b></div><div><span>Armas</span><b>Sencillas, marciales ligeras</b></div><div><span>Habilidades</span><b>3 de: Persuasión, Perspicacia, Investigación, Historia, Arcanos, Percepción, Engaño, Intimidación</b></div><div><span>Subclase</span><b>Marca (nivel 1)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Pulsos máx.</th><th>Rayo de Marca</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>4</td><td>2d6</td><td class="col-f">Marca del Dragón, Pulsos, Fragmento de Dragón</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>4</td><td>2d6</td><td class="col-f">Casa y Contactos, Clientes de la Casa</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>4</td><td>2d6</td><td class="col-f">—</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>4</td><td>2d6</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>5</td><td>2d8</td><td class="col-f">Marca Mayor</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>5</td><td>2d8</td><td class="col-f">Rasgo de Marca</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>5</td><td>2d8</td><td class="col-f">Marca Heredada</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>5</td><td>2d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>8</td><td>3d8</td><td class="col-f">Marca Intensa</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>8</td><td>3d8</td><td class="col-f">Rasgo de Marca</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>8</td><td>3d8</td><td class="col-f">Resonancia Mayor</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>8</td><td>3d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>9</td><td>4d8</td><td class="col-f">Casa en Pie, Juramento de Casa</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>9</td><td>4d8</td><td class="col-f">Rasgo de Marca</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>9</td><td>4d8</td><td class="col-f">Voluntad del Dragón</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>9</td><td>4d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>10</td><td>5d8</td><td class="col-f">Marca de Siberys</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>10</td><td>5d8</td><td class="col-f">—</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>10</td><td>5d8</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>10</td><td>5d8</td><td class="col-f">Heredero Supremo</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Marca del Dragón</h3><p>Al nivel 1 eliges tu <strong>Marca</strong>: Tormenta (Casa Lyrandar), Centinela (Casa Deneith) o Curación (Casa Jorasco). Tu Marca determina el tipo de daño de tu Rayo de Marca y te da rasgos a los niveles 1, 6, 10 y 14. Que tengas Marca no significa que debas pertenecer a esa Casa: puedes ser un heredero aberrante, o un portador exiliado, o alguien cuya Casa dejaste.</p></div><div class="caja"><h3>Pulsos</h3><p>Tu recurso son los <strong>Pulsos de la Marca</strong>. Tu máximo viene en la tabla. Los recuperas todos con un descanso largo y la mitad con uno corto.</p><p>Ganas 1 Pulso, una vez en cada uno de tus turnos, cuando tu Marca ayuda a otro: cuando usas un Don para proteger, curar o apoyar a un aliado, o cuando un aliado impacta o salva gracias a tu Don. También ganas 1 Pulso cuando impactas con tu Rayo de Marca a una criatura hostil por primera vez en cada ronda.</p><p>La CD de tus Dones es 8 + tu bonificador de competencia + tu modificador de Carisma.</p></div><div class="caja"><h3>Fragmento de Dragón</h3><p>Llevas un <strong>Fragmento de Dragón</strong> engastado como foco: una esquirla de las cuencas de Siberys. Mientras lo tengas, la CD de tus Dones aumenta en 1. Una vez por descanso largo, sosteniéndolo durante un descanso corto, recuperas 2 Pulsos adicionales. Si lo pierdes, puedes conseguir otro con un día de descanso y 100 po de materiales.</p></div><div class="caja"><h3>Solo el Portador: Clientes de la Casa</h3><p>Tu Marca existe para servir. Al final de cada descanso largo nombras a hasta 3 aliados como tus <strong>Clientes</strong>. Tus Dones de Marca llegan a un Cliente <strong>a cualquier distancia, en el mismo plano, sin necesidad de verlo</strong>. Cuando un Cliente tuyo impacta o supera una salvación, ganas 1 Pulso (una vez por ronda). El Portador es la única clase que presta su poder como un servicio de Casa: no lo ejecuta, lo entrega.</p></div><article class="rasgo"><header><h3>Casa y Contactos</h3><span class="nivel">Nivel 2</span></header><p>Tu Casa te da una red de contactos y recursos. Tienes ventaja en las pruebas de Persuasión, Perspicacia e Investigación cuando las haces con personas de tu Casa, o con quienes conocen tu apellido. Una vez por descanso largo puedes pedir un favor a la Casa: alojamiento seguro, un transporte, una carta de presentación o información de su red (a criterio del DM, en un día).</p></article><article class="rasgo"><header><h3>Clientes de la Casa</h3><span class="nivel">Nivel 2</span></header><p>Designas Clientes (ver Solo el Portador). Tus Dones de Marca que alcanzan a un aliado pueden alcanzar a un Cliente sin importar la distancia.</p></article><article class="rasgo"><header><h3>Marca Mayor</h3><span class="nivel">Nivel 5</span></header><p>Tu Marca despierta. Tus Dones de Marca ganan un efecto mejorado, que se indica en cada uno, y tu Rayo de Marca puede afectar a dos criaturas a la vez (dividiendo el dado).</p></article><article class="rasgo"><header><h3>Marca Heredada</h3><span class="nivel">Nivel 7</span></header><p>Tu Rayo de Marca y tus Dones pueden originarse en el espacio de un Cliente que veas, y no necesitas gastar un Pulso si el objetivo se encuentra a 5 pies de él.</p></article><article class="rasgo"><header><h3>Marca Intensa</h3><span class="nivel">Nivel 9</span></header><p>Tu máximo de Pulsos aumenta en 2. Tu Rayo de Marca puede afectar a tres criaturas a la vez y los Dones que alcanzan a un solo aliado pueden alcanzar a dos.</p></article><article class="rasgo"><header><h3>Resonancia Mayor</h3><span class="nivel">Nivel 11</span></header><p>Tu Resonancia cuesta 1 Pulso en lugar de 2 y dura 1 minuto.</p></article><article class="rasgo"><header><h3>Casa en Pie</h3><span class="nivel">Nivel 13</span></header><p>Una vez más por descanso largo, puedes pedir un favor a la Casa. Además, un aliado a 30 pies de ti puede gastar sus propios dados de golpe como acción adicional para curarse, sumando tu modificador de Carisma a cada dado.</p></article><article class="rasgo"><header><h3>Juramento de Casa</h3><span class="nivel">Nivel 13</span><span class="coste accion">Acción</span></header><p>Una vez por descanso largo, como acción, un Cliente recupera la mitad de sus puntos de golpe máximos y quita una condición (cegado, asustado, envenenado, aturdido), sin importar la distancia.</p></article><article class="rasgo"><header><h3>Voluntad del Dragón</h3><span class="nivel">Nivel 15</span></header><p>Tienes ventaja en las salvaciones contra efectos de encantamiento y de miedo, y resistencia al daño psíquico.</p></article><article class="rasgo"><header><h3>Marca de Siberys</h3><span class="nivel">Nivel 17</span></header><p>Tu Marca se convierte en una Marca de Siberys. Una vez por turno, un Don de Marca no te cuesta Pulsos. Tus Rayos de Marca ignoran resistencias al tipo de daño de tu Marca.</p></article><article class="rasgo"><header><h3>Heredero Supremo</h3><span class="nivel">Nivel 20</span></header><p>Tu máximo de Pulsos aumenta en 4. Al inicio de cada uno de tus turnos en combate ganas 1 Pulso. Tus Dones afectan al doble de criaturas.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Dones de Marca</h2>
+    <p>Estos Dones son comunes a todas las Marcas. Cada Marca añade además los suyos (pestaña Marcas). El tipo de daño de tus Dones es el de tu Marca: relámpago (Tormenta), fuerza (Centinela) o radiante (Curación).</p>
+    <article class="tecnica"><header><h3>Rayo de Marca</h3><span class="precio">1 Pulso</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 1</span></header><p>Un rayo de energía de la Marca contra una criatura a 60 pies: ataque a distancia con hechizo (usa Carisma). Si impacta, inflige el dado de la tabla (Rayo de Marca) de daño del tipo de tu Marca. Marca Mayor: puede afectar a dos criaturas.</p></article><article class="tecnica"><header><h3>Marca Revelada</h3><span class="precio">1 Pulso</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 1</span></header><p>Tu marca resplandece durante 1 minuto: emites luz brillante 10 pies y tenue otros 10. Tienes ventaja en las pruebas de Persuasión e Intimidación con quienes conozcan las Casas.</p></article><article class="tecnica"><header><h3>Mano de la Casa</h3><span class="precio">1 Pulso</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 1</span></header><p>Un aliado a 30 pies gana puntos de golpe temporales iguales a tu nivel de clase + tu modificador de Carisma. Marca Mayor: dura hasta tu siguiente descanso corto.</p></article><article class="tecnica"><header><h3>Sello de la Casa</h3><span class="precio">1 Pulso</span><span class="coste reaccion">Reacción</span><span class="nivel">Desde nivel 2</span></header><p>Cuando un aliado a 30 pies es objetivo de un ataque, el atacante tiene desventaja. Si el ataque falla, ganas 1 Pulso. Una vez por ronda.</p></article><article class="tecnica"><header><h3>Resonancia</h3><span class="precio">2 Pulsos</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 3</span></header><p>Hasta 3 aliados a 30 pies, y tú mismo, tenéis ventaja en vuestra siguiente salvación durante 1 minuto. Marca Mayor: o en su siguiente tirada de ataque.</p></article><article class="tecnica"><header><h3>Fragmento Ardiente</h3><span class="precio">2 Pulsos</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 3</span></header><p>Tu Fragmento de Dragón arde: tu siguiente impacto con arma o Rayo de Marca antes de tu siguiente turno inflige 2d6 de daño adicional del tipo de tu Marca.</p></article><article class="tecnica"><header><h3>Voz de la Casa</h3><span class="precio">1 Pulso</span><span class="coste minuto">1 minuto</span><span class="nivel">Desde nivel 3</span></header><p>Haces una petición a tus contactos de Casa: durante 10 minutos usas tu apellido como influencia y tienes ventaja en las pruebas de Persuasión con funcionarios, guardias y mercaderes.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Marcas del Dragón</h2>
+    <p>Al nivel 1 eliges tu Marca. Obtienes rasgos de Marca a los niveles 1, 6, 10 y 14.</p>
+    <div class="subs"><section class="sub" style="--sc:#6fa8ff"><header><span class="sub-eyebrow">Marca</span><h3>Marca de la Tormenta</h3><p class="sub-fuente">Casa Lyrandar · el viento y el trueno</p></header><p class="sub-intro">La Marca de los navegantes. Con ella domas el viento, empujas barcos y llamas al trueno. Tu Rayo de Marca inflige daño de relámpago.</p><ul><li><span class="sf-n">Nv. 1</span><div><strong>Soplo de Lyrandar</strong><span class="coste adicional">Acción adicional</span><p>Pagas 1 Pulso: tú o un aliado a 30 pies ganáis +20 pies de velocidad y no provocáis ataques de oportunidad hasta el final de este turno. Marca Mayor: dura 1 minuto.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Aliento de Tormenta</strong><span class="coste accion">Acción</span><p>Pagas 2 Pulsos: un cono de 30 pies de viento. Cada criatura hace una salvación de Constitución o sufre 4d6 de daño de trueno y es empujada 10 pies.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Navegar la Tormenta</strong><span class="coste accion">Acción</span><p>Pagas 2 Pulsos y vuelas con tu velocidad durante 1 minuto (concentración). Puedes llevar contigo a un aliado dispuesto de tu tamaño o menor.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Ojo de la Tormenta</strong><span class="coste accion">Acción</span><p>Una vez por descanso largo, creas un aura de 20 pies durante 1 minuto: tú y tus aliados tenéis resistencia al relámpago y al trueno, y los hostiles tienen desventaja en las tiradas de ataque a distancia.</p></div></li></ul></section><section class="sub" style="--sc:#c9a84c"><header><span class="sub-eyebrow">Marca</span><h3>Marca del Centinela</h3><p class="sub-fuente">Casa Deneith · el escudo de la Casa</p></header><p class="sub-intro">La Marca de los guardianes. Con ella tu cuerpo es un muro. Tu Rayo de Marca inflige daño de fuerza.</p><ul><li><span class="sf-n">Nv. 1</span><div><strong>Interposición</strong><span class="coste reaccion">Reacción</span><p>Cuando un aliado a 5 pies de ti es impactado, pagas 1 Pulso y reduces el daño en 1d10 + tu modificador de Carisma. Marca Mayor: lo reduces a 0 si el daño es inferior a tu nivel.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Guardia Sincronizada</strong><p>La primera vez en cada ronda que un aliado a 10 pies es impactado, ganas 1 Pulso. Además, tus aliados a 5 pies de ti tienen +1 de CA.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Muralla de Escudos</strong><span class="coste accion">Acción</span><p>Pagas 2 Pulsos: hasta el inicio de tu siguiente turno, todos los aliados a 10 pies ganan +2 de CA y resistencia al daño de armas no mágicas.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Centinela Inmortal</strong><span class="coste reaccion">Reacción</span><p>Una vez por descanso largo, cuando tú o un aliado a 30 pies caéis a 0 puntos de golpe, quedáis en 1 y sois inmunes al daño hasta el final del turno.</p></div></li></ul></section><section class="sub" style="--sc:#8fd1a8"><header><span class="sub-eyebrow">Marca</span><h3>Marca de la Curación</h3><p class="sub-fuente">Casa Jorasco · las manos que reparan</p></header><p class="sub-intro">La Marca de los sanadores. Con ella cierras heridas y quitas venenos. Tu Rayo de Marca inflige daño radiante.</p><ul><li><span class="sf-n">Nv. 1</span><div><strong>Mano de Jorasco</strong><span class="coste accion">Acción</span><p>Pagas 1 Pulso y tocas a una criatura: recupera 2d6 + tu modificador de Carisma puntos de golpe. Marca Mayor: 3d6.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Remedio</strong><span class="coste adicional">Acción adicional</span><p>Pagas 2 Pulsos y terminas una condición (cegado, ensordecido, envenenado, paralizado, asustado) en una criatura que toques.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Cuidado Mayor</strong><span class="coste accion">Acción</span><p>Pagas 3 Pulsos: cada aliado de tu elección a 10 pies de ti recupera 3d8 + tu modificador de Carisma puntos de golpe.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Don de la Vida</strong><span class="coste accion">Acción</span><p>Una vez por descanso largo, como acción, pagas 5 Pulsos y devuelves a la vida a una criatura muerta hace menos de 1 minuto con la mitad de sus puntos de golpe.</p></div></li></ul></section></div>
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Carisma</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p><div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Carisma</label><input type="number" id="mod" value="3" min="-5" max="10"></div><div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de Dones</span><b id="dv1">–</b></div><div><span>Pulsos máx.</span><b id="dv2">–</b></div><div><span>Rayo de Marca</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Pulsos de la Marca</h3><p class="sub-t">Se recuperan al servir a otros. Se gastan en Dones.</p><div class="cuenta" id="cnt-pulsos"></div><div class="pips" id="pips-pulsos"></div><div class="btns"><button class="btn" type="button" data-act="r:pulsos:corto">Descanso corto</button><button class="btn" type="button" data-act="r:pulsos:largo">Descanso largo</button><button class="btn" type="button" data-act="r:pulsos:1">+1</button><button class="btn" type="button" data-act="r:pulsos:-1">Gastar 1</button><button class="btn" type="button" data-act="r:pulsos:-2">Gastar 2</button><button class="btn" type="button" data-act="r:pulsos:-3">Gastar 3</button><button class="btn" type="button" data-act="r:pulsos:-5">Gastar 5</button></div></div><div class="card"><h3>Favores de la Casa</h3><p class="sub-t">Usados desde el último descanso largo (2 desde nivel 13).</p><div class="cuenta" id="cv-favores"></div><p class="nota" id="cn-favores"></p><div class="btns"><button class="btn" type="button" data-act="c:favores:1">+1</button><button class="btn" type="button" data-act="c:favores:-1">−1</button><button class="btn" type="button" data-act="c:favores:0">A cero</button></div></div><div class="card"><h3>Fragmento de Dragón</h3><p class="sub-t">Pulsos extra con un descanso corto, una vez por descanso largo.</p><div class="estado" id="tv-fragmento"></div><div class="btns"><button class="btn" type="button" data-act="t:fragmento:no">Descanso largo</button><button class="btn" type="button" data-act="t:fragmento:si">Usar</button></div></div></div>
+  </section>
+</main>
+
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "9+P+M"}, {"v": "T.pulsos[L-1]+(L>=20?4:0)"}, {"v": "T.rayo[L-1]"}], "recursos": [{"id": "pulsos", "n": "Pulsos de la Marca", "max": "T.pulsos[L-1]+(L>=20?4:0)"}], "contadores": [{"id": "favores", "max": "(L>=13?2:1)"}], "interruptores": [{"id": "fragmento", "si": "Disponible", "no": "Usado"}], "tablas": {"pulsos": [4, 4, 4, 4, 5, 5, 5, 5, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10], "rayo": ["2d6", "2d6", "2d6", "2d6", "2d8", "2d8", "2d8", "2d8", "3d8", "3d8", "3d8", "3d8", "4d8", "4d8", "4d8", "4d8", "5d8", "5d8", "5d8", "5d8"]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

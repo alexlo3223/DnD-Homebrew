@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Portador del Sello</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Spectral:wght@400;600&display=swap');
+
+:root{
+  --void: #120e0b;
+  --panel: #1c1512;
+  --panel-2: #241b16;
+  --line: #3a2c22;
+  --parchment: #e9dfca;
+  --parchment-dim: #b6a98e;
+  --jade: #3f9e8f;
+  --jade-glow: #6fd6c4;
+  --crimson: #b4372a;
+  --crimson-glow: #e0603f;
+  --bronze: #c69a4a;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, #241a12 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 110%, #1a1a22 0%, transparent 50%),
+    var(--void);
+  color:var(--parchment);
+  font-family:'Spectral', serif;
+  line-height:1.6;
+}
+
+.wrap{max-width:920px;margin:0 auto;padding:48px 28px 100px;}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;
+  padding:54px 36px;
+  margin-bottom:46px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,#1a130f,#150f0c);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    linear-gradient(115deg, transparent 40%, rgba(180,55,42,0.10) 55%, transparent 70%),
+    linear-gradient(245deg, transparent 40%, rgba(63,158,143,0.08) 55%, transparent 70%);
+  pointer-events:none;
+}
+.eyebrow{
+  font-family:'Cinzel',serif; letter-spacing:.35em; font-size:11px;
+  color:var(--bronze); text-transform:uppercase; margin-bottom:14px;
+}
+h1.title{
+  font-family:'Cinzel',serif; font-weight:900; font-size:52px; margin:0 0 6px;
+  background:linear-gradient(90deg,var(--jade-glow),var(--parchment) 40%,var(--crimson-glow));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  letter-spacing:.01em;
+}
+.subtitle{font-style:italic;color:var(--parchment-dim);font-size:17px;max-width:600px;}
+.stat-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+.stat-chip{
+  border:1px solid var(--line); padding:8px 16px; font-family:'Cinzel',serif;
+  font-size:11px; letter-spacing:.08em; color:var(--parchment-dim); text-transform:uppercase;
+  background:rgba(0,0,0,.25);
+}
+.stat-chip b{color:var(--parchment);display:block;font-size:15px;font-family:'Cormorant Garamond',serif;letter-spacing:0;margin-top:2px;}
+
+/* ---------- SECTION HEADERS ---------- */
+h2.sec{
+  font-family:'Cinzel',serif; font-size:22px; color:var(--parchment);
+  border-bottom:1px solid var(--line); padding-bottom:12px; margin:56px 0 20px;
+  display:flex; align-items:center; gap:14px;
+}
+h2.sec .mark{color:var(--crimson-glow);font-size:14px;letter-spacing:.2em;}
+h3.feat{
+  font-family:'Cinzel',serif; font-size:16px; color:var(--jade-glow);
+  margin:28px 0 8px; letter-spacing:.03em;
+}
+p{color:var(--parchment); font-size:15.5px;}
+.flavor{font-style:italic;color:var(--parchment-dim);border-left:2px solid var(--line);padding-left:16px;margin:18px 0;}
+
+/* ---------- EQUILIBRIO WIDGET ---------- */
+.eq-widget{
+  border:1px solid var(--line); background:var(--panel); padding:28px; margin:26px 0;
+}
+.eq-widget h4{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.15em;color:var(--bronze);margin:0 0 18px;text-transform:uppercase;}
+.eq-track{position:relative;height:46px;border:1px solid var(--line);background:linear-gradient(90deg,var(--jade) 0%, #4a4038 50%, var(--crimson) 100%);display:flex;}
+.eq-cell{
+  flex:1; border-right:1px solid rgba(0,0,0,.35); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel',serif; font-size:12px; color:rgba(0,0,0,.55);
+  transition:transform .15s ease, filter .15s ease;
+}
+.eq-cell:last-child{border-right:none;}
+.eq-cell:hover{filter:brightness(1.2); transform:scaleY(1.08);}
+.eq-cell.active{outline:2px solid var(--parchment); z-index:2; filter:brightness(1.3);}
+.eq-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;letter-spacing:.08em;color:var(--parchment-dim);font-family:'Cinzel',serif;text-transform:uppercase;}
+.eq-readout{margin-top:18px;padding:16px;background:var(--panel-2);border-left:3px solid var(--bronze);font-size:14.5px;min-height:60px;}
+.eq-readout b{color:var(--bronze);}
+
+/* ---------- RUPTURA SIMULATOR ---------- */
+.ruptura-box{border:1px solid var(--crimson);background:linear-gradient(180deg,#1e1310,#160d0b);padding:24px;margin:20px 0;}
+.ruptura-box h4{font-family:'Cinzel',serif;color:var(--crimson-glow);font-size:14px;letter-spacing:.1em;margin:0 0 12px;text-transform:uppercase;}
+.roll-btn{
+  font-family:'Cinzel',serif; letter-spacing:.08em; font-size:12px; text-transform:uppercase;
+  background:var(--crimson); color:var(--parchment); border:none; padding:11px 22px;
+  cursor:pointer; transition:background .2s;
+}
+.roll-btn:hover{background:var(--crimson-glow);}
+.roll-result{margin-top:14px;font-size:15px;min-height:24px;}
+
+/* ---------- TABLE ---------- */
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;}
+th{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--bronze);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);
+}
+td{padding:9px 8px;border-bottom:1px solid rgba(58,44,34,.5);color:var(--parchment-dim);}
+tr:hover td{color:var(--parchment);background:rgba(255,255,255,.02);}
+td.lvl{color:var(--parchment);font-family:'Cinzel',serif;font-weight:700;}
+
+/* ---------- SUBCLASS TABS ---------- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:24px 0 0;}
+.tab-btn{
+  flex:1; padding:16px; background:var(--panel); border:1px solid var(--line); border-bottom:none;
+  font-family:'Cinzel',serif; letter-spacing:.06em; font-size:13px; text-transform:uppercase;
+  color:var(--parchment-dim); cursor:pointer; transition:all .2s;
+}
+.tab-btn.guardian.on{color:var(--jade-glow);background:var(--panel-2);border-color:var(--jade);}
+.tab-btn.demonio.on{color:var(--crimson-glow);background:var(--panel-2);border-color:var(--crimson);}
+.tab-panel{display:none;border:1px solid var(--line);border-top:none;padding:30px;background:var(--panel-2);}
+.tab-panel.on{display:block;}
+.tab-panel.guardian h3.feat{color:var(--jade-glow);}
+.tab-panel.demonio h3.feat{color:var(--crimson-glow);}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+@media(max-width:700px){.two-col{grid-template-columns:1fr;}}
+
+.pill{display:inline-block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--line);color:var(--parchment-dim);margin-right:8px;}
+
+footer{margin-top:70px;text-align:center;color:var(--parchment-dim);font-size:12px;font-style:italic;opacity:.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Clase completa · Nivel 1 – 20</div>
+    <h1 class="title">El Portador del Sello</h1>
+    <p class="subtitle">Un semi-conjurador que empuña una hoja prisión: dentro de su acero duerme —o espera— una entidad demoníaca contenida por el espíritu de un guardián muerto hace siglos. Cada golpe es una negociación entre el control y la ruina.</p>
+    <div class="stat-strip">
+      <div class="stat-chip">Dado de golpeo<b>d10</b></div>
+      <div class="stat-chip">Salvaciones<b>Constitución · Carisma</b></div>
+      <div class="stat-chip">Armadura<b>Ligera, media, escudos</b></div>
+      <div class="stat-chip">Armas<b>Sencillas, marciales (espadas)</b></div>
+      <div class="stat-chip">Conjuros clave<b>Carisma</b></div>
+    </div>
+  </div>
+
+  <p class="flavor">"La hoja no elige a su portador. Lo audiciona." — fragmento hallado junto a un Sello roto.</p>
+
+  <h2 class="sec"><span class="mark">I.</span> Concepto</h2>
+  <p>El Portador del Sello lleva un arma sentiente y dividida contra sí misma: la vaina alberga la voluntad de un guardián que juró contener para siempre a lo que la hoja aprisiona. El portador no es dueño del arma — es el campo de batalla donde ambas voluntades negocian, a través de un recurso llamado <b>Equilibrio</b>.</p>
+
+  <h2 class="sec"><span class="mark">II.</span> Equilibrio del Sello</h2>
+  <p>A partir del nivel 1 tu Sello mantiene un <b>Equilibrio</b> que va de <b>0 (Contención total)</b> a <b>10 (Sello al límite)</b>. Cada día, al completar un descanso largo, tu Equilibrio se fija en <b>5</b>. Ciertas técnicas de tu Voz elegida suben o bajan este valor; tus rasgos de clase base también pueden moverlo. Prueba el rastreador:</p>
+
+  <div class="eq-widget">
+    <h4>Rastreador de Equilibrio</h4>
+    <div class="eq-track" id="eqTrack"></div>
+    <div class="eq-labels"><span>0 · Guardián en control</span><span>5 · Tensión</span><span>10 · Sello al límite</span></div>
+    <div class="eq-readout" id="eqReadout">Toca un valor para ver su efecto en juego.</div>
+  </div>
+
+  <p>Mientras tu Equilibrio esté en <b>0–3</b> (zona del Guardián), tienes ventaja en salvaciones contra ser asustado o dominado, y tus conjuros de curación restauran puntos de golpe adicionales iguales a tu bono de competencia. Mientras esté en <b>7–9</b> (zona del Cautivo), tus ataques con el Sello suman tu bonificador de competencia adicional al daño, y tienes ventaja en las pruebas de Carisma (Intimidación) — la voz que sale de tu boca no siempre es la tuya. Al llegar a <b>10</b>, debes superar una <b>Prueba de Contención</b> (salvación de Carisma CD 15) al final de cada uno de tus turnos, o el Sello se agrieta. Llegar a 10 siempre es una decisión tuya: ningún rasgo te obliga a subir el Equilibrio.</p>
+
+  <div class="ruptura-box">
+    <h4>Simulador de Prueba de Contención</h4>
+    <p style="margin:0 0 12px;">Si fallas la prueba en Equilibrio 10, el Cautivo dirige tu siguiente turno: atacas con ventaja a la criatura <em>hostil</em> más cercana y no puedes retirarte. Después, el Sello vuelve a cerrarse y tu Equilibrio baja a 6. Tira el d20 y suma mentalmente tu salvación de Carisma.</p>
+    <button class="roll-btn" onclick="rollRuptura()">Tirar d20</button>
+    <div class="roll-result" id="ruptResult"></div>
+  </div>
+
+  <h2 class="sec"><span class="mark">III.</span> Progresión</h2>
+  <table>
+    <tr><th>Nivel</th><th>Bono Comp.</th><th>Rasgos</th><th>Espacios 1º</th><th>2º</th><th>3º</th><th>4º</th><th>5º</th></tr>
+    <tr><td class="lvl">1</td><td>+2</td><td>Equilibrio del Sello, Golpe Sellado, Voz Elegida (rasgo 1)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">2</td><td>+2</td><td>Magia del Sello, Estilo de Combate</td><td>2</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">3</td><td>+2</td><td>Percepción del Sello</td><td>3</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">4</td><td>+2</td><td>Mejora de Característica</td><td>3</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">5</td><td>+3</td><td>Ataque Extra, Viento de Acero</td><td>4</td><td>2</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">6</td><td>+3</td><td>Resistencia al Sello, Voz Elegida (rasgo 2)</td><td>4</td><td>2</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">7</td><td>+3</td><td>Voz Contenida, La Hoja Despierta</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">8</td><td>+3</td><td>Mejora de Característica</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">9</td><td>+4</td><td>Reserva Ampliada</td><td>4</td><td>3</td><td>2</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">10</td><td>+4</td><td>Equilibrio Reforzado, Voz Elegida (rasgo 3)</td><td>4</td><td>3</td><td>2</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">11</td><td>+4</td><td>Golpe Sellado Mejorado</td><td>4</td><td>3</td><td>3</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">12</td><td>+4</td><td>Mejora de Característica</td><td>4</td><td>3</td><td>3</td><td>—</td><td>—</td></tr>
+    <tr><td class="lvl">13</td><td>+5</td><td>Vínculo Reforzado</td><td>4</td><td>3</td><td>3</td><td>1</td><td>—</td></tr>
+    <tr><td class="lvl">14</td><td>+5</td><td>Contención Perfecta, Voz Elegida (rasgo 4)</td><td>4</td><td>3</td><td>3</td><td>1</td><td>—</td></tr>
+    <tr><td class="lvl">15</td><td>+5</td><td>Viento de Acero Mejorado</td><td>4</td><td>3</td><td>3</td><td>2</td><td>—</td></tr>
+    <tr><td class="lvl">16</td><td>+5</td><td>Mejora de Característica</td><td>4</td><td>3</td><td>3</td><td>2</td><td>—</td></tr>
+    <tr><td class="lvl">17</td><td>+6</td><td>Golpe que No Falla</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td></tr>
+    <tr><td class="lvl">18</td><td>+6</td><td>Maestría del Sello, Voz Elegida (rasgo 5)</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td></tr>
+    <tr><td class="lvl">19</td><td>+6</td><td>Mejora de Característica</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td></tr>
+    <tr><td class="lvl">20</td><td>+6</td><td>Un Solo Ser</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td></tr>
+  </table>
+
+  <h2 class="sec"><span class="mark">IV.</span> Rasgos de clase</h2>
+
+  <h3 class="feat">Golpe Sellado (Nivel 1)</h3>
+  <p>Cuando aciertas un ataque con tu arma vinculada al Sello, puedes, sin gastar acción ni reacción (una vez por turno), elegir uno: subir tu Equilibrio en 1 y sumar tu modificador de Carisma al daño, o bajar tu Equilibrio en 1 y añadir un efecto de control menor (el objetivo tiene desventaja en su próximo ataque contra ti). Puedes usar esta opción un número de veces igual a tu modificador de Constitución (mínimo 1) por descanso largo.</p>
+  <p><b>Respiro del Guardián.</b> Como acción adicional, bajas tu Equilibrio en 2. Puedes hacerlo una vez por descanso corto: así cualquier Voz, incluidas las Cautivas, puede alejarse del límite cuando lo necesite.</p>
+
+  <h3 class="feat">Magia del Sello (Nivel 2)</h3>
+  <p>Aprendes a extraer hechizos de la tensión entre el Guardián y el Cautivo. Eres un semi-conjurador (como un Paladín): usas Carisma como característica de conjuración, preparas hechizos de tu lista de Portador del Sello y recuperas espacios en un descanso largo. Tu lista de conjuros: <b>1º</b> <i>castigo abrasador, curar heridas, escudo de fe, maleficio, orden imperiosa</i> · <b>2º</b> <i>arma mágica, inmovilizar persona, paso brumoso, ver invisibilidad</i> · <b>3º</b> <i>círculo mágico, disipar magia, lanzar maldición, revivificar</i> · <b>4º</b> <i>compulsión, destierro, guardián de la fe</i> · <b>5º</b> <i>disipar el bien y el mal, vínculo planar</i>.</p>
+
+  <h3 class="feat">Percepción del Sello (Nivel 3)</h3>
+  <p>El Sello presta sus sentidos a los tuyos: obtienes visión en la oscuridad de 18 metros y ventaja en las pruebas de Sabiduría (Percepción) pasivas y activas que dependan del oído.</p>
+
+  <h3 class="feat">Viento de Acero (Nivel 5)</h3>
+  <p>Como acción, puedes desenvainar, atacar y volver a envainar el Sello en un único instante sobrenatural. Haces un ataque con ventaja que, si acierta, no revela el arma a los sentidos de nadie salvo el objetivo (no provoca ataques de oportunidad ni requiere que estuvieras empuñando el arma antes). La primera vez que uses esto en un descanso largo, no afecta tu Equilibrio. Cada uso adicional antes del próximo descanso largo sube tu Equilibrio en 2.</p>
+
+  <h3 class="feat">Resistencia al Sello (Nivel 6)</h3>
+  <p>Tienes resistencia a un tipo de daño que elijas entre fuego, necrótico o psíquico (elegido al obtener este rasgo, ligado a la naturaleza del Cautivo en tu Sello).</p>
+
+  <h3 class="feat">Voz Contenida (Nivel 7)</h3>
+  <p>Puedes comunicarte telepáticamente con el Guardián y, cuando tu Equilibrio es 7 o más, con el Cautivo, dentro de 18 metros. Una vez por descanso corto, puedes pedir consejo a uno de los dos: obtén ventaja en la próxima prueba de característica que hagas relacionada con esa consulta.</p>
+
+  <h3 class="feat">La Hoja Despierta (Nivel 7)</h3>
+  <p>El Sello no es solo tu arma: es alguien. Cuando caes inconsciente con el Sello en la mano, la voz que está en control (el Guardián si tu Equilibrio es 5 o menos, el Cautivo si es 6 o más) mueve tu brazo: una vez por ronda, puede hacer un ataque con el Sello como reacción contra una criatura que te ataque cuerpo a cuerpo.</p>
+
+  <h3 class="feat">Reserva Ampliada (Nivel 9)</h3>
+  <p>El número de usos de Golpe Sellado por descanso largo aumenta en 2.</p>
+
+  <h3 class="feat">Equilibrio Reforzado (Nivel 10)</h3>
+  <p>Tu Equilibrio ya no se fija en 5 tras un descanso largo: eliges cualquier valor entre 3 y 7. Además, cuando fallarías una Prueba de Contención, puedes gastar tu reacción para repetirla una vez por descanso largo.</p>
+
+  <h3 class="feat">Golpe Sellado Mejorado (Nivel 11)</h3>
+  <p>El daño adicional de Golpe Sellado aumenta: suma el doble de tu modificador de Carisma en la opción ofensiva, y el efecto de control de la opción defensiva impone además desventaja en la siguiente prueba de salvación del objetivo.</p>
+
+  <h3 class="feat">Vínculo Reforzado (Nivel 13)</h3>
+  <p>El alcance de Voz Contenida aumenta a 36 metros, y ya no necesitas que tu Equilibrio sea 7 o más para consultar al Cautivo: ambas voces están siempre disponibles.</p>
+
+  <h3 class="feat">Contención Perfecta (Nivel 14)</h3>
+  <p>Una vez por descanso largo, cuando llegarías a Equilibrio 10, puedes en su lugar detenerte en 9 y no hacer la Prueba de Contención ese turno.</p>
+
+  <h3 class="feat">Viento de Acero Mejorado (Nivel 15)</h3>
+  <p>Puedes usar Viento de Acero dos veces sin coste de Equilibrio por descanso largo, y el ataque ahora golpea automáticamente si el objetivo no ha actuado aún ese asalto.</p>
+
+  <h3 class="feat">Golpe que No Falla (Nivel 17)</h3>
+  <p>Una vez por descanso corto, cuando fallas un ataque con el Sello, puedes subir tu Equilibrio en 2 para convertirlo en un acierto.</p>
+
+  <h3 class="feat">Maestría del Sello (Nivel 18)</h3>
+  <p>Eliges tu propio valor de Equilibrio al inicio de cada uno de tus turnos (subir o bajar hasta 2 puntos, gratis, como parte de tu turno).</p>
+
+  <h3 class="feat">Un Solo Ser (Nivel 20)</h3>
+  <p>Guardián y Cautivo dejan de disputarse tu voluntad: se funden en una sola voz que es completamente tuya. Tu Equilibrio deja de exigir Pruebas de Contención al llegar a 10 (nunca hay riesgo de ruptura), y mientras tu Equilibrio sea 10 obtienes un +2 adicional a los daños de tus ataques con el Sello así como resistencia a daño contundente, perforante y cortante.</p>
+
+  <h2 class="sec"><span class="mark">V.</span> Voz elegida <span class="pill">Nivel 1</span></h2>
+  <p>Desde el nivel 1 sabes exactamente quién comparte tu Sello, y eliges tu <b>Voz</b>: una de dos entidades Guardianas que buscan contener, proteger y sanar, o una de dos entidades Cautivas que buscan poder, daño y liberación. La elección es narrativa desde el primer combate, no una revelación tardía, y define cómo interactúas con tu Equilibrio durante toda la partida. Cada Voz obtiene rasgos en los niveles 1, 6, 10, 14 y 18.</p>
+
+  <div class="tabs">
+    <button class="tab-btn guardian on" id="btnViento" onclick="showTab('viento')">Viento Callado</button>
+    <button class="tab-btn guardian" id="btnPiedra" onclick="showTab('piedra')">Piedra Quieta</button>
+    <button class="tab-btn demonio" id="btnBrasas" onclick="showTab('brasas')">Heredera de las Brasas</button>
+    <button class="tab-btn demonio" id="btnGrieta" onclick="showTab('grieta')">Hija de la Grieta</button>
+  </div>
+
+  <div class="tab-panel guardian on" id="panelViento">
+    <p class="flavor">"No desenvaino para matar. Desenvaino para que nadie tenga que quedarse quieto y recibir el golpe."</p>
+    <h3 class="feat">Paso del Viento (Nivel 1)</h3>
+    <p>Ganas competencia en Acrobacias o Sigilo (a elección). Como acción adicional, puedes bajar tu Equilibrio en 1 para moverte hasta tu velocidad sin provocar ataques de oportunidad y sin gastar tu acción de Retirarte.</p>
+    <h3 class="feat">Corriente Protectora (Nivel 6)</h3>
+    <p>Cuando una criatura a 3 metros de ti es alcanzada por un ataque, puedes usar tu reacción y bajar tu Equilibrio en 1 para obligar al atacante a repetir la tirada de ataque, usando el resultado más bajo. Usable un número de veces igual a tu modificador de Constitución por descanso largo.</p>
+    <h3 class="feat">Palabra Silenciosa (Nivel 10)</h3>
+    <p>Puedes lanzar <i>silencio</i> sin gastar espacio de conjuro ni componentes, una vez por descanso largo. Mientras tu Equilibrio sea 3 o menos, las criaturas dentro de esa zona tienen desventaja en los ataques que hagan contra ti.</p>
+    <h3 class="feat">Viento que Une (Nivel 14)</h3>
+    <p>Como reacción, cuando un aliado a 9 metros sería alcanzado por un ataque o efecto de área, puedes intercambiar tu posición con la suya (sin provocar ataques de oportunidad) y bajar tu Equilibrio en 2. El ataque o efecto recae sobre ti en su lugar.</p>
+    <h3 class="feat">Calma Perfecta (Nivel 18)</h3>
+    <p>Mientras tu Equilibrio sea 3 o menos, no puedes ser sorprendido y, una vez en cada uno de tus turnos, cuando un ataque te falla, puedes redirigirlo a otra criatura de tu elección a 1,5 metros de ti que estuviera dentro del alcance del atacante.</p>
+  </div>
+
+  <div class="tab-panel guardian" id="panelPiedra">
+    <p class="flavor">"Yo no esquivo el golpe. Lo recibo, lo sostengo, y no dejo que llegue más lejos."</p>
+    <h3 class="feat">Postura Inquebrantable (Nivel 1)</h3>
+    <p>Al inicio de cada combate, ganas puntos de golpe temporales iguales a tu nivel de Portador del Sello. Mientras tu Equilibrio sea 3 o menos, ganas +1 a la Clase de Armadura.</p>
+    <h3 class="feat">Muro del Sello (Nivel 6)</h3>
+    <p>Como acción, bajas tu Equilibrio en 2 para crear una zona de 3 metros de radio centrada en ti: durante 1 minuto, tú y los aliados dentro tenéis resistencia al tipo de daño de tu Resistencia al Sello. Una vez por descanso corto.</p>
+    <h3 class="feat">Anclaje (Nivel 10)</h3>
+    <p>Como reacción, cuando una criatura a 9 metros sería forzada a moverse, derribada o asustada, puedes bajar tu Equilibrio en 1 para negar ese efecto por completo. Usable un número de veces igual a tu modificador de Constitución por descanso largo.</p>
+    <h3 class="feat">Escudo Compartido (Nivel 14)</h3>
+    <p>Mientras tu Equilibrio sea 5 o menos, los aliados a 3 metros de ti también tienen resistencia al tipo de daño de tu Resistencia al Sello.</p>
+    <h3 class="feat">Bastión Eterno (Nivel 18)</h3>
+    <p>Mientras tu Equilibrio sea 3 o menos, tú y los aliados a 6 metros tenéis ventaja en las salvaciones contra la muerte, y una vez por descanso largo cada uno, el daño que os reduciría a 0 puntos de golpe (sin ser un crítico) os deja en 1 punto de golpe en su lugar.</p>
+  </div>
+
+  <div class="tab-panel demonio" id="panelBrasas">
+    <p class="flavor">"El Guardián contiene el fuego. Yo solo quiero ver cuánto puede arder antes de que me detenga."</p>
+    <h3 class="feat">Marca Ígnea (Nivel 1)</h3>
+    <p>Cuando aciertas un ataque con el Sello, puedes subir tu Equilibrio en 1 para marcar al objetivo con fuego: al inicio de cada uno de sus turnos, sufre 1d4 de daño de fuego mientras tu Equilibrio sea 7 o más. La marca dura 1 minuto o hasta que tu Equilibrio baje de 7.</p>
+    <h3 class="feat">Explosión Contenida (Nivel 6)</h3>
+    <p>Como acción, subes tu Equilibrio en 3 y liberas una explosión de 3 metros centrada en ti: cada criatura en el área menos tú hace una salvación de Destreza o recibe daño de fuego igual a tu nivel de Portador del Sello (la mitad si tiene éxito). Una vez por descanso corto.</p>
+    <h3 class="feat">Alimentar la Llama (Nivel 10)</h3>
+    <p>Cuando infliges daño de fuego, ganas puntos de golpe temporales iguales a tu modificador de Carisma.</p>
+    <h3 class="feat">Fuego que No se Apaga (Nivel 14)</h3>
+    <p>La marca de Marca Ígnea ya no puede eliminarse con magia de curación por debajo de 3er nivel, y cuando un objetivo marcado muere, la marca salta a una criatura hostil adyacente.</p>
+    <h3 class="feat">Infierno Portado (Nivel 18)</h3>
+    <p>Mientras tu Equilibrio sea 10, tus ataques con el Sello infligen 1d6 de daño de fuego adicional y eres inmune al daño de fuego.</p>
+  </div>
+
+  <div class="tab-panel demonio" id="panelGrieta">
+    <p class="flavor">"Cada grieta es una promesa. Yo solo las abro un poco más rápido de lo que deberían abrirse."</p>
+    <h3 class="feat">Mirada Quebrada (Nivel 1)</h3>
+    <p>Como acción adicional, subes tu Equilibrio en 1 para maldecir a una criatura que veas a 9 metros: la próxima vez que haga una tirada de salvación antes del final de tu siguiente turno, tiene desventaja.</p>
+    <h3 class="feat">Grieta Menor (Nivel 6)</h3>
+    <p>Como acción adicional, subes tu Equilibrio en 2 para teletransportarte hasta 9 metros a un espacio desocupado que puedas ver. Una vez por descanso corto.</p>
+    <h3 class="feat">Caos Dirigido (Nivel 10)</h3>
+    <p>Cuando consigues un golpe crítico con un ataque del Sello, el objetivo también queda ensordecido o derribado (tu elección) hasta el final de su próximo turno.</p>
+    <h3 class="feat">Susurros Multiplicados (Nivel 14)</h3>
+    <p>Mirada Quebrada ahora puede maldecir a dos criaturas distintas con un mismo uso.</p>
+    <h3 class="feat">Grieta Abierta (Nivel 18)</h3>
+    <p>Mientras tu Equilibrio sea 10, una vez en cada uno de tus turnos, cuando aciertas un ataque con el Sello, puedes forzar al objetivo a repetir la última salvación que superó desde el final de tu último turno, con desventaja.</p>
+  </div>
+
+  <h2 class="sec"><span class="mark">VI.</span> Notas de mesa</h2>
+  <p>La Prueba de Contención tiene una CD fija y visible (15). La tensión no viene de reglas ocultas, sino de la decisión del jugador: cuánto se acerca a 10 a cambio de más daño, y cuándo usa el Respiro del Guardián para volver atrás.</p>
+
+</div>
+
+<footer>El Portador del Sello — homebrew inspirado en el arma Galehollow (D&D 5e). Uso libre en mesa.</footer>
+
+<script>
+const zones = {
+  0:{label:"0 · Contención total", text:"<b>Guardián en control absoluto.</b> Ventaja en salvaciones contra ser asustado o dominado. Tus curaciones restauran PG extra iguales a tu bono de competencia."},
+  1:{label:"1", text:"Zona del Guardián. Ventaja en salvaciones contra ser asustado o dominado."},
+  2:{label:"2", text:"Zona del Guardián. Ventaja en salvaciones contra ser asustado o dominado."},
+  3:{label:"3", text:"Zona del Guardián. Ventaja en salvaciones contra ser asustado o dominado. Límite superior de la zona segura."},
+  4:{label:"4", text:"Tensión neutral. Sin bonos ni penalizaciones especiales."},
+  5:{label:"5 · Punto de partida diario", text:"Equilibrio inicial tras un descanso largo. Tensión neutral."},
+  6:{label:"6", text:"Tensión neutral, acercándote a la zona del Cautivo."},
+  7:{label:"7", text:"<b>Zona del Cautivo.</b> Sumas tu bono de competencia al daño con el Sello. Ventaja en Intimidación."},
+  8:{label:"8", text:"Zona del Cautivo. Sumas tu bono de competencia al daño con el Sello. Ventaja en Intimidación."},
+  9:{label:"9", text:"Zona del Cautivo, al borde. Sumas tu bono de competencia al daño con el Sello. Ventaja en Intimidación."},
+  10:{label:"10 · Sello al límite", text:"<b>Prueba de Contención</b> al final de cada uno de tus turnos (salvación de Carisma CD 15). Fallarla deja al Cautivo dirigir tu siguiente turno."}
+};
+
+const track = document.getElementById('eqTrack');
+for(let i=0;i<=10;i++){
+  const cell = document.createElement('div');
+  cell.className='eq-cell';
+  cell.textContent=i;
+  cell.dataset.val=i;
+  cell.onclick=()=>selectEq(i);
+  track.appendChild(cell);
+}
+function selectEq(v){
+  document.querySelectorAll('.eq-cell').forEach(c=>c.classList.toggle('active', +c.dataset.val===v));
+  const z = zones[v];
+  document.getElementById('eqReadout').innerHTML = '<b>'+z.label+'</b><br>'+z.text;
+}
+selectEq(5);
+
+function rollRuptura(){
+  const roll = Math.floor(Math.random()*20)+1;
+  const box = document.getElementById('ruptResult');
+  box.innerHTML = 'd20: <b>'+roll+'</b> — suma tu salvación de Carisma. Con 15 o más mantienes el control. Si no, el Cautivo dirige tu siguiente turno (ataque con ventaja a la criatura hostil más cercana) y después tu Equilibrio baja a <b>6</b>.';
+}
+
+const voices = ['viento','piedra','brasas','grieta'];
+const voiceBtnId = {viento:'btnViento',piedra:'btnPiedra',brasas:'btnBrasas',grieta:'btnGrieta'};
+const voicePanelId = {viento:'panelViento',piedra:'panelPiedra',brasas:'panelBrasas',grieta:'panelGrieta'};
+function showTab(which){
+  voices.forEach(v=>{
+    document.getElementById(voiceBtnId[v]).classList.toggle('on', v===which);
+    document.getElementById(voicePanelId[v]).classList.toggle('on', v===which);
+  });
+}
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

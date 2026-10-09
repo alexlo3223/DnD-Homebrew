@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Navegante Estelar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+  :root {
+    --void:      #0a0c14;
+    --deep:      #0f1422;
+    --midnight:  #141929;
+    --panel:     #1a2035;
+    --rim:       #242d47;
+    --gold:      #c8973a;
+    --gold-soft: #e2b96a;
+    --gold-dim:  #8a6423;
+    --nebula:    #6b4fa0;
+    --nebula-l:  #9b72d4;
+    --star:      #d4c9f0;
+    --ice:       #a8c8e8;
+    --text:      #c8c0d8;
+    --text-dim:  #7a7290;
+    --white:     #f0ecf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Spectral', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* ── STARFIELD ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 12% 8%,  rgba(212,201,240,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 28% 15%, rgba(212,201,240,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 5%,  rgba(200,151,58,.6)  0%, transparent 100%),
+      radial-gradient(1px 1px at 62% 22%, rgba(212,201,240,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 78% 12%, rgba(212,201,240,.8) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 3%,  rgba(168,200,232,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5%  35%, rgba(212,201,240,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 18% 48%, rgba(212,201,240,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 33% 38%, rgba(200,151,58,.4)  0%, transparent 100%),
+      radial-gradient(1px 1px at 52% 55%, rgba(212,201,240,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 42%, rgba(212,201,240,.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 50%, rgba(168,200,232,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 38%, rgba(212,201,240,.6) 0%, transparent 100%),
+      radial-gradient(2px 2px at 22% 72%, rgba(200,151,58,.5)  0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 80%, rgba(212,201,240,.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 58% 68%, rgba(212,201,240,.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 78%, rgba(168,200,232,.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 65%, rgba(212,201,240,.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 90%, rgba(212,201,240,.5) 0%, transparent 100%),
+      radial-gradient(2px 2px at 50% 92%, rgba(155,114,212,.4) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NEBULA GLOW ── */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -30%;
+    right: -20%;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(ellipse at center, rgba(107,79,160,.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 72px 0 48px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.05;
+    letter-spacing: .04em;
+    text-shadow:
+      0 0 60px rgba(200,151,58,.35),
+      0 0 120px rgba(107,79,160,.25);
+    margin-bottom: 12px;
+  }
+
+  .hero-subtitle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--gold-soft);
+    opacity: .85;
+    margin-bottom: 40px;
+    letter-spacing: .02em;
+  }
+
+  /* compass SVG */
+  .compass-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+
+  .compass-svg {
+    width: 120px;
+    height: 120px;
+    filter: drop-shadow(0 0 18px rgba(200,151,58,.4));
+  }
+
+  .divider-star {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 auto 48px;
+    max-width: 340px;
+  }
+  .divider-star::before,
+  .divider-star::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to var(--dir, right), transparent, var(--gold-dim));
+  }
+  .divider-star::after { --dir: left; }
+  .divider-star span {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  /* ── FLAVOR TEXT ── */
+  .flavor-block {
+    border-left: 2px solid var(--nebula);
+    padding: 20px 24px;
+    margin: 0 0 52px;
+    background: linear-gradient(to right, rgba(107,79,160,.08), transparent);
+    border-radius: 0 6px 6px 0;
+  }
+  .flavor-block p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--star);
+    line-height: 1.8;
+  }
+  .flavor-block cite {
+    display: block;
+    margin-top: 10px;
+    font-size: .8rem;
+    color: var(--text-dim);
+    letter-spacing: .08em;
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION HEADERS ── */
+  h2.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--gold-soft);
+    letter-spacing: .08em;
+    margin: 0 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rim);
+    text-shadow: 0 0 30px rgba(200,151,58,.25);
+  }
+
+  h3.feature-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--gold);
+    margin: 0 0 8px;
+    letter-spacing: .06em;
+  }
+
+  /* ── INTRO COLUMNS ── */
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 52px;
+  }
+  @media (max-width: 580px) { .intro-grid { grid-template-columns: 1fr; } }
+
+  .stat-pill {
+    background: var(--panel);
+    border: 1px solid var(--rim);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+  .stat-pill .label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .stat-pill .value {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* ── PROSE ── */
+  .prose { margin-bottom: 52px; }
+  .prose p { margin-bottom: 14px; color: var(--text); }
+  .prose p:last-child { margin-bottom: 0; }
+
+  /* ── CLASS TABLE ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 52px;
+    border-radius: 10px;
+    border: 1px solid var(--rim);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead tr {
+    background: var(--panel);
+  }
+  thead th {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--rim);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid rgba(36,45,71,.5);
+    transition: background .15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(107,79,160,.07); }
+  tbody tr:nth-child(even) { background: rgba(26,32,53,.6); }
+  tbody tr:nth-child(even):hover { background: rgba(107,79,160,.1); }
+  td {
+    padding: 10px 14px;
+    color: var(--text);
+    vertical-align: top;
+  }
+  td:first-child {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: var(--gold-soft);
+    text-align: center;
+    width: 48px;
+  }
+  td.features-cell { color: var(--star); }
+  .bonus { color: var(--gold); font-family: 'Cinzel', serif; font-size: 12px; }
+  .instinto { color: var(--nebula-l); font-family: 'Cinzel', serif; font-size: 12px; }
+
+  /* ── FEATURE BLOCKS ── */
+  .feature-section { margin-bottom: 52px; }
+  .feature-entry {
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(36,45,71,.4);
+  }
+  .feature-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .feature-level-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    border: 1px solid var(--gold-dim);
+    border-radius: 3px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+  }
+
+  /* ── RESOURCE BOX ── */
+  .resource-box {
+    background: linear-gradient(135deg, rgba(107,79,160,.15), rgba(200,151,58,.08));
+    border: 1px solid var(--nebula);
+    border-radius: 10px;
+    padding: 28px 30px;
+    margin-bottom: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .resource-box::before {
+    content: '◈';
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    font-size: 64px;
+    color: rgba(107,79,160,.15);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .resource-box h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--nebula-l);
+    margin-bottom: 14px;
+    letter-spacing: .06em;
+  }
+  .resource-box ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+  }
+  @media (max-width: 520px) { .resource-box ul { grid-template-columns: 1fr; } }
+  .resource-box ul li {
+    padding-left: 16px;
+    position: relative;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .resource-box ul li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--nebula-l);
+    font-size: 7px;
+    top: 5px;
+  }
+
+  /* ── SUBCLASS CARDS ── */
+  .subclass-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+    margin-bottom: 52px;
+  }
+  @media (max-width: 620px) { .subclass-grid { grid-template-columns: 1fr; } }
+
+  .subclass-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--rim);
+  }
+  .subclass-card .card-header {
+    padding: 20px 22px 14px;
+    border-bottom: 1px solid var(--rim);
+  }
+  .subclass-card .card-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .subclass-card .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .subclass-card .card-body {
+    padding: 18px 22px 22px;
+    background: var(--panel);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* Corsario */
+  .card-corsario .card-header { background: linear-gradient(135deg, rgba(200,151,58,.15), rgba(200,151,58,.05)); }
+  .card-corsario .card-eyebrow { color: var(--gold-dim); }
+  .card-corsario .card-title   { color: var(--gold-soft); }
+
+  /* Cartógrafo */
+  .card-cartografo .card-header { background: linear-gradient(135deg, rgba(107,79,160,.2), rgba(107,79,160,.05)); }
+  .card-cartografo .card-eyebrow { color: #8a72c0; }
+  .card-cartografo .card-title   { color: var(--nebula-l); }
+
+  /* feature lists inside subclass sections */
+  .subclass-features .feature-entry .feature-level-badge.corsario {
+    color: var(--gold-dim);
+    border-color: var(--gold-dim);
+  }
+  .subclass-features .feature-entry .feature-level-badge.cartografo {
+    color: #8a72c0;
+    border-color: #8a72c0;
+  }
+
+  .subclass-features h3.corsario { color: var(--gold); }
+  .subclass-features h3.cartografo { color: var(--nebula-l); }
+
+  /* ── TIPS BOX ── */
+  .tips-box {
+    background: rgba(26,32,53,.8);
+    border: 1px solid var(--rim);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 52px;
+  }
+  .tips-box h4 {
+    font-family: 'Cinzel', serif;
+    font-size: .85rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 14px;
+  }
+  .tips-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tips-box ul li {
+    padding-left: 20px;
+    position: relative;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .tips-box ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--ice);
+    font-size: 12px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid var(--rim);
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Clase de D&amp;D 5ª Edición</p>
+
+    <div class="compass-wrap">
+      <svg class="compass-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer ring -->
+        <circle cx="60" cy="60" r="55" fill="none" stroke="#8a6423" stroke-width="1"/>
+        <circle cx="60" cy="60" r="51" fill="none" stroke="#c8973a" stroke-width=".5" opacity=".5"/>
+        <!-- tick marks -->
+        <g stroke="#8a6423" stroke-width="1">
+          <line x1="60" y1="5"  x2="60" y2="14"/>
+          <line x1="60" y1="106" x2="60" y2="115"/>
+          <line x1="5"  y1="60" x2="14" y2="60"/>
+          <line x1="106" y1="60" x2="115" y2="60"/>
+        </g>
+        <!-- diagonal ticks -->
+        <g stroke="#8a6423" stroke-width=".7" opacity=".6">
+          <line x1="21.7" y1="21.7" x2="27.8" y2="27.8"/>
+          <line x1="92.2" y1="92.2" x2="98.3" y2="98.3"/>
+          <line x1="98.3" y1="21.7" x2="92.2" y2="27.8"/>
+          <line x1="27.8" y1="92.2" x2="21.7" y2="98.3"/>
+        </g>
+        <!-- cardinal letters -->
+        <text x="60" y="20" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="#c8973a" font-weight="700">N</text>
+        <text x="60" y="107" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="#c8973a">S</text>
+        <text x="14" y="64" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="#c8973a">O</text>
+        <text x="107" y="64" text-anchor="middle" font-family="Cinzel,serif" font-size="9" fill="#c8973a">E</text>
+        <!-- needle -->
+        <polygon points="60,24 56,60 60,68 64,60" fill="#c8973a"/>
+        <polygon points="60,96 56,60 60,52 64,60" fill="#4a4060"/>
+        <!-- center dot -->
+        <circle cx="60" cy="60" r="4" fill="#0f1422" stroke="#c8973a" stroke-width="1.5"/>
+        <circle cx="60" cy="60" r="1.5" fill="#c8973a"/>
+        <!-- star accents -->
+        <circle cx="60" cy="60" r="28" fill="none" stroke="#242d47" stroke-width=".5"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">El Navegante Estelar</h1>
+    <p class="hero-subtitle">Donde termina el mapa, empieza la leyenda.</p>
+
+    <div class="divider-star"><span>✦</span></div>
+  </header>
+
+  <!-- FLAVOR -->
+  <blockquote class="flavor-block">
+    <p>El muchacho no heredó oro ni títulos. Heredó un mapa, una cicatriz, y una brújula que apuntaba hacia lo desconocido en lugar del norte. Cuando los piratas quemaron su aldea, él no huyó hacia la seguridad — saltó al vacío entre las estrellas y aprendió, en caída libre, que el horizonte no es un límite: es una invitación.</p>
+    <cite>— Del libro primero de los Cronistas del Mar Eterno</cite>
+  </blockquote>
+
+  <!-- QUICK STATS -->
+  <div class="intro-grid">
+    <div class="stat-pill"><span class="label">Dado de Golpe</span><span class="value">d10</span></div>
+    <div class="stat-pill"><span class="label">Habilidades Primarias</span><span class="value">Destreza, Inteligencia</span></div>
+    <div class="stat-pill"><span class="label">Salvaciones</span><span class="value">Destreza · Inteligencia</span></div>
+    <div class="stat-pill"><span class="label">Habilidades (elegir 4)</span><span class="value">Acrobacias, Historia, Percepción, Perspicacia, Sigilo, Supervivencia, Trato con Animales</span></div>
+    <div class="stat-pill"><span class="label">Armaduras</span><span class="value">Ligera, Media</span></div>
+    <div class="stat-pill"><span class="label">Armas</span><span class="value">Simples, Marciales · Armas de Fuego*</span></div>
+    <div class="stat-pill"><span class="label">Herramientas</span><span class="value">Utensilios de cartógrafo · Un instrumento musical</span></div>
+    <div class="stat-pill"><span class="label">Equipo Inicial</span><span class="value">Sable de abordaje, pistola de chispa*, mapa estelar, ropa de marinero, doblón de oro de la suerte</span></div>
+  </div>
+  <p style="color:var(--text-dim); font-size:12px; margin-top:-36px; margin-bottom:52px; font-style:italic;">* Si tu campaña no usa armas de fuego, sustitúyelas por arco corto y pistola de ballesta.</p>
+
+  <!-- FLAVOR / DESCRIPTION -->
+  <section class="prose">
+    <h2 class="section-title">El Navegante Estelar</h2>
+    <p>Los Navegantes Estelares no nacen héroes: se forjan en el filo del horizonte. Son exploradores, supervivientes y aventureros que han aprendido a leer el mundo como un mapa vivo, encontrando rutas donde otros solo ven peligro. Su poder proviene no de la magia o la devoción, sino del <em>Instinto Navegante</em>: una comprensión profunda e intuitiva del entorno, el movimiento y el momento preciso en que actuar.</p>
+    <p>Son combatientes ágiles que prefieren el ingenio a la fuerza bruta, capaces de moverse con fluidez por cualquier terreno y de sacar ventaja de situaciones que paralizarían a guerreros más convencionales. Un Navegante Estelar en acción parece casi imposible de atrapar: siempre está un paso por delante, siempre encuentra la salida, siempre llega a donde nadie esperaba que llegara.</p>
+    <p>El arquetipo clásico es el joven aventurero que parte de la nada en busca de algo más grande que él mismo. Pero los Navegantes Estelares pueden ser viejos corsarios endurecidos por décadas de viaje, cartógrafas obsesionadas con trazar lo imposible, o espías que usan el disfraz de explorador para moverse entre facciones. Lo que todos comparten es una relación especial con lo desconocido: no lo temen, lo abrazan.</p>
+
+    <h2 class="section-title" style="margin-top:32px;">Creando un Navegante Estelar</h2>
+    <p>Al crear tu personaje, piensa en qué te lanzó a la aventura. ¿Encontraste un mapa de un tesoro imposible? ¿Alguien destruyó lo que amabas y la venganza o la justicia te impulsaron hacia adelante? ¿Buscas algo que perdiste, o algo que nunca tuviste?</p>
+    <p>Los Navegantes Estelares suelen tener un <em>objeto de ancla</em>: algo que llevan siempre consigo y que representa su origen o su objetivo. Podría ser un mapa, un medallón, una moneda de la suerte o el sombrero desgastado de un mentor muerto. Define qué es para ti: aunque no tenga propiedades mecánicas al principio, podría volverse relevante a lo largo de tu aventura.</p>
+  </section>
+
+  <!-- RESOURCE BOX -->
+  <div class="resource-box">
+    <h3>Instinto Navegante</h3>
+    <p style="margin-bottom:16px; font-size:13.5px; color:var(--text);">El recurso central del Navegante Estelar. Tus puntos de Instinto se recargan al terminar un descanso corto o largo. Puedes gastarlos en una variedad de maniobras y habilidades especiales.</p>
+    <ul>
+      <li>Máximo de puntos = la mitad de tu nivel (redondeando hacia arriba) + tu modificador de INT (mín. 2), como indica la tabla</li>
+      <li>Se recuperan completamente con descanso corto o largo</li>
+      <li>Algunos usos requieren una reacción; otros, una acción adicional</li>
+      <li>A nivel 10 puedes recuperar 1d4 + INT puntos en pleno combate una vez por descanso largo</li>
+      <li>No pueden almacenarse entre días: el horizonte siempre cambia</li>
+      <li>Ciertos rasgos de subclase añaden usos adicionales o amplían las opciones</li>
+    </ul>
+  </div>
+
+  <!-- CLASS TABLE -->
+  <section>
+    <h2 class="section-title">Progresión de Clase</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Niv.</th>
+            <th>Bon. Prof.</th>
+            <th>Instinto</th>
+            <th>Rasgos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td> <td class="bonus">+2</td><td class="instinto">1+INT</td> <td class="features-cell">Instinto Navegante, Paso del Aventurero</td></tr>
+          <tr><td>2</td> <td class="bonus">+2</td><td class="instinto">2+INT</td> <td class="features-cell">Maniobras de Exploración, Visión Táctica</td></tr>
+          <tr><td>3</td> <td class="bonus">+2</td><td class="instinto">2+INT</td> <td class="features-cell">Rumbo Estelar (Subcl.), Lectura del Horizonte</td></tr>
+          <tr><td>4</td> <td class="bonus">+2</td><td class="instinto">2+INT</td> <td class="features-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>5</td> <td class="bonus">+3</td><td class="instinto">3+INT</td> <td class="features-cell">Ataque Extra, Esquiva Instintiva</td></tr>
+          <tr><td>6</td> <td class="bonus">+3</td><td class="instinto">3+INT</td> <td class="features-cell">Rasgo de Subcl., Huella Sin Rastro</td></tr>
+          <tr><td>7</td> <td class="bonus">+3</td><td class="instinto">4+INT</td> <td class="features-cell">Mente de Navegante, Evasión</td></tr>
+          <tr><td>8</td> <td class="bonus">+3</td><td class="instinto">4+INT</td> <td class="features-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>9</td> <td class="bonus">+4</td><td class="instinto">5+INT</td> <td class="features-cell">Percepción Ampliada, Velocidad de Crucero</td></tr>
+          <tr><td>10</td><td class="bonus">+4</td><td class="instinto">5+INT</td><td class="features-cell">Rasgo de Subcl., Calma del Timonel</td></tr>
+          <tr><td>11</td><td class="bonus">+4</td><td class="instinto">6+INT</td><td class="features-cell">Golpe Preciso, Lectura del Destino</td></tr>
+          <tr><td>12</td><td class="bonus">+4</td><td class="instinto">6+INT</td><td class="features-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>13</td><td class="bonus">+5</td><td class="instinto">7+INT</td><td class="features-cell">Memoria del Mar, Velocidad Sin Límites</td></tr>
+          <tr><td>14</td><td class="bonus">+5</td><td class="instinto">7+INT</td><td class="features-cell">Rasgo de Subcl., Trayectoria Imposible</td></tr>
+          <tr><td>15</td><td class="bonus">+5</td><td class="instinto">8+INT</td><td class="features-cell">Visión de Águila, Mente Inatrapable</td></tr>
+          <tr><td>16</td><td class="bonus">+5</td><td class="instinto">8+INT</td><td class="features-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>17</td><td class="bonus">+6</td><td class="instinto">9+INT</td><td class="features-cell">Paso del Viento, Maestría del Instinto</td></tr>
+          <tr><td>18</td><td class="bonus">+6</td><td class="instinto">9+INT</td><td class="features-cell">Leyenda Viviente</td></tr>
+          <tr><td>19</td><td class="bonus">+6</td><td class="instinto">10+INT</td><td class="features-cell">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>20</td><td class="bonus">+6</td><td class="instinto">10+INT</td><td class="features-cell">El Mapa al Fin del Mundo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CLASS FEATURES -->
+  <section class="feature-section">
+    <h2 class="section-title">Rasgos de Clase</h2>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 1</div>
+      <h3 class="feature-title">Instinto Navegante</h3>
+      <p>Posees una reserva de puntos de <strong>Instinto Navegante</strong> igual a la mitad de tu nivel (redondeando hacia arriba) + tu modificador de Inteligencia (mínimo 2), como indica la tabla. Se recuperan completamente al terminar un descanso corto o largo. Puedes usarlos en las <em>Maniobras de Exploración</em> (disponibles a nivel 2) y en otras capacidades de esta clase.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 1</div>
+      <h3 class="feature-title">Paso del Aventurero</h3>
+      <p>Has aprendido a moverte en cualquier entorno como si fuera tu hogar. Ganas las siguientes ventajas permanentes:</p>
+      <ul style="margin-top:10px; margin-left:20px; color:var(--text); line-height:1.8;">
+        <li>Tu velocidad de movimiento aumenta en 10 pies.</li>
+        <li>No sufres movimiento dificultoso al escalar o nadar.</li>
+        <li>Las tiradas de Acrobacias para moverte en superficies difíciles (cubiertas resbaladizas, cascos de barco, tejados) tienen ventaja.</li>
+      </ul>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 2</div>
+      <h3 class="feature-title">Maniobras de Exploración</h3>
+      <p>Aprendes un conjunto de maniobras rápidas y tácticas. Puedes gastar puntos de Instinto para ejecutarlas como acción adicional o reacción. Empiezas conociendo <strong>tres maniobras</strong>; aprendes una adicional a los niveles 5, 9, 13 y 17 (a nivel 17 las conoces todas).</p>
+      <div style="margin-top:14px; display:grid; gap:10px;">
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Golpe del Horizonte (2 pts.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Como acción adicional, tras realizar la acción de Atacar, haces un ataque adicional con un arma. No añades tu modificador de característica al daño de este ataque, salvo que sea negativo. Una vez por turno.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Esquiva Estelar (1 pt.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Reacción cuando eres objetivo de un ataque. Añade 1d8 + mod. INT a tu CA hasta el inicio de tu siguiente turno.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Reposicionamiento Rápido (1 pt.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Como acción adicional, te mueves hasta la mitad de tu velocidad sin provocar ataques de oportunidad. Puedes Desengancharte como parte de este movimiento.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Lectura del Enemigo (2 pts.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Usas tu acción para estudiar a una criatura a 30 pies. Hasta el final de tu siguiente turno, tus ataques contra ella tienen ventaja y conoces sus resistencias, inmunidades y nivel de desafío.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Ruta de Escape (2 pts.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Reacción cuando quedarías incapacitado o rodeado. Te mueves hasta tu velocidad completa sin provocar ataques de oportunidad y evitas daño de oportunidad ese turno.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Arma Improvisada del Entorno (1 pt.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Como acción adicional, agarras un objeto del entorno (cuerda, linterna, cadena, silla) y lo usas como arma que inflige 1d6 + DEX de daño contundente. Puedes lanzarlo hasta 20 pies.</p>
+        </div>
+        <div style="background:var(--panel); border:1px solid var(--rim); border-radius:6px; padding:14px 18px;">
+          <strong style="color:var(--gold-soft); font-family:'Cinzel',serif; font-size:.9rem;">Cabo de Amarre (1 pt.)</strong>
+          <p style="margin-top:6px; font-size:13.5px;">Cuando impactas a una criatura con un ataque, la obligas a hacer una salvación de Fuerza (CD 8 + prof. + mod. INT) o queda derribada. Si ya estaba derribada, su velocidad pasa a 0 hasta el final de su siguiente turno.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 2</div>
+      <h3 class="feature-title">Visión Táctica</h3>
+      <p>Tu mente procesa el campo de batalla como un mapa en tiempo real. Puedes usar tu modificador de <strong>Inteligencia</strong> en lugar de Sabiduría para las tiradas de Percepción pasiva y activa. Además, no puedes ser sorprendido mientras estés consciente y alerta.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 3</div>
+      <h3 class="feature-title">Lectura del Horizonte</h3>
+      <p>Desarrollas una comprensión casi sobrenatural de tu entorno. Cuando te encuentras en un lugar nuevo, puedes pedir al DM los siguientes detalles: el número aproximado de criaturas conscientes en la zona, la presencia de rutas de escape y puntos de ventaja, y si hay peligros ocultos relevantes (trampas, emboscadas). Esta información llega como <em>presentimientos</em> narrativos, no como datos precisos.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 5</div>
+      <h3 class="feature-title">Ataque Extra</h3>
+      <p>Cuando realizas la acción de Atacar, puedes atacar dos veces en lugar de una.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 5</div>
+      <h3 class="feature-title">Esquiva Instintiva</h3>
+      <p>Tu cuerpo reacciona antes de que tu mente procese la amenaza. Cuando un atacante que puedes ver te golpea, puedes usar tu reacción para reducir a la mitad el daño del golpe (sin gastar puntos de Instinto).</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 6</div>
+      <h3 class="feature-title">Huella Sin Rastro</h3>
+      <p>No dejas rastro al moverte por terreno natural, y las pruebas para rastrearte (tanto a ti como a hasta cinco aliados que viajen contigo) se hacen con desventaja. Además, puedes moverte a ritmo rápido sin la penalización habitual a la Percepción pasiva.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 7</div>
+      <h3 class="feature-title">Mente de Navegante</h3>
+      <p>Tu intelecto explorador se ha vuelto extraordinariamente resistente. Ganas resistencia a los efectos de encantamiento e ilusión: tus tiradas de salvación contra estos efectos tienen ventaja. Además, una vez por descanso largo, puedes relanzar una tirada de INT fallida.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 7</div>
+      <h3 class="feature-title">Evasión</h3>
+      <p>Has perfeccionado la técnica de esquivar hasta el límite de lo posible. Cuando estás sujeto a un efecto que requiere una tirada de salvación de Destreza para sufrir la mitad del daño, no sufres daño si superas la tirada, y solo la mitad si la fallas.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 9</div>
+      <h3 class="feature-title">Percepción Ampliada</h3>
+      <p>Tu radio de percepción pasiva aumenta en 30 pies, y puedes detectar criaturas invisibles a 10 pies de ti si se mueven (las percibes como siluetas borrosas). También tienes visión en la oscuridad hasta 60 pies.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 9</div>
+      <h3 class="feature-title">Velocidad de Crucero</h3>
+      <p>Tu velocidad de movimiento aumenta 10 pies adicionales (20 pies en total desde el nivel 1). Además, si no has atacado en tu turno, puedes Correr y Desengancharte como acción adicional gratuita una vez por turno.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 10</div>
+      <h3 class="feature-title">Calma del Timonel</h3>
+      <p>En el ojo del huracán, encuentras paz. Una vez por descanso largo, como acción adicional —incluso en pleno combate— respiras hondo y recuperas 1d4 + tu modificador de Inteligencia puntos de Instinto.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 11</div>
+      <h3 class="feature-title">Golpe Preciso</h3>
+      <p>Has encontrado los puntos débiles de cualquier estructura o criatura. Una vez por turno, cuando atacas a una criatura, puedes gastar 2 puntos de Instinto para que el ataque ignore resistencias al daño físico. Si el objetivo tiene inmunidad, la trata como resistencia en su lugar.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 11</div>
+      <h3 class="feature-title">Lectura del Destino</h3>
+      <p>Cuando tiras iniciativa, puedes gastar 1 punto de Instinto para tirar dos veces y quedarte con el resultado que prefieras. Además, una vez por descanso corto, cuando un aliado que puedas ver falla una tirada de salvación, puedes usar tu reacción para que la repita.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 13</div>
+      <h3 class="feature-title">Memoria del Mar</h3>
+      <p>Has recorrido suficiente mundo como para que el conocimiento se acumule de forma instintiva. Tu bonificador de competencia se aplica doblado a las tiradas de Historia, Naturaleza y Supervivencia relacionadas con lugares que hayas visitado o estudiado en mapas. Además, nunca te pierdes si tienes acceso al cielo nocturno.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 13</div>
+      <h3 class="feature-title">Velocidad Sin Límites</h3>
+      <p>Ganas una velocidad de trepar y de nadar iguales a tu velocidad caminando. Una vez por turno, puedes gastar 1 punto de Instinto para duplicar tu velocidad hasta el final del turno.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 14</div>
+      <h3 class="feature-title">Trayectoria Imposible</h3>
+      <p>Puedes moverte por paredes verticales y techos durante tu turno sin necesidad de manos, siempre que termines el movimiento en una superficie que pueda sostenerte. Además, la primera vez en cada uno de tus turnos que te mueves al menos 20 pies, tu siguiente ataque de ese turno tiene ventaja.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 15</div>
+      <h3 class="feature-title">Visión de Águila</h3>
+      <p>Las distancias largas no imponen desventaja a tus ataques a distancia, y tu Percepción pasiva aumenta en 5. Puedes ver con claridad hasta 1 milla como si estuvieras a 100 pies.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 15</div>
+      <h3 class="feature-title">Mente Inatrapable</h3>
+      <p>Eres prácticamente imposible de controlar. Eres inmune a los efectos de encantamiento y a la condición de Asustado. Si ya estabas bajo uno de estos efectos cuando obtienes este rasgo, el efecto termina inmediatamente.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 17</div>
+      <h3 class="feature-title">Paso del Viento</h3>
+      <p>Una vez por turno, como parte de tu movimiento, puedes gastar 2 puntos de Instinto para teletransportarte hasta 30 pies a un espacio desocupado que puedas ver. Ese movimiento no provoca ataques de oportunidad.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 17</div>
+      <h3 class="feature-title">Maestría del Instinto</h3>
+      <p>Tu dominio del Instinto Navegante ha alcanzado su cénit. Ahora puedes usar dos Maniobras de Exploración diferentes en el mismo turno sin limitación (si ambas lo permiten). Además, el coste de todas las maniobras se reduce en 1 punto (mínimo 1).</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 18</div>
+      <h3 class="feature-title">Leyenda Viviente</h3>
+      <p>Tu reputación te precede. Criaturas conscientes que te conozcan o hayan oído hablar de ti tienen desventaja en las tiradas de salvación contra ser Intimidados o Asustados por ti. Una vez por descanso largo, puedes inspirar a un aliado que puedas ver con un relato breve de tus aventuras: esa criatura gana ventaja en todas sus tiradas hasta el final de su siguiente turno.</p>
+    </div>
+
+    <div class="feature-entry">
+      <div class="feature-level-badge">Nivel 20</div>
+      <h3 class="feature-title">El Mapa al Fin del Mundo</h3>
+      <p>Has llegado al límite del horizonte y has vuelto para contarlo. Alcanzas el dominio absoluto sobre tu Instinto Navegante:</p>
+      <ul style="margin-top:12px; margin-left:20px; color:var(--text); line-height:1.9;">
+        <li>Tu reserva máxima de puntos de Instinto aumenta en tu bonificador de competencia.</li>
+        <li>Una vez por descanso largo, puedes gastar una acción para declarar que conoces la ruta óptima hacia cualquier objetivo o lugar que hayas escuchado describir. El DM te da información clave sobre el camino.</li>
+        <li>Cuando tu puntuación de puntos de Instinto llega a 0, recuperas automáticamente 4 puntos como reacción una vez por descanso largo.</li>
+        <li>Todos tus aliados a 60 pies que puedan verte tienen +2 a sus tiradas de iniciativa mientras no estés incapacitado.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SUBCLASSES -->
+  <section>
+    <h2 class="section-title">Rumbo Estelar — Subclases (Nivel 3)</h2>
+    <p style="margin-bottom:24px; color:var(--text);">A nivel 3 eliges tu <em>Rumbo Estelar</em>: la dirección que le da forma personal a tu aventura. Cada rumbo representa una filosofía diferente sobre cómo explorar el mundo.</p>
+
+    <div class="subclass-grid">
+      <div class="subclass-card card-corsario">
+        <div class="card-header">
+          <p class="card-eyebrow">Rumbo Estelar</p>
+          <h3 class="card-title">El Corsario de la Nebulosa</h3>
+        </div>
+        <div class="card-body">
+          Piratas, mercenarios y veteranos de los mares abiertos. El Corsario ha aprendido que el mejor mapa es el que dibuja con sangre y audacia. Especialistas en combate naval, asalto rápido y terrorismo táctico.
+        </div>
+      </div>
+      <div class="subclass-card card-cartografo">
+        <div class="card-header">
+          <p class="card-eyebrow">Rumbo Estelar</p>
+          <h3 class="card-title">El Cartógrafo de lo Ignoto</h3>
+        </div>
+        <div class="card-body">
+          Eruditos del horizonte. El Cartógrafo no solo explora: <em>documenta</em>. Su mente es una biblioteca viviente de rutas, secretos y conocimientos ocultos. Poderosos fuera del combate y mortales cuando planifican con antelación.
+        </div>
+      </div>
+    </div>
+
+    <!-- CORSARIO -->
+    <div class="subclass-features" style="margin-bottom:52px;">
+      <h2 class="section-title">El Corsario de la Nebulosa</h2>
+      <p style="margin-bottom:28px; color:var(--text);">Eres un arma viviente envuelta en piel de aventurero. Aprendiste que sobrevivir no basta: hay que actuar primero, más rápido y más sucio. Los Corsarios son combatientes de élite que prosperan en el caos del combate cerrado y en la acción directa.</p>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge corsario">Nivel 3 — Corsario</div>
+        <h3 class="feature-title corsario">Bautismo de Fuego</h3>
+        <p>Cuando sacas la iniciativa, puedes gastar 1 punto de Instinto para moverte hasta la mitad de tu velocidad y realizar un ataque como acción adicional libre antes de que comience el primer turno. Este movimiento no provoca ataques de oportunidad.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge corsario">Nivel 3 — Corsario</div>
+        <h3 class="feature-title corsario">Esgrima de Abordaje</h3>
+        <p>Cuando usas un arma con la propiedad Finura o un arma ligera, puedes añadir tu modificador de Inteligencia al daño en lugar del modificador de Destreza. Además, cuando estás a menos de 5 pies de un aliado y atacas al mismo objetivo que él, tus ataques tienen ventaja.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge corsario">Nivel 6 — Corsario</div>
+        <h3 class="feature-title corsario">Maniobra de Abordaje</h3>
+        <p>Aprendes la maniobra <strong>Asalto Devastador</strong> (no ocupa ranura): gastar 2 pts. de Instinto para atacar a todas las criaturas en un cono de 15 pies. Cada criatura afectada sufre daño de un ataque normal y debe superar CD 8 + prof. + mod. DEX o quedar Empujada 10 pies.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge corsario">Nivel 10 — Corsario</div>
+        <h3 class="feature-title corsario">Golpe Fantasma</h3>
+        <p>Una vez por turno, cuando impactas con un ataque cuerpo a cuerpo, puedes gastar 1 punto de Instinto para añadir 3d6 de daño adicional. Este daño es del mismo tipo que el arma. A nivel 17, aumenta a 5d6.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge corsario">Nivel 14 — Corsario</div>
+        <h3 class="feature-title corsario">Furia del Horizonte</h3>
+        <p>Entras en un estado de flujo combativo puro. Como acción adicional, declaras <em>Furia del Horizonte</em>: durante 1 minuto, cada vez que reduces a 0 los puntos de golpe de una criatura, recuperas 1 punto de Instinto (máximo 3 por activación). Utilizable 1 vez por descanso largo.</p>
+      </div>
+    </div>
+
+    <!-- CARTÓGRAFO -->
+    <div class="subclass-features">
+      <h2 class="section-title">El Cartógrafo de lo Ignoto</h2>
+      <p style="margin-bottom:28px; color:var(--text);">No todo tesoro es oro. El Cartógrafo busca conocimiento: rutas sin trazar, secretos enterrados, verdades que el mundo preferiría mantener ocultas. Son tan peligrosos dentro del combate como fuera de él, porque siempre han planificado tres pasos por adelante.</p>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge cartografo">Nivel 3 — Cartógrafo</div>
+        <h3 class="feature-title cartografo">Mente de Atlas</h3>
+        <p>Tu mente retiene cada detalle de cada lugar que visitas. Obtienes doble competencia en las habilidades de Historia y Naturaleza. Además, cuando estudias un lugar durante al menos 1 hora, puedes hacer una tirada de INT (CD 15) para extraer 1 pieza de información oculta sobre ese lugar (secreto, trampa no detectada, ruta alternativa).</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge cartografo">Nivel 3 — Cartógrafo</div>
+        <h3 class="feature-title cartografo">Ruta Calculada</h3>
+        <p>Antes de un combate en un lugar que hayas explorado durante al menos 1 minuto, puedes gastar 2 puntos de Instinto para establecer <em>puntos de ruta</em>: marcas hasta 3 ubicaciones en el campo de batalla. Mientras combates, moverte entre estos puntos no provoca ataques de oportunidad.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge cartografo">Nivel 6 — Cartógrafo</div>
+        <h3 class="feature-title cartografo">Conocimiento Táctico</h3>
+        <p>Tu comprensión de entornos y criaturas es extraordinaria. Una vez por descanso corto, puedes hacer una tirada de Historia o Naturaleza (CD = 10 + ND del enemigo) para identificar la <em>debilidad táctica</em> de una criatura: durante 1 hora, tus aliados añaden 1d4 a las tiradas de ataque y daño contra esa criatura.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge cartografo">Nivel 10 — Cartógrafo</div>
+        <h3 class="feature-title cartografo">El Mapa Vive</h3>
+        <p>Tu comprensión espacial se ha vuelto casi mística. Tienes la habilidad de <em>Sentido de Lugar</em>: cuando cierras los ojos durante 1 acción, obtienes una imagen mental del espacio de 60 pies a tu alrededor, incluyendo criaturas ocultas, pasajes secretos visibles y trampas no ocultadas mágicamente. Utilizable igual a tu mod. INT por descanso largo.</p>
+      </div>
+
+      <div class="feature-entry">
+        <div class="feature-level-badge cartografo">Nivel 14 — Cartógrafo</div>
+        <h3 class="feature-title cartografo">La Ruta Imposible</h3>
+        <p>Encuentras el camino donde no existe ninguno. Una vez por descanso largo, puedes gastar 3 puntos de Instinto para declarar una <em>Ruta Imposible</em>: tú y hasta 5 aliados cruzáis un obstáculo físico aparentemente infranqueable (puerta cerrada, muro, abismo, guardia bloqueante) como si no existiera. El DM decide la forma narrativa, pero el obstáculo <em>no puede deteneros</em>. Esto no funciona contra barreras mágicas de nivel 7 o superior.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <div class="tips-box">
+    <h4>Interpretando al Navegante Estelar</h4>
+    <ul>
+      <li>Tu personaje tiene una relación especial con los mapas, el horizonte y lo desconocido. No busca seguridad: busca la siguiente curva en el camino.</li>
+      <li>El Instinto Navegante no es magia: es experiencia, agudeza y esa cosa inarticulable que te dice cuándo girar a la izquierda. Interprétalo como intuición forjada en mil kilómetros recorridos.</li>
+      <li>El <em>objeto de ancla</em> que elijas en creación de personaje puede evolucionar con la historia. Habla con tu DM sobre cómo integrarlo en la narrativa.</li>
+      <li>Los Corsarios disfrutan del caos del combate; los Cartógrafos prefieren nunca llegar a combatir si pueden evitarlo. Ambos son igualmente letales cuando no tienen otra opción.</li>
+      <li>Estadísticamente, INT alto maximiza tus puntos de Instinto y varios rasgos. DEX alto mejora tu combate y defensa. Considera empezar con ambos equilibrados.</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>El Navegante Estelar · Homebrew D&amp;D 5ª Edición · Inspirado en Jim Hawkins — El Planeta del Tesoro</p>
+    <p style="margin-top:8px; font-size:9px; opacity:.5;">✦ &nbsp; Uso personal · No oficial &nbsp; ✦</p>
+  </footer>
+
+</div>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

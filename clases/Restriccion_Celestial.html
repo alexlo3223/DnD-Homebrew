@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portador de la Restricción Celestial — Clase D&D</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:     #0A0A0F;
+    --deep:      #111118;
+    --steel:     #1E1E28;
+    --smoke:     #2E2E3C;
+    --bone:      #E8E0D0;
+    --ash:       #9A9090;
+    --red:       #C41E3A;
+    --red-dim:   #8B0000;
+    --red-glow:  rgba(196,30,58,0.15);
+    --white:     #F5F0E8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'Shippori Mincho', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ── SCAR DIVIDER ── */
+  .scar {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--red) 30%, var(--red) 70%, transparent 100%);
+    margin: 0;
+    position: relative;
+  }
+  .scar::before {
+    content: '';
+    position: absolute;
+    inset: -3px 0;
+    background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+    filter: blur(4px);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 60px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 50%, rgba(139,0,0,0.12) 0%, transparent 70%),
+      var(--black);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '無';
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(200px, 30vw, 420px);
+    color: rgba(255,255,255,0.025);
+    font-family: serif;
+    font-weight: 900;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-weight: 700;
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--red);
+  }
+
+  .hero-subtitle {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-weight: 300;
+    font-size: clamp(16px, 2.5vw, 22px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+
+  .hero-quote {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ash);
+    max-width: 500px;
+    border-left: 2px solid var(--red-dim);
+    padding-left: 20px;
+    line-height: 1.5;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    border: 1px solid var(--smoke);
+    padding: 10px 20px;
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ash);
+    text-transform: uppercase;
+  }
+  .stat-pill strong {
+    display: block;
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0;
+    margin-bottom: 2px;
+  }
+
+  /* ── CONTENT LAYOUT ── */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ── SECTION ── */
+  section {
+    padding: 70px 40px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 42px);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--white);
+    margin-bottom: 28px;
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bone);
+    margin-bottom: 10px;
+    margin-top: 32px;
+  }
+
+  p { margin-bottom: 14px; color: var(--bone); }
+
+  /* ── FEATURE BOX ── */
+  .feature-box {
+    background: var(--deep);
+    border: 1px solid var(--smoke);
+    border-left: 3px solid var(--red);
+    padding: 22px 26px;
+    margin: 18px 0;
+    position: relative;
+  }
+  .feature-box:hover {
+    border-color: var(--smoke);
+    border-left-color: var(--red);
+    background: var(--steel);
+    transition: background 0.2s;
+  }
+
+  .feature-box .feature-name {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .feature-box .feature-level {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 0.25em;
+    margin-bottom: 10px;
+  }
+
+  .feature-box p { color: var(--ash); font-size: 15.5px; margin: 0; }
+
+  /* ── TWO COLUMN ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 10px;
+  }
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── TABLE ── */
+  .dnd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    margin: 24px 0;
+  }
+  .dnd-table th {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--red-dim);
+  }
+  .dnd-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--steel);
+    color: var(--bone);
+    vertical-align: top;
+  }
+  .dnd-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .dnd-table tr:last-child td { border-bottom: none; }
+  .dnd-table .lvl { font-family: 'Zen Kaku Gothic New', monospace; color: var(--ash); }
+  .dnd-table .feat-name { color: var(--white); font-weight: 600; }
+
+  /* ── ARCHETYPE CARDS ── */
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  @media (max-width: 700px) { .archetype-grid { grid-template-columns: 1fr; } }
+
+  .archetype-card {
+    background: var(--deep);
+    border: 1px solid var(--smoke);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .archetype-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red) 0%, transparent 100%);
+  }
+  .archetype-card h3 {
+    margin-top: 0;
+    color: var(--white);
+    font-size: 22px;
+  }
+  .archetype-card .archetype-tagline {
+    font-style: italic;
+    color: var(--red);
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  .archetype-card p { font-size: 15px; color: var(--ash); }
+
+  /* ── PROFICIENCY BLOCK ── */
+  .prof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  @media (max-width: 600px) { .prof-grid { grid-template-columns: 1fr 1fr; } }
+
+  .prof-item {
+    background: var(--steel);
+    padding: 14px 16px;
+    border-top: 2px solid var(--smoke);
+  }
+  .prof-item .prof-label {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .prof-item .prof-value {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--bone);
+  }
+
+  /* ── RESTRICTION BOX ── */
+  .restriction-box {
+    background: rgba(139,0,0,0.08);
+    border: 1px solid var(--red-dim);
+    padding: 28px 32px;
+    margin: 30px 0;
+    position: relative;
+  }
+  .restriction-box::before {
+    content: '⚠ RESTRICCIÓN CELESTIAL';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--black);
+    padding: 0 10px;
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+  }
+  .restriction-box p { color: var(--bone); margin: 0; font-size: 16px; }
+
+  /* ── DICE BADGE ── */
+  .dice-badge {
+    display: inline-block;
+    background: var(--red-dim);
+    color: var(--white);
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 10px;
+    letter-spacing: 0.05em;
+    margin-right: 6px;
+  }
+
+  /* ── DARK SECTION ── */
+  .dark-section {
+    background: var(--deep);
+    border-top: 1px solid var(--smoke);
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--steel);
+    padding: 40px;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--smoke);
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--steel);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  nav a {
+    font-family: 'Zen Kaku Gothic New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ash);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  nav a:hover { color: var(--red); }
+  nav .nav-brand {
+    font-family: 'Shippori Mincho B1', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.15em;
+    margin-right: auto;
+    text-transform: uppercase;
+  }
+
+  ul {
+    padding-left: 20px;
+    color: var(--ash);
+    font-size: 15.5px;
+  }
+  ul li { margin-bottom: 6px; }
+  ul li strong { color: var(--bone); }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style id="tema-ambientacion">
+
+/* Tema JJK: papel washi, tinta sumi y sello hanko */
+html::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:9998;}
+h1,h2{letter-spacing:.02em;}
+h2::after{content:"";display:block;width:120px;height:6px;margin-top:10px;border-radius:3px 60% 40% 3px;background:linear-gradient(90deg,#C41E3A,transparent);opacity:.85;}
+.jjk-hanko{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40px;padding:8px 0;font-family:'Shippori Mincho B1','Noto Serif JP',serif;font-weight:800;font-size:20px;line-height:1.1;color:#f4ece0;background:#c8202a;border-radius:4px;box-shadow:0 0 0 2px #c8202a, inset 0 0 0 2px #f4ece0;transform:rotate(-4deg);opacity:.92;}
+@media (max-width:600px){.jjk-hanko{font-size:15px;right:12px;bottom:12px;}}
+.hero::before{font-family:'Shippori Mincho B1',serif;}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">Portador</span>
+  <a href="#descripcion">Descripción</a>
+  <a href="#rasgos">Rasgos</a>
+  <a href="#progresion">Progresión</a>
+  <a href="#arquetipos">Arquetipos</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="inicio">
+  <p class="hero-eyebrow">Clase Homebrew · D&amp;D 5e / Compatible</p>
+  <h1 class="hero-title">
+    Portador de la
+    <span>Restricción</span>
+    Celestial
+  </h1>
+  <p class="hero-subtitle">Sin magia. Sin límite. Solo el cuerpo.</p>
+  <blockquote class="hero-quote">
+    "Nació sin mana. El cielo le tomó lo que otros dan por sentado,
+    y a cambio le dio algo que ningún hechicero puede comprar."
+  </blockquote>
+  <div class="hero-stats">
+    <div class="stat-pill"><strong>d12</strong>Dado de Golpe</div>
+    <div class="stat-pill"><strong>FUE / DES</strong>Atributos Principales</div>
+    <div class="stat-pill"><strong>Medio</strong>Complejidad</div>
+    <div class="stat-pill"><strong>Martial</strong>Rol de Combate</div>
+  </div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ DESCRIPCIÓN ══ -->
+<section id="descripcion" style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 001 — Descripción</p>
+  <h2>El Vacío Como Arma</h2>
+
+  <div class="restriction-box">
+    <p>Un Portador de la Restricción Celestial nace sin acceso a la magia arcana o divina. Su conexión con el Weave o con los dioses es nula, bloqueada desde el momento de su concepción por una anomalía congénita imposible de revertir. A cambio, su cuerpo físico trasciende los límites de los mortales comunes, alcanzando cotas que ningún entrenamiento ordinario puede igualar.</p>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Filosofía de Combate</h3>
+      <p>Donde otros hechiceros lanzan conjuros, el Portador se acerca. Donde otros guerreros se detienen, el Portador continúa. Su cuerpo es a la vez su única herramienta y su mayor fortaleza: velocidad antinatural, fuerza descomunal, y una capacidad de percibir amenazas mágicas que ningún practicante de magia puede explicar.</p>
+      <p>Los Portadores son escasos y frecuentemente incomprendidos. Muchos fueron rechazados por familias de magos o gremios de hechiceros. Algunos encontraron su camino como mercenarios, asesinos o guardaespaldas de élite.</p>
+    </div>
+    <div>
+      <h3>Creación del Personaje</h3>
+      <p>¿Por qué tu personaje nunca desarrolló magia? ¿Fue algo que descubriste tarde, o siempre supiste que eras diferente? ¿Tu familia lo veía como una maldición o como algo especial?</p>
+      <p>Los Portadores suelen compensar su vacío mágico con una obsesión por el control, el dominio físico o la búsqueda de armas que amplifiquen sus capacidades. Considera qué armas especializadas o herramientas has conseguido a lo largo de los años.</p>
+      <p><strong>Trasfondos sugeridos:</strong> Forajido, Soldado, Delincuente, Huérfano de Clan.</p>
+    </div>
+  </div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ PROFICIENCIAS ══ -->
+<section style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 002 — Proficiencias Iniciales</p>
+  <h2>Lo Que Domina</h2>
+
+  <div class="prof-grid">
+    <div class="prof-item">
+      <p class="prof-label">Armadura</p>
+      <p class="prof-value">Ligera, Media, Escudos</p>
+    </div>
+    <div class="prof-item">
+      <p class="prof-label">Armas</p>
+      <p class="prof-value">Simples, Marciales, Especiales de Clase</p>
+    </div>
+    <div class="prof-item">
+      <p class="prof-label">Herramientas</p>
+      <p class="prof-value">Una de artesano a elección</p>
+    </div>
+    <div class="prof-item">
+      <p class="prof-label">Tiradas de Salvación</p>
+      <p class="prof-value">Fuerza, Destreza</p>
+    </div>
+    <div class="prof-item">
+      <p class="prof-label">Habilidades</p>
+      <p class="prof-value">3 entre: Atletismo, Acrobacia, Sigilo, Perspicacia, Percepción, Intimidación</p>
+    </div>
+    <div class="prof-item">
+      <p class="prof-label">PG Iniciales</p>
+      <p class="prof-value">12 + mod. CON</p>
+    </div>
+  </div>
+
+  <div class="feature-box" style="margin-top:28px;">
+    <p class="feature-level">RESTRICCIÓN INNATA</p>
+    <p class="feature-name">Sin Acceso al Weave</p>
+    <p>No puedes lanzar hechizos de ningún tipo, ni siquiera trucos. Los objetos mágicos que requieren concentración o activación arcana no funcionan en tus manos.</p>
+  </div>
+
+  <div class="feature-box" style="border-left-color: var(--red);">
+    <p class="feature-level">RESTRICCIÓN INNATA — ABSOLUTA</p>
+    <p class="feature-name">Vacío Imposible de Alcanzar</p>
+    <p>Tu cuerpo carece por completo de la firma mágica que toda magia necesita para anclarse a un ser vivo. Esto no es resistencia: es incompatibilidad total.</p>
+    <p style="margin-top:10px;"><strong style="color:var(--bone);">La magia hostil apenas se ancla a ti.</strong> Los ataques de conjuro que te tengan como objetivo se hacen con desventaja, y tienes ventaja en las tiradas de salvación contra conjuros y efectos mágicos hostiles. La magia que tú aceptas voluntariamente (curación, mejoras, teletransporte de un aliado) te afecta con normalidad: tu vacío rechaza la agresión, no la ayuda.</p>
+    <p style="margin-top:10px;"><strong style="color:var(--bone);">Eres invisible a toda magia de detección, rastreo o adivinación</strong> — Detectar Magia, Detectar el Bien y el Mal, Localizar Criatura, escudriñar, cristales de adivinación, y cualquier sentido mágico similar simplemente no te perciben, como si no existieras para ellos. Esto no te protege de los efectos de área (una bola de fuego te alcanza como a cualquiera, aunque con tu ventaja en la salvación).</p>
+    <p style="margin-top:10px;"><strong style="color:var(--bone);">Lo que la energía maldita protege, tú lo atraviesas.</strong> Las defensas mágicas que suman CA (como <em>escudo</em>, <em>armadura de mago</em> o <em>escudo de fe</em>) no cuentan contra tus ataques: tu golpe no tiene firma que esas barreras puedan reconocer.</p>
+    <p style="margin-top:10px; color: var(--ash); font-style: italic;">No eres invulnerable a la magia: eres un blanco escurridizo para ella. Un golpe físico de un arma encantada sigue impactándote con normalidad.</p>
+  </div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ RASGOS PRINCIPALES ══ -->
+<section class="dark-section" id="rasgos" style="padding: 70px 40px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 003 — Rasgos de Clase</p>
+  <h2>El Cuerpo Como Arma</h2>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 1 — PASIVO</p>
+    <p class="feature-name">Cuerpo Imposible</p>
+    <p>Tu cuerpo opera en el límite de lo humanamente posible — no para resistir golpes, sino para no recibirlos. Cuando llevas armadura media, puedes añadir hasta +3 de tu modificador de Destreza a tu CA (en lugar del límite normal de +2). Además, no tienes límite de peso de carga, tu velocidad base aumenta en 15 pies, y puedes saltar el doble de la distancia normal sin necesitar carrerilla.</p>
+    <p style="margin-top:10px; color: var(--ash); font-style: italic;">No eres un muro: eres algo que ya no está donde el golpe esperaba encontrarlo.</p>
+  </div>
+
+  <div class="feature-box" style="border-left-color: var(--red);">
+    <p class="feature-level">NIVEL 1 — PASIVO</p>
+    <p class="feature-name">Fuerza Más Allá de lo Humano</p>
+    <p>Tu cuerpo compensa la ausencia total de magia con una capacidad física que ningún entrenamiento mortal explica. Tu puntuación de Fuerza tiene un máximo de 22 en lugar de 20. Además, tienes ventaja en las pruebas de Fuerza (Atletismo) y cuentas como una categoría de tamaño mayor para determinar tu capacidad de carga y lo que puedes empujar, arrastrar o levantar.</p>
+  </div>
+
+  <div class="feature-box" style="border-left-color: var(--red);">
+    <p class="feature-level">NIVEL 1 — ACCIÓN</p>
+    <p class="feature-name">Golpe Desnudo</p>
+    <p>Tus puños y patadas no son un último recurso: son un arma en sí mismos. Cuando atacas sin armas, tu daño de golpe es <span class="dice-badge">1d8</span> + mod. Fuerza en lugar de 1 + mod. Fuerza, se considera un arma cuerpo a cuerpo con la propiedad ligera, y se beneficia de Pulso Físico y de Arma de Especialista igual que cualquier arma empuñada. El dado aumenta a <span class="dice-badge">1d10</span> al nivel 7, <span class="dice-badge">1d12</span> al nivel 13, y <span class="dice-badge">2d8</span> al nivel 17.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 1 — PASIVO</p>
+    <p class="feature-name">Percepción del Vacío</p>
+    <p>Dado que no tienes mana propio, tu cuerpo desarrolló una hipersensibilidad a la energía mágica ajena. Puedes detectar la presencia de magia activa a 30 pies sin necesidad de usar Detectar Magia. Tienes ventaja en las pruebas de Percepción para notar criaturas que usan invisibilidad mágica o ilusiones.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 2 — ACCIÓN</p>
+    <p class="feature-name">Pulso Físico</p>
+    <p>Una vez por turno cuando impactas con un ataque de arma, puedes infligir <span class="dice-badge">1d8</span> de daño adicional del mismo tipo. Este daño aumenta a <span class="dice-badge">2d8</span> al nivel 7, <span class="dice-badge">3d8</span> al nivel 13, y <span class="dice-badge">4d8</span> al nivel 17. Puedes usar este rasgo un número de veces igual a tu bonificador de competencia, recuperándolo todo tras un descanso largo.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 3 — PASIVO</p>
+    <p class="feature-name">Arma de Especialista</p>
+    <p>Eliges un tipo de arma como tu "arma vinculada" (puede ser un arma especial única). Con ella obtienes: +1 a las tiradas de ataque, una vez por ronda puedes realizar un ataque de oportunidad con ella sin gastar tu reacción, y el dado de daño sube un paso (ej. d8 → d10).</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 5 — PASIVO</p>
+    <p class="feature-name">Ataque Extra</p>
+    <p>Cuando realizas la acción de Atacar, puedes hacer dos ataques en lugar de uno. A nivel 11, puedes realizar tres ataques.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 6 — PASIVO</p>
+    <p class="feature-name">Cuerpo Templado</p>
+    <p>Tu cuerpo ya no envejece de forma natural, y eres inmune a enfermedades. Cuando caes a 0 PG, puedes usar tu reacción para quedar en 1 PG en su lugar. Una vez usado, no puedes volver a usarlo hasta completar un descanso largo.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 9 — ACCIÓN BONIFICADA</p>
+    <p class="feature-name">Trance de Combate</p>
+    <p>Como acción bonificada, entras en un estado de concentración física máxima durante 1 minuto. Durante este tiempo: tu velocidad aumenta en 30 pies, tus ataques críticos se producen con 19-20, y puedes usar Pulso Físico en cada ataque sin consumir cargas. Una vez usado, debes completar un descanso corto o largo para recuperarlo.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 14 — PASIVO</p>
+    <p class="feature-name">Barrera Somática</p>
+    <p>Tu rechazo innato a la magia se vuelve activo. Cuando recibes daño de un hechizo, puedes usar tu reacción para reducirlo a la mitad (sin tirada de salvación). Además, eres inmune a encantamientos y efectos de control mental.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 15 — PASIVO</p>
+    <p class="feature-name">Resistencia Inquebrantable</p>
+    <p>Tienes ventaja en las tiradas de salvación de Constitución y en las salvaciones para no ser derribado, agarrado o apresado. Además, cuando sufrirías uno o más niveles de agotamiento, sufres uno menos.</p>
+  </div>
+
+  <div class="feature-box">
+    <p class="feature-level">NIVEL 20 — PASIVO</p>
+    <p class="feature-name">El Cuerpo Es Todo</p>
+    <p>Alcanzas la cima de lo que un ser sin magia puede ser. Tus puntuaciones de Fuerza y Destreza aumentan en 4 (hasta un máximo de 24). Todos tus ataques con tu Arma de Especialista se consideran mágicos a efectos de superar resistencias. Una vez por descanso largo, cuando falles una tirada de salvación, puedes elegir tener éxito en su lugar.</p>
+  </div>
+</div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ TABLA DE PROGRESIÓN ══ -->
+<section id="progresion" style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 004 — Tabla de Progresión</p>
+  <h2>Niveles 1 — 20</h2>
+
+  <table class="dnd-table">
+    <thead>
+      <tr>
+        <th>Nivel</th>
+        <th>Bon. Comp.</th>
+        <th>PG por Nivel</th>
+        <th>Rasgo Ganado</th>
+        <th>Pulso Físico</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="lvl">1</td><td>+2</td><td>12+CON</td><td class="feat-name">Sin Acceso al Weave, Vacío Imposible de Alcanzar, Cuerpo Imposible, Fuerza Más Allá de lo Humano, Golpe Desnudo, Percepción del Vacío</td><td>—</td></tr>
+      <tr><td class="lvl">2</td><td>+2</td><td>1d12+CON</td><td class="feat-name">Pulso Físico</td><td>1d8 / 2 cargas</td></tr>
+      <tr><td class="lvl">3</td><td>+2</td><td>1d12+CON</td><td class="feat-name">Arma de Especialista, Arquetipo (rasgo 1)</td><td>1d8 / 2 cargas</td></tr>
+      <tr><td class="lvl">4</td><td>+2</td><td>1d12+CON</td><td class="feat-name">Mejora de Puntuación de Característica</td><td>1d8 / 2 cargas</td></tr>
+      <tr><td class="lvl">5</td><td>+3</td><td>1d12+CON</td><td class="feat-name">Ataque Extra (×2)</td><td>1d8 / 3 cargas</td></tr>
+      <tr><td class="lvl">6</td><td>+3</td><td>1d12+CON</td><td class="feat-name">Cuerpo Templado, Arquetipo (rasgo 2)</td><td>1d8 / 3 cargas</td></tr>
+      <tr><td class="lvl">7</td><td>+3</td><td>1d12+CON</td><td class="feat-name">Pulso Físico mejorado</td><td>2d8 / 3 cargas</td></tr>
+      <tr><td class="lvl">8</td><td>+3</td><td>1d12+CON</td><td class="feat-name">Mejora de Puntuación de Característica</td><td>2d8 / 3 cargas</td></tr>
+      <tr><td class="lvl">9</td><td>+4</td><td>1d12+CON</td><td class="feat-name">Trance de Combate</td><td>2d8 / 4 cargas</td></tr>
+      <tr><td class="lvl">10</td><td>+4</td><td>1d12+CON</td><td class="feat-name">Arquetipo (rasgo 3)</td><td>2d8 / 4 cargas</td></tr>
+      <tr><td class="lvl">11</td><td>+4</td><td>1d12+CON</td><td class="feat-name">Ataque Extra (×3)</td><td>2d8 / 4 cargas</td></tr>
+      <tr><td class="lvl">12</td><td>+4</td><td>1d12+CON</td><td class="feat-name">Mejora de Puntuación de Característica</td><td>2d8 / 4 cargas</td></tr>
+      <tr><td class="lvl">13</td><td>+5</td><td>1d12+CON</td><td class="feat-name">Pulso Físico mejorado</td><td>3d8 / 5 cargas</td></tr>
+      <tr><td class="lvl">14</td><td>+5</td><td>1d12+CON</td><td class="feat-name">Barrera Somática, Arquetipo (rasgo 4)</td><td>3d8 / 5 cargas</td></tr>
+      <tr><td class="lvl">15</td><td>+5</td><td>1d12+CON</td><td class="feat-name">Resistencia Inquebrantable</td><td>3d8 / 5 cargas</td></tr>
+      <tr><td class="lvl">16</td><td>+5</td><td>1d12+CON</td><td class="feat-name">Mejora de Puntuación de Característica</td><td>3d8 / 5 cargas</td></tr>
+      <tr><td class="lvl">17</td><td>+6</td><td>1d12+CON</td><td class="feat-name">Pulso Físico mejorado</td><td>4d8 / 6 cargas</td></tr>
+      <tr><td class="lvl">18</td><td>+6</td><td>1d12+CON</td><td class="feat-name">Arquetipo (rasgo 5)</td><td>4d8 / 6 cargas</td></tr>
+      <tr><td class="lvl">19</td><td>+6</td><td>1d12+CON</td><td class="feat-name">Mejora de Puntuación de Característica</td><td>4d8 / 6 cargas</td></tr>
+      <tr><td class="lvl">20</td><td>+6</td><td>1d12+CON</td><td class="feat-name">El Cuerpo Es Todo</td><td>4d8 / 6 cargas</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ ARQUETIPOS ══ -->
+<section id="arquetipos" style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 005 — Arquetipos de Clase</p>
+  <h2>Senderos de la Restricción</h2>
+  <p style="color:var(--ash);margin-bottom:10px;">En nivel 3 eliges un arquetipo. Cada uno representa un camino distinto para canalizar la ausencia de magia en dominio físico. Otorga rasgos en los niveles 3, 6, 10, 14 y 18.</p>
+
+  <div class="archetype-grid">
+
+    <!-- ARQUETIPO 1 -->
+    <div class="archetype-card">
+      <h3>Ejecutor de Sombra</h3>
+      <p class="archetype-tagline">— El camino de Toji Fushiguro —</p>
+      <p>Especializados en eliminar objetivos de élite. Combinan velocidad, armas poco convencionales y una movilidad sobrehumana para penetrar cualquier defensa, incluidas las mágicas.</p>
+      <div class="feature-box" style="margin-top:16px;">
+        <p class="feature-level">NIV 3</p>
+        <p class="feature-name">Colmillo del Vacío</p>
+        <p>Puedes almacenar hasta 3 armas en un espacio extradimensional personal. Sacarlas o guardarlas es una acción gratuita. Las armas almacenadas no pueden ser detectadas por magia.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 6</p>
+        <p class="feature-name">Maniobra Imposible</p>
+        <p>Cuando te mueves, no provocas ataques de oportunidad. Además, como acción bonus puedes dashearte y realizar un ataque al final del movimiento.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 10</p>
+        <p class="feature-name">Fractura de Defensa</p>
+        <p>Tus ataques ignoran resistencias no mágicas y reducen en 3 la CA del objetivo hasta el inicio de tu próximo turno al impactar.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 14</p>
+        <p class="feature-name">Cazador de Hechiceros</p>
+        <p>Tienes ventaja en las tiradas de ataque contra criaturas que estén concentrándose en un conjuro, y esas criaturas tienen desventaja en la salvación de Constitución para mantener la concentración cuando les haces daño.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 18</p>
+        <p class="feature-name">El Asesino del Cielo</p>
+        <p>Una vez por turno, cuando impactas a una criatura con tu Arma de Especialista, puedes poner fin a un conjuro de nivel 5 o inferior que la esté afectando o que ella esté manteniendo.</p>
+      </div>
+    </div>
+
+    <!-- ARQUETIPO 2 -->
+    <div class="archetype-card">
+      <h3>Lanza Inamovible</h3>
+      <p class="archetype-tagline">— El camino de Maki Zenin —</p>
+      <p>Guerreras y guerreros que convirtieron el rechazo de sus clanes en combustible. Maestros en armas especializadas de tradición, pueden activar el potencial de armas cursadas o encantadas que en manos de otros serían inmanejables.</p>
+      <div class="feature-box" style="margin-top:16px;">
+        <p class="feature-level">NIV 3</p>
+        <p class="feature-name">Dominio del Arsenal</p>
+        <p>Tienes competencia con cualquier arma, sin importar su rareza o tipo. Puedes usar armas con la propiedad "requiere magia" como si no la tuvieran.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 6</p>
+        <p class="feature-name">Postura de Raíz</p>
+        <p>Como acción bonus, adoptas una postura de combate. Hasta el inicio de tu próximo turno, cualquier criatura que te golpee recibe daño igual a tu modificador de FUE o DES, y tienes ventaja en todas las tiradas de salvación de FUE.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 10</p>
+        <p class="feature-name">Cuerpo Indestructible</p>
+        <p>Cuando recibes daño que te reduciría a 0 PG, puedes hacer una tirada de salvación de Constitución (CD 10 + daño recibido / 5). Si tienes éxito, quedas en 1 PG. Una vez por descanso largo.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 14</p>
+        <p class="feature-name">Arsenal Viviente</p>
+        <p>Puedes cambiar de arma como parte de cada ataque. Cuando realizas la acción de Atacar y cada ataque usa un arma distinta de la del ataque anterior, cada uno de esos ataques inflige 1d6 de daño adicional del tipo del arma.</p>
+      </div>
+      <div class="feature-box">
+        <p class="feature-level">NIV 18</p>
+        <p class="feature-name">Muro de Acero</p>
+        <p>Los aliados a 1,5 m de ti ganan +2 a la CA. Cuando una criatura a tu alcance ataca a un aliado, puedes usar tu reacción para hacerle un ataque con ventaja antes de que resuelva el suyo.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ EQUIPAMIENTO ══ -->
+<section style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 006 — Equipamiento</p>
+  <h2>Herramientas de Supervivencia</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Equipamiento Inicial</h3>
+      <ul>
+        <li>Un arma marcial a elección (tu Arma de Especialista inicial)</li>
+        <li>Dos armas simples adicionales</li>
+        <li>Armadura de cuero tachonado o armadura de cuero</li>
+        <li>Un paquete de explorador o un paquete de ladrón</li>
+        <li>Un set de herramientas de artesano</li>
+        <li>15 po adicionales para equipo menor</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Armas Recomendadas</h3>
+      <p>Los Portadores frecuentemente buscan armas que amplíen su alcance o velocidad, compensando su falta de magia a distancia.</p>
+      <ul>
+        <li><strong>Cadena con hoz:</strong> versátil, flexible, difícil de bloquear</li>
+        <li><strong>Lanza o Naginata:</strong> alcance y penetración</li>
+        <li><strong>Garra de mano (kukri doble):</strong> velocidad y daño continuo</li>
+        <li><strong>Arco de guerra:</strong> la única "magia a distancia" del Portador</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="scar"></div>
+
+<!-- ══ ROL ══ -->
+<section class="dark-section" style="padding:70px 40px;">
+<div style="max-width:1100px;margin:0 auto;">
+  <p class="section-label">// 007 — Interpretación</p>
+  <h2>Vivir Con el Vacío</h2>
+
+  <div class="two-col">
+    <div>
+      <h3>Relación con Hechiceros</h3>
+      <p>Los Portadores son raros, y los magos frecuentemente los tratan con una mezcla de curiosidad y desconfianza. Un Portador puede leer esa incomodidad, aprovecharla, o ignorarla por completo. Que el mundo quiera categorizarte es su problema.</p>
+      <p>Algunos buscan activamente aliarse con hechiceros poderosos, usando su inmunidad práctica a la magia como activo. Otros los evitan, prefiriendo mundos donde el músculo y el acero son moneda de cambio.</p>
+    </div>
+    <div>
+      <h3>Rasgos de Personalidad</h3>
+      <ul>
+        <li>Pragmático hasta el cinismo. Los Portadores no tienen tiempo para idealismos.</li>
+        <li>Independientes al extremo. Nadie les protegió con magia: aprendieron a protegerse solos.</li>
+        <li>Percepción aguda del poder. Saben exactamente quién en la sala es una amenaza real.</li>
+        <li>Tendencia a infraestimar sus propias capacidades (o a sobreestimar las de otros).</li>
+        <li>Afecto profundo, rara vez expresado. Cuando protegen a alguien, lo hacen por completo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="restriction-box" style="margin-top:36px;">
+    <p>La Restricción Celestial no es una maldición. Es un contrato que nadie firmó pero que da forma a todo. El Portador no nació roto: nació distinto. Y esa diferencia, cuando se entiende y se acepta, es lo más cercano al absoluto que un ser mortal puede alcanzar.</p>
+  </div>
+</div>
+</section>
+
+<footer>
+  <p>Portador de la Restricción Celestial · Clase Homebrew D&amp;D 5e · Inspirada en Jujutsu Kaisen</p>
+  <p style="margin-top:8px;color:#1E1E28;">No afiliado con Gege Akutami, Shueisha, MAPPA, o Wizards of the Coast</p>
+</footer>
+
+<div class="jjk-hanko" aria-hidden="true"><span>天</span><span>与</span></div>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

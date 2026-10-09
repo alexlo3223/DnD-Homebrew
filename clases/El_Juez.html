@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Juez — Clase D&amp;D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Shippori+Mincho:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+:root{--bg:#0d0807;--card:#160e0c;--card2:#1d1310;--ink:#ece2d0;--dim:#a8988a;--acc:#c9a84c;--acc2:#ecd9a0;
+--line:rgba(236,226,208,.09);--line2:rgba(201,168,76,.28);--navbg:rgba(13,8,7,.93);--sel:rgba(201,168,76,.10);
+--f-title:Georgia,serif;--f-body:Georgia,serif;--f-label:Georgia,serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f-body);min-height:100vh}
+a{color:var(--acc2)}
+.hero{position:relative;text-align:center;padding:64px 20px 36px;overflow:hidden;isolation:isolate}
+.hero .eyebrow{font:600 11px/1.4 var(--f-label);letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+.hero h1{font:700 clamp(40px,7vw,68px)/1.05 var(--f-title);color:var(--acc2);margin:14px 0 10px;text-wrap:balance}
+.hero .lema{font-style:italic;color:var(--dim);max-width:640px;margin:0 auto;font-size:17.5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px}
+.tags span{font:600 10.5px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--acc2);border:1px solid var(--line2);padding:7px 11px;border-radius:2px}
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;justify-content:center;gap:2px;background:var(--navbg);backdrop-filter:blur(6px);border-block:1px solid var(--line);padding:0 10px}
+nav.tabs button{font:600 11px/1 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);background:none;border:0;padding:15px 14px;cursor:pointer;border-bottom:2px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--acc2);border-bottom-color:var(--acc)}
+nav.tabs button:focus-visible,.btn:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:36px 18px 90px;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+h2{font:700 15px/1.3 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc2);margin:34px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.panel>h2:first-child{margin-top:0}
+p{margin-bottom:12px}
+.desc p{max-width:68ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:22px 0}
+.stats div{background:var(--card);padding:14px 16px}
+.stats span{display:block;font:600 10px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+.stats b{font-weight:600;font-size:15.5px}
+.tabla-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px;font-variant-numeric:tabular-nums}
+th{font:600 10px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);background:var(--card2);padding:10px 8px;text-align:left}
+td{padding:8px;border-top:1px solid var(--line);vertical-align:top}
+td.col-f{color:var(--ink)}
+tr.mejora td.col-f{color:var(--dim)}
+tr.actual td{background:var(--sel)}
+.rasgo,.tecnica{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--acc);padding:16px 18px;margin-bottom:12px;border-radius:2px}
+.rasgo header,.tecnica header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:8px}
+.rasgo h3,.tecnica h3{font:700 18px/1.25 var(--f-title);color:var(--acc2);margin-right:4px}
+.nivel{font:600 10px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.precio{font:700 12px/1 var(--f-label);color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:2px;letter-spacing:.04em}
+.coste{font:700 10.5px/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:2px;border:1px solid}
+.coste.accion{color:#f0c27a;border-color:#f0c27a66}
+.coste.adicional{color:#8fd1a8;border-color:#8fd1a866}
+.coste.reaccion{color:#9fb8ff;border-color:#9fb8ff66}
+.coste.libre,.coste.minuto,.coste.ritual{color:var(--dim);border-color:var(--line2)}
+.regla{margin-top:6px;padding:10px 12px;background:var(--card2);border:1px dashed var(--line2);font-size:15px}
+.caja{background:var(--card2);border:1px solid var(--line2);padding:18px 20px;margin:16px 0;border-radius:2px}
+.caja h3{font:700 17px/1.3 var(--f-title);color:var(--acc2);margin-bottom:8px}
+.caja ul{margin:6px 0 10px 20px}.caja li{margin-bottom:4px}
+.subs{display:grid;gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--sc);border-radius:2px;padding:18px 20px}
+.sub header{margin-bottom:8px}
+.sub-eyebrow{font:600 10px/1 var(--f-label);letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+.sub h3{font:700 24px/1.2 var(--f-title);color:var(--sc);margin-top:6px}
+.sub-fuente{font-size:14px;color:var(--dim);font-style:italic;margin:2px 0 0}
+.sub-intro{font-style:italic;color:var(--dim)}
+.sub ul{list-style:none;display:grid;gap:12px;margin-top:10px}
+.sub li{display:grid;grid-template-columns:52px 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.sub li>div{min-width:0}
+.sf-n{font:700 11px/1.6 var(--f-label);color:var(--sc);letter-spacing:.06em}
+.sub li strong{font-family:var(--f-title);font-size:16.5px;color:var(--ink);margin-right:8px}
+.sub li p{margin:6px 0 0}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:2px;min-width:0}
+.card.ancha{grid-column:1/-1}
+.card h3{font:700 12px/1.3 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--acc2);margin-bottom:4px}
+.card .sub-t{font-size:14px;color:var(--dim);font-style:italic;margin-bottom:12px}
+.fila{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+select,input[type=number]{background:var(--bg);color:var(--ink);border:1px solid var(--line2);font:inherit;font-size:15px;padding:6px 10px;border-radius:2px}
+.derivados{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
+.derivados div{text-align:center}
+.derivados span{display:block;font:600 9.5px/1.3 var(--f-label);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.derivados b{font:700 24px/1.2 var(--f-title);color:var(--acc2);font-variant-numeric:tabular-nums}
+.pips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.pip{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--acc);background:var(--acc);cursor:pointer;padding:0}
+.pip.off{background:transparent;opacity:.55}
+.cuenta{font:700 15px/1 var(--f-label);color:var(--ink);font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{font:700 10.5px/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--acc2);background:transparent;border:1px solid var(--line2);padding:9px 12px;border-radius:2px;cursor:pointer}
+.btn:hover{background:var(--acc);color:var(--bg)}
+.nota{font-size:13.5px;color:var(--dim);font-style:italic;margin-top:8px}
+.estado{font:700 18px/1.3 var(--f-title);color:var(--acc2)}
+@media (max-width:600px){body{font-size:16px}.sub li{grid-template-columns:1fr;gap:4px}main{padding-inline:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+:root{--bg:#07080e;--card:#0d0f1a;--card2:#121526;--ink:#e8eef8;--dim:#8a97ad;--acc:#9aa6ff;--acc2:#c8d0ff;--line:rgba(200,212,232,.09);--line2:rgba(154,166,255,.28);--navbg:rgba(7,8,14,.93);--sel:rgba(154,166,255,.10);--f-title:'Shippori Mincho B1','Noto Serif JP',Georgia,serif;--f-body:'Shippori Mincho',Georgia,serif;--f-label:'Zen Kaku Gothic New','Trebuchet MS',sans-serif;--acc:#d4b04a;--acc2:#f0dc94;--glow:#7a1626;--line2:rgba(212,176,74,.30);--sel:rgba(212,176,74,.10);--bg:#0a0709;--card:#130c10;--card2:#1a1015;}
+
+html::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:9998}
+body{background:radial-gradient(ellipse 70% 50% at 70% 0%,color-mix(in srgb,var(--acc) 14%,transparent),transparent 60%),var(--bg)}
+h2::after{content:"";display:block;width:120px;height:6px;margin-top:10px;border-radius:3px 60% 40% 3px;background:linear-gradient(90deg,var(--acc),transparent);opacity:.85}
+.hero h1{font-weight:800;letter-spacing:.02em}
+.jjk-hanko{position:fixed;right:22px;bottom:22px;z-index:9999;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;width:40px;padding:8px 0;font-family:'Shippori Mincho B1','Noto Serif JP',serif;font-weight:800;font-size:20px;line-height:1.1;color:#f4ece0;background:#c8202a;border-radius:4px;box-shadow:0 0 0 2px #c8202a, inset 0 0 0 2px #f4ece0;transform:rotate(-4deg);opacity:.92}
+.jjk-kanji{position:absolute;right:6%;top:30px;font:800 220px/1 'Shippori Mincho B1','Noto Serif JP',serif;color:var(--acc);opacity:.05;z-index:-1;pointer-events:none;writing-mode:vertical-rl}
+@media (max-width:600px){.jjk-hanko{font-size:15px;right:12px;bottom:12px}.jjk-kanji{font-size:120px}}
+
+
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="jjk-kanji" aria-hidden="true">裁判</div>
+  <p class="eyebrow">Clase homebrew · D&amp;D 5e · Jujutsu Kaisen · Inspirada en Hiromi Higuruma</p>
+  <h1>El Juez</h1>
+  <p class="lema">«En este tribunal no gana el más fuerte. Gana quien tiene la ley de su lado, y yo soy la ley.»</p>
+  <div class="tags"><span>Cargos</span><span>Pruebas</span><span>Penas</span><span>Dominio: el Tribunal</span></div>
+</header>
+<nav class="tabs" aria-label="Secciones"><button type="button" data-p="clase" aria-selected="true">Clase</button><button type="button" data-p="rasgos" aria-selected="false">Rasgos</button><button type="button" data-p="lista" aria-selected="false">Penas</button><button type="button" data-p="subs" aria-selected="false">Tribunales</button><button type="button" data-p="ficha" aria-selected="false">Ficha de juego</button></nav>
+<main>
+  <section class="panel on" id="p-clase">
+    <h2>Descripción</h2>
+    <div class="desc"><p>El Juez es un hechicero jujutsu que convierte el combate en un proceso. Abre un <strong>Expediente</strong> contra quien delinque a su vista, acumula <strong>Pruebas</strong> mientras el acusado sigue cometiendo lo que se le imputa y, cuando tiene bastantes, dicta una <strong>Pena</strong>: confiscar un conjuro, prohibir la violencia, ordenar un arresto o ejecutar.</p><p>Es una clase de lectura y de paciencia, no de fuerza bruta. Cuanto más tiempo actúa el enemigo sin ser frenado, más Pruebas junta el Juez, y más dura es la sentencia. La técnica premia observar, nombrar y castigar en el momento justo.</p><p>Los Cargos y las Penas son decisiones del jugador, no penalizaciones. Nada de lo que hace el Juez obliga a sufrir por defecto.</p></div>
+    <div class="stats"><div><span>Dado de golpe</span><b>d8</b></div><div><span>Característica principal</span><b>Inteligencia + Sabiduría</b></div><div><span>Salvaciones</span><b>Inteligencia · Sabiduría</b></div><div><span>Armadura</span><b>Ligera</b></div><div><span>Armas</span><b>Sencillas</b></div><div><span>Habilidades</span><b>3 de: Investigación, Perspicacia, Persuasión, Intimidación, Historia, Percepción</b></div><div><span>Subclase</span><b>Tribunal (nivel 3)</b></div></div>
+    <h2>Tabla de progresión</h2>
+    <div class="tabla-wrap"><table id="prog"><thead><tr><th>Nivel</th><th>Comp.</th><th>Pruebas máx.</th><th>Cargos por objetivo</th><th>Rasgos</th></tr></thead><tbody><tr data-lvl="1"><td>1</td><td>+2</td><td>4</td><td>2</td><td class="col-f">Expediente, Pruebas, Veredicto</td></tr><tr data-lvl="2"><td>2</td><td>+2</td><td>4</td><td>2</td><td class="col-f">Absolución, Prohibición de Violencia</td></tr><tr data-lvl="3"><td>3</td><td>+2</td><td>4</td><td>2</td><td class="col-f">Tribunal, Confiscación, Código Vigente</td></tr><tr data-lvl="4" class="mejora"><td>4</td><td>+2</td><td>4</td><td>2</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="5"><td>5</td><td>+3</td><td>5</td><td>2</td><td class="col-f">Doble Expediente, Orden de Arresto, Perjurio</td></tr><tr data-lvl="6"><td>6</td><td>+3</td><td>5</td><td>2</td><td class="col-f">Interrogatorio, rasgo de Tribunal</td></tr><tr data-lvl="7"><td>7</td><td>+3</td><td>5</td><td>2</td><td class="col-f">Mente Jurídica</td></tr><tr data-lvl="8" class="mejora"><td>8</td><td>+3</td><td>5</td><td>2</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="9"><td>9</td><td>+4</td><td>6</td><td>3</td><td class="col-f">Sala de Juicio</td></tr><tr data-lvl="10"><td>10</td><td>+4</td><td>6</td><td>3</td><td class="col-f">Jurisprudencia, rasgo de Tribunal</td></tr><tr data-lvl="11"><td>11</td><td>+4</td><td>6</td><td>3</td><td class="col-f">Ejecución, Dos Leyes</td></tr><tr data-lvl="12" class="mejora"><td>12</td><td>+4</td><td>6</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="13"><td>13</td><td>+5</td><td>7</td><td>3</td><td class="col-f">Veredicto Unánime</td></tr><tr data-lvl="14"><td>14</td><td>+5</td><td>7</td><td>3</td><td class="col-f">Rasgo de Tribunal</td></tr><tr data-lvl="15"><td>15</td><td>+5</td><td>7</td><td>3</td><td class="col-f">Juicio Justo</td></tr><tr data-lvl="16" class="mejora"><td>16</td><td>+5</td><td>7</td><td>3</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="17"><td>17</td><td>+6</td><td>8</td><td>4</td><td class="col-f">Segunda Instancia</td></tr><tr data-lvl="18"><td>18</td><td>+6</td><td>8</td><td>4</td><td class="col-f">—</td></tr><tr data-lvl="19" class="mejora"><td>19</td><td>+6</td><td>8</td><td>4</td><td class="col-f">Mejora de Característica</td></tr><tr data-lvl="20"><td>20</td><td>+6</td><td>8</td><td>4</td><td class="col-f">La Ley Soy Yo</td></tr></tbody></table></div>
+  </section>
+  <section class="panel" id="p-rasgos">
+    <h2>Rasgos de clase</h2>
+    <div class="caja"><h3>Expediente</h3><p>Una vez en cada uno de tus turnos, sin acción, abres un <strong>Expediente</strong> contra una criatura que veas a 60 pies y que haya hecho daño a alguien, mentido a la vista de alguien, lanzado un conjuro o huido de combate desde que empezó el encuentro o desde que la viste. Le impones un <strong>Cargo</strong> de uno de estos cuatro tipos: Violencia, Engaño, Hechicería o Huida. Un objetivo solo puede tener un Cargo de cada tipo y tantos Cargos a la vez como indica la tabla. Los Cargos terminan cuando acaba el combate o cuando el objetivo muere.</p></div><div class="caja"><h3>Pruebas</h3><p>Tu recurso son las <strong>Pruebas</strong>. Tu máximo viene en la tabla. Las recuperas todas con un descanso largo y la mitad con uno corto.</p><p>Ganas 1 Prueba, sin acción, la primera vez en cada ronda que una criatura con Cargo hace algo que coincide con él: Violencia (daña a alguien), Engaño (se esconde, miente o usa una ilusión), Hechicería (lanza un conjuro o usa un rasgo especial) o Huida (se mueve lejos para escapar o usa Retirarse). Por eso el Juez no necesita golpear: necesita esperar la infracción.</p></div><div class="caja"><h3>Veredicto</h3><p>Como acción adicional, o como acción cuando la Pena lo indique, pagas Pruebas y dictas una <strong>Pena</strong> de tu lista (pestaña Penas) contra una criatura con el Cargo que esa Pena pide. La criatura hace una salvación de Carisma. Si falla, sufre la Pena. Si la supera, la Pena no tiene efecto, pero las Pruebas se gastan igual y el Cargo sigue sobre ella.</p><p>La CD de tus Penas es 8 + tu bonificador de competencia + tu modificador de Inteligencia.</p></div><div class="caja"><h3>Solo el Juez: Código Vigente</h3><p>Al inicio de tu descanso largo promulgas una <strong>Regla</strong> del tribunal (de la lista de abajo). Una vez por día, como acción adicional, la declaras en vigor durante 1 minuto en un radio de 60 pies. <strong>La Regla obliga a todos, también a ti.</strong> Ese es el precio de la ley: no te beneficia una excepción. Nadie más puede imponer reglas a un campo de batalla.<ul><li><strong>Nadie huye:</strong> ninguna criatura puede terminar su movimiento a más de 30 pies del lugar donde declaraste la Regla.</li><li><strong>Un golpe cada uno:</strong> cada criatura solo puede hacer un ataque por turno.</li><li><strong>Palabra dada:</strong> la criatura que mienta en voz alta sufre 2d6 de daño psíquico.</li><li><strong>Derecho a defensa:</strong> la primera vez en cada ronda que una criatura sufre daño, lo reduce a la mitad si no ha atacado en ese turno.</li></ul></p></div><article class="rasgo"><header><h3>Tribunal</h3><span class="nivel">Nivel 3</span></header><p>Eliges el tribunal que presides: Fiscal, Defensor o Verdugo. Obtienes rasgos de Tribunal a los niveles 3, 6, 10 y 14.</p></article><article class="rasgo"><header><h3>Código Vigente</h3><span class="nivel">Nivel 3</span><span class="coste adicional">Acción adicional</span></header><p>Promulgas una Regla y la declaras en vigor, con las reglas de Solo el Juez. Ganas 1 Prueba cada vez que una criatura hostil incumple la Regla. Solo una vez por descanso largo.</p></article><article class="rasgo"><header><h3>Doble Expediente</h3><span class="nivel">Nivel 5</span></header><p>Puedes abrir hasta dos Expedientes en cada uno de tus turnos en lugar de uno.</p></article><article class="rasgo"><header><h3>Interrogatorio</h3><span class="nivel">Nivel 6</span><span class="coste minuto">1 minuto</span></header><p>Dedicas 1 minuto a interrogar a una criatura que esté a tu alcance y tenga un Cargo de Engaño. Debe superar una salvación de Sabiduría o responder con la verdad a tres preguntas. No recuerda haber sido interrogada.</p></article><article class="rasgo"><header><h3>Mente Jurídica</h3><span class="nivel">Nivel 7</span></header><p>Tienes competencia en las salvaciones de Carisma y ventaja en las pruebas de Perspicacia para detectar mentiras.</p></article><article class="rasgo"><header><h3>Sala de Juicio</h3><span class="nivel">Nivel 9</span><span class="coste accion">Acción</span></header><p>Como acción, pagas 5 Pruebas y despliegas tu Dominio: un tribunal de 30 pies de radio centrado en ti, que dura 1 minuto (concentración). Dentro, tus Penas no necesitan que el objetivo tenga el Cargo, cuestan 1 Prueba menos (mínimo 1) y las criaturas hostiles tienen desventaja en las salvaciones contra ellas. Las criaturas hostiles que entren por primera vez reciben un Cargo de Violencia. Una vez por descanso largo.</p></article><article class="rasgo"><header><h3>Jurisprudencia</h3><span class="nivel">Nivel 10</span></header><p>Tu máximo de Pruebas aumenta en 2. Abrir un Expediente no cuenta como acción alguna.</p></article><article class="rasgo"><header><h3>Dos Leyes</h3><span class="nivel">Nivel 11</span></header><p>Puedes tener dos Reglas en vigor a la vez al declararlas, y cada una cuenta como una declaración.</p></article><article class="rasgo"><header><h3>Veredicto Unánime</h3><span class="nivel">Nivel 13</span><span class="coste reaccion">Reacción</span></header><p>Una vez por descanso largo, cuando una criatura supera una salvación contra una de tus Penas, puedes hacer que la falle.</p></article><article class="rasgo"><header><h3>Juicio Justo</h3><span class="nivel">Nivel 15</span></header><p>Cuando una criatura supera una salvación contra tu Pena, ganas 1 Prueba. Una vez por turno.</p></article><article class="rasgo"><header><h3>Segunda Instancia</h3><span class="nivel">Nivel 17</span></header><p>Puedes usar Sala de Juicio una vez más antes de un descanso largo, y ya no necesita concentración.</p></article><article class="rasgo"><header><h3>La Ley Soy Yo</h3><span class="nivel">Nivel 20</span></header><p>Tu máximo de Pruebas se duplica. Todas tus Penas cuestan 1 Prueba menos (mínimo 1). Al inicio de cada uno de tus turnos en combate, ganas 2 Pruebas.</p></article>
+  </section>
+  <section class="panel" id="p-lista">
+    <h2>Penas</h2>
+    <p>Las Penas se dictan como parte del Veredicto. Salvo que se diga otra cosa, la criatura hace una salvación de Carisma. Cada Pena pide un tipo de Cargo.</p>
+    <article class="tecnica"><header><h3>Sentencia Leve</h3><span class="precio">1 Prueba</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 1</span></header><p>Cualquier Cargo. El objetivo sufre (1 + nº de Cargos que tenga) d6 de daño de fuerza, o la mitad si supera la salvación. Desde el nivel 11, los dados son d8.</p></article><article class="tecnica"><header><h3>Absolución</h3><span class="precio">1 Prueba</span><span class="coste reaccion">Reacción</span><span class="nivel">Desde nivel 2</span></header><p>Cuando un aliado a 30 pies sufre daño de una criatura con Cargo, reduces ese daño en 2d6 + tu modificador de Inteligencia. No requiere salvación.</p></article><article class="tecnica"><header><h3>Prohibición de Violencia</h3><span class="precio">2 Pruebas</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 2</span></header><p>Cargo de Violencia. Hasta el final de su siguiente turno, el objetivo no puede dañar a nadie. Si lo intenta, sufre 3d8 de daño psíquico y la Pena termina.</p></article><article class="tecnica"><header><h3>Confiscación</h3><span class="precio">2 Pruebas</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 3</span></header><p>Cargo de Hechicería. Eliges un conjuro o rasgo especial que haya usado desde que le abriste el Expediente. No puede usarlo hasta el final de su siguiente turno. Desde el nivel 9, hasta el final del combate si falla por 5 o más.</p></article><article class="tecnica"><header><h3>Orden de Arresto</h3><span class="precio">2 Pruebas</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 5</span></header><p>Cargo de Huida. Es arrastrada a 5 pies de ti y queda restringida hasta el final de su siguiente turno. Una criatura voladora cae al suelo.</p></article><article class="tecnica"><header><h3>Perjurio</h3><span class="precio">2 Pruebas</span><span class="coste adicional">Acción adicional</span><span class="nivel">Desde nivel 5</span></header><p>Cargo de Engaño. Terminan en ella las ilusiones, la invisibilidad y los disfraces mágicos. Tiene desventaja en las tiradas de ataque hasta el final de su siguiente turno.</p></article><article class="tecnica"><header><h3>Ejecución</h3><span class="precio">4 Pruebas</span><span class="coste accion">Acción</span><span class="nivel">Desde nivel 11</span></header><p>Cualquier Cargo. Invocas la Espada del Verdugo, un arma de fuerza que existe solo en este momento, y haces un ataque cuerpo a cuerpo con hechizo contra la criatura. Si impacta, sufre (2 + nº de Cargos) d10 de daño de fuerza. Si queda por debajo del doble de tu nivel en puntos de golpe, muere. Sin salvación.</p></article>
+  </section>
+  <section class="panel" id="p-subs">
+    <h2>Tribunales</h2>
+    <p>Al nivel 3 eliges el tribunal que presides. Cada uno entiende la justicia de otra manera.</p>
+    <div class="subs"><section class="sub" style="--sc:#e07a5f"><header><span class="sub-eyebrow">Tribunal</span><h3>Fiscal</h3><p class="sub-fuente">La acusación nunca duerme</p></header><p class="sub-intro">Tú acusas, tú pruebas, tú condenas. El Fiscal convierte las Pruebas en daño con un rigor casi mecánico.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Acusación Fundada</strong><p>Tu Sentencia Leve usa d8 en lugar de d6.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Pruebas Acumuladas</strong><p>Una vez por turno, cuando impactas con un arma o un ataque con hechizo a una criatura con Cargo, añades 1d8 de daño de fuerza.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Alegato Final</strong><p>Cuando una criatura con tres Cargos o más falla la salvación de una Pena tuya, sufre además 3d8 de daño psíquico.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Pena Máxima</strong><p>Ejecución te cuesta 3 Pruebas en lugar de 4 y el umbral de muerte pasa a ser el triple de tu nivel.</p></div></li></ul></section><section class="sub" style="--sc:#9fb8ff"><header><span class="sub-eyebrow">Tribunal</span><h3>Defensor</h3><p class="sub-fuente">Todo el mundo merece un abogado</p></header><p class="sub-intro">Tu técnica se dirige a proteger. El Defensor convierte los Cargos de los enemigos en blindaje para su gente.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Presunción de Inocencia</strong><p>Cuando abres un Expediente contra una criatura que ha dañado a un aliado, ese aliado gana puntos de golpe temporales iguales a tu nivel de clase + tu modificador de Inteligencia.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Objeción</strong><span class="coste reaccion">Reacción</span><p>Cuando una criatura con Cargo apunta a un aliado a 30 pies con un conjuro o efecto que le obligue a salvar, ese aliado tiene ventaja en la salvación. Cuesta tu reacción.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Fianza</strong><span class="coste reaccion">Reacción</span><p>Cuando un aliado a 30 pies sufre daño, puedes gastar 2 Pruebas y reacción para absorber la mitad. Sufres tú ese daño como daño de fuerza.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Apelación</strong><span class="coste reaccion">Reacción</span><p>Una vez por descanso largo, cuando un aliado a 30 pies cae a 0 puntos de golpe, lo estabilizas y recupera puntos de golpe iguales a 5 × tu modificador de Inteligencia.</p></div></li></ul></section><section class="sub" style="--sc:#c9a84c"><header><span class="sub-eyebrow">Tribunal</span><h3>Verdugo</h3><p class="sub-fuente">La sentencia se ejecuta de inmediato</p></header><p class="sub-intro">La sala de juicio es solo una formalidad. El Verdugo entiende que la técnica se hace carne con la espada.</p><ul><li><span class="sf-n">Nv. 3</span><div><strong>Filo del Verdugo</strong><p>Desde el nivel 3 puedes usar Ejecución sin esperar al nivel 11, pagando 5 Pruebas. Al nivel 11 pasa a costar 4.</p></div></li><li><span class="sf-n">Nv. 6</span><div><strong>Ejecución Rápida</strong><p>Una vez por combate, cuando abres un Expediente y la criatura ya tiene un Cargo, puedes usar Sentencia Leve contra ella inmediatamente sin acción.</p></div></li><li><span class="sf-n">Nv. 10</span><div><strong>Sentencia Firme</strong><p>Tus Penas de acción adicional pueden cargarse como reacción cuando una criatura con Cargo termina su turno a 30 pies de ti.</p></div></li><li><span class="sf-n">Nv. 14</span><div><strong>Cadalso</strong><p>Cuando Ejecución mata a una criatura, la Espada del Verdugo se queda en tu mano 1 minuto como arma de fuerza (1d10, alcance 10 pies) con la que eres competente.</p></div></li></ul></section></div>
+  </section>
+  <section class="panel" id="p-ficha">
+    <h2>Ficha de juego</h2>
+    <p class="nota">Los valores se calculan con el nivel y el modificador elegidos. Se guardan mientras la página esté abierta.</p>
+    <div class="ficha"><div class="card ancha"><h3>Nivel y Mod. Inteligencia</h3><p class="sub-t">Elige tu nivel y tu modificador para calcular los valores.</p><div class="fila"><label for="lvl">Nivel</label><select id="lvl"></select><label for="mod">Mod. Inteligencia</label><input type="number" id="mod" value="3" min="-5" max="10"></div><div class="derivados"><div><span>Comp.</span><b id="dv0">–</b></div><div><span>CD de Penas</span><b id="dv1">–</b></div><div><span>Pruebas máx.</span><b id="dv2">–</b></div><div><span>Cargos/objetivo</span><b id="dv3">–</b></div></div></div><div class="card ancha"><h3>Pruebas</h3><p class="sub-t">Ganas 1 Prueba cuando una criatura con Cargo comete lo imputado (una vez por ronda).</p><div class="cuenta" id="cnt-pruebas"></div><div class="pips" id="pips-pruebas"></div><div class="btns"><button class="btn" type="button" data-act="r:pruebas:corto">Descanso corto</button><button class="btn" type="button" data-act="r:pruebas:largo">Descanso largo</button><button class="btn" type="button" data-act="r:pruebas:1">+1</button><button class="btn" type="button" data-act="r:pruebas:-1">Gastar 1</button><button class="btn" type="button" data-act="r:pruebas:-2">Gastar 2</button><button class="btn" type="button" data-act="r:pruebas:-4">Gastar 4</button><button class="btn" type="button" data-act="r:pruebas:-5">Gastar 5</button></div></div><div class="card"><h3>Sala de Juicio</h3><p class="sub-t">Desde nivel 9. Una vez por descanso largo (dos desde nivel 17).</p><div class="estado" id="tv-sala"></div><div class="btns"><button class="btn" type="button" data-act="t:sala:no">Descanso largo</button><button class="btn" type="button" data-act="t:sala:si">Usar</button></div></div></div>
+  </section>
+</main>
+<div class="jjk-hanko" aria-hidden="true"><span>裁</span><span>判</span></div>
+<script>
+const CFG = {"derivados": [{"v": "'+'+P"}, {"v": "8+P+M"}, {"v": "P+2+(L>=10?2:0)"}, {"v": "T.cargos[L-1]"}], "recursos": [{"id": "pruebas", "n": "Pruebas", "max": "(L>=20?2:1)*(P+2+(L>=10?2:0))"}], "contadores": [], "interruptores": [{"id": "sala", "si": "Disponible", "no": "Usada"}], "tablas": {"cargos": [2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4]}};
+const PB=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+b.dataset.p));
+  window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+}));
+const st={lvl:1,mod:3,res:{},cnt:{},tog:{}};
+const lvlSel=document.getElementById('lvl');
+for(let i=1;i<=20;i++){const o=document.createElement('option');o.value=i;o.textContent='Nivel '+i;lvlSel.appendChild(o);}
+const modIn=document.getElementById('mod');
+function ev(expr){const L=st.lvl,P=PB[L-1],M=st.mod;const T=CFG.tablas,C=st.cnt;return Function('L','P','M','T','C','return ('+expr+')')(L,P,M,T,C);}
+function render(){
+  document.querySelectorAll('#prog tbody tr').forEach(tr=>tr.classList.toggle('actual',+tr.dataset.lvl===st.lvl));
+  CFG.derivados.forEach((d,i)=>{document.getElementById('dv'+i).textContent=ev(d.v);});
+  CFG.recursos.forEach(r=>{
+    const max=Math.max(0,ev(r.max)); if(st.res[r.id]===undefined||st.res[r.id]>max) st.res[r.id]=(r.inicio!==undefined?Math.min(max,ev(r.inicio)):max);
+    const box=document.getElementById('pips-'+r.id); box.innerHTML='';
+    for(let i=0;i<max;i++){const b=document.createElement('button');b.type='button';b.className='pip'+(i<st.res[r.id]?'':' off');b.setAttribute('aria-label',r.n+' '+(i+1));
+      b.onclick=()=>{st.res[r.id]=(i<st.res[r.id])?i:i+1;render();};box.appendChild(b);}
+    document.getElementById('cnt-'+r.id).textContent=st.res[r.id]+' / '+max;
+  });
+  CFG.contadores.forEach(c=>{const max=ev(c.max);if(st.cnt[c.id]===undefined)st.cnt[c.id]=0;st.cnt[c.id]=Math.min(st.cnt[c.id],max);
+    document.getElementById('cv-'+c.id).textContent=max>=99?st.cnt[c.id]:st.cnt[c.id]+' / '+max;
+    const n=document.getElementById('cn-'+c.id); if(n&&c.nota) n.textContent=ev(c.nota);});
+  CFG.interruptores.forEach(t=>{if(st.tog[t.id]===undefined)st.tog[t.id]=true;const e=document.getElementById('tv-'+t.id);e.textContent=st.tog[t.id]?t.si:t.no;e.style.opacity=st.tog[t.id]?1:.55;});
+}
+function act(kind,id,how){
+  if(kind==='r'){const r=CFG.recursos.find(x=>x.id===id);const max=ev(r.max);
+    if(how==='largo')st.res[id]=max; else if(how==='corto')st.res[id]=Math.min(max,st.res[id]+Math.floor(max/2));
+    else if(how==='inicio')st.res[id]=Math.min(max,ev(r.inicio)); else if(how==='piso')st.res[id]=Math.max(st.res[id],Math.min(max,ev(r.inicio))); else st.res[id]=Math.max(0,Math.min(max,st.res[id]+(+how)));}
+  if(kind==='c'){const c=CFG.contadores.find(x=>x.id===id);const max=ev(c.max);st.cnt[id]=how==='0'?0:Math.max(0,Math.min(max,st.cnt[id]+(+how)));}
+  if(kind==='t'){st.tog[id]=how==='si';}
+  render();
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const [k,id,h]=b.dataset.act.split(':');act(k,id,h);});
+lvlSel.addEventListener('change',()=>{st.lvl=+lvlSel.value;render();});
+modIn.addEventListener('input',()=>{st.mod=+modIn.value||0;render();});
+render();
+</script>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

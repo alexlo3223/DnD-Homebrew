@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Absorbente — Clase D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #09090D;
+  --page:     #0F0F14;
+  --surface:  #141419;
+  --raised:   #1A1A22;
+  --line:     #252532;
+  --soft:     #1E1E28;
+  --muted:    #52526A;
+  --mid:      #7878A0;
+  --text:     #B8B8D0;
+  --bright:   #D8D8EE;
+  --white:    #EEEEF8;
+
+  --res:      #6B60C4;
+  --res-lo:   #2E2960;
+  --res-hi:   #9D94E0;
+
+  --tec:      #B48A34;
+  --tec-lo:   #503C14;
+  --tec-hi:   #D4AE60;
+
+  --pas:      #3A8A6A;
+  --pas-lo:   #183C2C;
+  --pas-hi:   #60B898;
+
+  --sa:       #B44A3A;
+  --sa-lo:    #501E18;
+  --sa-hi:    #D07868;
+
+  --sb:       #3A68A4;
+  --sb-lo:    #182C48;
+  --sb-hi:    #68A0D0;
+}
+
+body { background: var(--ink); color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.75; }
+
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 22px 80px; }
+
+/* ── HERO ── */
+.hero { padding: 68px 0 54px; text-align: center; border-bottom: 1px solid var(--line); margin-bottom: 52px; }
+
+.glyph { width: 72px; height: 72px; margin: 0 auto 24px; position: relative; }
+.gr { position: absolute; inset: 0; animation: spin 28s linear infinite; opacity: 0.3; }
+.gr2 { position: absolute; inset: 14px; animation: spin 16s linear infinite reverse; opacity: 0.55; }
+.gc { position: absolute; inset: 26px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .gr, .gr2 { animation: none; } }
+
+.hero-tag { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; color: var(--muted); text-transform: uppercase; margin-bottom: 14px; }
+.hero h1 { font-family: 'Crimson Pro', serif; font-size: clamp(34px, 6vw, 54px); font-weight: 300; color: var(--white); letter-spacing: 0.07em; line-height: 1.1; margin-bottom: 6px; }
+.hero-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--res-hi); letter-spacing: 0.2em; margin-bottom: 26px; }
+.hero-quote { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 15.5px; color: var(--mid); max-width: 500px; margin: 0 auto; line-height: 1.85; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 50px; }
+.sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.sec-n { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted); white-space: nowrap; }
+h2 { font-family: 'Crimson Pro', serif; font-size: 21px; font-weight: 400; color: var(--bright); letter-spacing: 0.02em; white-space: nowrap; }
+.rule { flex: 1; height: 1px; background: linear-gradient(to right, var(--line), transparent); }
+
+/* ── STAT CELLS ── */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-bottom: 16px; }
+.sc { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; }
+.sc .l { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.sc .v { font-size: 13px; color: var(--bright); }
+
+/* ── INFOBOX ── */
+.ib { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 15px 18px; margin-top: 10px; }
+.ib .l { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 7px; }
+.ib p, .ib li { font-size: 13px; color: var(--mid); line-height: 1.7; }
+
+/* ── TABLA PROGRESIÓN ── */
+.tw { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead th { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.13em; color: var(--muted); text-transform: uppercase; padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tbody td { padding: 7px 10px; border-bottom: 1px solid var(--soft); color: var(--text); white-space: nowrap; }
+tbody tr:hover td { background: rgba(107,96,196,0.04); }
+tbody td:first-child { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 11px; }
+tbody td:nth-child(2) { color: var(--bright); }
+
+.tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.04em; padding: 2px 5px; border-radius: 3px; margin-right: 2px; margin-bottom: 2px; white-space: nowrap; }
+.tb { background: rgba(120,120,160,0.1); border: 1px solid rgba(120,120,160,0.22); color: var(--mid); }
+.tr { background: rgba(107,96,196,0.12); border: 1px solid rgba(107,96,196,0.28); color: var(--res-hi); }
+.tt { background: rgba(180,138,52,0.12); border: 1px solid rgba(180,138,52,0.28); color: var(--tec-hi); }
+.tp { background: rgba(58,138,106,0.12); border: 1px solid rgba(58,138,106,0.28); color: var(--pas-hi); }
+.ts { background: rgba(180,74,58,0.1); border: 1px solid rgba(180,74,58,0.22); color: #C09090; }
+
+/* ── TABLA ABSORCIÓN (3 modos) ── */
+.abs-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+.abs-table th { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.13em; color: var(--muted); text-transform: uppercase; padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.abs-table td { padding: 11px 14px; border-bottom: 1px solid var(--soft); font-size: 13px; color: var(--mid); line-height: 1.65; vertical-align: top; }
+.abs-table tr:hover td { background: rgba(107,96,196,0.03); }
+.mode-pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; padding: 3px 9px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+.mode-a { background: rgba(58,138,106,0.12); border: 1px solid var(--pas-lo); color: var(--pas-hi); }
+.mode-b { background: rgba(107,96,196,0.12); border: 1px solid var(--res-lo); color: var(--res-hi); }
+.mode-c { background: rgba(180,138,52,0.12); border: 1px solid var(--tec-lo); color: var(--tec-hi); }
+.abs-table td strong { color: var(--bright); font-weight: 500; }
+.abs-table td em { color: var(--mid); }
+
+/* ── TABLA RESONANCIA ── */
+.res-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+.res-table th { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.13em; color: var(--muted); text-transform: uppercase; padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.res-table td { padding: 8px 14px; border-bottom: 1px solid var(--soft); color: var(--text); }
+.res-table td:first-child { color: var(--mid); font-family: 'DM Mono', monospace; font-size: 11px; }
+.res-table td:nth-child(2) { color: var(--res-hi); font-family: 'DM Mono', monospace; }
+.res-table tr:hover td { background: rgba(107,96,196,0.04); }
+
+/* ── GASTOS RESONANCIA ── */
+.res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+.rs { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 11px 14px; display: flex; gap: 12px; align-items: flex-start; }
+.rc { font-family: 'DM Mono', monospace; font-size: 15px; color: var(--res-lo); line-height: 1; flex-shrink: 0; min-width: 18px; text-align: right; padding-top: 1px; }
+.ri .n { font-size: 12.5px; font-weight: 500; color: var(--bright); }
+.ri .d { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+/* ── FEAT CARDS ── */
+.fg { display: grid; grid-template-columns: repeat(auto-fill, minmax(385px, 1fr)); gap: 12px; }
+.fc { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; position: relative; overflow: hidden; transition: border-color 0.18s; }
+.fc:hover { border-color: rgba(255,255,255,0.1); }
+.fc::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; }
+.fc.cb::before { background: var(--mid); opacity: 0.35; }
+.fc.cr::before { background: var(--res); opacity: 0.8; }
+.fc.ct::before { background: var(--tec); opacity: 0.8; }
+.fc.cp::before { background: var(--pas); opacity: 0.8; }
+.fc.key { border-color: var(--line); }
+.fc.key::before { opacity: 1; width: 3px; }
+
+.fn { font-family: 'Crimson Pro', serif; font-size: 15px; font-weight: 600; color: var(--bright); margin-bottom: 3px; }
+.fm { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+.fm .cr { color: var(--res-hi); }
+.fm .ct { color: var(--tec-hi); }
+.fm .cp { color: var(--pas-hi); }
+.fb { font-size: 13px; color: var(--mid); line-height: 1.74; }
+.fb strong { color: var(--text); font-weight: 500; }
+.fb em { font-style: italic; }
+.hr { border: none; border-top: 1px solid var(--soft); margin: 11px 0; }
+.ibox { background: var(--raised); border-radius: 5px; padding: 10px 13px; margin-top: 10px; font-size: 12.5px; color: var(--mid); line-height: 1.65; }
+.ibox .l { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+
+/* ── SUBCLASES ── */
+.sub { margin-bottom: 44px; }
+.sub-hd { border-radius: 8px; padding: 20px 22px; margin-bottom: 14px; border: 1px solid; }
+.sub-ey { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.55; margin-bottom: 5px; }
+.sub-hd h3 { font-family: 'Crimson Pro', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 2px; }
+.sub-hd .alt { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; opacity: 0.45; margin-bottom: 10px; }
+.sub-hd p { font-family: 'Crimson Pro', serif; font-size: 14px; font-style: italic; line-height: 1.8; opacity: 0.72; }
+
+.sa .sub-hd { background: rgba(180,74,58,0.07); border-color: var(--sa-lo); color: #D09080; }
+.sa .fc::before { background: var(--sa); }
+.sa .fc.key::before { opacity: 1; }
+.sa .fc:hover { border-color: var(--sa-lo); }
+
+.sb .sub-hd { background: rgba(58,104,164,0.07); border-color: var(--sb-lo); color: #80A8D0; }
+.sb .fc::before { background: var(--sb); }
+.sb .fc.key::before { opacity: 1; }
+.sb .fc:hover { border-color: var(--sb-lo); }
+
+/* ── SEP ── */
+.sep { display: flex; align-items: center; gap: 16px; margin: 46px 0; opacity: 0.2; }
+.sl { flex: 1; height: 1px; background: var(--line); }
+.sg { font-size: 11px; letter-spacing: 7px; color: var(--mid); }
+
+/* ── FOOTER ── */
+.footer { border-top: 1px solid var(--soft); padding-top: 26px; text-align: center; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--muted); line-height: 2.2; }
+
+/* ── PÍLDORAS DE TIPO ── */
+.pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 12px; }
+.pill-r { background: rgba(107,96,196,0.14); border: 1px solid var(--res-lo); color: var(--res-hi); }
+.pill-t { background: rgba(180,138,52,0.14); border: 1px solid var(--tec-lo); color: var(--tec-hi); }
+.pill-p { background: rgba(58,138,106,0.14); border: 1px solid var(--pas-lo); color: var(--pas-hi); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="glyph" aria-hidden="true">
+    <svg class="gr" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="33" stroke="#6B60C4" stroke-width="0.7" stroke-dasharray="5 4"/><polygon points="36,4 66,20 66,52 36,68 6,52 6,20" stroke="#6B60C4" stroke-width="0.5" fill="none"/></svg>
+    <svg class="gr2" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="19" stroke="#B48A34" stroke-width="0.6" stroke-dasharray="3 5"/></svg>
+    <svg class="gc" viewBox="0 0 20 20" fill="none"><polygon points="10,1 12.9,7.6 20,7.6 14.4,11.9 16.5,18.5 10,14.5 3.5,18.5 5.6,11.9 0,7.6 7.1,7.6" stroke="#6B60C4" stroke-width="0.9" fill="rgba(107,96,196,0.1)"/></svg>
+  </div>
+  <div class="hero-tag">Clase Homebrew · D&amp;D 5e</div>
+  <h1>El Absorbente</h1>
+  <div class="hero-sub">resonancia · técnica · patrón</div>
+  <p class="hero-quote">"El poder nunca desaparece cuando muere quien lo tenía.<br>Solo cambia de manos. Yo me aseguro de que esas manos sean las mías."</p>
+</header>
+
+<!-- 00. ESTADÍSTICAS -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">00</span><h2>Estadísticas de clase</h2><div class="rule"></div></div>
+  <div class="stats-grid">
+    <div class="sc"><div class="l">Dado de golpe</div><div class="v">d8</div></div>
+    <div class="sc"><div class="l">Salvaciones</div><div class="v">Carisma · Constitución</div></div>
+    <div class="sc"><div class="l">Armadura</div><div class="v">Ligera · Media · Escudos</div></div>
+    <div class="sc"><div class="l">Armas</div><div class="v">Simples · Marciales cuerpo a cuerpo</div></div>
+    <div class="sc"><div class="l">Atributo de lanzamiento</div><div class="v">Carisma</div></div>
+    <div class="sc"><div class="l">Tipo de lanzador</div><div class="v">Semilanzador — espacios como un Paladín</div></div>
+    <div class="sc"><div class="l">Habilidades (elige 3)</div><div class="v">Arcana · Atletismo · Engaño · Historia · Perspicacia · Percepción · Persuasión · Sigilo</div></div>
+    <div class="sc"><div class="l">Herramientas</div><div class="v">Herramientas de ladrón</div></div>
+  </div>
+  <div class="ib">
+    <div class="l">Los tres tipos de almacenamiento</div>
+    <p>El Absorbente puede guardar habilidades robadas en tres formas distintas, que coexisten y se complementan:<br><br>
+    <span class="pill pill-t">Técnica activa</span> &nbsp;Habilidad que equipes deliberadamente y ejecutas gastando Resonancia. Requiere acción o acción bonus según el rasgo. Límite: 1 al inicio, sube con nivel.<br><br>
+    <span class="pill pill-p">Patrón pasivo</span> &nbsp;Fragmento interiorizado que funciona de forma continua sin acción: resistencias, bonificaciones, sentidos. Se elige y fija en descansos. Límite: escala con nivel.<br><br>
+    <span class="pill pill-r">Hechizo capturado</span> &nbsp;Conjuro ajeno absorbido, almacenado como conjuro conocido temporal. Se lanza con tus slots de hechizo usando Carisma. Límite: 1 capturado a la vez por slot disponible.
+    </p>
+  </div>
+  <div class="ib">
+    <div class="l">Cómo funciona una técnica robada</div>
+    <p>Al integrar un patrón capturado durante un descanso, el DM y tú lo traducís a una <strong style="color:var(--text)">Técnica activa</strong> con estas reglas:<br><br>
+    · <strong style="color:var(--text)">Coste:</strong> 1 Resonancia; 2 si la habilidad original era de recarga o de usos limitados por día.<br>
+    · <strong style="color:var(--text)">Uso:</strong> el mismo tipo de acción que la original (acción, acción adicional o reacción); si era de área o multiataque, cuenta como una acción.<br>
+    · <strong style="color:var(--text)">Números:</strong> ataque = bono de competencia + mod. de Carisma; CD = 8 + bono de competencia + mod. de Carisma; daño = el de la original, con un máximo de <em>tu bono de competencia</em> d8 (o d10 si la original era un único objetivo).<br>
+    · <strong style="color:var(--text)">Patrones pasivos:</strong> sentidos, velocidades, una resistencia a un tipo de daño o ventaja en un tipo de prueba o salvación. Nunca inmunidades, resistencia a todo daño ni rasgos legendarios (salvo Extracción legendaria, nivel 17).<br>
+    · <strong style="color:var(--text)">Duración:</strong> una técnica o patrón integrado se mantiene hasta que lo sustituyas por otro en un descanso.
+  </div>
+</section>
+
+<div class="sep"><div class="sl"></div><div class="sg">✦ ✦ ✦</div><div class="sl"></div></div>
+
+<!-- 01. RESONANCIA -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">01</span><h2>Resonancia</h2><div class="rule"></div></div>
+
+  <div class="ib" style="margin-bottom:14px;">
+    <div class="l">¿Qué es la Resonancia?</div>
+    <p>La Resonancia es el eco residual de los poderes que has absorbido — energía que no te pertenece del todo, pero que aprendes a canalizar. Se gasta para activar Técnicas activas, potenciar ataques, capturar hechizos y forzar extracciones. Se recupera completamente con un <strong style="color:var(--text)">descanso largo</strong>. Con un <strong style="color:var(--text)">descanso corto</strong> recuperas <strong style="color:var(--text)">2 puntos</strong>.</p>
+  </div>
+
+  <div class="tw">
+    <table class="res-table">
+      <thead><tr><th>Niveles</th><th>Resonancia máxima</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td>1 – 4</td><td>4</td><td style="color:var(--mid); font-size:12px;">Base — aprendes a sostener el eco</td></tr>
+        <tr><td>5 – 8</td><td>6</td><td style="color:var(--mid); font-size:12px;">Segundo ataque — más demanda, más capacidad</td></tr>
+        <tr><td>9 – 12</td><td>8</td><td style="color:var(--mid); font-size:12px;">Segunda técnica activa desbloqueada</td></tr>
+        <tr><td>13 – 16</td><td>10</td><td style="color:var(--mid); font-size:12px;">Nivel superior — extracciones legendarias en el horizonte</td></tr>
+        <tr><td>17 – 20</td><td>12</td><td style="color:var(--mid); font-size:12px;">Apoteosis — Absorción total disponible</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ib" style="margin-top:12px;">
+    <div class="l">Sobrecarga</div>
+    <p>No puedes gastar más de la mitad de tu Resonancia máxima (redondeando hacia arriba) en un único turno: el eco necesita tiempo para asentarse. Las subclases pueden modificar este límite.</p>
+  </div>
+
+  <div style="margin-top:18px;">
+    <div class="ib" style="margin-bottom:10px;"><div class="l">Gastos de Resonancia</div></div>
+    <div class="res-grid">
+      <div class="rs"><div class="rc">1</div><div class="ri"><div class="n">Impacto resonante</div><div class="d">+daño de fuerza en un ataque melee (escala con nivel).</div></div></div>
+      <div class="rs"><div class="rc">1</div><div class="ri"><div class="n">Absorción forzada (extra)</div><div class="d">Usar Absorción fuera de su límite de usos por descanso.</div></div></div>
+      <div class="rs"><div class="rc">1</div><div class="ri"><div class="n">Cambio de técnica</div><div class="d">Cambiar Técnica activa equipada (acción bonus).</div></div></div>
+      <div class="rs"><div class="rc">2</div><div class="ri"><div class="n">Descarga</div><div class="d">Sobrecargar la Técnica activa este turno: +2d8 o duplicar duración/alcance.</div></div></div>
+      <div class="rs"><div class="rc">2</div><div class="ri"><div class="n">Transferencia</div><div class="d">Compartir Técnica activa con aliado a 9m (1 uso, mod. Car./descanso largo).</div></div></div>
+      <div class="rs"><div class="rc">3</div><div class="ri"><div class="n">Captura de hechizo</div><div class="d">Absorber conjuro fallido de nivel 1–5 como hechizo capturado.</div></div></div>
+      <div class="rs"><div class="rc">3</div><div class="ri"><div class="n">Supresión</div><div class="d">Al absorber, el objetivo no puede usar esa habilidad hasta el inicio de su siguiente turno.</div></div></div>
+      <div class="rs"><div class="rc">5</div><div class="ri"><div class="n">Extracción legendaria</div><div class="d">Ver rasgo de nivel 17. Solo 1/descanso largo.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><div class="sl"></div><div class="sg">✦ ✦ ✦</div><div class="sl"></div></div>
+
+<!-- 02. PROGRESIÓN -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">02</span><h2>Tabla de progresión</h2><div class="rule"></div></div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr><th>Nv</th><th>Bon.</th><th>Resonancia</th><th>Técnicas</th><th>Patrones</th><th>Hechizos</th><th>1°</th><th>2°</th><th>3°</th><th>4°</th><th>5°</th><th>Rasgos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td>4</td><td>1</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tb">Combatiente resonante</span><span class="tag tr">Absorción</span></td></tr>
+        <tr><td>2</td><td>+2</td><td>4</td><td>1</td><td>—</td><td>3</td><td>2</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag ts">Senda de resonancia</span></td></tr>
+        <tr><td>3</td><td>+2</td><td>4</td><td>1</td><td>—</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag ts">Rasgo de senda</span></td></tr>
+        <tr><td>4</td><td>+2</td><td>4</td><td>1</td><td>1</td><td>5</td><td>3</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="tag tp">1er patrón pasivo</span><span class="tag tb">Mejora de atributo</span></td></tr>
+        <tr><td>5</td><td>+3</td><td>6</td><td>1</td><td>1</td><td>6</td><td>4</td><td>2</td><td>—</td><td>—</td><td>—</td><td><span class="tag tb">Ataque adicional</span></td></tr>
+        <tr><td>6</td><td>+3</td><td>6</td><td>1</td><td>1</td><td>7</td><td>4</td><td>2</td><td>—</td><td>—</td><td>—</td><td><span class="tag ts">Rasgo de senda</span></td></tr>
+        <tr><td>7</td><td>+3</td><td>6</td><td>1</td><td>1</td><td>8</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td><td><span class="tag tr">Captura de hechizo</span></td></tr>
+        <tr><td>8</td><td>+3</td><td>6</td><td>1</td><td>2</td><td>9</td><td>4</td><td>3</td><td>—</td><td>—</td><td>—</td><td><span class="tag tp">2° patrón pasivo</span><span class="tag tb">Mejora de atributo</span></td></tr>
+        <tr><td>9</td><td>+4</td><td>8</td><td>1</td><td>2</td><td>10</td><td>4</td><td>3</td><td>2</td><td>—</td><td>—</td><td><span class="tag tt">Saturación</span></td></tr>
+        <tr><td>10</td><td>+4</td><td>8</td><td>1</td><td>2</td><td>11</td><td>4</td><td>3</td><td>2</td><td>—</td><td>—</td><td><span class="tag ts">Rasgo de senda</span></td></tr>
+        <tr><td>11</td><td>+4</td><td>8</td><td>2</td><td>2</td><td>12</td><td>4</td><td>3</td><td>3</td><td>—</td><td>—</td><td><span class="tag tt">Segunda técnica activa</span></td></tr>
+        <tr><td>12</td><td>+4</td><td>8</td><td>2</td><td>3</td><td>12</td><td>4</td><td>3</td><td>3</td><td>—</td><td>—</td><td><span class="tag tp">3er patrón pasivo</span><span class="tag tb">Mejora de atributo</span></td></tr>
+        <tr><td>13</td><td>+5</td><td>10</td><td>2</td><td>3</td><td>13</td><td>4</td><td>3</td><td>3</td><td>1</td><td>—</td><td><span class="tag tr">Absorción encubierta</span></td></tr>
+        <tr><td>14</td><td>+5</td><td>10</td><td>2</td><td>3</td><td>13</td><td>4</td><td>3</td><td>3</td><td>1</td><td>—</td><td><span class="tag ts">Rasgo de senda</span></td></tr>
+        <tr><td>15</td><td>+5</td><td>10</td><td>2</td><td>3</td><td>14</td><td>4</td><td>3</td><td>3</td><td>2</td><td>—</td><td><span class="tag tt">Técnica fijada</span></td></tr>
+        <tr><td>16</td><td>+5</td><td>10</td><td>2</td><td>4</td><td>14</td><td>4</td><td>3</td><td>3</td><td>2</td><td>—</td><td><span class="tag tp">4° patrón pasivo</span><span class="tag tb">Mejora de atributo</span></td></tr>
+        <tr><td>17</td><td>+6</td><td>12</td><td>2</td><td>4</td><td>15</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td><td><span class="tag tt">Extracción legendaria</span></td></tr>
+        <tr><td>18</td><td>+6</td><td>12</td><td>2</td><td>4</td><td>15</td><td>4</td><td>3</td><td>3</td><td>3</td><td>1</td><td><span class="tag ts">Rasgo de senda</span></td></tr>
+        <tr><td>19</td><td>+6</td><td>12</td><td>2</td><td>4</td><td>15</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td><td><span class="tag tb">Mejora de atributo</span></td></tr>
+        <tr><td>20</td><td>+6</td><td>12</td><td>3</td><td>5</td><td>15</td><td>4</td><td>3</td><td>3</td><td>3</td><td>2</td><td><span class="tag tb">Absorción total</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ib" style="margin-top:12px;">
+    <div class="l">Lista de hechizos</div>
+    <p>El Absorbente conoce hechizos de forma fija (como Paladín), nunca los prepara. Su lista cubre las escuelas de <strong style="color:var(--text)">Transmutación, Abjuración, Evocación y Encantamiento</strong> de las listas de Mago y Hechicero. Usa <strong style="color:var(--text)">Carisma</strong> como atributo. Los hechizos capturados se añaden temporalmente a sus hechizos conocidos.</p>
+  </div>
+</section>
+
+<div class="sep"><div class="sl"></div><div class="sg">✦ ✦ ✦</div><div class="sl"></div></div>
+
+<!-- 03. RASGOS -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">03</span><h2>Rasgos de clase</h2><div class="rule"></div></div>
+
+  <div class="fg">
+
+    <!-- COMBATIENTE RESONANTE -->
+    <div class="fc cb key">
+      <div class="fn">Combatiente resonante</div>
+      <div class="fm">Nivel 1 · Pasivo permanente</div>
+      <div class="fb">
+        Define el loop de combate básico de la clase. Tienes dos opciones en cada turno cuando realizas la acción de Ataque:<br><br>
+        <strong>Opción A — Ataque con arma + Impacto resonante:</strong> Gastas 1 punto de Resonancia para añadir daño de fuerza al golpe. El dado escala: <strong>1d6</strong> (nv 1–4) → <strong>1d8</strong> (nv 5–10) → <strong>1d10</strong> (nv 11–16) → <strong>1d12</strong> (nv 17+).<br><br>
+        <strong>Opción B — Reemplazar un ataque por la Técnica activa:</strong> En lugar de un ataque con arma, ejecutas tu Técnica activa equipada pagando su coste de Resonancia. Si tienes Ataque adicional (nv 5), el otro ataque sigue siendo con arma.
+        <div class="ibox">
+          <div class="l">Combinaciones típicas en un turno (nv 5+)</div>
+          Ataque arma + Impacto resonante · Técnica activa · Ataque arma normal<br>
+          — o —<br>
+          Dos ataques con arma, ambos con Impacto resonante (2 Res. gastados)<br>
+          — o —<br>
+          Técnica activa + ataque con arma normal
+        </div>
+      </div>
+    </div>
+
+    <!-- ABSORCIÓN -->
+    <div class="fc cr key">
+      <div class="fn">Absorción</div>
+      <div class="fm">Nivel 1 · <span class="cr">3 modos</span> · Ver tabla</div>
+      <div class="fb">
+        El mecanismo central para robar habilidades ajenas. Tiene tres modos de uso con costes y resultados distintos. Independientemente del modo, integrar un patrón capturado siempre ocurre durante un <strong>descanso corto o largo</strong> — no en mitad del combate.
+      </div>
+      <table class="abs-table">
+        <thead>
+          <tr><th>Modo</th><th>Cuándo / Coste</th><th>Resultado</th><th>Límite</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mode-pill mode-a">Pasivo</span></td>
+            <td>Observas a una criatura 1 ronda completa. Sin coste.</td>
+            <td>Memorizas patrones generales. <em>No captura hechizos nv 4+ ni rasgos legendarios.</em></td>
+            <td>Sin límite de intentos, prueba Arcana CD 10.</td>
+          </tr>
+          <tr>
+            <td><span class="mode-pill mode-b">Activo</span></td>
+            <td><strong>Reacción</strong> cuando una criatura a 18m usa una habilidad. Sin coste de Resonancia.</td>
+            <td>Captura directa del patrón. Fallo por 5+: 1d6 daño psíquico.</td>
+            <td>Mod. Carisma (mín. 1) veces por descanso corto.</td>
+          </tr>
+          <tr>
+            <td><span class="mode-pill mode-c">Forzado</span></td>
+            <td><strong>Acción</strong> sobre objetivo inconsciente/muerto hace &lt;1 min. O <strong>reacción</strong> gastando 1 Res. extra fuera de límite.</td>
+            <td>Éxito automático. Puede capturar rasgos legendarios (CD de Arcana igual a 10 + CR/2 para verificar si hay algo extraíble).</td>
+            <td>Ilimitado (por acción), sujeto a tus límites de Técnicas y Patrones.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ibox" style="margin-top:10px;">
+        <div class="l">Prueba de Absorción (modos Pasivo y Activo)</div>
+        Arcana o Perspicacia (tu elección) contra la <strong>CD de conjuro del objetivo</strong>, o <strong>10 + CR/2</strong> para rasgos innatos.
+      </div>
+    </div>
+
+    <!-- ATAQUE ADICIONAL -->
+    <div class="fc cb">
+      <div class="fn">Ataque adicional</div>
+      <div class="fm">Nivel 5 · Pasivo</div>
+      <div class="fb">Puedes atacar dos veces en lugar de una cuando realizas la acción de Ataque. Funciona en combinación directa con Combatiente resonante: cada ataque puede elegir independientemente si usa Impacto resonante o si uno se reemplaza por la Técnica activa.</div>
+    </div>
+
+    <!-- CAPTURA DE HECHIZO -->
+    <div class="fc cr">
+      <div class="fn">Captura de hechizo</div>
+      <div class="fm">Nivel 7 · Reacción · <span class="cr">3 Resonancia</span></div>
+      <div class="fb">
+        Cuando un conjuro de nivel 1 a 5 falla contra ti (superas la salvación o la tirada de ataque no impacta), puedes gastar <strong>3 puntos de Resonancia</strong> como reacción para capturarlo.<br><br>
+        El conjuro queda como <strong>hechizo capturado</strong>: se añade a tus hechizos conocidos temporalmente y puedes lanzarlo con tus propios slots usando Carisma. Permanece hasta que lo lances una vez o decidas liberarlo. Solo puedes tener un hechizo capturado por slot de hechizo disponible que tengas.
+      </div>
+    </div>
+
+    <!-- SATURACIÓN -->
+    <div class="fc ct">
+      <div class="fn">Saturación</div>
+      <div class="fm">Nivel 9 · Pasivo</div>
+      <div class="fb">
+        Cada vez que usas tu Técnica activa equipada, acumulas 1 stack de <em>Saturación</em>. Cuando alcanzas un número de stacks igual a tu <strong>modificador de Carisma</strong>, el siguiente uso de esa técnica en el mismo combate es <strong>gratuito en Resonancia</strong> y los stacks vuelven a cero.<br><br>
+        Los stacks se pierden al cambiar de Técnica activa o al terminar el combate.
+      </div>
+    </div>
+
+    <!-- SEGUNDA TÉCNICA -->
+    <div class="fc ct key">
+      <div class="fn">Segunda técnica activa</div>
+      <div class="fm">Nivel 11 · Permanente</div>
+      <div class="fb">
+        Puedes tener <strong>2 Técnicas activas</strong> equipadas simultáneamente. Alternar entre ellas como acción bonus es gratuito en Resonancia una vez por turno.<br><br>
+        Esto permite que en un turno completo (con Ataque adicional) puedas: usar la Técnica A como reemplazo de un ataque, hacer el segundo ataque con arma con Impacto resonante, y cambiar a la Técnica B como acción bonus para el siguiente turno.
+      </div>
+    </div>
+
+    <!-- ABSORCIÓN ENCUBIERTA -->
+    <div class="fc cr">
+      <div class="fn">Absorción encubierta</div>
+      <div class="fm">Nivel 13 · Pasivo</div>
+      <div class="fb">
+        Tus intentos de Absorción ya no producen señales visibles. El objetivo no detecta que estás copiando su habilidad a menos que supere una prueba de <strong>Percepción pasiva</strong> contra tu CD de conjuro. Permite absorber patrones en escenas sociales, de exploración o negociaciones sin revelar tu naturaleza.
+      </div>
+    </div>
+
+    <!-- TÉCNICA FIJADA -->
+    <div class="fc ct">
+      <div class="fn">Técnica fijada</div>
+      <div class="fm">Nivel 15 · Pasivo</div>
+      <div class="fb">
+        Elige una de tus Técnicas activas y <strong>fíjala</strong>. Una técnica fijada no puede ser desplazada involuntariamente y recupera <strong>1 uso adicional</strong> por descanso corto. Cambiar qué técnica está fijada requiere un descanso largo.
+      </div>
+    </div>
+
+    <!-- EXTRACCIÓN LEGENDARIA -->
+    <div class="fc ct">
+      <div class="fn">Extracción legendaria</div>
+      <div class="fm">Nivel 17 · <span class="ct">5 Resonancia</span> · 1/descanso largo</div>
+      <div class="fb">
+        Una vez por descanso largo, si reduces a 0 PV a una criatura de CR 10 o superior, puedes gastar <strong>5 puntos de Resonancia</strong> para extraer su rasgo más definitorio como Técnica activa. Esta técnica legendaria ocupa el equivalente a <strong>2 slots</strong>: mientras esté equipada, desplaza a las demás salvo una. No caduca con descansos — permanece hasta que la liberes voluntariamente.
+      </div>
+    </div>
+
+    <!-- ABSORCIÓN TOTAL -->
+    <div class="fc cb key">
+      <div class="fn">Absorción total</div>
+      <div class="fm">Nivel 20 · Apoteosis</div>
+      <div class="fb">
+        Tu Carisma aumenta en 2 (máximo 22). Ganas los siguientes beneficios permanentes:<br><br>
+        · Puedes tener <strong>3 Técnicas activas</strong> simultáneas y <strong>5 Patrones pasivos</strong>.<br>
+        · Una vez por descanso largo, durante 1 minuto, entras en <strong>Estado de flujo</strong>: cambiar de técnica es gratuito sin acción, puedes usar dos técnicas distintas en el mismo turno pagando cada una su coste, y recuperas 1 punto de Resonancia al inicio de cada uno de tus turnos.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sep"><div class="sl"></div><div class="sg">✦ ✦ ✦</div><div class="sl"></div></div>
+
+<!-- 04. SUBCLASES -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">04</span><h2>Sendas de resonancia</h2><div class="rule"></div></div>
+  <p style="color:var(--muted); font-size:13px; margin-bottom:30px; max-width:600px;">Eliges tu Senda en el <strong style="color:var(--text)">nivel 2</strong>. Rasgos en los niveles 2, 3, 6, 10, 14 y 18. Las sendas inclinan la clase base hacia el combate cuerpo a cuerpo o hacia el lanzamiento de hechizos, pero la base sigue siendo viable en cualquier dirección.</p>
+
+  <!-- ══ SENDA A: EL RECIPIENTE ══ -->
+  <div class="sub sa">
+    <div class="sub-hd">
+      <div class="sub-ey">Senda I · The Vessel</div>
+      <h3>El Recipiente</h3>
+      <div class="alt">Inclinación: Combate cuerpo a cuerpo · Alta dependencia de la Técnica activa única</div>
+      <p>Llevas algo dentro que no te pertenece del todo. Sin liberarlo, eres un guerrero mágico de precisión: una sola técnica, pero con una potencia que otros no pueden igualar. Con la entidad liberada, el combate cambia de naturaleza — y el coste siempre llega después.</p>
+    </div>
+
+    <div class="fg">
+
+      <div class="fc key">
+        <div class="fn">Técnica única amplificada</div>
+        <div class="fm">Nivel 2 · Senda I · Pasivo</div>
+        <div class="fb">
+          Mientras tienes equipada <strong>exactamente 1 Técnica activa</strong>, esa técnica está amplificada: su daño aumenta en <strong>1d8</strong>, su CD de salvación sube en <strong>2</strong>, y su coste de Resonancia se reduce en 1 (mínimo 0).<br><br>
+          Al obtener la Segunda técnica activa (nv 11), puedes elegir operar con una sola para mantener este beneficio, o equipar dos y perderlo. Esta es la tensión central de la senda.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Entidad ligada</div>
+        <div class="fm">Nivel 2 · Senda I · Fundamento</div>
+        <div class="fb">
+          Una entidad sobrenatural está anclada a ti. Permanece latente (invisible, indetectable) salvo cuando la invocas. Mientras está latente, actúa como <strong>almacén físico</strong>: puede portar hasta 3 objetos que requieran sintonización, sin contar contra tu límite.
+          <div class="ibox">
+            <div class="l">Stat block de la entidad (cuando se manifiesta)</div>
+            PV: mitad de tu máximo · CA: 10 + mod. Carisma<br>
+            Velocidad: vuelo 12m · No puede ser objetivo de oportunidad<br>
+            Ataque: mod. Carisma + bon. comp. · Daño: 1d8+mod. Car. (fuerza)<br>
+            Turno: actúa inmediatamente después del tuyo, obedece tus instrucciones
+          </div>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Invocación y retiro</div>
+        <div class="fm">Nivel 3 · Senda I · Acción bonus · <span style="color:var(--sa-hi)">2 Resonancia</span></div>
+        <div class="fb">
+          Puedes manifestar o retirar la entidad como <strong>acción bonus</strong> gastando 2 puntos de Resonancia. Manifestada, actúa en combate con su propio turno y puede ejecutar tu Técnica activa equipada usando tu modificador de Carisma.<br><br>
+          La entidad no puede estar manifestada más de <strong>10 minutos continuos</strong> — después necesita un descanso corto en estado latente.
+        </div>
+      </div>
+
+      <div class="fc key">
+        <div class="fn">Modo ilimitado</div>
+        <div class="fm">Nivel 6 · Senda I · Acción bonus · <span style="color:var(--sa-hi)">4 Resonancia</span> · 1/descanso largo</div>
+        <div class="fb">
+          Una vez por descanso largo, acción bonus y 4 Resonancia: entras en <strong>Modo ilimitado</strong> durante turnos iguales a tu <strong>modificador de Carisma</strong>.<br><br>
+          Durante el Modo ilimitado:<br>
+          · Tu Técnica activa no consume Resonancia al usarse.<br>
+          · El Impacto resonante no cuesta Resonancia y el dado sube un escalón (1d8→1d10→1d12→2d8).<br>
+          · La entidad puede usar la Técnica activa en su propio turno sin contar tus usos.<br>
+          · Ignoras el límite de Sobrecarga.<br><br>
+          Al terminar: sufres <strong>1 nivel de agotamiento</strong>.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Reserva de la entidad</div>
+        <div class="fm">Nivel 10 · Senda I · Pasivo</div>
+        <div class="fb">
+          La entidad puede almacenar y ejecutar hasta <strong>2 Técnicas activas adicionales</strong> de forma independiente a las tuyas. Estas técnicas solo la entidad puede usarlas en su turno — tú no tienes acceso directo. Se elige cuáles lleva durante un descanso corto.<br><br>
+          Esto permite cubrir hasta 3 técnicas distintas en un mismo combate: 1 o 2 tuyas y hasta 2 de la entidad, dividiendo roles ofensivos, defensivos y de utilidad.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Sinergia de combate</div>
+        <div class="fm">Nivel 14 · Senda I · Pasivo</div>
+        <div class="fb">
+          Cuando la entidad y tú atacáis al mismo objetivo en la misma ronda, ambos ataques obtienen <strong>ventaja</strong>. Una vez por ronda, si ambos impactáis a ese objetivo, sufre una penalización de <strong>−2 a la CA</strong> hasta el inicio de tu siguiente turno.
+        </div>
+      </div>
+
+      <div class="fc key">
+        <div class="fn">Forma sin restricciones</div>
+        <div class="fm">Nivel 18 · Senda I · Acción bonus · 1/descanso largo</div>
+        <div class="fb">
+          Una vez por descanso largo, liberas el control sobre la entidad durante <strong>1 minuto</strong>:<br><br>
+          · La entidad tiene el <strong>doble de tus PV máximos</strong> y usa todas las Técnicas activas del sistema sin límite de Resonancia.<br>
+          · Las criaturas hostiles a 18m que fallen una salvación de Sabiduría (CD de conjuro) quedan <em>asustadas</em> mientras dure el efecto.<br>
+          · Recuperas <strong>3 puntos de Resonancia</strong> al inicio de cada uno de tus turnos.<br><br>
+          Al finalizar, la entidad queda latente sin poder manifestarse hasta el siguiente descanso largo.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SENDA B: EL COLECCIONISTA ══ -->
+  <div class="sub sb">
+    <div class="sub-hd">
+      <div class="sub-ey">Senda II · The Collector</div>
+      <h3>El Coleccionista</h3>
+      <div class="alt">Inclinación: Spellcasting versátil · Gestión táctica del archivo</div>
+      <p>Cada técnica que robas es una pieza en una colección que construyes con criterio. No actúas con prisa: observas, catalogas, preparas. El libro es la interfaz entre tú y todo lo que has acumulado. Cuando por fin abres la página correcta, la batalla ya terminó en tu cabeza.</p>
+    </div>
+
+    <div class="fg">
+
+      <div class="fc key">
+        <div class="fn">El libro de condiciones</div>
+        <div class="fm">Nivel 2 · Senda II · Fundamento</div>
+        <div class="fb">
+          Cada Técnica activa que integras en tu archivo tiene una <strong>condición de activación</strong> adicional — una restricción narrativa que defines al integrarla (con aprobación del DM). Cuanto más restrictiva es la condición, mayor es el beneficio:
+          <div class="ibox">
+            <div class="l">Escala de condiciones</div>
+            <strong style="color:var(--text)">Condición menor</strong> (fácil de cumplir): coste de Resonancia −1.<br>
+            <strong style="color:var(--text)">Condición moderada</strong> (requiere setup): daño base ×1.5 o CD de salvación +3.<br>
+            <strong style="color:var(--text)">Condición mayor</strong> (difícil, depende del enemigo o el entorno): daño base ×2 o efecto adicional significativo.
+          </div>
+          <hr class="hr">
+          <em>Ejemplos: "solo si el libro está abierto (mano libre)" · "solo si el objetivo ya recibió daño este turno" · "solo si no has recibido daño desde tu último turno" · "solo la primera vez por combate".</em>
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Archivo ampliado</div>
+        <div class="fm">Nivel 2 · Senda II · Pasivo</div>
+        <div class="fb">
+          Tu capacidad de almacenamiento activo supera la clase base desde el inicio:<br><br>
+          · Tienes <strong>2 Técnicas activas</strong> desde nivel 2 (en lugar de 1).<br>
+          · Esta cifra sube a <strong>3 en el nivel 11</strong> (en lugar de 2).<br>
+          · Cambiar entre técnicas equipadas es <strong>gratuito en Resonancia</strong> siempre que el libro esté en tus manos.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Patrones pasivos del libro</div>
+        <div class="fm">Nivel 3 · Senda II · Pasivo</div>
+        <div class="fb">
+          Tus Patrones pasivos solo están activos mientras el libro está físicamente <strong>abierto en tus manos</strong>. Si se cierra o te lo arrebatan, los efectos pasivos se suspenden hasta que lo reabras (acción bonus).<br><br>
+          A cambio de esta restricción, tienes <strong>1 Patrón pasivo adicional</strong> respecto al límite estándar en todos los niveles (nv 4 → 2 pasivos, nv 8 → 3, etc.), y puedes integrar pasivos de tipo social o de exploración (ventaja en habilidades específicas, idiomas adicionales, sentidos especiales).
+        </div>
+      </div>
+
+      <div class="fc key">
+        <div class="fn">Extracción anticipada</div>
+        <div class="fm">Nivel 6 · Senda II · Pasivo</div>
+        <div class="fb">
+          Si has observado a una criatura durante al menos <strong>1 ronda completa</strong>, puedes declarar qué habilidad intentas anticipar (acción libre). Si esa criatura usa exactamente esa habilidad en los siguientes 3 turnos, la absorción ocurre <strong>automáticamente</strong> — sin reacción, sin Resonancia, con éxito automático.<br><br>
+          Solo puedes tener <strong>1 extracción anticipada pendiente</strong> a la vez.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Técnicas indexadas</div>
+        <div class="fm">Nivel 10 · Senda II · Pasivo</div>
+        <div class="fb">
+          Durante un descanso largo puedes <strong>indexar</strong> hasta 3 de tus Técnicas activas. Las técnicas indexadas obtienen:<br><br>
+          · CD de salvación <strong>+2</strong>.<br>
+          · <strong>1 uso adicional</strong> por descanso corto.<br>
+          · Si tienen condición de activación y la cumples, la siguiente activación de ese turno no consume Resonancia.<br><br>
+          Las técnicas indexadas cambian en cada descanso largo.
+        </div>
+      </div>
+
+      <div class="fc">
+        <div class="fn">Dos páginas abiertas</div>
+        <div class="fm">Nivel 14 · Senda II · Pasivo</div>
+        <div class="fb">
+          Puedes activar dos Técnicas activas distintas en el <strong>mismo turno</strong>: una con tu acción (o reemplazando un ataque) y otra con tu acción bonus, cada una pagando su coste. Si ambas tienen su condición cumplida, el coste total de Resonancia del turno se reduce en <strong>1</strong>.
+        </div>
+      </div>
+
+      <div class="fc key">
+        <div class="fn">Obra maestra</div>
+        <div class="fm">Nivel 18 · Senda II · Pasivo</div>
+        <div class="fb">
+          Elige <strong>3 Técnicas activas</strong> de tu archivo como tu Obra maestra. Estas técnicas no consumen usos al activarse — se recargan automáticamente al <strong>inicio de cada uno de tus turnos</strong>. La Obra maestra puede cambiar en cada descanso largo.<br><br>
+          Adicionalmente, una vez por ronda puedes activar una técnica de la Obra maestra <strong>sin necesitar el libro abierto</strong>, ignorando la restricción de Patrones pasivos condicionados para esa activación.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<div class="sep"><div class="sl"></div><div class="sg">✦ ✦ ✦</div><div class="sl"></div></div>
+
+<!-- 05. NOTAS -->
+<section class="section">
+  <div class="sec-head"><span class="sec-n">05</span><h2>Notas de diseño</h2><div class="rule"></div></div>
+  <div class="fg">
+    <div class="fc cb">
+      <div class="fn">Para el DM</div>
+      <div class="fm">Consejos de mesa</div>
+      <div class="fb">
+        La clase es reactiva: enemigos con habilidades interesantes hacen al jugador brillar. Un jefe cuya técnica llevan varias sesiones viendo es el momento ideal. Los Patrones pasivos invitan a la preparación entre sesiones — respétalos como decisiones de personaje, no como housekeeping.<br><br>
+        <strong>El Recipiente:</strong> el Modo ilimitado es una carta de triunfo. El nivel de agotamiento es real — no lo ignores ni lo suavices; es el diseño.<br><br>
+        <strong>El Coleccionista:</strong> trabaja con el jugador para diseñar condiciones que sean dramáticamente interesantes, no triviales. "Solo si hace frío" es trivial. "Solo si el objetivo está sangrando" crea tensión.
+      </div>
+    </div>
+    <div class="fc cb">
+      <div class="fn">Para el jugador</div>
+      <div class="fm">Cómo jugar</div>
+      <div class="fb">
+        Tu decisión más importante no ocurre en tu turno — ocurre al decidir <em>qué absorber</em>. Un patrón pasivo de resistencia al fuego elegido antes de entrar a la guarida del dragón vale más que cualquier rasgo ofensivo.<br><br>
+        El turno tipo involucra dos o tres microelecciones rápidas: ¿Impacto resonante o Técnica activa? ¿Vale la pena la Descarga ahora? ¿Tengo Resonancia para aguantar un turno más sin descansar?<br><br>
+        <strong>Lleva una ficha física</strong> de tus técnicas y patrones. La gestión del archivo es la mitad del juego.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>El Absorbente · Clase Homebrew para D&amp;D 5e</p>
+  <p>Senda I: El Recipiente &nbsp;·&nbsp; Senda II: El Coleccionista</p>
+  <p style="opacity:0.35; margin-top:2px;">No afiliado con Wizards of the Coast · Uso personal</p>
+</footer>
+
+</div>
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

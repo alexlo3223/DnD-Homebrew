@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Héroe — Clase D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0A0E1A;
+    --oro: #C9A84C;
+    --oro-claro: #E8C96A;
+    --azul: #2E5F8A;
+    --azul-claro: #4A7FA8;
+    --marfil: #E8DFC8;
+    --marfil-oscuro: #C8B896;
+    --rojo: #8B2020;
+    --rojo-claro: #B03030;
+    --verde: #3A6B2A;
+    --verde-claro: #5A9B40;
+    --bronce: #A8602A;
+    --bronce-claro: #D0803A;
+    --gris-oscuro: #1A1E2E;
+    --gris-medio: #252A3E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--negro);
+    color: var(--marfil);
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .portada {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px 40px;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 30%, #1a2545 0%, var(--negro) 70%);
+  }
+
+  .portada::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px),
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px);
+    pointer-events: none;
+  }
+
+  .emblema {
+    width: 120px; height: 120px;
+    margin-bottom: 28px;
+    animation: pulso 4s ease-in-out infinite;
+  }
+
+  @keyframes pulso {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(201,168,76,0.3)); }
+    50%       { filter: drop-shadow(0 0 30px rgba(201,168,76,0.6)); }
+  }
+
+  .portada-categoria {
+    font-family: 'Cinzel', serif;
+    font-size: 11px; letter-spacing: 6px;
+    color: var(--oro); text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .portada-titulo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(42px, 8vw, 72px); font-weight: 700;
+    color: var(--oro); line-height: 1;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3), 0 2px 4px rgba(0,0,0,0.8);
+    margin-bottom: 8px;
+  }
+
+  .portada-subtitulo {
+    font-family: 'Cinzel', serif;
+    font-size: 14px; letter-spacing: 4px;
+    color: var(--marfil-oscuro); margin-bottom: 28px;
+  }
+
+  .portada-lema {
+    font-style: italic; color: var(--marfil-oscuro); font-size: 14px;
+    max-width: 500px;
+    border-top: 1px solid rgba(201,168,76,0.3);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 12px 24px;
+  }
+
+  .greca {
+    width: 100%; height: 24px; display: block; overflow: visible;
+  }
+
+  .contenido {
+    max-width: 900px; margin: 0 auto; padding: 0 32px 80px;
+  }
+
+  .seccion { margin-top: 48px; }
+
+  .seccion-titulo {
+    font-family: 'Cinzel', serif;
+    font-size: 11px; letter-spacing: 5px;
+    color: var(--oro); text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .seccion-titulo::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, rgba(201,168,76,0.5), transparent);
+  }
+
+  .h2-clase {
+    font-family: 'Cinzel', serif; font-size: 26px; font-weight: 600;
+    color: var(--marfil); margin-bottom: 16px; margin-top: 36px;
+  }
+
+  .h3-clase {
+    font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600;
+    color: var(--oro-claro); margin-top: 28px; margin-bottom: 10px;
+  }
+
+  p { margin-bottom: 12px; }
+
+  .rasgos-rapidos {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin: 24px 0;
+  }
+
+  .rasgo-item {
+    background: var(--gris-oscuro);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 14px 16px; border-radius: 2px;
+  }
+
+  .rasgo-label {
+    font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 3px;
+    color: var(--oro); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .rasgo-valor {
+    font-family: 'Cinzel', serif; font-size: 13px;
+    color: var(--marfil); font-weight: 600;
+  }
+
+  .tabla-wrapper {
+    overflow-x: auto; margin: 24px 0;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  thead { background: linear-gradient(to right, var(--gris-oscuro), var(--gris-medio)); }
+
+  th {
+    font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px;
+    color: var(--oro); text-transform: uppercase;
+    padding: 12px 10px; text-align: left;
+    border-bottom: 1px solid rgba(201,168,76,0.3); white-space: nowrap;
+  }
+
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 12.5px; color: var(--marfil); white-space: nowrap;
+  }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  tr:hover td { background: rgba(201,168,76,0.06); }
+
+  .nivel-hito td { background: rgba(201,168,76,0.08) !important; color: var(--oro-claro); }
+  .td-rasgo { color: var(--marfil-oscuro); font-style: italic; white-space: normal; }
+
+  .rasgo-bloque {
+    background: var(--gris-oscuro);
+    border-left: 3px solid var(--oro);
+    padding: 20px 24px; margin: 20px 0;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .rasgo-bloque-titulo {
+    font-family: 'Cinzel', serif; font-size: 14px; font-weight: 600;
+    color: var(--oro); margin-bottom: 10px;
+  }
+
+  .rasgo-bloque p { margin-bottom: 8px; color: var(--marfil); }
+  .rasgo-bloque p:last-child { margin-bottom: 0; }
+
+  .arete-box {
+    background: linear-gradient(135deg, #1a1e2e 0%, #0f1520 100%);
+    border: 1px solid var(--oro); border-radius: 2px;
+    padding: 28px 32px; margin: 28px 0;
+    position: relative; overflow: hidden;
+  }
+
+  .arete-box::before {
+    content: 'ΑΡΕΤΗ';
+    position: absolute; right: -20px; top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    font-family: 'Cinzel', serif; font-size: 80px; font-weight: 900;
+    color: rgba(201,168,76,0.04); letter-spacing: 10px; pointer-events: none;
+  }
+
+  .arete-titulo {
+    font-family: 'Cinzel Decorative', serif; font-size: 20px;
+    color: var(--oro); margin-bottom: 14px;
+  }
+
+  /* ── SUBCLASES ── */
+  .subclase-card {
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px; margin: 32px 0; overflow: hidden;
+  }
+
+  .subclase-header {
+    padding: 24px 28px;
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  /* Gloria — rojo sangre */
+  .subclase-gloria .subclase-header {
+    background: linear-gradient(to right, #1e0f0f, #140a0a);
+    border-bottom: 2px solid var(--rojo-claro);
+  }
+  .subclase-gloria .subclase-nombre  { color: var(--rojo-claro); }
+  .subclase-gloria .subclase-icono   { color: var(--rojo-claro); }
+  .subclase-gloria .subclase-rasgo-titulo { color: var(--rojo-claro); }
+  .subclase-gloria { border-color: rgba(176,48,48,0.3); }
+
+  /* Nostos — azul mar */
+  .subclase-nostos .subclase-header {
+    background: linear-gradient(to right, #0e1820, #080e14);
+    border-bottom: 2px solid var(--azul-claro);
+  }
+  .subclase-nostos .subclase-nombre  { color: var(--azul-claro); }
+  .subclase-nostos .subclase-icono   { color: var(--azul-claro); }
+  .subclase-nostos .subclase-rasgo-titulo { color: var(--azul-claro); }
+  .subclase-nostos { border-color: rgba(74,127,168,0.3); }
+
+  /* Kleos — verde laurel */
+  .subclase-kleos .subclase-header {
+    background: linear-gradient(to right, #0d1a0a, #081006);
+    border-bottom: 2px solid var(--verde-claro);
+  }
+  .subclase-kleos .subclase-nombre  { color: var(--verde-claro); }
+  .subclase-kleos .subclase-icono   { color: var(--verde-claro); }
+  .subclase-kleos .subclase-rasgo-titulo { color: var(--verde-claro); }
+  .subclase-kleos { border-color: rgba(90,155,64,0.3); }
+
+  /* Metis — bronce de figuras negras */
+  .subclase-metis .subclase-header {
+    background: linear-gradient(to right, #1e130a, #140c06);
+    border-bottom: 2px solid var(--bronce-claro);
+  }
+  .subclase-metis .subclase-nombre  { color: var(--bronce-claro); }
+  .subclase-metis .subclase-icono   { color: var(--bronce-claro); }
+  .subclase-metis .subclase-rasgo-titulo { color: var(--bronce-claro); }
+  .subclase-metis { border-color: rgba(208,128,58,0.3); }
+
+  .subclase-icono { font-size: 40px; line-height: 1; flex-shrink: 0; }
+
+  .subclase-nombre {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 22px; font-weight: 700; line-height: 1.1;
+  }
+
+  .subclase-epitheto {
+    font-style: italic; color: var(--marfil-oscuro); font-size: 13px; margin-top: 4px;
+  }
+
+  .subclase-cuerpo {
+    padding: 24px 28px; background: rgba(255,255,255,0.01);
+  }
+
+  .subclase-rasgo { margin-bottom: 24px; }
+
+  .subclase-rasgo-titulo {
+    font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+  }
+
+  .nivel-tag {
+    font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px;
+    padding: 2px 8px; border-radius: 1px;
+    background: rgba(255,255,255,0.06); color: var(--marfil-oscuro);
+  }
+
+  .llamada {
+    background: rgba(139,32,32,0.12);
+    border: 1px solid rgba(139,32,32,0.35);
+    padding: 16px 20px; border-radius: 2px; margin: 16px 0; font-size: 13.5px;
+  }
+  .llamada-azul  { background: rgba(46,95,138,0.12); border-color: rgba(46,95,138,0.35); }
+  .llamada-oro   { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+  .llamada-verde { background: rgba(58,107,42,0.12); border-color: rgba(90,155,64,0.35); }
+  .llamada-bronce { background: rgba(168,96,42,0.12); border-color: rgba(208,128,58,0.35); }
+
+  .footer {
+    text-align: center; padding: 40px 20px;
+    border-top: 1px solid rgba(201,168,76,0.15); margin-top: 60px;
+    color: var(--marfil-oscuro); font-size: 12px; letter-spacing: 2px;
+    font-family: 'Cinzel', serif;
+  }
+
+  ul, ol { padding-left: 24px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+  strong { color: var(--oro-claro); font-weight: 600; }
+
+  .dado {
+    display: inline-block;
+    background: var(--gris-oscuro); border: 1px solid var(--oro);
+    color: var(--oro); font-family: 'Cinzel', serif;
+    font-size: 11px; padding: 2px 7px; border-radius: 2px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="portada">
+  <svg class="emblema" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="56" stroke="#C9A84C" stroke-width="1" stroke-dasharray="4 3" opacity="0.4"/>
+    <circle cx="60" cy="60" r="48" fill="#0A0E1A" stroke="#C9A84C" stroke-width="1.5" opacity="0.8"/>
+    <path d="M60 20 C42 20 30 35 30 52 L30 68 C30 72 34 74 36 70 L36 62 C36 58 38 56 40 56 L40 72 C40 75 43 76 44 73 L44 60 C47 60 48 62 48 64 L48 78 C48 81 52 82 52 79 L52 65 L68 65 L68 79 C68 82 72 81 72 78 L72 64 C72 62 73 60 76 60 L76 73 C77 76 80 75 80 72 L80 56 C82 56 84 58 84 62 L84 70 C86 74 90 72 90 68 L90 52 C90 35 78 20 60 20 Z" fill="#C9A84C" opacity="0.9"/>
+    <ellipse cx="60" cy="17" rx="8" ry="5" fill="#8B2020" opacity="0.9"/>
+    <line x1="60" y1="12" x2="60" y2="22" stroke="#8B2020" stroke-width="2"/>
+    <rect x="57" y="38" width="6" height="18" rx="3" fill="#0A0E1A" opacity="0.6"/>
+    <circle cx="60" cy="60" r="6" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+    <path d="M18 55 C14 50 10 55 14 58 C10 60 12 66 16 63 C14 67 18 70 20 66 C20 70 25 71 25 67 C27 70 32 68 29 64 C33 65 34 60 30 59 C34 57 32 52 28 54 C27 50 22 50 22 54 C19 52 16 55 18 55 Z" fill="#2E5F8A" opacity="0.7"/>
+    <path d="M102 55 C106 50 110 55 106 58 C110 60 108 66 104 63 C106 67 102 70 100 66 C100 70 95 71 95 67 C93 70 88 68 91 64 C87 65 86 60 90 59 C86 57 88 52 92 54 C93 50 98 50 98 54 C101 52 104 55 102 55 Z" fill="#2E5F8A" opacity="0.7"/>
+  </svg>
+  <div class="portada-categoria">Clase de D&D 5e · Épica Griega</div>
+  <div class="portada-titulo">El Héroe</div>
+  <div class="portada-subtitulo">Ἥρως · Hijo del Destino</div>
+  <div class="portada-lema">«No el más fuerte, ni el más inteligente. El que se atreve a afrontar lo que ningún mortal debería, y lo recuerdan por ello.»</div>
+</div>
+
+<svg class="greca" viewBox="0 0 900 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="greca" x="0" y="0" width="48" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0,12 L6,12 L6,6 L18,6 L18,12 L24,12 L24,6 L30,6 L30,18 L18,18 L18,12 L12,12 L12,18 L0,18 Z" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="24" fill="url(#greca)"/>
+</svg>
+
+
+<div class="contenido">
+
+  <!-- RESUMEN -->
+  <div class="seccion">
+    <div class="seccion-titulo">Resumen de Clase</div>
+    <div class="rasgos-rapidos">
+      <div class="rasgo-item"><div class="rasgo-label">Dado de Golpe</div><div class="rasgo-valor">d10</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Competencias Clave</div><div class="rasgo-valor">FUE o DES, CON</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Armadura</div><div class="rasgo-valor">Todas, escudos</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Armas</div><div class="rasgo-valor">Todas</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Tiradas de Salvación</div><div class="rasgo-valor">FUE, CON</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Habilidades (elige 2)</div><div class="rasgo-valor">Atletismo, Historia, Intimidación, Percepción, Persuasión, Perspicacia</div></div>
+      <div class="rasgo-item"><div class="rasgo-label">Recurso Único</div><div class="rasgo-valor">Puntos de Arete</div></div>
+    </div>
+  </div>
+
+  <!-- DESCRIPCIÓN -->
+  <div class="seccion">
+    <div class="seccion-titulo">Descripción</div>
+    <p>El mundo recuerda a los héroes mucho después de que sus huesos se hayan convertido en polvo. No porque fueran invencibles, sino porque se atrevieron a afrontar lo que ningún mortal debería. Algunos lo hicieron por gloria. Otros, para volver a casa. Otros, para que su nombre protegiera a los que vendrían después. Y otros, simplemente, porque fueron más listos que el monstruo.</p>
+    <p>El Héroe no es un simple guerrero ni un paladín al servicio de los dioses: es un <em>individuo singular</em> cuya <strong>Arete</strong> —su excelencia, su virtud heroica— lo eleva por encima de los hombres comunes y atrae la atención de los propios Olímpicos. Lo que lo distingue no es qué hace, sino <em>por qué</em> lo hace. Esa motivación es la fuente de todo su poder.</p>
+    <p>Al nivel 3, el Héroe elige su <strong>Motivación Épica</strong>: el principio que da forma a su leyenda y define cómo canaliza el Arete que acumula en combate. Cuatro caminos: <strong>Gloria</strong> (la fama en batalla), <strong>Nostos</strong> (el regreso), <strong>Kleos</strong> (la fama que nace de proteger) y <strong>Metis</strong> (la astucia de Odiseo, el héroe de los mil ardides).</p>
+  </div>
+
+  <!-- ARETE -->
+  <div class="seccion">
+    <div class="seccion-titulo">Recurso Central</div>
+    <div class="arete-box">
+      <div class="arete-titulo">Arete — Puntos de Gloria Heroica</div>
+      <p>El <strong>Arete</strong> (del griego <em>ἀρετή</em>, «excelencia» o «virtud heroica») representa la acumulación de gloria, el reconocimiento divino y la fuerza de voluntad que trasciende lo mortal. No es magia ni entrenamiento: es la prueba viviente de que eres más que un hombre.</p>
+
+      <div class="h3-clase" style="margin-top:16px; font-size:14px;">Máximo de Arete</div>
+      <p>Tu máximo de Arete es igual a <strong>1 + tu modificador de Constitución</strong> (mínimo 2). Este máximo aumenta según la tabla de clase, hasta un tope de 10 al nivel 20.</p>
+
+      <div class="h3-clase" style="font-size:14px;">Ganar Arete</div>
+      <p>El Arete no se reinicia entre combates: lo que ganas se conserva hasta que lo gastes. Lo ganas durante el transcurso de la aventura:</p>
+      <ul>
+        <li>La primera vez en cada combate que impactas a un enemigo con un ataque.</li>
+        <li>Reduces a 0 PG a un enemigo de CR igual o superior a tu nivel ÷ 4 (mínimo CR 1).</li>
+        <li>Consigues un golpe crítico.</li>
+        <li>Superas una prueba de característica de CD 20 o superior sin ayuda mágica.</li>
+        <li>Sufres un golpe crítico y sigues consciente al inicio de tu siguiente turno.</li>
+        <li>El DM puede conceder 1 punto de Arete por una hazaña de valentía extraordinaria.</li>
+      </ul>
+      <p>No puedes acumular más puntos que tu máximo, y no puedes ganar y gastar Arete en el mismo turno.</p>
+
+      <div class="h3-clase" style="font-size:14px;">Recuperación</div>
+      <p>Al terminar un descanso largo, si tienes menos de 2 puntos de Arete, subes a 2. Al terminar un descanso corto, si tienes 0, ganas 1.</p>
+    </div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="seccion">
+    <div class="seccion-titulo">Tabla de Progresión</div>
+    <div class="tabla-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nivel</th><th>Bon. Comp.</th><th>Arete Máx.</th><th>Rasgos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>+2</td><td>1+CON</td><td class="td-rasgo">Arete, Frente al Destino, Piel de Bronce</td></tr>
+          <tr><td>2</td><td>+2</td><td>1+CON</td><td class="td-rasgo">Hazaña Heroica (2), Talón de Aquiles</td></tr>
+          <tr class="nivel-hito"><td>3</td><td>+2</td><td>2+CON</td><td class="td-rasgo">Motivación Épica</td></tr>
+          <tr><td>4</td><td>+2</td><td>2+CON</td><td class="td-rasgo">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>5</td><td>+3</td><td>3+CON</td><td class="td-rasgo">Ataque Extra, Empuje Heroico, Hazaña Heroica (+1)</td></tr>
+          <tr><td>6</td><td>+3</td><td>3+CON</td><td class="td-rasgo">Rasgo de Motivación</td></tr>
+          <tr><td>7</td><td>+3</td><td>4+CON</td><td class="td-rasgo">Cólera Épica</td></tr>
+          <tr><td>8</td><td>+3</td><td>4+CON</td><td class="td-rasgo">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>9</td><td>+4</td><td>5+CON</td><td class="td-rasgo">Voluntad Inquebrantable, Frente al Destino (d8), Hazaña Heroica (+1)</td></tr>
+          <tr class="nivel-hito"><td>10</td><td>+4</td><td>5+CON</td><td class="td-rasgo">Rasgo de Motivación, Gloria Eterna</td></tr>
+          <tr><td>11</td><td>+4</td><td>6+CON</td><td class="td-rasgo">Presencia del Semidiós, Hazaña Heroica (+1)</td></tr>
+          <tr><td>12</td><td>+4</td><td>6+CON</td><td class="td-rasgo">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>13</td><td>+5</td><td>7+CON</td><td class="td-rasgo">Hazaña Heroica (+1)</td></tr>
+          <tr class="nivel-hito"><td>14</td><td>+5</td><td>7+CON</td><td class="td-rasgo">Rasgo de Motivación</td></tr>
+          <tr><td>15</td><td>+5</td><td>8+CON</td><td class="td-rasgo">Último Aliento</td></tr>
+          <tr><td>16</td><td>+5</td><td>8+CON</td><td class="td-rasgo">Mejora de Puntuación de Característica</td></tr>
+          <tr><td>17</td><td>+6</td><td>9+CON</td><td class="td-rasgo">Cólera Épica (mejorada), Frente al Destino (d10), Hazaña Heroica (+1)</td></tr>
+          <tr><td>18</td><td>+6</td><td>9+CON</td><td class="td-rasgo">Sangre Inmortal</td></tr>
+          <tr><td>19</td><td>+6</td><td>10</td><td class="td-rasgo">Mejora de Puntuación de Característica</td></tr>
+          <tr class="nivel-hito"><td>20</td><td>+6</td><td>10</td><td class="td-rasgo">Apoteosis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RASGOS DE CLASE -->
+  <div class="seccion">
+    <div class="seccion-titulo">Rasgos de Clase</div>
+
+    <div class="h2-clase">Nivel 1</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Arete</div>
+      <p>Obtienes el recurso Arete descrito anteriormente. Empiezas con 2 puntos tras cada descanso largo y acumulas más durante el combate y la exploración.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Frente al Destino</div>
+      <p>Los héroes no huyen de la muerte: la miran a los ojos. Cuando hagas una prueba de característica o tirada de salvación, puedes gastar 1 punto de Arete como reacción —incluso fuera de tu turno— para añadir <span class="dado">1d6</span> al resultado <em>después</em> de ver el número.</p>
+      <p>Este dado escala a <span class="dado">1d8</span> al nivel 9, y a <span class="dado">1d10</span> al nivel 17.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Piel de Bronce</div>
+      <p>Tu cuerpo ha sido forjado en la batalla. Cuando no llevas armadura, tu CA es igual a <strong>13 + tu modificador de Constitución</strong>. Puedes seguir usando un escudo con este rasgo.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 2</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Hazaña Heroica</div>
+      <p>Aprendes 2 Hazañas Heroicas de la lista al final de esta sección. Ganas una hazaña adicional a los niveles 5, 9, 11, 13 y 17 (7 de las 8 en total). Para activar una hazaña debes gastar los puntos de Arete indicados. Salvo que se especifique, puedes usar cada hazaña una vez por turno.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Talón de Aquiles</div>
+      <p>Todo gran héroe tiene una vulnerabilidad que define su leyenda. Al obtener este rasgo, elige un tipo de daño o condición (miedo, veneno, encantamiento, fuego, frío…): es tu Talón, un rasgo narrativo que el DM puede usar para dar forma a tus pruebas, sin penalización mecánica.</p>
+      <p>Sin embargo, esta debilidad engrandece aún más tu gloria: cuando <em>superas</em> con éxito una tirada de salvación contra ese efecto, ganas 1 punto de Arete inmediatamente.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 5</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Ataque Extra</div>
+      <p>Cuando realizas la acción de Atacar en tu turno, puedes hacer dos ataques en lugar de uno.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Empuje Heroico</div>
+      <p>Cuando impactas con un ataque de arma cuerpo a cuerpo, puedes gastar 1 punto de Arete para añadir <span class="dado">2d6</span> de daño adicional. Si el objetivo tiene un tamaño igual o inferior al tuyo, también lo empujas 10 pies en una dirección de tu elección.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 7</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Cólera Épica</div>
+      <p>Como acción adicional, puedes entrar en Cólera Épica durante 1 minuto. Mientras dura:</p>
+      <ul>
+        <li>Tienes ventaja en las tiradas de ataque con armas cuerpo a cuerpo.</li>
+        <li>Añades tu modificador de CON al daño de tus ataques de arma (además del modificador habitual).</li>
+        <li>Ganas PV temporales iguales a tu nivel al inicio de cada uno de tus turnos.</li>
+      </ul>
+      <p>La Cólera termina antes de tiempo si comienzas tu turno sin haber atacado ni recibido daño en el turno anterior. Necesitas un descanso corto o largo para volver a usarla. Al nivel 17 puedes usarla 2 veces entre descansos.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 9</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Voluntad Inquebrantable</div>
+      <p>Tienes ventaja en las tiradas de salvación contra ser asustado o encantado. Además, cuando fallas una tirada de salvación de SAB, INT o CAR, puedes gastar 1 punto de Arete para repetirla y tomar el segundo resultado.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 10</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Gloria Eterna</div>
+      <p>Cuando reduces a 0 PG a un enemigo visible, todos los aliados que puedan verte u oírte ganan ventaja en su siguiente tirada de ataque o prueba de característica antes del final de tu próximo turno.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 11</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Presencia del Semidiós</div>
+      <p>Los enemigos que puedan verte al inicio de su turno deben superar una tirada de salvación de Sabiduría (CD = 8 + bon. comp. + modificador de CON) o tener desventaja en sus tiradas de ataque contra tus aliados —no contra ti— hasta el final de ese turno.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 15</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Último Aliento</div>
+      <p>Una vez por descanso largo, cuando caerías a 0 PG, puedes gastar 2 puntos de Arete como reacción para quedarte en 1 PG. Inmediatamente ganas PV temporales iguales a tu nivel × 3, y puedes moverte hasta tu velocidad sin provocar ataques de oportunidad.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 18</div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Sangre Inmortal</div>
+      <p>La sangre divina que corre por tus venas te hace casi imposible de matar. Tienes resistencia al daño contundente, cortante y perforante de armas no mágicas. Cuando haces tiradas de muerte, un resultado de 15 o superior cuenta como un éxito.</p>
+    </div>
+
+    <div class="h2-clase">Nivel 20 — Capstone</div>
+
+    <div class="rasgo-bloque" style="border-left: 4px solid var(--oro);">
+      <div class="rasgo-bloque-titulo" style="font-size:16px;">⚡ Apoteosis</div>
+      <p>Has trascendido lo mortal. Los dioses te reconocen como uno de los suyos:</p>
+      <ul>
+        <li><strong>Catasterismo:</strong> tu figura queda grabada en las estrellas. Mientras sea de noche y tus aliados puedan ver el cielo, ellos y tú tenéis ventaja en las salvaciones contra ser asustados, y cualquier criatura que conozca tu leyenda tiene desventaja en su primera tirada de ataque contra ti.</li>
+        <li>Tus ataques con armas se consideran mágicos a todos los efectos.</li>
+        <li>No puedes ser envejecido mágicamente ni morir de vejez.</li>
+        <li>Cuando activas la Cólera Épica, también recuperas todos tus puntos de Arete.</li>
+        <li>Cuando mueres, existe un 50% de posibilidades (d20, resultado 11+) de que los dioses te devuelvan a la vida en 1d4 días, sin coste de material.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HAZAÑAS -->
+  <div class="seccion">
+    <div class="seccion-titulo">Lista de Hazañas Heroicas</div>
+    <p>Al ganar el rasgo <em>Hazaña Heroica</em>, elige de la siguiente lista. El coste en Arete aparece entre paréntesis.</p>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Golpe del Campeón <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(1 Arete)</span></div>
+      <p>Cuando impactas con un ataque de arma, añades tu modificador de Fuerza una segunda vez al daño de ese golpe.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Escudo del Olímpico <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(1 Arete)</span></div>
+      <p>Como reacción al ser impactado por un ataque, interpones tu escudo heroicamente. El daño se reduce en <span class="dado">2d8</span> + tu modificador de CON. Requiere usar un escudo.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Rugido de Guerra <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(1 Arete)</span></div>
+      <p>Como acción adicional, emites un rugido aterrador. Todos los enemigos en 30 pies deben superar una TS de Sabiduría (CD 8 + bon. comp. + CON) o quedar asustados de ti hasta el final de tu próximo turno.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Lanzamiento Épico <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(1 Arete)</span></div>
+      <p>Como acción, intentas agarrar a un enemigo de tu tamaño o menor (prueba de FUE enfrentada) y lanzarlo hasta 30 pies. Aterriza sufriendo <span class="dado">3d6</span> de daño contundente y cae derribado. Si impacta contra una superficie sólida, el daño aumenta a <span class="dado">4d6</span>.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Emboscada del Cazador <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(1 Arete)</span></div>
+      <p>Cuando impactas a un enemigo que no te ha visto atacar aún en este combate, el golpe causa <span class="dado">3d6</span> de daño adicional y el objetivo debe superar una TS de CON (CD 8 + bon. comp. + FUE o DES) o quedar aturdido hasta el final de tu próximo turno.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Golpe Mítico <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(3 Arete)</span></div>
+      <p>Como acción, realizas un único ataque devastador. Si impacta, inflige daño normal más <span class="dado">6d10</span> adicionales. Si el objetivo tiene menos de la mitad de sus PG máximos, el daño adicional se dobla.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Catábasis <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(3 Arete · 1 vez por descanso largo)</span></div>
+      <p>Cuando caes inconsciente, puedes gastar 3 puntos de Arete como reacción. Tu espíritu resiste el descenso al Érebo: recuperas 1 PG inmediatamente, y en tu próximo turno actúas con normalidad.</p>
+    </div>
+
+    <div class="rasgo-bloque">
+      <div class="rasgo-bloque-titulo">Don de Atenea <span style="color:var(--marfil-oscuro); font-weight:400; font-size:12px;">(2 Arete)</span></div>
+      <p>Como acción adicional, entras en un estado de claridad táctica durante 1 minuto. Tienes ventaja en pruebas de INT y SAB, y puedes usar la acción de Ayuda como acción adicional en cada uno de tus turnos.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MOTIVACIONES ÉPICAS (SUBCLASES)
+  ══════════════════════════════════════ -->
+  <div class="seccion">
+    <div class="seccion-titulo">Motivación Épica</div>
+    <p>Al nivel 3, el Héroe elige la Motivación Épica que define su leyenda. No es una técnica ni un don divino: es la <em>razón</em> por la que actúa, y esa razón transforma cómo fluye el Arete a través de él. Cada Motivación otorga rasgos en los niveles 3, 6, 10 y 14.</p>
+
+    <!-- ══ GLORIA ══ -->
+    <div class="subclase-card subclase-gloria">
+      <div class="subclase-header">
+        <div class="subclase-icono">⚔️</div>
+        <div>
+          <div class="subclase-nombre">Gloria</div>
+          <div class="subclase-epitheto">Κλέος ἄφθιτον — La fama imperecedera ganada en batalla</div>
+        </div>
+      </div>
+      <div class="subclase-cuerpo">
+        <p style="margin-bottom:20px; color:var(--marfil-oscuro); font-style:italic;">Algunos héroes eligen vivir poco y brillar mucho. El campo de batalla es su altar, el combate su plegaria. No temen la muerte porque saben que morirán inmortales.</p>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Sed de Batalla <span class="nivel-tag">Nivel 3</span></div>
+          <p>Tu Arete arde más intensamente en el fragor del combate. Ganas 1 punto de Arete adicional (además de los normales) cuando reduces a 0 PG a un enemigo de CR 1 o superior. Además, mientras tengas al menos 1 punto de Arete, tus tiradas de daño con armas cuerpo a cuerpo obtienen un +2.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Presencia Aterradora <span class="nivel-tag">Nivel 3</span></div>
+          <p>Ganas competencia en Intimidación; si ya la tienes, ganas pericia. Cuando entras en Cólera Épica, puedes asustar simultáneamente a todos los enemigos en 30 pies que puedan verte: deben superar una TS de SAB (CD 8 + bon. comp. + CON) o quedar asustados de ti durante 1 minuto (TS al final de cada turno). Una criatura que supere la TS queda inmune a este efecto durante 24 horas.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Heridas que Honran <span class="nivel-tag">Nivel 6</span></div>
+          <p>Tus cicatrices son tus laureles. Cuando recibes daño de un ataque, puedes usar tu reacción para ganar 1 punto de Arete y añadir tu modificador de CON como reducción a ese daño. Esta reacción puede usarse una vez por turno.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Sin Cuartel <span class="nivel-tag">Nivel 10</span></div>
+          <p>Cuando reduces a 0 PG a un enemigo con un ataque cuerpo a cuerpo, puedes realizar inmediatamente un ataque adicional contra otro enemigo adyacente como parte de la misma acción. Este ataque no consume tu acción ni movimiento. Usable una vez por turno.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Último Campeón <span class="nivel-tag">Nivel 14</span></div>
+          <p>Cuando gastas 2 o más puntos de Arete de una sola vez (en cualquier rasgo o hazaña), el siguiente ataque que hagas antes del final de tu turno es automáticamente un golpe crítico si impacta. Además, mientras estés en Cólera Épica, tu velocidad de movimiento aumenta en 20 pies y los ataques de oportunidad contra ti tienen desventaja.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOSTOS ══ -->
+    <div class="subclase-card subclase-nostos">
+      <div class="subclase-header">
+        <div class="subclase-icono">⚓</div>
+        <div>
+          <div class="subclase-nombre">Nostos</div>
+          <div class="subclase-epitheto">Νόστος — El regreso. La supervivencia como acto de voluntad</div>
+        </div>
+      </div>
+      <div class="subclase-cuerpo">
+        <p style="margin-bottom:20px; color:var(--marfil-oscuro); font-style:italic;">No busca la muerte gloriosa. Busca volver. Sea a su hogar, a su gente, o a sí mismo. Esa determinación lo hace más peligroso que cualquier guerrero que no teme morir: él teme no llegar.</p>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Resistencia del Regresante <span class="nivel-tag">Nivel 3</span></div>
+          <p>Has sobrevivido a lo que debería haberte matado. Ganas competencia en las tiradas de salvación de Sabiduría. Además, cuando terminas un descanso corto, puedes gastar uno o más Dados de Golpe para recuperar PG como de costumbre; por cada Dado de Golpe gastado, también recuperas 1 punto de Arete (hasta tu máximo).</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Ingenio del Superviviente <span class="nivel-tag">Nivel 3</span></div>
+          <p>Ganas competencia en dos habilidades de entre: Engaño, Perspicacia, Sigilo, Supervivencia o Percepción. Si ya tienes competencia en alguna de ellas, ganas pericia. Puedes usar tu modificador de Inteligencia en lugar de Fuerza o Destreza para tiradas de ataque y daño con armas que manipules con precisión (a elección del jugador al inicio del combate).</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">No Hoy <span class="nivel-tag">Nivel 6</span></div>
+          <p>Una vez por descanso corto, cuando falles una tirada de muerte, puedes gastar 1 punto de Arete para que cuente como un resultado neutro (ni éxito ni fracaso). Además, tienes ventaja en las tiradas de salvación contra venenos y enfermedades, y resistencia al daño de veneno.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Mil Formas de Llegar <span class="nivel-tag">Nivel 10</span></div>
+          <p>Tu mente siempre encuentra una salida. Cuando estés atrapado, retenido, paralizado o de otra forma incapacitado, puedes gastar 1 punto de Arete al inicio de tu turno para suprimir ese efecto durante ese turno, actuando con normalidad. Esto no elimina la condición, solo la ignora momentáneamente.</p>
+          <p>Además, eres inmune a la condición asustado.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">El Regreso del Héroe <span class="nivel-tag">Nivel 14</span></div>
+          <p>Has estado tan cerca de la muerte que ya no te sorprende. Hasta que alcances el nivel 15, puedes usar <em>Último Aliento</em> una vez por descanso largo como si ya lo tuvieras. Cuando lo activas, también puedes gastar hasta 3 puntos de Arete adicionales: por cada punto gastado recuperas <span class="dado">2d10</span> PG inmediatamente.</p>
+          <p>Además, una vez por descanso largo, cuando terminas un combate con 0 puntos de Arete, los recuperas todos instantáneamente si en ese combate caíste inconsciente al menos una vez y volviste a luchar.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ KLEOS ══ -->
+    <div class="subclase-card subclase-kleos">
+      <div class="subclase-header">
+        <div class="subclase-icono">🌿</div>
+        <div>
+          <div class="subclase-nombre">Kleos</div>
+          <div class="subclase-epitheto">Κλέος — La fama que nace de proteger, no de conquistar</div>
+        </div>
+      </div>
+      <div class="subclase-cuerpo">
+        <p style="margin-bottom:20px; color:var(--marfil-oscuro); font-style:italic;">Su gloria no se mide en enemigos caídos, sino en quiénes siguen vivos gracias a él. Es el héroe que interpone su cuerpo, que carga con el destino de los demás, que será recordado no por lo que hizo sino por a quién salvó.</p>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Escudo de los Caídos <span class="nivel-tag">Nivel 3</span></div>
+          <p>Tu Arete crece cuando proteges, no cuando destruyes. Como reacción cuando un aliado adyacente recibe daño, puedes gastar 1 punto de Arete para absorber la mitad de ese daño (redondeado hacia arriba) en tu lugar. Si lo haces y sigues en pie, ganas 1 punto de Arete al inicio de tu siguiente turno.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Voz del Comandante <span class="nivel-tag">Nivel 3</span></div>
+          <p>Ganas competencia en Persuasión e Historia. Puedes usar la acción de Ayuda como acción adicional una vez por turno. Cuando ayudas a un aliado en una tirada de ataque, ese aliado añade tu bonificador de competencia al daño si el ataque impacta.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Leyenda que Inspira <span class="nivel-tag">Nivel 6</span></div>
+          <p>Tu presencia eleva a los que te rodean. Mientras tengas al menos 1 punto de Arete, todos los aliados en 30 pies que puedan verte añaden tu bonificador de competencia a sus tiradas de salvación contra ser asustados. Además, una vez por descanso corto, puedes gastar 2 puntos de Arete para otorgar a todos tus aliados visibles <span class="dado">2d6</span> PV temporales.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Interposición Heroica <span class="nivel-tag">Nivel 10</span></div>
+          <p>Puedes usar tu reacción para moverte hasta tu velocidad hacia un aliado que acabe de ser objetivo de un ataque, antes de que el ataque se resuelva. Si llegas a su lado, el ataque te impacta a ti en su lugar. No puedes usar <em>Frente al Destino</em> para modificar esa tirada de ataque.</p>
+          <p>Además, tienes resistencia al daño de todos los ataques que recibas como parte de este rasgo.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">El Nombre que Perdura <span class="nivel-tag">Nivel 14</span></div>
+          <p>Tu legado se convierte en magia. Como acción y gastando 3 puntos de Arete, pronuncias el nombre de uno de tus aliados caídos o presentes y declaras que no morirá aquí. Durante 1 minuto:</p>
+          <ul>
+            <li>Ese aliado tiene ventaja en todas las tiradas de ataque, salvación y pruebas de característica.</li>
+            <li>Cuando ese aliado caería a 0 PG, cae a 1 PG en su lugar (solo una vez por activación).</li>
+            <li>Ese aliado ignora la condición asustado.</li>
+          </ul>
+          <p>Usable una vez por descanso largo. Si el aliado elegido ya está a 0 PG o muerto, puedes gastar 4 puntos de Arete en su lugar para estabilizarlo inmediatamente con 1 PG.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ METIS ══ -->
+    <div class="subclase-card subclase-metis">
+      <div class="subclase-header">
+        <div class="subclase-icono">🐴</div>
+        <div>
+          <div class="subclase-nombre">Metis</div>
+          <div class="subclase-epitheto">Μῆτις — La astucia. El héroe que gana pensando dos pasos por delante</div>
+        </div>
+      </div>
+      <div class="subclase-cuerpo">
+        <p style="margin-bottom:20px; color:var(--marfil-oscuro); font-style:italic;">«No le rezaba a Ares. Le rezaba a Atenea, diosa de la guerra sabia. Porque el bruto que carga de frente ya está muerto; el que piensa, llega a casa.» Odiseo no fue el más fuerte de Troya, pero fue el único que la tomó. Su Arete nace de la información, del engaño bien tendido y de la palabra justa.</p>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Ojo del Estratega <span class="nivel-tag">Nivel 3</span></div>
+          <p>Como acción, estudias a una criatura que puedas ver a 60 pies o menos. Haz una prueba de Inteligencia (Historia, Arcanos, Naturaleza o Religión, según el tipo de criatura) contra CD 10 + su CR. Si la superas, el DM te revela dos de estos datos a tu elección: resistencias, inmunidades o vulnerabilidades, su estado de PG (alto / medio / bajo), su acción más peligrosa, o una condición que la afecte. Si superas la CD en 5 o más, revela tres.</p>
+          <p>Puedes usarlo un número de veces igual a tu bonificador de competencia por descanso largo, y además cuando gastas 1 punto de Arete. La primera vez en cada combate que la prueba tiene éxito, ganas 1 punto de Arete.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Soy Nadie <span class="nivel-tag">Nivel 3</span></div>
+          <p>Ganas competencia en Engaño y Perspicacia; si ya tienes alguna, ganas pericia. Además, una vez por descanso largo, tras presentarte ante una criatura con un nombre falso, esa criatura no puede usar reacciones contra ti durante la primera ronda de cualquier combate contra ti, y las pruebas de sus aliados para identificarte o describirte después se hacen con desventaja.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Golpe Engañoso <span class="nivel-tag">Nivel 6</span></div>
+          <p>Cuando impactas con un ataque de arma, puedes gastar 1 punto de Arete. El golpe inflige tu dado de <em>Frente al Destino</em> de daño adicional, y el objetivo debe superar una TS de SAB (CD 8 + bon. comp. + INT) o quedar <em>engañado</em>: tiene desventaja en su siguiente tirada de ataque contra ti. Una vez por turno.</p>
+          <p>Además, como reacción, cuando un aliado a 30 pies que pueda oírte realiza una tirada de ataque, salvación o prueba, puedes describir un detalle de la situación que justifique su éxito y gastar 1 punto de Arete: suma tu dado de <em>Frente al Destino</em> a su resultado.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">El Caballo de Madera <span class="nivel-tag">Nivel 10</span></div>
+          <p>Una vez por descanso largo, puedes pasar 1 hora preparando un plan maestro y gastar 2 puntos de Arete. Hasta 6 aliados voluntarios ganan ventaja en Engaño, Actuación y Sigilo durante 24 horas mientras el plan esté activo, y si alguno falla una de esas tiradas puede gastar tu reacción para repetirla.</p>
+          <p>Además, como acción y gastando 2 puntos de Arete, puedes adoptar una identidad falsa durante 8 horas: tu apariencia, voz y porte cambian para coincidir con alguien que hayas observado durante al menos 1 hora. Quien interactúe contigo debe superar una prueba de Perspicacia contra tu CD (8 + bon. comp. + INT) para darse cuenta. El efecto termina si atacas o lanzas un conjuro ofensivo.</p>
+        </div>
+
+        <div class="subclase-rasgo">
+          <div class="subclase-rasgo-titulo">Nadie <span class="nivel-tag">Nivel 14</span></div>
+          <p>Cuando una criatura que no conozca tu nombre verdadero te apunta con un ataque o un conjuro, puedes usar tu reacción y gastar 2 puntos de Arete: debe superar una TS de SAB (CD 8 + bon. comp. + INT) o el ataque o conjuro falla automáticamente. Una vez por descanso largo.</p>
+          <p>Además, eres inmune a conjuros de adivinación y efectos que revelen tu localización, nombre real o alineamiento, salvo que lo permitas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div class="seccion">
+    <div class="seccion-titulo">Equipo Inicial</div>
+    <p>Empiezas con el siguiente equipo, además del equipo otorgado por tu trasfondo:</p>
+    <ul>
+      <li>Una espada larga o una lanza (a elegir)</li>
+      <li>Armadura de escamas y un escudo, <em>o</em> armadura de cuero tachonado</li>
+      <li>Dos jabalinas</li>
+      <li>Un kit de explorador o un kit de aventurero</li>
+    </ul>
+  </div>
+
+  <!-- ROLEPLAY -->
+  <div class="seccion">
+    <div class="seccion-titulo">Interpretación del Héroe</div>
+
+    <div class="llamada">
+      <strong>Conexión Divina:</strong> El Héroe siempre tiene una relación con el panteón, aunque no sea sacerdote. ¿Qué dios te favorece? ¿Cuál es tu enemigo divino? Esta relación puede ser de favoritismo, deuda, o incluso maldición.
+    </div>
+    <div class="llamada llamada-azul">
+      <strong>La Profecía:</strong> Considera trabajar con tu DM para establecer un destino ligado a tu héroe. Los grandes protagonistas de la épica griega no eligen sus pruebas: estas los encuentran. La profecía no tiene que ser una condena; puede ser también una promesa.
+    </div>
+    <div class="llamada llamada-verde">
+      <strong>Tu Motivación como Brújula:</strong> La Motivación Épica no es solo mecánica; define cómo tu personaje interpreta el mundo. Un héroe de Gloria busca el combate. Un héroe de Nostos protege su capacidad de seguir adelante. Un héroe de Kleos mide cada acción por cómo lo recordarán quienes queden. Un héroe de Metis no lucha si puede evitarlo, y cuando lucha, ya lo había planeado.
+    </div>
+    <div class="llamada llamada-oro">
+      <strong>Timé y Kleos:</strong> En la cultura griega, <em>timé</em> (el honor entre iguales) y <em>kleos</em> (la fama que te sobrevive) eran más valiosos que la vida misma. ¿Qué actos quieres que se cuenten de ti cuando hayas muerto? Esa pregunta es el motor de un Héroe.
+    </div>
+    <div class="llamada llamada-bronce">
+      <strong>El Plan de Metis:</strong> Con Metis, Arete se gana más con la cabeza que con la espada: estudia al enemigo antes de que empiece la violencia, usa <em>Ojo del Estratega</em> en el pasillo antes de abrir la puerta, y deja que tus aliados brillen con tus detalles narrados. Funciona mejor con un objetivo personal claro (un hogar al que regresar, una traición que vengar) que dé sentido a tanto teatro.
+    </div>
+  </div>
+
+</div>
+
+<svg class="greca" viewBox="0 0 900 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="greca2" x="0" y="0" width="48" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0,12 L6,12 L6,6 L18,6 L18,12 L24,12 L24,6 L30,6 L30,18 L18,18 L18,12 L12,12 L12,18 L0,18 Z" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.4"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="24" fill="url(#greca2)"/>
+</svg>
+
+<div class="footer">
+  ΕΛ ΗΕΡΟΕ · D&D 5e Homebrew · Colección Épica
+</div>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Oficiante — Clase de D&D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d0a08;
+    --panel: #17120e;
+    --panel2: #1e1712;
+    --line: #3a2c20;
+    --text: #e6dbc4;
+    --text-dim: #a3927a;
+    --gold: #c8a24a;
+    --gold-bright: #e6c273;
+    --ember: #cf5a26;
+    --ember-bright: #ef7a3c;
+    --steel: #5f7c8a;
+    --steel-bright: #86aebd;
+    --candle: #d8cdb0;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background: radial-gradient(ellipse at top, #171009 0%, #0d0a08 55%, #080605 100%);
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  ::selection{ background: var(--gold); color:#1a1a1a; }
+
+  .wrap{ max-width: 900px; margin: 0 auto; padding: 0 24px 120px; }
+
+  h1,h2,h3,h4{ font-family:'Cormorant SC', serif; font-weight:600; letter-spacing:.03em; color: var(--gold-bright); margin: 0 0 .3em; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding: 90px 24px 70px;
+    text-align:center;
+    overflow:hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(207,90,38,0.16), transparent 60%),
+      linear-gradient(180deg, #120d09, #0d0a08 80%);
+  }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+  }
+  .hero h1{
+    font-size: clamp(2.6rem, 7vw, 4.6rem);
+    margin: 0;
+    color: var(--candle);
+    text-shadow: 0 0 30px rgba(207,90,38,.25);
+  }
+  .hero .sub{
+    font-family:'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-top: 10px;
+  }
+  .censer{
+    width: 3px;
+    height: 60px;
+    margin: 34px auto 0;
+    background: linear-gradient(var(--line), var(--gold));
+    position: relative;
+    transform-origin: top center;
+    animation: swing 4.5s ease-in-out infinite;
+  }
+  .censer::after{
+    content:'';
+    position:absolute;
+    left:50%; bottom:-14px;
+    transform: translateX(-50%);
+    width:26px; height:20px;
+    background: radial-gradient(circle at 50% 30%, var(--gold-bright), var(--gold) 60%, #7a5c26 100%);
+    border-radius: 4px 4px 10px 10px;
+    box-shadow: 0 0 18px rgba(200,162,74,.5);
+  }
+  .smoke{
+    position:absolute; left:50%; bottom:60px; transform:translateX(-50%);
+    width:120px; height:120px; pointer-events:none;
+    opacity:.5;
+    background: radial-gradient(circle, rgba(230,219,196,.16), transparent 70%);
+    filter: blur(6px);
+    animation: rise 6s ease-in infinite;
+  }
+  @keyframes swing{ 0%,100%{transform:rotate(-7deg);} 50%{transform:rotate(7deg);} }
+  @keyframes rise{ 0%{opacity:0; transform:translate(-50%,10px) scale(.7);} 40%{opacity:.5;} 100%{opacity:0; transform:translate(-50%,-90px) scale(1.4);} }
+
+  @media (prefers-reduced-motion: reduce){
+    .censer, .smoke { animation: none; }
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding: 52px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .lede{ font-size: 1.15rem; color: var(--text); }
+  .lede em{ color: var(--gold); font-style: italic; }
+
+  blockquote{
+    margin: 24px 0; padding: 14px 22px;
+    border-left: 3px solid var(--ember);
+    background: rgba(207,90,38,.06);
+    font-style: italic;
+    color: var(--text-dim);
+  }
+
+  .feature{ margin: 30px 0; }
+  .feature h3{ font-size: 1.5rem; display:flex; align-items:baseline; gap:10px; flex-wrap: wrap; }
+  .feature h3 .lvl{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--bg); background: var(--gold);
+    padding: 2px 8px; border-radius: 3px; letter-spacing: .05em;
+  }
+  .feature h3 .cost{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--gold-bright); border: 1px solid var(--gold);
+    padding: 1px 7px; border-radius: 3px; letter-spacing: .04em;
+  }
+  .feature p{ margin: .5em 0; }
+  .feature ul{ padding-left: 22px; }
+  .feature li{ margin: 6px 0; }
+
+  /* ---------- TABLES ---------- */
+  table{ width:100%; border-collapse: collapse; margin: 18px 0 28px; font-size: .95rem; }
+  caption{ text-align:left; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-dim); margin-bottom:8px; }
+  th{
+    font-family:'Cormorant SC', serif; font-weight:600; letter-spacing:.02em;
+    text-align:left; color: var(--gold-bright);
+    border-bottom: 1px solid var(--gold); padding: 8px 10px;
+    background: rgba(200,162,74,.06);
+  }
+  td{ padding: 7px 10px; border-bottom: 1px solid var(--line); color: var(--text); font-family:'JetBrains Mono',monospace; font-size:.85rem; }
+  td.desc{ font-family:'EB Garamond',serif; font-size:.95rem; }
+  tr:nth-child(even) td{ background: rgba(230,219,196,.02); }
+  .table-scroll{ overflow-x:auto; }
+
+  /* ---------- DEVOCIÓN WIDGET ---------- */
+  .devocion-box{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 26px;
+    margin: 24px 0;
+  }
+  .devocion-box h4{ margin-bottom: 4px; }
+  .devocion-box .caption{ color: var(--text-dim); font-size: .85rem; margin-bottom: 18px; }
+  .dev-row{ display:flex; align-items:center; gap:16px; flex-wrap: wrap; }
+  .dev-track{
+    flex: 1 1 260px;
+    height: 22px;
+    background: #0a0806;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    overflow: hidden;
+    position: relative;
+  }
+  .dev-fill{
+    height:100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6b4d1c, var(--gold), var(--gold-bright));
+    transition: width .35s ease;
+    box-shadow: 0 0 14px rgba(200,162,74,.5) inset;
+  }
+  .dev-count{ font-family:'JetBrains Mono',monospace; min-width: 64px; text-align:center; color: var(--gold-bright); font-size:1.1rem; }
+  .dev-buttons{ display:flex; gap:10px; margin-top: 16px; flex-wrap: wrap; }
+  button.dev-btn{
+    font-family:'JetBrains Mono',monospace; font-size: .78rem; letter-spacing:.04em;
+    background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+    padding: 9px 14px; border-radius: 4px; cursor:pointer; transition: all .15s ease;
+  }
+  button.dev-btn:hover{ border-color: var(--gold); color: var(--gold-bright); }
+  button.dev-btn.spend{ border-color: var(--ember); }
+  button.dev-btn.spend:hover{ background: rgba(207,90,38,.12); color: var(--ember-bright); }
+  button.dev-btn:disabled{ opacity:.35; cursor:not-allowed; }
+  .dev-log{ margin-top:14px; font-size:.82rem; color: var(--text-dim); min-height: 1.4em; font-style: italic; }
+  .dev-max-select{ font-family:'JetBrains Mono',monospace; font-size:.78rem; color:var(--text-dim); display:flex; align-items:center; gap:8px; margin-bottom:14px;}
+  .dev-max-select select{ background:var(--panel2); color:var(--text); border:1px solid var(--line); border-radius:4px; padding:4px 8px; }
+
+  /* ---------- ORDENES TABS ---------- */
+  .tabs{ display:flex; gap:8px; margin-bottom: 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .tab-btn{
+    font-family:'Cormorant SC', serif; font-size: 1.05rem; letter-spacing:.03em;
+    background: none; border:none; color: var(--text-dim);
+    padding: 12px 18px; cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all .15s ease;
+  }
+  .tab-btn.active{ color: var(--gold-bright); border-bottom-color: var(--gold); }
+  .tab-btn:hover{ color: var(--gold); }
+  .tab-panel{ display:none; padding-top: 28px; }
+  .tab-panel.active{ display:block; animation: fadein .25s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .order-banner{
+    padding: 16px 20px; margin-bottom: 22px; border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .order-banner.cadena{ border-left: 3px solid var(--ember); background: rgba(207,90,38,.05); }
+  .order-banner.umbral{ border-left: 3px solid var(--steel); background: rgba(95,124,138,.07); }
+  .order-banner.vela{ border-left: 3px solid var(--candle); background: rgba(216,205,176,.05); }
+  .order-banner p{ margin:0; font-style: italic; color: var(--text-dim); }
+
+  .pill{
+    display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase; color: var(--bg);
+    background: var(--gold); padding: 2px 9px; border-radius: 3px; margin-right:8px;
+  }
+
+  .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  @media (max-width: 640px){ .two-col{ grid-template-columns: 1fr; } }
+
+  .toc{ display:flex; flex-wrap:wrap; gap: 10px 22px; font-family:'JetBrains Mono',monospace; font-size:.8rem; color: var(--text-dim); margin-top: 22px; }
+  .toc a{ color: var(--text-dim); text-decoration:none; border-bottom: 1px dotted var(--line); }
+  .toc a:hover{ color: var(--gold-bright); border-bottom-color: var(--gold); }
+
+  footer{ text-align:center; padding: 40px 0 10px; color: var(--text-dim); font-family:'JetBrains Mono',monospace; font-size: .75rem; letter-spacing:.08em; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Clase para D&D 5e · Nivel 1–20 · Mundo moderno</div>
+  <h1>El Oficiante</h1>
+  <div class="sub">entre el incienso viejo y el neón nuevo, la fe es un oficio con procedimiento</div>
+  <div class="censer"></div>
+  <div class="smoke"></div>
+</div>
+
+<div class="wrap">
+
+  <section id="intro">
+    <p class="lede">Antes de que existieran los templos ya ardía el fuego que espanta a lo que no debería caminar entre los vivos. <em>El Oficiante</em> es quien hereda ese fuego, pero no lo bendice con un martillo: lo lleva a una ciudad de 2 a. m., con una linterna UV, una bolsa de sal y un expediente bajo el brazo. No es un caballero sagrado con espacios de conjuro. Es un <strong>funcionario de lo sobrenatural</strong>: abre el caso, estudia a la entidad, cierra la puerta y reza lo justo.</p>
+    <blockquote>«No exorcizo por poder. Exorcizo porque he leído el expediente, conozco su nombre y sé por dónde se rompe. La fe es lo que hago cuando acaba el papeleo.»</blockquote>
+    <p>La clase se apoya en tres ideas que no pertenecen al Paladín. El <strong>Expediente</strong> convierte cada encuentro en un caso: investigas y obtienes la Debilidad de la entidad. Los <strong>Ritos</strong> sustituyen a los conjuros: son procedimientos con utilería (tiza, sal, agua bendita, campana, linterna UV) que pagas con <strong>Devoción</strong>. Y el <strong>Responso</strong> hace de cada rito un acto de comunidad: tus aliados responden al rezo y lo refuerzan. La Devoción oscila entre dos estados, la <strong>Vigilia</strong>, calma y sostenida, y el <strong>Fervor</strong>, un arrebato de fe que tú decides encender y que se consume mientras dura.</p>
+    <div class="toc">
+      <a href="#rasgos">Rasgos de clase</a>
+      <a href="#tabla">Tabla de progresión</a>
+      <a href="#devocion">Devoción</a>
+      <a href="#ritos">Ritos</a>
+      <a href="#ordenes">Órdenes Exorcistas</a>
+      <a href="#equipo">Equipo</a>
+    </div>
+  </section>
+
+  <section id="rasgos">
+    <h2>Rasgos de Clase</h2>
+    <div class="two-col">
+      <div>
+        <table>
+          <tr><th>Dado de Golpe</th><td class="desc">1d10 por nivel de Oficiante</td></tr>
+          <tr><th>PG al nivel 1</th><td class="desc">10 + mod. Constitución</td></tr>
+          <tr><th>PG por nivel</th><td class="desc">1d10 (o 6) + mod. Constitución</td></tr>
+          <tr><th>Salvaciones</th><td class="desc">Sabiduría e Inteligencia</td></tr>
+          <tr><th>CD de Rito</th><td class="desc">8 + bon. de competencia + mod. Sabiduría</td></tr>
+        </table>
+      </div>
+      <div>
+        <table>
+          <tr><th>Armaduras</th><td class="desc">Ligeras, medias (sin escudos)</td></tr>
+          <tr><th>Armas</th><td class="desc">Sencillas, y Armas Rituales (ver abajo)</td></tr>
+          <tr><th>Herramientas</th><td class="desc">Un juego de símbolo sagrado o herramientas de sacerdote, a elección</td></tr>
+          <tr><th>Habilidades</th><td class="desc">Elige 3: Perspicacia, Intimidación, Medicina, Persuasión, Religión, Investigación</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 1</span> Armas Rituales</h3>
+      <p>Tu orden lucha con instrumentos de fe reconvertidos en armas. Ganas competencia con las <strong>armas rituales</strong>: mangual, cadena con pesa, báculo, látigo y cualquier arma sencilla o marcial que un DJ apruebe como instrumento litúrgico modificado (incensarios oscilantes, rosarios de eslabones, campanas de mano con filo, barras de hierro de obra bendecidas). Un arma ritual mágica y única — como el legendario <em>BotaShoge</em>, un incensario-mangual consagrado para el exorcismo — es un ejemplo perfecto del tipo de arma que esta clase está pensada para empuñar, aunque no es obligatoria: cualquier Oficiante puede optar por un báculo sencillo, una cadena de plata o incluso los puños envueltos en cuentas benditas.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 1</span> Expediente</h3>
+      <p>Ante la amenaza, el Oficiante investiga primero. Como una acción de 1 minuto (o como acción si ya conoces su Nombre), <strong>abres un Expediente</strong> sobre una criatura o una anomalía que puedas estudiar de cerca: examinar al poseído, leer las marcas de la pared, interrogar a un testigo. Haz una prueba de Religión o de Investigación contra CD 10 + el CR de la criatura. Si la superas, el DM te revela su <strong>tipo</strong>, su <strong>Nombre</strong> (si lo tiene) y su <strong>Debilidad</strong>: un tipo de daño, un objeto o una condición que la perjudica. Si no la superas, no pierdes el Expediente: puedes intentarlo otra vez tras observarla durante un turno de combate.</p>
+      <p>Puedes tener abiertos a la vez un número de Expedientes igual a tu bonificador de competencia. Mientras uno está abierto:</p>
+      <ul>
+        <li>Una vez por turno, cuando impactas a esa criatura con un arma o con un Rito, añades tu bonificador de competencia al daño, y ese daño es del tipo de su Debilidad.</li>
+        <li>La primera vez en cada combate que esa criatura debe hacer una salvación contra uno de tus Ritos, la hace con desventaja.</li>
+      </ul>
+      <p>Un Expediente se cierra cuando la criatura muere, cuando la pierdes de vista durante más de un día o cuando abres otro por encima del límite (el más antiguo se cierra).</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 1</span> Sentido de lo Impío</h3>
+      <p>Como acción, sabes la ubicación de cualquier aberración, muerto viviente o infernal que no esté detrás de una barrera de plomo a menos de 18 metros. Sabes también si un ser vivo cercano está poseído o marcado por una entidad de otro plano. Puedes usar este rasgo un número de veces igual a tu modificador de Sabiduría (mínimo 1), y recuperas los usos tras un descanso largo.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 1</span> Devoción</h3>
+      <p>Posees una reserva de <strong>Devoción</strong> que se restaura por completo tras un descanso largo. Vives normalmente en un estado de <strong>Vigilia</strong>: fe calma que se repone sola con el tiempo. Se gasta en Ritos y en mantener el Fervor. Consulta la sección <a href="#devocion">Devoción</a> para las reglas completas.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 2</span> Ritos</h3>
+      <p>Aprendes un número de <strong>Ritos</strong> según la tabla de progresión. No usas espacios de conjuro: cada Rito cuesta puntos de Devoción (se indican en su descripción) y requiere su utilería (tiza, sal, agua bendita, campana, linterna UV), que va incluida en tu Kit de Oficiante. Puedes cambiar un Rito que conozcas por otro cada vez que subes de nivel. Consulta la <a href="#ritos">Lista de Ritos</a>.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 2</span> Encender el Fervor</h3>
+      <p>Como acción adicional, si tienes al menos 1 punto de Devoción, puedes <strong>encender tu Fervor</strong>. Mientras dure (hasta 1 minuto, o hasta que lo apagues o se extinga):</p>
+      <ul>
+        <li>Cada vez que impactas con tu arma ritual, infliges automáticamente 1d6 de daño radiante adicional, sin gastar Devoción. Si el objetivo tiene un Expediente abierto, el daño es del tipo de su Debilidad.</li>
+        <li>Tienes ventaja en las salvaciones para resistir ser asustado o encantado.</li>
+        <li>Tu velocidad aumenta 3 metros.</li>
+      </ul>
+      <p>Al inicio de cada uno de tus turnos mientras el Fervor esté activo, pierdes 1 punto de Devoción. Si llegas a 0, el Fervor se extingue de inmediato. También puedes apagarlo tú mismo como acción adicional, para conservar lo que te quede. No puedes volver a encenderlo hasta recuperar al menos 1 punto de Devoción a través de tu Vigilia.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 3</span> Orden Exorcista</h3>
+      <p>Eliges una tradición: <strong>Orden de la Cadena Ardiente</strong>, <strong>Orden del Umbral</strong> u <strong>Orden de la Vela Muda</strong>. Ver la sección <a href="#ordenes">Órdenes Exorcistas</a>.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 5</span> Ataque Extra</h3>
+      <p>Puedes atacar dos veces, en lugar de una, cada vez que uses la acción de Atacar en tu turno.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 6</span> Responso</h3>
+      <p>Un rito dicho a solas es una plegaria; dicho entre varios, es una orden. Cuando usas un Rito (o tu Exorcismo) que obliga a hacer una salvación, cada aliado a 9 metros que pueda oírte puede usar su reacción para <strong>responder</strong>: la CD aumenta en 1 por cada aliado que responda (máximo +3), y cada aliado que respondió gana 1d6 + tu mod. de Sabiduría puntos de golpe temporales. Si al menos uno responde, el humo del incensario cubre el área y ninguna criatura dentro puede ser poseída hasta el final de tu siguiente turno.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 9</span> Exorcismo</h3>
+      <p>Como acción, puedes gastar 3 puntos de Devoción y señalar a una criatura aberración, muerto viviente o infernal a 9 metros. Debe superar una salvación de Sabiduría (CD de Rito) o queda asustada durante 1 minuto y sufre 4d6 de daño radiante (la mitad si supera la salvación). Una criatura que falle por 5 o más queda además cegada por un destello de humo sagrado hasta el final de su siguiente turno. Es un rito de comunidad: el Responso se aplica a él.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 10</span> Caso Cerrado</h3>
+      <p>Cuando reduces a 0 puntos de golpe a una criatura con un Expediente abierto, recuperas 2 puntos de Devoción y puedes abrir un nuevo Expediente sobre otra criatura que veas, sin tiempo de espera y sin prueba (el DM te revela su tipo y su Debilidad). Una vez por turno.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 11</span> Fervor Ardiente</h3>
+      <p>El daño automático de tu Fervor pasa de 1d6 a 1d8. Además, mientras tu Fervor esté encendido, todo tu daño radiante y de fuego cuenta como mágico para superar resistencias e inmunidades.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 14</span> Presencia Inquebrantable</h3>
+      <p>Mientras tengas al menos 1 punto de Devoción, no puedes ser asustado ni poseído contra tu voluntad, y tienes ventaja en las salvaciones para resistir ser encantado.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 15</span> Incienso Protector</h3>
+      <p>Los Ritos de zona que mantienes (Círculo de Tiza, Letanía Grabada) otorgan además resistencia al daño necrótico a ti y a los aliados dentro de su área, y ventaja en las salvaciones contra efectos que intenten poseerlos.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 18</span> Fe Constante</h3>
+      <p>Tu Fervor ya solo consume 1 punto de Devoción cada dos turnos, en lugar de cada turno. Además, tu máximo de Devoción aumenta en 2.</p>
+    </div>
+
+    <div class="feature">
+      <h3><span class="lvl">Nv 20</span> Rito Final</h3>
+      <p>Una vez por descanso largo, como acción, puedes extinguir toda tu Devoción actual (mínimo 4, encendiendo el Fervor primero si no lo estaba ya) para desatar un Rito Final: cada criatura hostil a 6 metros debe superar una salvación de Sabiduría o sufrir 2d10 de daño radiante y de fuego por cada punto de Devoción extinguido (la mitad si supera la salvación), y quedar asustada durante 1 minuto. Las criaturas aberración, muerto viviente, feérico o infernal que fallen la salvación son además desterradas a su plano de origen si tienen menos de 50 puntos de golpe actuales.</p>
+    </div>
+  </section>
+
+  <section id="tabla">
+    <h2>Progresión de El Oficiante</h2>
+    <div class="table-scroll">
+    <table>
+      <caption>Tabla de clase</caption>
+      <tr>
+        <th>Nivel</th><th>Bono Compet.</th><th>Rasgos</th>
+        <th>Dev. Máx</th><th>Ritos</th>
+      </tr>
+      <tr><td>1</td><td>+2</td><td class="desc">Armas Rituales, Expediente, Sentido de lo Impío, Devoción</td><td>2</td><td>—</td></tr>
+      <tr><td>2</td><td>+2</td><td class="desc">Ritos, Encender el Fervor</td><td>2</td><td>2</td></tr>
+      <tr><td>3</td><td>+2</td><td class="desc">Orden Exorcista</td><td>3</td><td>2</td></tr>
+      <tr><td>4</td><td>+2</td><td class="desc">Mejora de Característica</td><td>3</td><td>2</td></tr>
+      <tr><td>5</td><td>+3</td><td class="desc">Ataque Extra</td><td>4</td><td>3</td></tr>
+      <tr><td>6</td><td>+3</td><td class="desc">Responso</td><td>4</td><td>3</td></tr>
+      <tr><td>7</td><td>+3</td><td class="desc">Rasgo de Orden</td><td>4</td><td>3</td></tr>
+      <tr><td>8</td><td>+3</td><td class="desc">Mejora de Característica</td><td>5</td><td>3</td></tr>
+      <tr><td>9</td><td>+4</td><td class="desc">Exorcismo</td><td>5</td><td>4</td></tr>
+      <tr><td>10</td><td>+4</td><td class="desc">Caso Cerrado</td><td>5</td><td>4</td></tr>
+      <tr><td>11</td><td>+4</td><td class="desc">Fervor Ardiente</td><td>6</td><td>4</td></tr>
+      <tr><td>12</td><td>+4</td><td class="desc">Mejora de Característica</td><td>6</td><td>4</td></tr>
+      <tr><td>13</td><td>+5</td><td class="desc">Rasgo de Orden</td><td>6</td><td>5</td></tr>
+      <tr><td>14</td><td>+5</td><td class="desc">Presencia Inquebrantable</td><td>7</td><td>5</td></tr>
+      <tr><td>15</td><td>+5</td><td class="desc">Incienso Protector</td><td>7</td><td>5</td></tr>
+      <tr><td>16</td><td>+5</td><td class="desc">Mejora de Característica</td><td>7</td><td>5</td></tr>
+      <tr><td>17</td><td>+6</td><td class="desc">Rasgo de Orden</td><td>8</td><td>6</td></tr>
+      <tr><td>18</td><td>+6</td><td class="desc">Fe Constante</td><td>10</td><td>6</td></tr>
+      <tr><td>19</td><td>+6</td><td class="desc">Mejora de Característica</td><td>10</td><td>6</td></tr>
+      <tr><td>20</td><td>+6</td><td class="desc">Rito Final</td><td>10</td><td>6</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <section id="devocion">
+    <h2>Devoción: Vigilia y Fervor</h2>
+    <p>La Devoción no se te escapa por no hacer nada — no hay reloj castigándote. En vez de eso, vives entre dos estados que tú controlas: la calma sostenida de la <strong>Vigilia</strong>, y el arrebato deliberado del <strong>Fervor</strong>.</p>
+
+    <h3 style="font-size:1.2rem; margin-top:26px;">Vigilia</h3>
+    <p>Es tu estado por defecto. Tu Devoción se restaura por completo tras un descanso largo, y mientras estés en Vigilia recuperas <strong>1 punto de Devoción al inicio de tu turno si no gastaste Devoción en tu turno anterior</strong> (hasta tu máximo, ver tabla de progresión). Tu fe se repone cuando le das un respiro: gastar cada turno la agota, alternar la mantiene viva.</p>
+
+    <h3 style="font-size:1.2rem; margin-top:26px;">Fervor</h3>
+    <p>Es un arrebato que <em>tú</em> decides encender (rasgo <strong>Encender el Fervor</strong>, nivel 2), no algo que ocurre solo. Mientras dura, tus golpes arden con fe automáticamente y ganas resistencia mental — pero cada turno que lo mantienes encendido cuesta un punto de tu reserva. Tú decides cuándo merece la pena quemar tu Devoción en un pico de intensidad, y cuándo prefieres guardarla y dejar que la Vigilia la reponga para el siguiente combate.</p>
+    <p>Esto convierte la Devoción en una decisión táctica de ritmo — cuándo encender la mecha — en lugar de un contador que sube y baja según lo bien que interpretes tu turno.</p>
+    <p>No puedes tener más puntos de Devoción que tu máximo. El exceso al recuperar (por descanso largo, por ejemplo) simplemente no se aplica.</p>
+
+    <div class="devocion-box">
+      <h4>Simulador de Devoción</h4>
+      <div class="caption">Pequeña herramienta para visualizar la Vigilia y el Fervor en mesa. Ajusta el máximo a tu nivel actual y avanza turno a turno.</div>
+      <div class="dev-max-select">
+        Devoción máxima:
+        <select id="devMaxSelect">
+          <option value="2">2 (Nv 1–2)</option>
+          <option value="3" selected>3 (Nv 3–4)</option>
+          <option value="4">4 (Nv 5–7)</option>
+          <option value="5">5 (Nv 8–10)</option>
+          <option value="6">6 (Nv 11–13)</option>
+          <option value="7">7 (Nv 14–16)</option>
+          <option value="8">8 (Nv 17)</option>
+          <option value="10">10 (Nv 18–20)</option>
+        </select>
+      </div>
+      <div class="dev-row">
+        <div class="dev-track"><div class="dev-fill" id="devFill"></div></div>
+        <div class="dev-count" id="devCount">3 / 3</div>
+      </div>
+      <div class="caption" id="devState" style="margin:10px 0 0; font-family:'JetBrains Mono',monospace; letter-spacing:.06em; text-transform:uppercase; font-size:.75rem;">Estado: Vigilia</div>
+      <div class="dev-buttons">
+        <button class="dev-btn" id="btnFervor">Encender el Fervor</button>
+        <button class="dev-btn" id="btnTurn">Pasar un turno</button>
+        <button class="dev-btn spend" id="btnGolpe">Gastar 1 en un Rito</button>
+        <button class="dev-btn" id="btnReset">Descanso largo</button>
+      </div>
+      <div class="dev-log" id="devLog">Tras un descanso largo empiezas con la Devoción al máximo, en Vigilia.</div>
+    </div>
+  </section>
+
+  <section id="ritos">
+    <h2>Lista de Ritos</h2>
+    <p>Un Rito es un procedimiento, no un conjuro: lo ejecutas con utilería real y cuesta Devoción. Todos usan tu CD de Rito (8 + competencia + SAB). Conoces un número de Ritos según la tabla de progresión. Si hay un Expediente abierto sobre el objetivo, se aplican sus bonificaciones.</p>
+
+    <div class="feature">
+      <h3>Círculo de Tiza <span class="cost">1 Devoción</span> <span class="cost">Acción</span></h3>
+      <p>Trazas un círculo de 3 metros de radio con tiza consagrada (dura 10 minutos, o hasta que lo borres o lo cruce un ataque). Las criaturas aberración, muerto viviente, feérico e infernal deben superar una salvación de Sabiduría para cruzarlo, y tienen desventaja en las tiradas de ataque contra quienes están dentro. Los aliados dentro tienen ventaja en las salvaciones contra miedo, encantamiento y posesión.</p>
+    </div>
+    <div class="feature">
+      <h3>Agua Bendita <span class="cost">1 Devoción</span> <span class="cost">Acción adicional</span></h3>
+      <p>Lanzas un vial a una criatura a 6 metros: ataque a distancia, 2d6 de daño radiante (4d6 contra aberración, muerto viviente, feérico o infernal). El daño aumenta en 1d6 a los niveles 5, 11 y 17.</p>
+    </div>
+    <div class="feature">
+      <h3>Linterna UV <span class="cost">1 Devoción</span> <span class="cost">Acción adicional</span></h3>
+      <p>Durante 1 minuto proyectas un haz de luz en cono de 9 metros. Lo que alcanza el haz y esté invisible, etéreo o disfrazado queda revelado, y las criaturas profanas que lo reciben tienen desventaja en su primera salvación contra tus Ritos en cada turno.</p>
+    </div>
+    <div class="feature">
+      <h3>Primeros Auxilios Rituales <span class="cost">1 Devoción</span> <span class="cost">Acción</span></h3>
+      <p>Tocas a una criatura: recupera 2d8 + tu mod. de Sabiduría puntos de golpe y termina en ella una condición de envenenado, asustado o encantado. A los niveles 5, 11 y 17 la curación aumenta en 1d8.</p>
+    </div>
+    <div class="feature">
+      <h3>Arma Bendecida <span class="cost">1 Devoción</span> <span class="cost">Acción adicional</span></h3>
+      <p>Durante 10 minutos, hasta 3 armas que toques (tuya o de tus aliados) cuentan como mágicas y plateadas, y cada impacto inflige 1d4 de daño radiante adicional contra aberraciones, muertos vivientes, feéricos e infernales.</p>
+    </div>
+    <div class="feature">
+      <h3>Atadura de Sal <span class="cost">2 Devoción</span> <span class="cost">Acción</span></h3>
+      <p>Una criatura a 9 metros con un Expediente abierto debe superar una salvación de Fuerza o queda apresada por un cordón de sal hasta el final de su siguiente turno (sin necesidad de Expediente, la salvación se hace con ventaja).</p>
+    </div>
+    <div class="feature">
+      <h3>Campana de Mano <span class="cost">1 Devoción</span> <span class="cost">Reacción</span></h3>
+      <p>Cuando un aliado a 9 metros que pueda oírte falla una salvación contra miedo, encantamiento o posesión, lo hace sonar: el aliado la repite con un bonificador igual a tu bonificador de competencia.</p>
+    </div>
+    <div class="feature">
+      <h3>Letanía Grabada <span class="cost">2 Devoción</span> <span class="cost">Acción adicional</span></h3>
+      <p>Durante 1 minuto, un altavoz o una recitación en voz alta cubre 9 metros a tu alrededor: los aliados que la oigan suman 1d4 a sus salvaciones contra miedo, encantamiento y posesión, y las criaturas profanas que empiecen su turno dentro tienen desventaja en las pruebas de ataque contra ti hasta el final de ese turno. Requiere concentración.</p>
+    </div>
+    <div class="feature">
+      <h3>Sello de Vigilia <span class="cost">1 Devoción</span> <span class="cost">Acción</span></h3>
+      <p>Marcas una puerta, ventana o paso con sal y tiza. Durante 8 horas, sabes cuándo cualquier criatura lo cruza, y las criaturas profanas que lo crucen sufren 2d6 de daño radiante (salvación de Destreza para la mitad).</p>
+    </div>
+    <div class="feature">
+      <h3>Nombre Verdadero <span class="cost">2 Devoción</span> <span class="cost">Acción</span></h3>
+      <p>Pronuncias el Nombre de una criatura con un Expediente abierto: debe superar una salvación de Carisma o queda sujeta a tu voz durante 1 minuto: no puede usar sus reacciones y, si la orden es una sola palabra no suicida, la obedece en su siguiente turno. Una vez por descanso largo para cada criatura.</p>
+    </div>
+  </section>
+
+  <section id="ordenes">
+    <h2>Órdenes Exorcistas</h2>
+    <p>Cada Oficiante pertenece, formal o informalmente, a una tradición que moldea cómo entiende el exorcismo: como purga violenta, como control metódico del territorio, o como acto de compasión hacia la víctima.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="cadena">Orden de la Cadena Ardiente</button>
+      <button class="tab-btn" data-tab="umbral">Orden del Umbral</button>
+      <button class="tab-btn" data-tab="vela">Orden de la Vela Muda</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-cadena">
+      <div class="order-banner cadena">
+        <p><span class="pill">Tradicional</span>La orden más antigua: monjes-soldado que nunca dejaron de creer que lo profano se combate cuerpo a cuerpo, con cadena, fuego y disciplina.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 3</span> Cadena Consagrada</h3>
+        <p>Tu arma ritual gana 1,5 metros de alcance adicional al hacer ataques de oportunidad (no al atacar en tu turno). Además, cuando impactas a una criatura aberración, muerto viviente, feérico o infernal, puedes gastar 1 punto de Devoción para que quede <strong>apresada</strong> por cadenas espectrales hasta el final de su siguiente turno (salvación de Fuerza para liberarse, CD de Rito).</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 7</span> Fuego Judicial</h3>
+        <p>El daño de tu Fervor y de tus Ritos ignora resistencia (pero no inmunidad) a fuego y radiante. Además, una criatura apresada por tu Cadena Consagrada sufre 1d6 de daño de fuego al inicio de cada uno de sus turnos mientras siga apresada.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 13</span> Yugo Eterno</h3>
+        <p>Como acción, puedes intentar encadenar permanentemente a una criatura aberración o muerto viviente que ya esté apresada o agarrada: debe superar una salvación de Carisma o queda <strong>Yugada</strong>: no puede moverse ni teleportarse voluntariamente mientras permanezca consciente y tú estés a menos de 18 metros. Puede repetir la salvación al final de cada uno de sus turnos.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 17</span> Verdugo de lo Profano</h3>
+        <p>Una vez por descanso largo, un ataque que hagas contra una criatura aberración, muerto viviente, feérico o infernal se convierte automáticamente en un golpe crítico, y el daño resultante no puede ser reducido por resistencia ni inmunidad de ningún tipo.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-umbral">
+      <div class="order-banner umbral">
+        <p><span class="pill">Moderno</span>Exorcistas de ciudad: sellan portales en trasteros y estaciones de metro con sal, luz ultravioleta y una fe tan práctica como cualquier oficio de guardia de seguridad.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 3</span> Sello de Umbral</h3>
+        <p>Como acción, puedes consagrar un umbral (una puerta, ventana o paso de hasta 3 metros de ancho) que conozcas o toques. Ninguna criatura aberración, muerto viviente, feérico o infernal puede cruzarlo voluntariamente sin superar una salvación de Sabiduría (CD de Rito). Puedes mantener un número de sellos activos igual a tu modificador de Sabiduría (mínimo 1); si intentas crear uno más, el más antiguo se desvanece.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 7</span> Exilio Rápido</h3>
+        <p>Cuando uses tu rasgo Exorcismo y el objetivo falle la salvación, en lugar de (o además de) quedar asustado, puede quedar desterrado a un páramo inofensivo de tu plano de origen preferido durante 1 minuto, tal y como el conjuro <em>destierro</em>.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 13</span> Vigilancia Constante</h3>
+        <p>Percibes automáticamente cualquier portal planar, grieta o sello activo (propio o ajeno) a 1,6 kilómetros. Además, ganas resistencia al daño de criaturas con el tipo aberración, feérico o infernal.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 17</span> Guardián del Último Umbral</h3>
+        <p>Tus Sellos de Umbral se vuelven permanentes mientras no los desactives tú mismo. Además, una vez por descanso largo, si una criatura falla la salvación contra tu Exorcismo o tu Exilio Rápido, puedes desterrarla a su plano de origen en lugar de temporalmente; no puede regresar a este plano por sí misma durante un año y un día.</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-vela">
+      <div class="order-banner vela">
+        <p><span class="pill">Compasivo</span>No todos los poseídos son el monstruo. Esta orden practica un exorcismo que protege primero a la víctima — y solo después, si hace falta, castiga a lo que la habita.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 3</span> Voto de Silencio</h3>
+        <p>Puedes usar tus Ritos que no infligen daño sin hablar, de modo que nadie que no te vea hacer el rito lo oye. Ganas además ventaja en las pruebas de Perspicacia para detectar sufrimiento, miedo o posesión en otra criatura. Una vez por descanso corto, cuando usas Primeros Auxilios Rituales sobre otra criatura, puedes Encender tu Fervor en ese mismo instante sin gastar tu acción adicional.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 7</span> Manos que Calman</h3>
+        <p>Cuando usas Primeros Auxilios Rituales sobre una criatura, esta también puede repetir inmediatamente una salvación contra un efecto de asustado o encantado que la afecte. Además, puedes gastar 2 puntos de Devoción y tocar a una criatura consciente para calmarla como el conjuro <em>calmar emociones</em>, sin gastar una acción de conjuro.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 13</span> Purificación sin Dolor</h3>
+        <p>Cuando tu Fervor o tu Exorcismo afectarían a una criatura poseída o dominada por otra entidad, puedes elegir no infligirle daño a la víctima: en su lugar, la entidad que la posee sufre el daño y el efecto normalmente, y debe superar su salvación con desventaja.</p>
+      </div>
+      <div class="feature">
+        <h3><span class="lvl">Nv 17</span> Última Vela</h3>
+        <p>Una vez por descanso largo, puedes tocar a una criatura que haya muerto hace 1 minuto o menos y susurrar un último rito: vuelve a la vida con 1 punto de golpe, sin necesidad de componentes materiales ni coste alguno más allá de tus palabras.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="equipo">
+    <h2>Equipo Inicial</h2>
+    <p>Empiezas con lo siguiente, además del equipo otorgado por tu trasfondo:</p>
+    <ul>
+      <li>(a) Cota de escamas o (b) armadura de cuero acolchado y un símbolo sagrado personal</li>
+      <li>(a) Un arma ritual (mangual, cadena, báculo o instrumento improvisado) o (b) cualquier arma sencilla</li>
+      <li>Un Kit de Oficiante: tiza consagrada, sal, cinco viales de agua bendita, una linterna UV, una campana de mano, un incensario de viaje y una libreta de expedientes</li>
+      <li>Un paquete de sacerdote o de explorador urbano (linterna, mapa de la ciudad)</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>El Oficiante — clase homebrew para D&D 5e · inspirada en el Botafumeiro/BotaShoge</footer>
+
+<script>
+(function(){
+  let dev = 3;
+  let max = 3;
+  let fervorOn = false;
+  let spentLastTurn = false;
+  let spentThisTurn = false;
+  const fill = document.getElementById('devFill');
+  const count = document.getElementById('devCount');
+  const log = document.getElementById('devLog');
+  const stateLabel = document.getElementById('devState');
+  const maxSelect = document.getElementById('devMaxSelect');
+  const btnFervor = document.getElementById('btnFervor');
+
+  function render(msg){
+    dev = Math.max(0, Math.min(dev, max));
+    fill.style.width = (dev/max*100) + '%';
+    count.textContent = dev + ' / ' + max;
+    stateLabel.textContent = 'Estado: ' + (fervorOn ? 'Fervor (ardiendo)' : 'Vigilia');
+    btnFervor.textContent = fervorOn ? 'Apagar el Fervor' : 'Encender el Fervor';
+    if(msg) log.textContent = msg;
+  }
+
+  maxSelect.addEventListener('change', () => {
+    max = parseInt(maxSelect.value, 10);
+    render('Máximo ajustado a ' + max + '.');
+  });
+
+  btnFervor.addEventListener('click', () => {
+    if(!fervorOn){
+      if(dev <= 0){ render('No puedes encender el Fervor sin al menos 1 punto de Devoción.'); return; }
+      fervorOn = true;
+      render('Enciendes tu Fervor: golpes con +1d6 radiante automático, ventaja contra miedo/encantamiento, +3 m de velocidad.');
+    } else {
+      fervorOn = false;
+      render('Apagas tu Fervor a propósito, conservando la Devoción que te quedaba.');
+    }
+  });
+
+  document.getElementById('btnTurn').addEventListener('click', () => {
+    if(fervorOn){
+      dev -= 1;
+      if(dev <= 0){
+        fervorOn = false;
+        render('Tu turno consume 1 Devoción en Fervor — llegas a 0 y el Fervor se extingue solo.');
+      } else {
+        render('Otro turno de Fervor: −1 Devoción por mantenerlo encendido.');
+      }
+    } else {
+      spentLastTurn = spentThisTurn; spentThisTurn = false;
+      if(spentLastTurn){ render('En Vigilia, pero gastaste Devoción el turno anterior: no recuperas este turno.'); return; }
+      const before = dev;
+      dev = Math.min(max, dev + 1);
+      render(dev>before ? 'En Vigilia, recuperas 1 Devoción al inicio del turno.' : 'En Vigilia, ya estás al máximo de Devoción.');
+    }
+  });
+
+  document.getElementById('btnGolpe').addEventListener('click', () => {
+    if(dev <= 0){ render('No tienes Devoción que gastar.'); return; }
+    dev -= 1;
+    spentThisTurn = true;
+    render('Rito (gasto manual): −1 Devoción. En Vigilia, gastar en tu turno impide recuperar al siguiente.');
+  });
+
+  document.getElementById('btnReset').addEventListener('click', () => {
+    dev = max;
+    fervorOn = false;
+    render('Descanso largo: la Devoción vuelve a su máximo y el Fervor se apaga.');
+  });
+
+  render();
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+})();
+</script>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>

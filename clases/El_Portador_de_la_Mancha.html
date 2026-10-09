@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>El Portador de la Mancha</title>
+<style>
+  :root{
+    --bg:#0b0c0f;
+    --bg2:#131519;
+    --panel:#15171c;
+    --border:#2a2e37;
+    --text:#c9cdd6;
+    --text-dim:#7a808d;
+    --accent:#5fae7a;
+    --accent2:#8b3a3a;
+    --gold:#b89452;
+    --glow: 0 0 18px rgba(95,174,122,0.25);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(circle at 20% 0%, #14171b 0%, #0b0c0f 60%);
+    color:var(--text);
+    font-family: 'Crimson Pro', 'Times New Roman', serif;
+    line-height:1.55;
+    padding:0 0 60px 0;
+  }
+  .header{
+    position:relative;
+    padding:70px 20px 50px;
+    text-align:center;
+    background:
+      linear-gradient(180deg, rgba(11,12,15,0) 0%, rgba(11,12,15,1) 95%),
+      radial-gradient(ellipse at center, rgba(95,174,122,0.12) 0%, rgba(11,12,15,0) 70%);
+    border-bottom:1px solid var(--border);
+    overflow:hidden;
+  }
+  .header::before{
+    content:"";
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(115deg, transparent, transparent 40px, rgba(139,58,58,0.04) 40px, rgba(139,58,58,0.04) 41px);
+    pointer-events:none;
+  }
+  .header h1{
+    font-size:2.6em;
+    letter-spacing:3px;
+    margin:0;
+    color:#e6e9ee;
+    text-shadow: 0 0 20px rgba(95,174,122,0.35);
+    font-variant: small-caps;
+  }
+  .header .subtitle{
+    color:var(--gold);
+    letter-spacing:4px;
+    text-transform:uppercase;
+    font-size:0.8em;
+    margin-top:12px;
+  }
+  .header .quote{
+    max-width:680px;
+    margin:26px auto 0;
+    color:var(--text-dim);
+    font-style:italic;
+    font-size:0.95em;
+  }
+  .container{max-width:960px;margin:0 auto;padding:0 24px;}
+  .tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin:36px 0 0;
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    padding:14px 0;
+    z-index:10;
+    border-bottom:1px solid var(--border);
+  }
+  .tab-btn{
+    background:var(--bg2);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    padding:9px 18px;
+    font-family:inherit;
+    letter-spacing:1px;
+    font-size:0.8em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .25s;
+    border-radius:2px;
+  }
+  .tab-btn:hover{color:var(--text); border-color:var(--accent);}
+  .tab-btn.active{
+    color:#0b0c0f;
+    background:var(--accent);
+    border-color:var(--accent);
+    box-shadow:var(--glow);
+  }
+  .tab-content{display:none; padding-top:34px; animation:fadeIn .4s ease;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h2.section-title{
+    color:var(--accent);
+    font-variant:small-caps;
+    font-size:1.7em;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+    margin-top:50px;
+    letter-spacing:1px;
+  }
+  h3.sub-title{
+    color:var(--gold);
+    font-variant:small-caps;
+    font-size:1.25em;
+    margin-top:30px;
+    letter-spacing:0.5px;
+  }
+  .flavor{
+    border-left:3px solid var(--accent2);
+    padding:4px 18px;
+    color:#a7a1a1;
+    font-style:italic;
+    background:rgba(139,58,58,0.05);
+    margin:18px 0;
+  }
+  .box{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:20px 22px;
+    margin:18px 0;
+  }
+  .box h4{margin-top:0;color:var(--accent);font-variant:small-caps;letter-spacing:1px;font-size:1.15em;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-size:0.92em;
+  }
+  th{
+    background:var(--bg2);
+    color:var(--gold);
+    text-transform:uppercase;
+    font-size:0.75em;
+    letter-spacing:1px;
+    padding:10px 8px;
+    border-bottom:2px solid var(--border);
+    text-align:left;
+  }
+  td{
+    padding:8px;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    font-size:0.95em;
+  }
+  tr:hover td{background:rgba(95,174,122,0.04);}
+  .tag{
+    display:inline-block;
+    background:rgba(95,174,122,0.12);
+    border:1px solid var(--accent);
+    color:var(--accent);
+    padding:2px 9px;
+    border-radius:10px;
+    font-size:0.7em;
+    letter-spacing:0.5px;
+    margin-right:6px;
+  }
+  .tag.red{background:rgba(139,58,58,0.15); border-color:var(--accent2); color:#d98787;}
+
+  /* Tracker */
+  .tracker{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:24px;
+    margin:20px 0;
+  }
+  .tracker-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .tracker-label{color:var(--gold); font-variant:small-caps; font-size:1.1em; letter-spacing:1px;}
+  .counter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .counter button{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--accent);
+    background:transparent;
+    color:var(--accent);
+    font-size:1.1em;
+    cursor:pointer;
+    transition:.2s;
+  }
+  .counter button:hover{background:var(--accent); color:#0b0c0f; box-shadow:var(--glow);}
+  .counter .val{
+    min-width:42px;
+    text-align:center;
+    font-size:1.4em;
+    color:#e6e9ee;
+  }
+  .pip-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;}
+  .pip{
+    width:20px;height:20px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:#1a1c21;
+    transition:.3s;
+  }
+  .pip.filled{
+    background:var(--accent2);
+    border-color:var(--accent2);
+    box-shadow:0 0 8px rgba(139,58,58,0.6);
+  }
+  .threshold-bar{
+    height:10px;
+    width:100%;
+    background:#1a1c21;
+    border-radius:6px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    margin-top:8px;
+  }
+  .threshold-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--accent2), #c46a4f, var(--gold));
+    width:0%;
+    transition:width .5s ease;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--text-dim);
+    color:var(--text-dim);
+    padding:6px 14px;
+    font-size:0.75em;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-radius:3px;
+  }
+  .reset-btn:hover{border-color:var(--accent2); color:#d98787;}
+  ul{padding-left:20px;}
+  li{margin-bottom:6px;}
+  .footer-note{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:0.8em;
+    margin-top:60px;
+    letter-spacing:1px;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style id="tema-ambientacion">
+
+/* Tema Guardas Grises: azul de la orden, plata y la Ruina */
+:root{--bg:#0a0d13;--bg2:#111722;--panel:#131a26;--border:#2b3a52;--text:#cfd5df;--accent:#5b8fd0;--gold:#c7ccd6;--glow:0 0 18px rgba(91,143,208,.28);}
+body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 100 100'%3E%3Cpath d='M50 8 L82 22 V52 Q82 78 50 94 Q18 78 18 52 V22 Z' fill='none' stroke='%23c7ccd6' stroke-width='2' opacity='.18'/%3E%3Cpath d='M38 64 Q34 46 46 38 Q42 30 52 26 Q62 30 58 40 Q70 44 66 62 L58 58 L54 70 L46 62 Z' fill='%23c7ccd6' opacity='.12'/%3E%3C/svg%3E") no-repeat right 30px bottom 30px/220px,radial-gradient(circle at 20% 0%,#16213a 0%,#0a0d13 60%);background-attachment:fixed;font-size:17px;}
+h1,h2,h3,h4,.sub-title,th{font-family:'Cinzel',serif;letter-spacing:.04em;}
+h1{color:#e3e8f0;text-shadow:0 0 22px rgba(91,143,208,.35);}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="subtitle">Clase de Personaje &mdash; Nivel 1 a 20</div>
+  <h1>El Portador de la Mancha</h1>
+  <div class="quote">"Se rieron de mí cuando dije que la había domado. No se ríen cuando ven mis ojos por la noche."</div>
+</div>
+
+<div class="container">
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('general')">La Clase</button>
+  <button class="tab-btn" onclick="showTab('progresion')">Progresión</button>
+  <button class="tab-btn" onclick="showTab('tecnicas')">Técnicas de Purga</button>
+  <button class="tab-btn" onclick="showTab('filo')">Orden del Filo</button>
+  <button class="tab-btn" onclick="showTab('runa')">Orden de la Runa</button>
+  <button class="tab-btn" onclick="showTab('susurro')">Orden del Susurro</button>
+  <button class="tab-btn" onclick="showTab('tracker')">Ficha de Recursos</button>
+</div>
+
+<!-- ===================== GENERAL ===================== -->
+<div class="tab-content active" id="general">
+
+  <h2 class="section-title">Origen</h2>
+  <div class="flavor">
+    Hace generaciones, cuando la Mancha se extendió por primera vez desde las profundidades, los reinos se dieron cuenta de que solo lo corrompido podía cazar con eficacia a lo corrompido. Un puñado de voluntarios se sometió al Rito del Umbral: beber una gota de la propia esencia corrupta, sobrevivir, y quedar unidos a ella para siempre. Nació así la Orden de los Portadores. No son sacerdotes ni magos: son cazadores que llevan la plaga en la sangre, condenados a combatirla sabiendo que, tarde o temprano, dejarán de ganar esa guerra.
+  </div>
+
+  <div class="box">
+    <h4>Rasgos de Clase</h4>
+    <table>
+      <tr><td><strong>Dado de Golpe</strong></td><td>1d10 por nivel de Portador de la Mancha</td></tr>
+      <tr><td><strong>PG al Nivel 1</strong></td><td>10 + modificador de Constitución</td></tr>
+      <tr><td><strong>PG en niveles superiores</strong></td><td>1d10 (o 6) + mod. Constitución por nivel</td></tr>
+      <tr><td><strong>Competencia en armaduras</strong></td><td>Ligera, media, pesada, escudos</td></tr>
+      <tr><td><strong>Competencia en armas</strong></td><td>Armas simples y marciales</td></tr>
+      <tr><td><strong>Herramientas</strong></td><td>Ninguna</td></tr>
+      <tr><td><strong>Salvaciones</strong></td><td>Constitución y Sabiduría</td></tr>
+      <tr><td><strong>Habilidades</strong></td><td>Elige 2: Percepción, Supervivencia, Intimidación, Arcanos, Investigación, Naturaleza, Perspicacia</td></tr>
+    </table>
+  </div>
+
+  <div class="box">
+    <h4>Equipo Inicial</h4>
+    <ul>
+      <li>(a) una espada a dos manos o (b) un arma marcial y un escudo</li>
+      <li>(a) armadura de escamas o (b) armadura de cuero tachonado</li>
+      <li>Un kit de explorador y un frasco con una muestra de tejido corrupto (foco de tu vínculo)</li>
+      <li>2 armas simples a elección y una ballesta ligera con 20 virotes</li>
+    </ul>
+  </div>
+
+  <h2 class="section-title">Puntos de Mancha</h2>
+  <p>Tu vínculo con la corrupción te otorga una reserva de energía oscura que puedes canalizar en combate.</p>
+
+  <div class="box">
+    <h4>Reserva</h4>
+    <p>Empezando en nivel 1, tienes una reserva de <strong>Puntos de Mancha</strong> igual a tu nivel de Portador de la Mancha (mínimo 1). Recuperas todos tus Puntos de Mancha gastados al terminar un descanso corto o largo.</p>
+  </div>
+
+  <div class="box">
+    <h4>Ganar Puntos de Mancha en combate</h4>
+    <p>Además de tu reserva por descanso, ganas <strong>1 Punto de Mancha</strong> (hasta un máximo de tu nivel + 2) cuando:</p>
+    <ul>
+      <li>Reduces a 0 puntos de golpe a una criatura de tipo aberración, muerto viviente, monstruosidad o cualquier criatura que el DJ considere "corrompida por la Mancha" en tu ambientación.</li>
+      <li>Recibes daño de una de esas criaturas (solo una vez por turno).</li>
+      <li>Sacas un 1 en una tirada de salvación de muerte (tu cuerpo se aferra a la corrupción para sobrevivir).</li>
+    </ul>
+    <p>No hay penalización por dejar Puntos de Mancha sin gastar: no decaen ni te perjudican por acumularse dentro de tu reserva. Son tuyos para usarlos cuando quieras.</p>
+  </div>
+
+  <div class="box">
+    <h4>Detectar la Mancha</h4>
+    <p>Desde el nivel 1, puedes usar una acción adicional para sentir la presencia de criaturas corrompidas en un radio de 18 metros a tu alrededor, incluso a través de paredes (no de forma precisa, solo dirección e intensidad aproximada). Puedes hacerlo un número de veces igual a tu modificador de Sabiduría (mínimo 1) por descanso largo.</p>
+  </div>
+
+  <h2 class="section-title">Umbral de Corrupción</h2>
+  <div class="flavor">
+    Cada Portador libra una guerra silenciosa contra lo que lleva dentro. No es un recurso que gastas: es una marca que crece contigo, para bien y para mal.
+  </div>
+  <div class="box">
+    <h4>Cómo funciona</h4>
+    <p>Tu Umbral de Corrupción es un rasgo permanente que sube automáticamente en los niveles 3, 9, 14 y 18 (Umbral I a IV). Cada Umbral te otorga un beneficio pasivo permanente. No se puede reducir ni gastar: representa cuánto ha cambiado tu cuerpo y tu mente.</p>
+    <table>
+      <tr><th>Umbral</th><th>Nivel</th><th>Beneficio</th></tr>
+      <tr><td>Umbral I</td><td>3</td><td>Resistencia a daño de veneno. Ventaja en salvaciones contra enfermedad. Tus ojos brillan tenuemente en la oscuridad (visión en la oscuridad 18m, o +18m si ya la tenías).</td></tr>
+      <tr><td>Umbral II</td><td>9</td><td>Resistencia a daño necrótico. Puedes gastar 1 Punto de Mancha para entender y ser entendido por criaturas corrompidas durante 1 minuto.</td></tr>
+      <tr><td>Umbral III</td><td>14</td><td>Inmunidad a enfermedades. Ganas 3 Puntos de Mancha adicionales de reserva. Las criaturas corrompidas hostiles deben esforzarse para distinguirte de uno de los suyos a simple vista.</td></tr>
+      <tr><td>Umbral IV</td><td>18</td><td>Inmunidad a daño de veneno. Tu cuerpo ha cambiado tanto que la Mancha te sostiene: una vez por descanso largo puedes ignorar por completo el resultado de una tirada de salvación de muerte fallida.</td></tr>
+    </table>
+  </div>
+
+  <h2 class="section-title">Rasgos Adicionales</h2>
+  <h3 class="sub-title">Estilo de Combate (Nivel 2)</h3>
+  <p>Eliges uno: Duelista, Defensa, Arma a Dos Manos, Protección o Arquería.</p>
+
+  <h3 class="sub-title">Derecho de Reclutamiento (Nivel 3)</h3>
+  <p>Los Guardas Grises responden ante un único tratado: frente a la Ruina, nadie puede negarles ayuda. Una vez por descanso largo, en una comunidad amenazada por criaturas corrompidas, puedes invocar el Derecho de Reclutamiento: las autoridades locales deben proporcionarte alojamiento, provisiones o un guía, o hasta dos combatientes (milicianos o guardias) durante 24 horas. Negarse a un Guarda Gris tiene consecuencias políticas que el DM decidirá.</p>
+  <p><strong>La Llamada.</strong> Cuando la Ruina despierta en algún lugar del mundo (a discreción del DM), lo oyes en sueños: sabes en qué dirección y aproximadamente a qué distancia está su origen.</p>
+
+  <h3 class="sub-title">Ataque Extra (Nivel 5)</h3>
+  <p>Puedes atacar dos veces en vez de una cuando usas la acción de Atacar en tu turno.</p>
+
+  <h3 class="sub-title">Resistencia Templada (Nivel 7)</h3>
+  <p>Elige daño ácido, de frío, de fuego o de rayo. Ganas resistencia a ese tipo de daño.</p>
+
+  <h3 class="sub-title">Sentir el Vacío (Nivel 13)</h3>
+  <p>No puedes ser sorprendido por criaturas corrompidas y las ves a través de invisibilidad y oscuridad mágica dentro de tu radio de Detectar la Mancha.</p>
+
+  <h3 class="sub-title">Voluntad del Guardián (Nivel 17)</h3>
+  <p>Tienes ventaja en las tiradas de salvación contra ser encantado o asustado. Mientras te quede al menos 1 Punto de Mancha, no puedes ser poseído ni controlado mentalmente por criaturas corrompidas.</p>
+
+  <h3 class="sub-title">Encarnación de la Mancha (Nivel 20)</h3>
+  <div class="flavor">Por un instante dejas de resistirte a lo que llevas dentro, y lo dejas correr libre.</div>
+  <p>Una vez por descanso largo, como acción adicional, puedes dejar que la corrupción te consuma parcialmente durante 1 minuto. Mientras dure:</p>
+  <ul>
+    <li>Tus ataques cuerpo a cuerpo infligen 1d10 de daño necrótico adicional.</li>
+    <li>Tienes resistencia a daño contundente, perforante y cortante de armas no mágicas.</li>
+    <li>Al inicio de cada uno de tus turnos recuperas 2 Puntos de Mancha.</li>
+    <li>Cuando reduces a 0 los puntos de golpe de una criatura mientras dura este rasgo, puedes recuperar PG igual a tu nivel de Portador.</li>
+  </ul>
+  <p>Al terminar el efecto, tienes desventaja en pruebas de característica y salvaciones que no sean de Constitución hasta tu próximo descanso corto o largo: tu cuerpo paga el precio de haber soltado las riendas.</p>
+
+</div>
+
+<!-- ===================== PROGRESION ===================== -->
+<div class="tab-content" id="progresion">
+  <h2 class="section-title">Tabla de Progresión</h2>
+  <table>
+    <tr><th>Nivel</th><th>Bono Comp.</th><th>Puntos de Mancha</th><th>Rasgos</th></tr>
+    <tr><td>1</td><td>+2</td><td>1</td><td>Puntos de Mancha, Detectar la Mancha, Orden</td></tr>
+    <tr><td>2</td><td>+2</td><td>2</td><td>Técnicas de Purga, Estilo de Combate</td></tr>
+    <tr><td>3</td><td>+2</td><td>3</td><td>Umbral de Corrupción I, Derecho de Reclutamiento</td></tr>
+    <tr><td>4</td><td>+2</td><td>4</td><td>Mejora de Puntuación de Característica</td></tr>
+    <tr><td>5</td><td>+3</td><td>5</td><td>Ataque Extra</td></tr>
+    <tr><td>6</td><td>+3</td><td>6</td><td>Rasgo de Orden</td></tr>
+    <tr><td>7</td><td>+3</td><td>7</td><td>Resistencia Templada</td></tr>
+    <tr><td>8</td><td>+3</td><td>8</td><td>Mejora de Puntuación de Característica</td></tr>
+    <tr><td>9</td><td>+4</td><td>9</td><td>Umbral de Corrupción II</td></tr>
+    <tr><td>10</td><td>+4</td><td>10</td><td>Rasgo de Orden</td></tr>
+    <tr><td>11</td><td>+4</td><td>11</td><td>Técnica de Purga Mejorada</td></tr>
+    <tr><td>12</td><td>+4</td><td>12</td><td>Mejora de Puntuación de Característica</td></tr>
+    <tr><td>13</td><td>+5</td><td>13</td><td>Sentir el Vacío</td></tr>
+    <tr><td>14</td><td>+5</td><td>14</td><td>Umbral de Corrupción III</td></tr>
+    <tr><td>15</td><td>+5</td><td>15</td><td>Rasgo de Orden</td></tr>
+    <tr><td>16</td><td>+5</td><td>16</td><td>Mejora de Puntuación de Característica</td></tr>
+    <tr><td>17</td><td>+6</td><td>17</td><td>Voluntad del Guardián</td></tr>
+    <tr><td>18</td><td>+6</td><td>18</td><td>Umbral de Corrupción IV</td></tr>
+    <tr><td>19</td><td>+6</td><td>19</td><td>Mejora de Puntuación de Característica</td></tr>
+    <tr><td>20</td><td>+6</td><td>20</td><td>Encarnación de la Mancha</td></tr>
+  </table>
+  <p class="flavor">Los Puntos de Mancha de la tabla reflejan tu reserva máxima por descanso; recuerda que en combate puedes ganar puntos extra hasta un tope de tu nivel + 2.</p>
+</div>
+
+<!-- ===================== TECNICAS ===================== -->
+<div class="tab-content" id="tecnicas">
+  <h2 class="section-title">Técnicas de Purga</h2>
+  <p>Desde el nivel 2, conoces las siguientes Técnicas de Purga y puedes gastar Puntos de Mancha para activarlas. En el nivel 11 (Técnica de Purga Mejorada) desbloqueas la técnica marcada como <em>(Nivel 11+)</em>.</p>
+
+  <div class="box">
+    <h4>Golpe Purgante <span class="tag">1 Punto</span></h4>
+    <p>Cuando impactas con un ataque de arma cuerpo a cuerpo, puedes gastar 1 Punto de Mancha para infligir 1d6 de daño necrótico adicional y marcar al objetivo hasta el final de tu próximo turno.</p>
+  </div>
+  <div class="box">
+    <h4>Instinto de Cazador <span class="tag">1 Punto</span></h4>
+    <p>Antes de hacer una tirada de ataque contra una criatura marcada por ti (sin usar acción ni reacción), gasta 1 Punto de Mancha para tener ventaja en esa tirada.</p>
+  </div>
+  <div class="box">
+    <h4>Piel Curtida <span class="tag">1 Punto</span></h4>
+    <p>Como acción adicional, gasta 1 Punto de Mancha para ganar resistencia a un tipo de daño de tu elección (ácido, veneno, necrótico o contundente/perforante/cortante) hasta el final de tu próximo turno.</p>
+  </div>
+  <div class="box">
+    <h4>Grito de la Mancha <span class="tag">2 Puntos</span></h4>
+    <p>Como acción, gasta 2 Puntos de Mancha para que todas las criaturas de tu elección en un cono de 4,5 metros hagan una salvación de Sabiduría (CD 8 + tu bono de competencia + tu mod. de Constitución) o queden asustadas de ti hasta el final de tu próximo turno.</p>
+  </div>
+  <div class="box">
+    <h4>Paso entre la Niebla <span class="tag">2 Puntos</span></h4>
+    <p>Como acción adicional, gasta 2 Puntos de Mancha para teletransportarte hasta 9 metros a un espacio que puedas ver, dejando tras de ti una bruma corrupta que impone desventaja en ataques a distancia contra ti hasta el inicio de tu próximo turno.</p>
+  </div>
+  <div class="box">
+    <h4>Marca del Cazador <span class="tag">1 Punto</span></h4>
+    <p>Como acción adicional, gasta 1 Punto de Mancha para marcar a una criatura que puedas ver a 18 metros. Siempre sabes la dirección hacia esa criatura mientras esté en el mismo plano de existencia, durante 1 hora.</p>
+  </div>
+  <div class="box">
+    <h4>Golpe que Doblega <span class="tag">3 Puntos</span></h4>
+    <p><em>(Nivel 11+)</em> Cuando impactas con un ataque de arma, gasta 3 Puntos de Mancha para forzar a la criatura a hacer una salvación de Constitución (misma CD) o quedar envenenada y con la velocidad reducida a 0 hasta el final de su próximo turno.</p>
+  </div>
+</div>
+
+<!-- ===================== ORDEN DEL FILO ===================== -->
+<div class="tab-content" id="filo">
+  <h2 class="section-title">Orden del Filo</h2>
+  <div class="flavor">No hay elegancia en lo que hacen. Cargan armas que pocos pueden levantar y dejan que la corrupción convierta cada golpe en una sentencia.</div>
+
+  <h3 class="sub-title">Furia Corrupta (Nivel 1)</h3>
+  <p>Cuando reduces a 0 los puntos de golpe de una criatura con un ataque de arma cuerpo a cuerpo, puedes usar tu reacción para hacer un ataque de arma adicional contra otra criatura a tu alcance.</p>
+
+  <h3 class="sub-title">Golpe Devastador (Nivel 6)</h3>
+  <p>Una vez por turno, cuando impactas con un ataque de arma cuerpo a cuerpo, puedes gastar 2 Puntos de Mancha para tirar un dado de daño del arma adicional.</p>
+
+  <h3 class="sub-title">Piel de Corrupción (Nivel 10)</h3>
+  <p>Ganas resistencia a daño contundente, perforante y cortante de armas no mágicas mientras no lleves armadura pesada.</p>
+
+  <h3 class="sub-title">Verdugo Inquebrantable (Nivel 15)</h3>
+  <p>Tienes ventaja en las tiradas de salvación de muerte. Además, una vez por descanso largo, mientras tengas al menos 1 Punto de Mancha, cuando un solo ataque te reduciría a 0 puntos de golpe, quedas en 1 en su lugar.</p>
+</div>
+
+<!-- ===================== ORDEN DE LA RUNA ===================== -->
+<div class="tab-content" id="runa">
+  <h2 class="section-title">Orden de la Runa</h2>
+  <div class="flavor">Graban su piel y sus armas con sigilos que contienen la corrupción el tiempo justo para dirigirla: hacia sus enemigos, hacia sus aliados, hacia donde más falta hace.</div>
+
+  <h3 class="sub-title">Sigilos Grabados (Nivel 1)</h3>
+  <p>Conoces 2 Runas de la siguiente lista. Puedes grabar una Runa en un arma o en un escudo con 1 hora de trabajo; el objeto puede llevar hasta 1 Runa (2 desde el nivel 10). Gastas 1 Punto de Mancha para activar el efecto de una Runa grabada al impactar o al ser impactado con esa arma/escudo, según corresponda.</p>
+  <ul>
+    <li><strong>Runa de Advertencia:</strong> al ser atacado, impón desventaja a esa tirada de ataque.</li>
+    <li><strong>Runa de Sangría:</strong> al impactar, la criatura sufre 1d4 de daño necrótico adicional al empezar cada uno de sus turnos durante 1 minuto (una salvación de Constitución al final de cada turno termina el efecto).</li>
+    <li><strong>Runa de Anclaje:</strong> al impactar, la velocidad de la criatura se reduce a la mitad hasta el final de tu próximo turno.</li>
+  </ul>
+
+  <h3 class="sub-title">Runa Compartida (Nivel 6)</h3>
+  <p>Puedes gastar una acción adicional y 1 Punto de Mancha para grabar temporalmente una Runa que conozcas en el arma de un aliado a tu alcance, hasta el final de su próximo turno.</p>
+
+  <h3 class="sub-title">Tercera Runa (Nivel 10)</h3>
+  <p>Aprendes 1 Runa adicional de tu elección y tus objetos grabados pueden llevar 2 Runas simultáneamente.</p>
+
+  <h3 class="sub-title">Runa del Umbral (Nivel 15)</h3>
+  <p>Aprendes la Runa de Quiebre: al impactar, gasta 3 Puntos de Mancha para que la criatura haga una salvación de Constitución o quede paralizada hasta el final de tu próximo turno (solo funciona una vez sobre la misma criatura por descanso largo).</p>
+</div>
+
+<!-- ===================== ORDEN DEL SUSURRO ===================== -->
+<div class="tab-content" id="susurro">
+  <h2 class="section-title">Orden del Susurro</h2>
+  <div class="flavor">Escuchan lo que la Mancha susurra y han aprendido a responderle en su propio idioma. No son magos, pero la corrupción que llevan dentro puede doblarse, un instante, a su voluntad.</div>
+
+  <h3 class="sub-title">Ecos de la Mancha (Nivel 1)</h3>
+  <p>Aprendes dos trucos de tu elección de la lista de trucos de mago. Constitución es tu característica de conjuros para ellos y para todos los conjuros de esta Orden (usa tu CD de la Mancha: 8 + bono de competencia + mod. de Constitución). Además, conoces el conjuro <em>detectar el mal y el bien</em> y puedes lanzarlo gastando 1 Punto de Mancha, sin necesidad de componentes materiales.</p>
+
+  <h3 class="sub-title">Conjuros Susurrados (Nivel 6)</h3>
+  <p>Ganas un pequeño repertorio de conjuros que puedes lanzar gastando Puntos de Mancha en vez de espacios de conjuro (1 Punto = conjuro de nivel 1, 2 Puntos = nivel 2, y así sucesivamente). Conoces estos conjuros (nivel máximo: 3): <em>disfrazarse</em>, <em>rayo de enfermedad</em>, <em>ver invisibilidad</em>, <em>inmovilizar persona</em>, <em>miedo</em> y <em>lanzar maldición</em>.</p>
+
+  <h3 class="sub-title">Voz que Corrompe (Nivel 10)</h3>
+  <p>Puedes gastar 2 Puntos de Mancha como acción para lanzar <em>sugestión</em> sin componentes materiales, sin que la criatura sepa que fue magia lo que la convenció (solo funciona en criaturas vivas).</p>
+
+  <h3 class="sub-title">Un Paso Más Allá del Velo (Nivel 15)</h3>
+  <p>Una vez por descanso largo, puedes gastar 4 Puntos de Mancha para lanzar <em>plaga de insectos</em> o <em>nube aniquiladora</em> (elige al aprender este rasgo) sin componentes materiales.</p>
+</div>
+
+<!-- ===================== TRACKER ===================== -->
+<div class="tab-content" id="tracker">
+  <h2 class="section-title">Ficha de Recursos</h2>
+  <p class="flavor">Ajusta estos valores durante la partida. Los datos no se guardan al recargar la página: es solo un apoyo visual para la mesa.</p>
+
+  <div class="tracker">
+    <div class="tracker-row">
+      <div class="tracker-label">Puntos de Mancha</div>
+      <div class="counter">
+        <button onclick="changeMancha(-1)">−</button>
+        <div class="val" id="manchaVal">0</div>
+        <button onclick="changeMancha(1)">+</button>
+      </div>
+    </div>
+    <div>
+      <label style="color:var(--text-dim); font-size:0.8em;">Máximo de la reserva (tu nivel de clase):</label>
+      <input type="number" id="manchaMax" value="1" min="1" max="20" style="width:60px; background:#1a1c21; color:var(--text); border:1px solid var(--border); padding:4px 8px; margin-left:8px;" onchange="mancha=parseInt(this.value)||1; renderPips()">
+    </div>
+    <div class="pip-row" id="pipRow"></div>
+    <button class="reset-btn" style="margin-top:14px;" onclick="restCorto()">Descanso corto / largo (recuperar todo)</button>
+  </div>
+
+  <div class="tracker">
+    <div class="tracker-row">
+      <div class="tracker-label">Umbral de Corrupción</div>
+      <div class="val" id="umbralLabel" style="font-size:1.1em;">Ninguno</div>
+    </div>
+    <div class="threshold-bar"><div class="threshold-fill" id="umbralFill"></div></div>
+    <div class="counter" style="margin-top:14px;">
+      <button onclick="changeUmbral(-1)">−</button>
+      <div class="val" id="umbralVal">0</div>
+      <button onclick="changeUmbral(1)">+</button>
+    </div>
+    <p style="color:var(--text-dim); font-size:0.8em; margin-top:6px;">0 = Sin marca · 1 = Umbral I (nv.3) · 2 = Umbral II (nv.9) · 3 = Umbral III (nv.14) · 4 = Umbral IV (nv.18)</p>
+  </div>
+</div>
+
+</div>
+
+<div class="footer-note">EL PORTADOR DE LA MANCHA · Documento de clase homebrew para D&D 5e</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+let mancha = 1;
+let manchaMax = 1;
+
+function renderPips(){
+  manchaMax = parseInt(document.getElementById('manchaMax').value) || 1;
+  if(mancha > manchaMax) mancha = manchaMax;
+  const row = document.getElementById('pipRow');
+  row.innerHTML = '';
+  for(let i=0;i<manchaMax;i++){
+    const pip = document.createElement('div');
+    pip.className = 'pip' + (i < mancha ? ' filled' : '');
+    row.appendChild(pip);
+  }
+  document.getElementById('manchaVal').innerText = mancha;
+}
+
+function changeMancha(delta){
+  mancha = Math.max(0, Math.min(manchaMax, mancha + delta));
+  renderPips();
+}
+
+function restCorto(){
+  mancha = manchaMax;
+  renderPips();
+}
+
+let umbral = 0;
+const umbralNames = ['Ninguno','Umbral I','Umbral II','Umbral III','Umbral IV'];
+
+function changeUmbral(delta){
+  umbral = Math.max(0, Math.min(4, umbral + delta));
+  document.getElementById('umbralVal').innerText = umbral;
+  document.getElementById('umbralLabel').innerText = umbralNames[umbral];
+  document.getElementById('umbralFill').style.width = (umbral/4*100) + '%';
+}
+
+renderPips();
+changeUmbral(0);
+</script>
+
+<a id="volver-codice" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:99999;font:600 13px/1 Georgia,serif;letter-spacing:.06em;color:#e9dcc0;background:rgba(14,11,9,.88);border:1px solid rgba(201,162,92,.55);padding:9px 13px;border-radius:2px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.5)">← Códice</a>
+<script>try{if(window.top!==window.self)document.getElementById("volver-codice").remove()}catch(e){}</script>
+</body>
+</html>
