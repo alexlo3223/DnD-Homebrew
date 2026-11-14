@@ -190,6 +190,23 @@ body.asistente .hoja{display:block;max-width:880px;margin:0 auto}
 body.asistente .hoja>.panel{width:100%;margin-bottom:18px}
 body.asistente #hoja [data-paso]:not(.activo){display:none!important}
 
+/* ——— Banners, bandejas y rasgos ——— */
+.banners{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:12px;margin:6px 0 12px}
+.grupo-b{margin:10px 0;border-top:1px solid var(--line);padding-top:8px}
+.grupo-b>summary{cursor:pointer;list-style:none;padding:4px 0}
+.grupo-b>summary::-webkit-details-marker{display:none}
+.grupo-b>summary h3{display:inline;margin:0;font-family:var(--titulo);font-size:20px}
+.banner{background:var(--campo);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.banner.sel{border-color:var(--acento);box-shadow:0 0 0 2px color-mix(in srgb,var(--acento) 35%,transparent)}
+.banner h3{margin:0;font-size:17px}
+.banner p{margin:0;color:var(--sub);font-size:13px}
+.banner>.btn{align-self:flex-start;font-size:13px;padding:6px 12px}
+.bandeja summary{cursor:pointer;color:var(--acento);font-weight:600;font-size:14px;padding:4px 0}
+.bandeja-cuerpo{white-space:pre-line;font-size:14px;line-height:1.5;padding-top:6px;color:var(--text)}
+.sub-tit{margin:14px 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
+.tag-eleccion{display:inline-block;background:var(--acento);color:#fff;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;margin-left:6px;vertical-align:middle}
+.rasgo .desc{white-space:pre-line;color:var(--sub);font-size:14px;margin:4px 0 0}
+
 /* ——— Responsive ——— */
 @media (max-width:980px){.p4,.p6,.p8{grid-column:span 12}}
 @media (max-width:860px){
@@ -268,19 +285,22 @@ body.asistente #hoja [data-paso]:not(.activo){display:none!important}
       <section class="panel p6" data-paso="1" id="p-raza">
         <h2>Raza</h2>
         <div class="campos">
-          <label class="campo">Raza<select id="f-raza" data-k="raza" data-r="1"></select></label>
+          <label class="campo" hidden>Raza<select id="f-raza" data-k="raza" data-r="1"></select></label>
           <label class="campo" id="l-subraza">Subraza<select id="f-subraza" data-k="subraza" data-r="1"></select></label>
         </div>
+        <div class="banners" id="b-raza"></div>
         <p class="nota">Sus rasgos aparecen en el paso 7. Las mejoras de característica que elijas están en el paso 3.</p>
       </section>
 
       <section class="panel p6" data-paso="2" id="p-clase">
         <h2>Clase</h2>
         <div class="campos">
-          <label class="campo">Clase<select id="f-clase" data-k="clase" data-r="1"></select></label>
-          <label class="campo">Subclase<span id="c-subclase" style="display:contents"></span></label>
+          <label class="campo" hidden>Clase<select id="f-clase" data-k="clase" data-r="1"></select></label>
+          <label class="campo" id="l-sub">Subclase<span id="c-subclase" style="display:contents"></span></label>
           <label class="campo">Nivel<select id="f-nivel" data-k="nivel" data-r="1"></select></label>
         </div>
+        <div id="b-clase"></div>
+        <div id="b-sub"></div>
         <p class="nota" id="nota-clase"></p>
       </section>
 
@@ -418,12 +438,158 @@ function perfilHomebrew(c){
     if(rasgosCol<0)rasgosCol=tabla.cab.length-1;
     extrasCols=extrasCols.filter(i=>i!==rasgosCol);
   }
-  return perfiles[c.f]={sal:carsEn(sal).slice(0,2),salTexto:sal,
+  const p0={sal:carsEn(sal).slice(0,2),salTexto:sal,
     arm:valor(texto,/\bArmaduras?\s*(.{0,120})/),armas:valor(texto,/\bArmas\s*(.{0,140})/),
-    herr:valor(texto,/\bHerramientas\s*(.{0,100})/),hab:valor(texto,/\bHabilidades(?:\s*\([^)]*\))?\s*(.{0,200})/),
+    herr:valor(texto,/\bHerramientas\s*(.{0,100})/),hab:habTxt(texto),
     car:carsEn(conj)[0]||'',tabla,rasgosCol,espCols,trucosCol,extrasCols};
+  p0.bl=bloquesHB(c);p0.subs=subsDe(c,p0.bl);p0.feat=featHB(p0);p0.lore=loreHB(c,p0.bl);p0.como=comoHB(c,p0.bl);return perfiles[c.f]=p0;
 }
 const filaNivel=(p,nv)=>p.tabla&&[...p.tabla.datos].reverse().find(d=>d.nv<=nv);
+
+/* ——— Texto del compendio: títulos, subclases, rasgos y textos de presentación ——— */
+const sinAcento=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const textoEl=e=>e.textContent.replace(/\s+/g,' ').trim();
+const SUB_TITULO=/subclas|senda|arquetipo|escuela|via|tradicion|linaje|orden|ajah|camino|faceta|dominio|vocacion|motivacion|rumbo|circulo|colegio|herencia|especialidad|voz|resonancia/;
+const NUM_PAL={uno:1,una:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6};
+const ELECCION=/\b(elig(e|es|ir)|elegir|escoge|escoger)\b/i;
+
+function limpiarNombre(t){
+  return String(t).replace(/\s*\(detalle completo\)/i,'').replace(/^⚔️\s*/,'').replace(/^⚓\s*/,'')
+    .replace(/^(nivel|nv\.?)\s*\d+\s*[—–\-:]?\s*/i,'')
+    .replace(/\s*\((nivel|nv\.?)\s*\d+\)\s*$/i,'')
+    .replace(/\s*[·—–-]\s*(nivel|nv\.?)\s*\d+.*$/i,'')
+    .replace(/\s+(nivel|nv\.?)\s*\d+\s*$/i,'')
+    .trim();
+}
+/* Elementos de texto de una sección, en orden, sin tablas ni etiquetas de bloque */
+function itemsDe(html){
+  const raiz=document.createElement('div');raiz.innerHTML=html;
+  return [...raiz.querySelectorAll('h2,h3,h4,h5,h6,p,li,dd')].filter(e=>!e.closest('table,.bloque')&&textoEl(e));
+}
+/* Texto que sigue a un título, hasta el siguiente título del mismo nivel o superior */
+function descDe(items,idx){
+  const lv=/^H\d$/.test(items[idx].tagName)?+items[idx].tagName[1]:9,out=[];
+  for(let k=idx+1;k<items.length&&out.join('\n').length<900;k++){
+    const e=items[k],t=textoEl(e);
+    if(/^H\d$/.test(e.tagName)){if(+e.tagName[1]<=lv)break;out.push('▸ '+t);}
+    else out.push(e.tagName==='LI'?'• '+t:t);
+  }
+  return out.join('\n').slice(0,900);
+}
+function textoSec(sec,max){
+  return sec.items.filter(e=>e.tagName==='P'||e.tagName==='LI').map(e=>(e.tagName==='LI'?'• ':'')+textoEl(e)).join('\n').slice(0,max);
+}
+function bloquesHB(c){return c.secciones.map(s=>({t:s.t,tipo:s.tipo,items:itemsDe(s.html)}));}
+
+/* Subclases fijadas a mano para las clases cuyo texto no sigue el patrón. Vacío = sin subclases. */
+const SUB_MANUAL={
+  Ladron_de_Almas:[],El_Juez:[],El_Dhampiro:[],El_Alomante:[],El_Corredor_del_Viento:[],El_Portador_de_la_Marca:[],El_Plagado:[],
+  El_Cazador_de_la_Noche:[{n:'Cainhurst',nivel:3},{n:'Iglesia de la Sanación',nivel:3}],
+  El_Tahur:[{n:'Escuela del Duelo',nivel:3},{n:'Escuela de la Calle',nivel:3}],
+  El_Sonador_de_Mensis:[{n:'La Nodriza',nivel:3},{n:'El Informe',nivel:3}],
+  El_Exorcista_de_las_Cenizas:[{n:'Juramento del Cazador de Brujos',nivel:3},{n:'Juramento del Linaje Maldito',nivel:3}],
+  El_Caminante_de_los_Suenos:[{n:'Senda del Hacha',nivel:14,sec:'El Hacha o el Martillo'},{n:'Senda del Martillo',nivel:14,sec:'El Hacha o el Martillo'}],
+  Restriccion_Celestial:[{n:'Ejecutor de Sombra',nivel:3},{n:'Lanza Inamovible',nivel:3}],
+  El_Heroe:['Gloria','Sed de Batalla','Presencia Aterradora','Heridas que Honran','Sin Cuartel','Último Campeón','Nostos','Resistencia del Regresante','Ingenio del Superviviente','No Hoy'].map(n=>({n,nivel:1})),
+  Herrero_de_Guerra:['Forja Viva','Espíritu de la Forja','Martillo de Herrero','Forja Acelerada','Armadura Fundida','Corazón de Magma'].map(n=>({n,nivel:3})),
+  El_Oficiante:[{n:'Cadena Consagrada',nivel:3},{n:'Fuego Judicial',nivel:7},{n:'Yugo Eterno',nivel:13},{n:'Verdugo de lo Profano',nivel:17},{n:'Sello de Umbral',nivel:3},{n:'Exilio Rápido',nivel:7}],
+  El_Portador_de_la_Mancha:[{n:'Orden del Filo',nivel:3,sec:'Orden del Filo'},{n:'Orden de la Runa',nivel:3,sec:'Orden de la Runa'},{n:'Orden del Susurro',nivel:3,sec:'Orden del Susurro'}],
+  El_Tejedor_del_Poder:[{n:'Ajah Verde',nivel:14},{n:'Ajah Gris',nivel:14}],
+  El_Tejedor_de_la_Llama:[{n:'Balefire',nivel:14},{n:'Corazón de la Tierra',nivel:14}],
+  El_Guardian:[{n:'Escudo del Vínculo',nivel:14},{n:'Filo del Vínculo',nivel:14}],
+  El_Recordado:[{n:'Atado al Cuerno',nivel:14},{n:'El General',nivel:14}],
+  La_Portadora_de_Glifos:[{n:'Orden de Ecclesia',nivel:3},{n:'El Tirador de Agartha',nivel:3},{n:'Sombra de Dominus',nivel:3}]
+};
+/* Subclases: títulos h3/h4 dentro de secciones con nombre de subclase; sin los títulos de rasgo (Nivel, Nv., Pasiva…) */
+function subclasesHB(bl){
+  const out=[],vistos=new Set();
+  bl.forEach(sec=>{
+    if(!(sec.tipo==='subclases'||SUB_TITULO.test(sinAcento(sec.t))))return;
+    const nivelSec=+((sec.t.match(/nivel\s*(\d+)/i)||[])[1])||3;
+    sec.items.forEach((e,i)=>{
+      if(!/^H[34]$/.test(e.tagName))return;
+      const raw=textoEl(e),n=limpiarNombre(raw);
+      if(!n||n.length>60)return;
+      if(/^(nivel|nv)\s*\d/i.test(raw)||/\((nivel|nv)/i.test(raw)||/\bnv\.?\s*\d/i.test(raw))return;
+      if(/\b(pasiva|accion|reaccion|bonus|bonificada|por descanso|una vez)\b/.test(sinAcento(raw)))return;
+      if(vistos.has(sinAcento(n)))return;vistos.add(sinAcento(n));
+      out.push({n,nivel:nivelSec,d:descDe(sec.items,i)});
+    });
+  });
+  return out;
+}
+/* Subclases de una clase: la lista fijada a mano si la hay, si no la detección automática */
+function subsDe(c,bl){
+  const m=SUB_MANUAL[c.f];
+  if(!m)return subclasesHB(bl);
+  return m.map(e=>{
+    const sec=e.sec?bl.find(s=>s.t===e.sec):null;
+    let d=sec?textoSec(sec,900):'';
+    if(!sec){
+      const b=sinAcento(e.n);
+      search:for(const s of bl)for(let i=0;i<s.items.length;i++){
+        const it=s.items[i];if(!/^H[2-6]$/.test(it.tagName))continue;
+        if(sinAcento(textoEl(it)).includes(b)){d=descDe(s.items,i);break search;}
+      }
+    }
+    return {n:e.n,nivel:e.nivel||3,d};
+  });
+}
+/* Texto de habilidades con su cuenta («elige 3») y la lista, sin lo que venga después */
+function habTxt(texto){
+  /* Puede haber varias menciones («Habilidades Primarias…»): gana la que más nombres de habilidad trae */
+  let mejor='',mejorN=-1;
+  for(let i=texto.indexOf('Habilidades');i>=0;i=texto.indexOf('Habilidades',i+1)){
+    const m=texto.slice(i+11,i+211).match(/^(\s*\([^)]*\))?\s*:?\s*(.*)$/);
+    if(!m)continue;
+    const cand=((m[1]||'').trim()+' '+m[2].split(CORTE)[0].split(/\.\s/)[0]).trim();
+    const n=HABILIDADES.filter(h=>sinAcento(cand).includes(sinAcento(h[0]))).length;
+    if(n>mejorN){mejorN=n;mejor=cand;}
+  }
+  return mejor;
+}
+function splitRasgos(t){return String(t).split(/,\s*(?![^()]*\))/).map(s=>s.trim()).filter(s=>s&&!/^[—–-]$/.test(s));}
+/* Descripción de un rasgo de la tabla: el título con ese nombre (con o sin etiqueta de acción) */
+function descRasgo(bl,nombre){
+  const n=sinAcento(limpiarNombre(nombre).replace(/\s*\(.*?\)/g,'').trim());
+  if(!n)return '';
+  for(const sec of bl)for(let i=0;i<sec.items.length;i++){
+    const e=sec.items[i];if(!/^H[2-6]$/.test(e.tagName))continue;
+    const h=sinAcento(limpiarNombre(textoEl(e)).replace(/\s*\(.*?\)/g,'').trim());
+    if(h===n||h.startsWith(n+' '))return descDe(sec.items,i);
+  }
+  return '';
+}
+function featHB(p){
+  if(!p.tabla)return [];
+  const out=[];
+  p.tabla.datos.forEach(d=>splitRasgos(d.c[p.rasgosCol]||'').forEach(n=>out.push({nv:d.nv,n,d:descRasgo(p.bl,n)})));
+  return out;
+}
+function loreHB(c,bl){return [c.g,bl[0]?textoSec(bl[0],700):''].filter(Boolean).join('\n\n');}
+function comoHB(c,bl){
+  const sec=bl.find(s=>/recurso|cilindro|tambor|resonancia|pip|dados|mecanica|reglas/.test(sinAcento(s.t)))||bl[1];
+  return [c.rec?'Recurso: '+c.rec+'.':'',sec?textoSec(sec,700):''].filter(Boolean).join('\n\n');
+}
+/* Habilidades que la clase deja elegir, y cuántas. Sin lista concreta, se pueden elegir todas. */
+function habInfo(c){
+  if(!c)return {n:0,lista:null};
+  if(c.tipo==='o')return {n:c.hab?c.hab.n:0,lista:c.hab&&c.hab.de!=='todas'?c.hab.de:null};
+  const t=c.habTexto||'';
+  /* «elige N», «elegir N» (palabra completa: no «Religión») o «N de» / «N entre» al principio */
+  const ms=[t.match(/\b(?:elig|eleg)\w*\s*(\d+|uno|una|dos|tres|cuatro|cinco|seis)?\s*(?:de|entre|:)?\s*:?\s*([^.;]+)/i),
+    t.match(/^\s*(\d+|uno|una|dos|tres|cuatro)\s+(?:de|entre):?\s*([^.;]+)/i)];
+  for(const m of ms){
+    if(!m)continue;
+    const lista=HABILIDADES.map(h=>h[0]).filter(h=>sinAcento(m[2]).includes(sinAcento(h)));
+    if(lista.length&&lista.length<HABILIDADES.length)return {n:+m[1]||NUM_PAL[(m[1]||'').toLowerCase()]||2,lista};
+  }
+  /* Lista de habilidades sin «elige N»: se limita a esa lista, sin contar cuántas */
+  const lista=HABILIDADES.map(h=>h[0]).filter(h=>sinAcento(t).includes(sinAcento(h)));
+  if(lista.length>=2&&lista.length<HABILIDADES.length)return {n:0,lista};
+  return {n:0,lista:null};
+}
+
 
 /* ——— Vista común de una clase (oficial u homebrew) ——— */
 function claseDe(id){
@@ -431,8 +597,8 @@ function claseDe(id){
   const [t,k]=id.split(':');
   if(t==='o'){
     const c=CLASES_OFICIALES.find(x=>x.id===k);if(!c)return null;
-    return {tipo:'o',id,n:c.n,d:c.d,sal:c.sal,arm:c.arm,armas:c.armas,herr:c.herr,hab:c.hab,
-      subNivel:c.sub.nivel,subTitulo:c.sub.titulo,subs:c.sub.op.map(o=>o.n),
+    return {tipo:'o',id,lore:c.lore,como:c.como,n:c.n,d:c.d,sal:c.sal,arm:c.arm,armas:c.armas,herr:c.herr,hab:c.hab,
+      subNivel:c.sub.nivel,subTitulo:c.sub.titulo,subList:c.sub.op.map(o=>({n:o.n,nivel:c.sub.nivel,d:o.r.map(([nv,nm])=>'Nv '+nv+': '+nm).join('\n')})),subs:c.sub.op.map(o=>o.n),
       rasgos(nv,sub){
         const so=c.sub.op.find(o=>o.n===sub);
         const base=c.rasgos.filter(r=>r[0]<=nv).map(([n,a,b])=>({nv:n,n:a,t:b}));
@@ -449,13 +615,12 @@ function claseDe(id){
   const c=CLASES.find(x=>x.f===k);if(!c)return null;
   const p=perfilHomebrew(c);
   return {tipo:'h',id,n:c.n,d:c.d,sal:p.sal,arm:p.arm,armas:p.armas,herr:p.herr,hab:null,habTexto:p.hab,vol:c.v,f:c.f,rec:c.rec,m:c.m,p,
-    subs:null,
-    rasgos(nv){
-      if(!p.tabla)return [];
-      return p.tabla.datos.filter(d=>d.nv<=nv).flatMap(d=>{
-        const t=(d.c[p.rasgosCol]||'').trim();
-        return !t||/^[—–-]$/.test(t)?[]:[{nv:d.nv,n:t}];
-      });
+    lore:p.lore,como:p.como,subTitulo:'Subclase',subNivel:3,subList:p.subs,subs:p.subs.map(s=>s.n),
+    rasgos(nv,sub){
+      const base=p.feat.filter(f=>f.nv<=nv).map(f=>({nv:f.nv,n:f.n,t:f.d}));
+      const s=p.subs.find(x=>x.n===sub);
+      if(s&&nv>=s.nivel)base.push({nv:s.nivel,n:'Subclase: '+s.n,t:s.d});
+      return base.sort((a,b)=>a.nv-b.nv);
     },
     extras(nv){
       const f=filaNivel(p,nv);if(!f)return [];
@@ -616,6 +781,58 @@ function cargarCampos(){
   });
 }
 
+/* ——— Banners de raza, clase y subclase, con bandejas de trasfondo ——— */
+const MEJ_TXT=m=>Object.entries(m||{}).map(([k,v])=>`+${v} ${NOMBRE_CAR[k]}`).join(', ');
+function banner(o,titulo,sub,bandeja){
+  return `<article class="banner${o.sel?' sel':''}">
+    <h3>${esc(titulo)}</h3>${sub?`<p>${esc(sub)}</p>`:''}
+    <button type="button" class="btn${o.sel?'':' prim'}" data-pick="${o.tipo}" data-v="${esc(o.v)}"${o.sel?' aria-pressed="true"':''}>${o.sel?'✓ Elegida':'Elegir'}</button>
+    <details class="bandeja"><summary>Trasfondo y funcionamiento</summary><div class="bandeja-cuerpo">${esc(bandeja||'Sin descripción en el compendio.')}</div></details>
+  </article>`;
+}
+function bannerRaza(r){
+  const texto=[r.lore,
+    `Tamaño ${r.tam}, velocidad ${r.vel} pies. Idiomas: ${r.idiomas}.`,
+    Object.keys(r.mej||{}).length?`Mejoras de característica: ${MEJ_TXT(r.mej)}.`:'',
+    r.elegir?`Además, elige ${r.elegir.n} característica(s) para +${r.elegir.val}.`:'',
+    (r.rasgos||[]).map(([n,t])=>`• ${n}: ${t}`).join('\n'),
+    (r.sub||[]).length?`Subrazas: ${r.sub.map(s=>s.n).join(', ')}.`:''].filter(Boolean).join('\n\n');
+  return banner({tipo:'raza',v:r.id,sel:F.raza===r.id},r.n,`Tamaño ${r.tam} · velocidad ${r.vel} pies`,texto);
+}
+function bannerClase(c){
+  const texto=[c.lore,c.como,
+    c.tipo==='o'
+      ?`Dado de golpe ${c.d}. Salvaciones: ${c.sal.map(k=>NOMBRE_CAR[k]).join(' y ')}.\nArmaduras: ${c.arm}. Armas: ${c.armas}.`
+      :`Dado de golpe ${c.d}${c.sal.length?'. Salvaciones: '+c.sal.map(k=>NOMBRE_CAR[k]||k).join(' y '):''}.`].filter(Boolean).join('\n\n');
+  const sub=c.tipo==='h'?MAG[CLASES.find(x=>x.f===c.f).m]+' · dado '+c.d:'Dado '+c.d+(c.hab?' · elige '+c.hab.n+' habilidades':'');
+  return banner({tipo:'clase',v:c.id,sel:F.clase===c.id},c.n,sub,texto);
+}
+function listaClases(){
+  return [{nombre:'Manual del Jugador',items:CLASES_OFICIALES.map(x=>claseDe('o:'+x.id))},
+    ...VOL.map(v=>({nombre:v.nombre,items:CLASES.filter(x=>x.v===v.id).map(x=>claseDe('h:'+x.f))}))];
+}
+/* Re-pinta cada bloque solo si cambia lo que muestra, para no cerrar las bandejas abiertas */
+function pintarBanners(){
+  const br=$('b-raza');
+  if(br.dataset.k!==F.raza){br.dataset.k=F.raza;br.innerHTML=RAZAS.map(bannerRaza).join('');}
+  const bc=$('b-clase');
+  if(bc.dataset.k!==F.clase){
+    bc.dataset.k=F.clase;
+    bc.innerHTML=listaClases().map(g=>{
+      const abierto=g.items.some(c=>c.id===F.clase);
+      return `<details class="grupo-b"${abierto?' open':''}><summary><h3>${esc(g.nombre)}</h3></summary><div class="banners">${g.items.map(bannerClase).join('')}</div></details>`;
+    }).join('');
+  }
+  const c=claseDe(F.clase),bs=$('b-sub'),key=F.clase+'|'+F.subclase;
+  if(bs.dataset.k!==key){
+    bs.dataset.k=key;
+    bs.innerHTML=c&&c.subList&&c.subList.length
+      ?`<h3 class="sub-tit">${esc(c.subTitulo)}</h3><div class="banners">${c.subList.map(s=>banner({tipo:'sub',v:s.n,sel:F.subclase===s.n},s.n,'Desde el nivel '+s.nivel,s.d||'Rasgos de esta subclase: míralos en la ficha.')).join('')}</div>`
+      :'';
+  }
+}
+
+/* ——— Identidad: raza, clase, subclase y campos ——— */
 function pintarIdentidad(){
   const c=claseDe(F.clase),{r}=raza();
   $('f-clase').value=F.clase;$('f-nivel').value=F.nivel;$('f-raza').value=F.raza;
@@ -624,11 +841,11 @@ function pintarIdentidad(){
   $('f-subraza').innerHTML=subs.map(s=>`<option value="${s.id}">${esc(s.n)}</option>`).join('');
   if(subs.length&&!subs.some(s=>s.id===F.subraza))F.subraza=subs[0].id;
   $('f-subraza').value=F.subraza;
-  /* Subclase: lista en las oficiales, texto libre en las homebrew */
-  if(c&&c.subs){
-    $('c-subclase').innerHTML=`<select data-k="subclase" data-r="1"><option value="">— ${esc(c.subTitulo)} (nivel ${c.subNivel}) —</option>${c.subs.map(s=>`<option>${esc(s)}</option>`).join('')}</select>`;
-  }else $('c-subclase').innerHTML=`<input data-k="subclase" placeholder="Senda, escuela…">`;
-  $('c-subclase').firstElementChild.value=F.subclase||'';
+  /* Subclase: banners si la clase tiene una lista; texto libre si no */
+  const conLista=!!(c&&c.subList&&c.subList.length);
+  $('l-sub').hidden=conLista;
+  $('c-subclase').innerHTML=conLista?'':'<input data-k="subclase" placeholder="Senda, escuela…">';
+  if(!conLista)$('c-subclase').firstElementChild.value=F.subclase||'';
   $('hoja').dataset.vol=c&&c.vol?c.vol:'';
   const {s}=raza();
   $('resumen').textContent=[s&&s.n!==(r&&r.n)?s.n:r&&r.n,c&&c.n,'nivel '+F.nivel].filter(Boolean).join(' · ');
@@ -638,7 +855,9 @@ function pintarIdentidad(){
     nota.push(`${MAG[cc.m]} · dado ${esc(c.d)}${c.rec?' · recurso: '+esc(c.rec):''} · <a href="index.html#/clase/${esc(c.f)}">Leer la clase completa →</a>`);
   }
   $('nota-clase').innerHTML=nota.join('');
+  pintarBanners();
 }
+
 
 function pintarMetodos(){
   const M=[['compra','Compra de puntos'],['array','Array estándar'],['tirada','Tirada 4d6'],['manual','Manual']];
@@ -697,6 +916,7 @@ function bonoHab(n,t,pb){
   return mod(t[car])+nivel*pb;
 }
 
+/* ——— Habilidades: solo las que la clase permite elegir ——— */
 function pintarSalHab(){
   const c=claseDe(F.clase),t=totales(),pb=competencia(F.nivel),sal=salvacionesDe(c);
   $('c-sal').innerHTML='<div class="filas">'+CARS.map(k=>{
@@ -704,35 +924,38 @@ function pintarSalHab(){
     return `<label class="fila"><input type="checkbox" data-sal="${k}" ${comp?'checked':''}><span class="v">${signo(mod(t[k])+(comp?pb:0))}</span><span>${NOMBRE_CAR[k]}</span><small></small></label>`;
   }).join('')+'</div>'+(c&&c.tipo==='h'&&!c.sal.length?'<p class="nota aviso">No se han encontrado las salvaciones de esta clase en el compendio: márcalas a mano.</p>':'')
     +(F.sal?'<p class="nota no-print"><button class="btn" type="button" data-a="sal-clase">Volver a las de la clase</button></p>':'');
-  const fijas=habilidadesFijas();
-  const elegidas=Object.entries(F.hab).filter(([n,v])=>v&&!fijas.includes(n)).length;
-  const {r,s}=raza();const habRaza=(s&&s.habElegir)||(r&&r.habElegir)||0;
+  const {r,s}=raza(),fijas=habilidadesFijas(),hi=habInfo(c),habRaza=(s&&s.habElegir)||(r&&r.habElegir)||0;
+  const visibles=HABILIDADES.filter(([n])=>!hi.lista||hi.lista.includes(n)||fijas.includes(n));
+  const elegidas=visibles.filter(([n])=>!fijas.includes(n)&&F.hab[n]).length;
+  const limite=hi.n+habRaza;
   let guia='';
-  if(c&&c.hab)guia=`Clase: elige ${c.hab.n} de ${c.hab.de==='todas'?'cualquier habilidad':c.hab.de.join(', ')}.`;
-  else if(c&&c.habTexto)guia=`Clase: ${c.habTexto}`;
-  if(habRaza)guia+=` Raza: ${habRaza} a elegir.`;
-  if(fijas.length)guia+=` Por la raza: ${fijas.join(', ')}.`;
-  const limite=(c&&c.hab?c.hab.n:0)+habRaza;
-  $('c-hab').innerHTML='<div class="filas">'+HABILIDADES.map(([n,k])=>{
+  if(hi.n)guia+=`Clase: elige ${hi.n}${hi.lista?' entre estas: '+hi.lista.join(', '):' (cualquiera)'}. `;
+  else if(hi.lista)guia+=`Clase: solo puedes elegir estas: ${hi.lista.join(', ')}. `;
+  if(habRaza)guia+=`Raza: ${habRaza} a elegir. `;
+  if(fijas.length)guia+=`Por la raza: ${fijas.join(', ')}. `;
+  $('c-hab').innerHTML='<div class="filas">'+visibles.map(([n,k])=>{
     const fija=fijas.includes(n),v=fija?Math.max(1,F.hab[n]||0):(F.hab[n]||0);
-    const sugerida=c&&c.hab&&(c.hab.de==='todas'||c.hab.de.includes(n));
-    return `<div class="fila"><input type="checkbox" data-hab="${esc(n)}" aria-label="Competencia en ${esc(n)}" ${v?'checked':''} ${fija?'disabled':''}><input type="checkbox" class="pe" data-per="${esc(n)}" title="Pericia" aria-label="Pericia en ${esc(n)}" ${v===2?'checked':''} ${v?'':'disabled'}><span>${esc(n)} <small>${k}</small>${sugerida?' <small>·</small>':''}</span><span class="v">${signo(mod(t[k])+v*pb)}</span></div>`;
-  }).join('')+'</div>'+`<p class="nota ${limite&&elegidas>limite?'aviso':''}">${esc(guia)}${limite?` Elegidas: ${elegidas} de ${limite}.`:''} La segunda casilla es pericia.</p>`;
+    return `<div class="fila"><input type="checkbox" data-hab="${esc(n)}" aria-label="Competencia en ${esc(n)}" ${v?'checked':''} ${fija?'disabled':''}><input type="checkbox" class="pe" data-per="${esc(n)}" title="Pericia" aria-label="Pericia en ${esc(n)}" ${v===2?'checked':''} ${v?'':'disabled'}><span>${esc(n)} <small>${k}</small></span><span class="v">${signo(mod(t[k])+v*pb)}</span></div>`;
+  }).join('')+'</div>'+`<p class="nota ${limite&&elegidas>limite?'aviso':''}">${esc(guia)}${limite?`Elegidas: ${elegidas} de ${limite}. `:''}La segunda casilla es pericia.</p>`;
 }
 
+/* ——— Rasgos hasta el nivel elegido, con lo que hace cada uno ——— */
+function filaRasgo(nombre,texto,etiqueta,cls){
+  const tag=texto&&ELECCION.test(texto)?'<span class="tag-eleccion">Elección</span>':'';
+  return `<div class="rasgo"><span class="nv${cls?' '+cls:''}">${esc(etiqueta)}</span><div><b>${esc(nombre)}</b>${tag}${texto?`<p class="desc">${esc(texto)}</p>`:''}</div></div>`;
+}
 function pintarRasgos(){
   const c=claseDe(F.clase),{r,s}=raza();
   let h='';
   const ex=c?c.extras(F.nivel):[];
   if(ex.length)h+=`<div class="extras">${ex.map(([k,v])=>`<span>${esc(k)}: <b>${esc(v)}</b></span>`).join('')}</div>`;
   const filas=[];
-  [...((r&&r.rasgos)||[]),...((s&&s.rasgos)||[])].forEach(([n,t])=>filas.push(`<div class="rasgo"><span class="nv raza">Raza</span><div><b>${esc(n)}</b><p>${esc(t)}</p></div></div>`));
+  [...((r&&r.rasgos)||[]),...((s&&s.rasgos)||[])].forEach(([n,t])=>filas.push(filaRasgo(n,t,'Raza','raza')));
   if(c){
-    const rs=c.rasgos(F.nivel,F.subclase);
-    rs.forEach(x=>filas.push(`<div class="rasgo"><span class="nv">Nv ${x.nv}</span><div><b>${esc(x.n)}</b>${x.t?`<p>${esc(x.t)}</p>`:''}</div></div>`));
-    if(c.tipo==='o'&&!F.subclase&&F.nivel>=c.subNivel)filas.push(`<p class="nota aviso">Elige ${esc(c.subTitulo.toLowerCase())} para ver sus rasgos.</p>`);
+    c.rasgos(F.nivel,F.subclase).forEach(x=>filas.push(filaRasgo(x.n,x.t,'Nv '+x.nv)));
+    if(c.subList&&c.subList.length&&!F.subclase&&F.nivel>=c.subNivel)filas.push(`<p class="nota aviso">Elección pendiente: elige ${esc(c.subTitulo.toLowerCase())} en el paso 2 para ver sus rasgos.</p>`);
     if(c.tipo==='h'&&!c.p.tabla)filas.push(`<p class="nota">Esta clase no tiene una tabla de niveles que se pueda leer. <a href="index.html#/clase/${esc(c.f)}">Consulta sus rasgos en el compendio →</a></p>`);
-    else if(c.tipo==='h')filas.push(`<p class="nota">Rasgos según la tabla de progresión. <a href="index.html#/clase/${esc(c.f)}">Texto completo en el compendio →</a></p>`);
+    else if(c.tipo==='h')filas.push(`<p class="nota">Rasgos hasta el nivel ${F.nivel}. <a href="index.html#/clase/${esc(c.f)}">Texto completo en el compendio →</a></p>`);
   }
   $('c-rasgos').innerHTML=h+'<div class="rasgos">'+filas.join('')+'</div>';
 }
@@ -922,6 +1145,14 @@ function exportar(){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='personajes-compendio.json';a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
+/* Banners: elegir raza, clase o subclase */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pick]');if(!b)return;
+  const v=b.dataset.v;
+  if(b.dataset.pick==='sub'){F.subclase=v;cambio();return;}
+  const s=b.dataset.pick==='raza'?$('f-raza'):$('f-clase');
+  s.value=v;s.dispatchEvent(new Event('change',{bubbles:true}));
+});
 /* Botones de la lista, de la ficha y del asistente */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-acc]');if(!b)return;

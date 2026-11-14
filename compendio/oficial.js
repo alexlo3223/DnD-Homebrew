@@ -604,3 +604,46 @@ const CONJUROS=CONJUROS_TXT.trim().split('\n').map(l=>{
   const [n,en,niv,esc,listas,f]=l.split('|');
   return {n,en,niv:+niv,esc,listas,ritual:f.includes('r'),conc:f.includes('c')};
 });
+
+/* Textos de presentación (trasfondo y cómo funciona), escritos para este compendio */
+const TEXTOS_OFICIALES={
+  razas:{
+    enano:'Pueblos de montaña y forja, con memoria larga y poca prisa. Son resistentes, tenaces y muy leales a su clan y a su oficio.',
+    elfo:'Un pueblo antiguo de bosques y magia que vive siglos y recuerda más aún. Son ágiles, perceptivos y difíciles de dormir.',
+    mediano:'Gente sencilla de campos y colinas que prefiere el hogar y la buena mesa. Son pequeños, afortunados y sorprendentemente valientes.',
+    humano:'La raza más numerosa y variada, con ambiciones de todo tipo. Su ventaja es la versatilidad: pueden llegar a ser cualquier cosa.',
+    draconido:'Descendientes de dragones que llevan en la sangre el aliento de su linaje. Son orgullosos, honorables y fuertes.',
+    gnomo:'Inventores curiosos de mente rápida, interesados en cómo funciona todo. Son astutos y difíciles de engañar con magia.',
+    semielfo:'Fruto de dos mundos, muchas veces sin sitio claro en ninguno. Son carismáticos, adaptables y buenos negociadores.',
+    semiorco:'Nacidos de la unión de humanos y orcos, enfrentados a prejuicios de ambos lados. Son fuertes, resistentes y directos.',
+    tiflin:'Descendientes de pactos infernales, con cuernos y cola que delatan su herencia. Su carisma y su magia heredada les abren y les cierran puertas.'
+  },
+  clases:{
+    barbaro:{lore:'Guerreros salvajes que canalizan una furia ancestral en el combate. Viven según la fuerza del cuerpo y del instinto.',
+      como:'Una vez por descanso largo o por combate según la tabla, entras en furia: ganas daño extra, resistencia a daño físico y ventaja en pruebas de fuerza. Si no atacas ni recibes golpes en un turno, la furia termina.'},
+    bardo:{lore:'Artistas, cuentacuentos y espías cuya magia nace de la palabra y la música. Inspiran a sus aliados y saben de todo un poco.',
+      como:'Lanzas conjuros con Carisma usando un instrumento como foco. Con la Inspiración bárdica das un dado a un aliado para que lo sume a una tirada; los usos son tu modificador de Carisma por descanso largo.'},
+    clerigo:{lore:'Servidores de un dios o de una fuerza divina que curan, protegen y castigan a los enemigos de su fe. Su poder depende de la devoción y del dominio que elijan.',
+      como:'Preparas conjuros cada día con Sabiduría. Canalizar divinidad te da efectos especiales por descanso, y el dominio que elijas añade conjuros y habilidades propias.'},
+    druida:{lore:'Guardianes de la naturaleza que se unen a la magia del mundo vivo. Pueden transformarse en animales y hablar con la vida salvaje.',
+      como:'Preparas conjuros con Sabiduría. Desde el nivel 2 adoptas formas de bestia algunas veces por descanso corto; el círculo que elijas define tu especialidad.'},
+    guerrero:{lore:'Maestros de las armas y de la disciplina, capaces de dominar cualquier estilo de combate. Su fuerza es la técnica y la resistencia.',
+      como:'Eliges un estilo de combate y ganas ataques extra en tu turno. Tomar aliento te cura una vez por descanso corto, y el arquetipo marcial define tu especialidad.'},
+    monje:{lore:'Practicantes de disciplinas marciales que convierten el cuerpo y la energía interior en arma. Prescinden de armaduras y de armas complejas.',
+      como:'Gastas puntos de ki para atacar más rápido, esquivar y moverte con más velocidad. Tus golpes sin armas crecen de dado con el nivel.'},
+    paladin:{lore:'Guerreros juramentados que combinan el acero con la magia divina. Su juramento les da una causa y poderes concretos.',
+      como:'Gastas espacios de conjuro para hacer daño extra al impactar y tienes una reserva de curación que se recupera en descanso largo. Tus auras protegen a los aliados cercanos.'},
+    explorador:{lore:'Rastreadores y cazadores que viven en la naturaleza y conocen a sus enemigos. Se mueven con sigilo y llevan una magia ligada a la tierra.',
+      como:'Lanzas conjuros de explorador con Sabiduría. Tus rasgos de enemigo predilecto y de terreno favorito te dan ventajas al rastrear, cazar y viajar.'},
+    picaro:{lore:'Ladrones, espías y asesinos que vencen con astucia más que con fuerza. Su punto fuerte es atacar donde el enemigo no espera.',
+      como:'Cuando tienes ventaja o un aliado junto al objetivo, tu ataque furtivo añade daño extra cada turno. Puedes correr, esconderte o desengañar con una acción adicional.'},
+    hechicero:{lore:'Personas con magia innata, heredada de un linaje o de una fuerza del cosmos. Su poder nace de dentro, no del estudio.',
+      como:'Lanzas conjuros con Carisma. Tienes puntos de hechicería que puedes convertir en espacios de conjuro, o gastar para alterar tus conjuros con la metamagia.'},
+    brujo:{lore:'Personas que han hecho un pacto con un ser de otro plano a cambio de poder. El pacto les da magia, pero también una deuda.',
+      como:'Tienes pocos espacios de conjuro, siempre de nivel alto, que se recuperan en descanso corto. Las invocaciones te dan poderes adicionales y el patrón define la naturaleza del pacto.'},
+    mago:{lore:'Eruditos que dominan la magia a través del estudio y de sus libros de conjuros. Su poder es amplio, aunque frágil en el cuerpo.',
+      como:'Preparas conjuros de tu libro con Inteligencia y recuperas algunos espacios tras un descanso corto. La tradición arcana que elijas define tu especialidad.'}
+  }
+};
+RAZAS.forEach(r=>{r.lore=TEXTOS_OFICIALES.razas[r.id]||'';});
+CLASES_OFICIALES.forEach(c=>{const t=TEXTOS_OFICIALES.clases[c.id]||{};c.lore=t.lore||'';c.como=t.como||'';});
