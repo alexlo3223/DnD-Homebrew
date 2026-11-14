@@ -15,7 +15,8 @@ window.Lector=(function(){
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const decodificar=s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value;};
   const textoDe=el=>el.textContent.replace(/\s+/g,' ').trim();
-  const esH=n=>!!n&&/^H[34]$/.test(n.tagName);
+  /* h3.subclase es el nombre de una subclase: separa grupos, no es un rasgo */
+  const esH=n=>!!n&&/^H[34]$/.test(n.tagName)&&!n.classList.contains('subclase');
 
   /* Ficha rápida: líneas "Salvaciones …", "Armas …" de cualquier sección, más el recurso propio */
   function fichaRapida(c){
@@ -72,6 +73,7 @@ window.Lector=(function(){
         else{grupo={items:[n],pendiente:false};grupos.push(grupo);}
         return;
       }
+      if(n.classList.contains('subclase')){grupo={items:[n],pendiente:false};grupos.push(grupo);return;}
       if(n.classList.contains('bloque')&&esH(nodos[i+1])){
         grupo={items:[n],pendiente:true};grupos.push(grupo);return;
       }
@@ -81,7 +83,7 @@ window.Lector=(function(){
     intro.forEach(n=>cuerpo.appendChild(n));
     grupos.forEach(g=>{
       const h=g.items.find(esH);
-      if(!h)return;
+      if(!h){g.items.forEach(n=>cuerpo.appendChild(n));return;}
       const bloques=g.items.filter(n=>n.classList.contains('bloque'));
       let nivel=null;
       for(const b of bloques){

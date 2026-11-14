@@ -129,6 +129,7 @@ a{text-decoration:none}
 .seccion h2{margin:0 0 22px;font-family:var(--titulo);font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:700;letter-spacing:-.02em;text-wrap:balance}
 .seccion h3{margin:30px 0 10px;font-size:22px;line-height:1.2;font-weight:600;letter-spacing:-.02em;color:var(--acento)}
 .seccion h4{margin:22px 0 8px;font-size:18px;font-weight:600}
+.seccion h3.subclase{margin:44px 0 14px;padding-top:18px;border-top:2px solid var(--acento);font-family:var(--titulo);font-size:clamp(24px,3vw,30px);color:var(--text)}
 .seccion p,.seccion li{font-size:17px;line-height:1.6}
 .seccion p{margin:0 0 14px}
 .seccion p.lead{font-size:clamp(20px,2.4vw,23px);line-height:1.45;color:var(--sub);letter-spacing:-.01em;margin-bottom:26px}
@@ -168,6 +169,7 @@ details.seccion>summary h2::after{content:"";flex:none;width:9px;height:9px;marg
 details.seccion[open]>summary h2::after{transform:rotate(-135deg)}
 details.seccion>summary:hover h2{color:var(--acento)}
 .resumen{display:block;margin:-12px 0 26px;color:var(--sub);font-size:16px;line-height:1.5}
+details.seccion[open] .resumen{display:none}
 .cuerpo p,.cuerpo li,.cuerpo .bloque,.rasgo-cuerpo p,.rasgo-cuerpo li{font-size:var(--tam,17px)}
 .cuerpo p{max-width:68ch}
 .ficha-rapida{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:22px 24px;margin:0 0 36px;border-top:3px solid var(--acento)}
@@ -315,7 +317,7 @@ function tarjeta(c,i){
     <h2>${esc(c.n)}</h2>
     <p class="lema">${esc(c.e)}</p>
     <p class="desc">${esc(c.g)}</p>
-    <span class="meta">${Lector.ROL_ICONO[c.r]||''} ${esc(c.r)} · dado ${esc(c.d)} · ${MAG[c.m]}</span>
+    <span class="meta">${Lector.ROL_ICONO[c.r]||''} ${esc(c.r)} · dado ${esc(c.d)}${MAG[c.m]!==c.r?' · '+MAG[c.m]:''}</span>
     <span class="abrir">Leer la clase →</span>
   </a>`;
 }
@@ -361,7 +363,7 @@ function verClase(f){
     <p class="eyebrow">${v.marca?v.marca+' · ':''}${esc(v.nombre)}</p>
     <h1>${esc(c.n)}</h1>
     <p class="lema">${esc(c.e)}</p>
-    <div class="chips"><span>${esc(c.r)}</span><span>Dado ${esc(c.d)}</span><span>${MAG[c.m]}</span></div>`;
+    <div class="chips"><span>${esc(c.r)}</span><span>Dado ${esc(c.d)}</span>${MAG[c.m]!==c.r?`<span>${MAG[c.m]}</span>`:''}</div>`;
   $('c-arte').innerHTML=`${emblema(v)}<span class="mono-grande">${esc(inicial(c.n))}</span>`;
   $('c-contenido').innerHTML=`
     <div class="herr" role="toolbar" aria-label="Opciones de lectura">
@@ -373,7 +375,7 @@ function verClase(f){
       <span class="sep" aria-hidden="true"></span>
       <button type="button" data-a="enlace">Copiar enlace</button>
     </div>`+c.secciones.map((s,k)=>`
-    <details class="seccion sec-${s.tipo}" id="sec-${k}" data-k="${k}"${k===0||s.tipo==='tabla'?' open':''}>
+    <details class="seccion sec-${s.tipo}" id="sec-${k}" data-k="${k}" open>
       <summary><h2>${esc(s.t)}</h2><span class="resumen"></span></summary>
       <div class="cuerpo">${s.html.replace(/<table/g,'<div class="tabla-wrap"><table').replace(/<\/table>/g,'</table></div>')}</div>
     </details>`).join('');
