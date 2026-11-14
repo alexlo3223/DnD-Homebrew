@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="Compendio de clases homebrew de D&amp;D 5e: 43 clases en siete ambientaciones.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%93%9C%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya:wght@400;500;700&family=IM+Fell+English+SC&family=Shippori+Mincho+B1:wght@700;800&family=UnifrakturCook:wght@700&family=Cinzel:wght@600;700&display=swap">
+<title>Compendio de Clases Homebrew</title>
+<style>
+/* ——— Base: claro por defecto, oscuro por sistema o por elección ——— */
+:root{
+  --bg:#f5f5f7;--card:#ffffff;--text:#1d1d1f;--sub:#6e6e73;--line:rgba(0,0,0,.08);
+  --chip:#e8e8ed;--zebra:#fafafc;--shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);
+  --nav:rgba(245,245,247,.78);--blue:#0071e3;
+  --acento:#0071e3;--acento2:#5ac8fa;--titulo:-apple-system,"SF Pro Display","Segoe UI",sans-serif;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000;--card:#1c1c1e;--text:#f5f5f7;--sub:#98989d;--line:rgba(255,255,255,.12);
+    --chip:#2c2c2e;--zebra:#161618;--shadow:none;--nav:rgba(20,20,22,.78);--blue:#2997ff;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000;--card:#1c1c1e;--text:#f5f5f7;--sub:#98989d;--line:rgba(255,255,255,.12);
+  --chip:#2c2c2e;--zebra:#161618;--shadow:none;--nav:rgba(20,20,22,.78);--blue:#2997ff;color-scheme:dark;
+}
+
+/* ——— Identidad por ambientación ——— */
+[data-vol="jjk"]{--acento:#e0463a;--acento2:#8f9cff;--titulo:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif}
+[data-vol="castlevania"]{--acento:#c2263a;--acento2:#e8c39e;--titulo:"UnifrakturCook","Old English Text MT",Georgia,serif}
+[data-vol="rueda"]{--acento:#c99a3a;--acento2:#f0d58a;--titulo:"Cinzel","Trajan Pro",Georgia,serif}
+[data-vol="cosmere"]{--acento:#4f8fe8;--acento2:#a9c8ff;--titulo:-apple-system,"SF Pro Display","Segoe UI",sans-serif}
+[data-vol="eberron"]{--acento:#b8891f;--acento2:#e9cf7a;--titulo:"Alegreya SC",Georgia,serif}
+[data-vol="bloodborne"]{--acento:#6b7a90;--acento2:#c9d1de;--titulo:"IM Fell English SC",Georgia,serif}
+[data-vol="sueltas"]{--acento:#b86f3f;--acento2:#f0c9a4;--titulo:"Alegreya",Georgia,serif}
+:root[data-theme="dark"] [data-vol="rueda"],:root[data-theme="dark"] [data-vol="eberron"]{--acento:#e3b859}
+:root[data-theme="dark"] [data-vol="bloodborne"]{--acento:#9aa8bd}
+:root[data-theme="dark"] [data-vol="sueltas"]{--acento:#d9915f}
+:root[data-theme="dark"] [data-vol="castlevania"]{--acento:#e0445a}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.47 var(--font);-webkit-font-smoothing:antialiased;overflow-x:clip}
+button,input,a{font:inherit;color:inherit}
+a{text-decoration:none}
+::selection{background:color-mix(in srgb,var(--acento) 35%,transparent)}
+:focus-visible{outline:2px solid var(--acento);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+.eyebrow{margin:0 0 12px;color:var(--acento);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+/* ——— Barra superior ——— */
+.barra{position:sticky;top:0;z-index:12;background:var(--nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.barra .wrap{display:flex;align-items:center;gap:14px;height:52px;min-width:0}
+.barra strong{font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+.migas{display:flex;align-items:center;gap:8px;min-width:0;font-size:14px;color:var(--sub);white-space:nowrap;overflow:hidden}
+.migas a{color:var(--blue)}
+.migas span{overflow:hidden;text-overflow:ellipsis}
+.migas .sep{opacity:.5}
+.buscar{margin-left:auto;min-width:0;width:min(300px,100%);height:32px;border-radius:999px;border:0;background:var(--chip);padding:0 14px;outline:none}
+.buscar::placeholder{color:var(--sub)}
+.tema{flex:none;width:32px;height:32px;border:0;border-radius:50%;background:var(--chip);cursor:pointer;display:grid;place-items:center;font-size:15px}
+.progreso{position:fixed;left:0;right:0;top:52px;height:2px;z-index:11;background:var(--acento);transform-origin:0 50%;transform:scaleX(0)}
+
+/* ——— Inicio ——— */
+.portada{padding-block:clamp(48px,9vw,104px) 36px}
+.portada h1{margin:0;font-size:clamp(44px,8vw,84px);line-height:1.02;font-weight:700;letter-spacing:-.035em;text-wrap:balance}
+.portada h1 span{color:var(--sub)}
+.lead-inicio{max-width:44ch;margin:20px 0 0;color:var(--sub);font-size:clamp(19px,2.2vw,24px);line-height:1.35;letter-spacing:-.01em}
+.filtros{display:grid;gap:14px;padding-bottom:36px}
+.seg,.vols{display:flex;flex-wrap:wrap;gap:8px}
+.seg button,.vols button{border:0;border-radius:999px;background:var(--chip);padding:8px 14px;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,transform .2s}
+.seg button:active,.vols button:active{transform:scale(.97)}
+.seg button[aria-pressed="true"],.vols button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.vols i{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--c)}
+.recuento{margin:0;color:var(--sub);font-size:14px}
+
+.grupo{padding-bottom:56px}
+.grupo-cab{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 24px;margin-bottom:22px;padding-top:8px;border-top:2px solid var(--acento)}
+.grupo-cab h2{margin:0;font-family:var(--titulo);font-size:clamp(28px,4vw,40px);line-height:1.1;letter-spacing:-.02em;color:var(--text)}
+.grupo-cab p{grid-column:1;margin:0;color:var(--sub);font-size:15px;max-width:60ch}
+.grupo-cab span{grid-row:1/3;grid-column:2;color:var(--acento);font-size:14px;font-weight:600;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:20px;padding-bottom:24px}
+.grupo .grid{padding-bottom:0}
+.tarjeta-clase{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;min-width:0;border-radius:22px;background:var(--card);box-shadow:var(--shadow);padding:26px;animation:subir .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 35ms);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
+.tarjeta-clase::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--acento),var(--acento2))}
+.tarjeta-clase:hover{transform:translateY(-3px);box-shadow:0 2px 4px rgba(0,0,0,.05),0 18px 40px color-mix(in srgb,var(--acento) 16%,transparent)}
+.mono{position:absolute;right:18px;top:12px;font:700 74px/1 var(--titulo);color:var(--acento);opacity:.14;pointer-events:none;user-select:none}
+.etiqueta{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--acento)}
+.tarjeta-clase h2{margin:4px 0 0;font-family:var(--titulo);font-size:clamp(22px,2.4vw,25px);line-height:1.15;font-weight:600;letter-spacing:-.02em;text-wrap:balance;position:relative}
+.lema{margin:0;font-weight:500;font-size:15px;position:relative}
+.desc{margin:0;color:var(--sub);font-size:15px;line-height:1.4;position:relative}
+.meta{margin-top:auto;padding-top:12px;color:var(--sub);font-size:13px;position:relative}
+.abrir{color:var(--acento);font-size:15px;font-weight:600;position:relative}
+.vacio{padding:48px 0;color:var(--sub);text-align:center}
+@keyframes subir{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ——— Vista de clase ——— */
+.hero{position:relative;overflow:hidden;background:radial-gradient(900px 480px at 88% -12%,color-mix(in srgb,var(--acento) 26%,transparent),transparent 62%),var(--bg)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(24px,5vw,64px);align-items:center;padding-block:clamp(40px,7vw,88px) clamp(36px,5vw,64px)}
+.hero h1{margin:0;font-family:var(--titulo);font-size:clamp(44px,7vw,80px);line-height:1.02;font-weight:700;letter-spacing:-.02em;text-wrap:balance;overflow-wrap:anywhere}
+.hero .lema{margin-top:18px;font-size:clamp(19px,2.2vw,24px);color:var(--sub);letter-spacing:-.01em;max-width:42ch;line-height:1.35}
+.hero-arte{position:relative;width:clamp(150px,22vw,250px);aspect-ratio:1;flex:none}
+.emblema{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:var(--acento);stroke-width:2.2;opacity:.55}
+.mono-grande{position:absolute;inset:0;display:grid;place-items:center;font:700 clamp(96px,14vw,160px)/1 var(--titulo);color:var(--acento);text-shadow:0 10px 40px color-mix(in srgb,var(--acento) 35%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chips span{background:var(--card);box-shadow:var(--shadow);border-radius:999px;padding:6px 13px;font-size:13px;color:var(--sub)}
+.vista{display:grid;grid-template-columns:200px minmax(0,1fr);gap:56px;padding-bottom:64px;align-items:start}
+.indice{position:sticky;top:76px;display:flex;flex-direction:column;gap:2px;border-left:2px solid var(--line);padding-left:4px}
+.indice button{border:0;background:none;text-align:left;padding:7px 12px;margin-left:-6px;border-radius:10px;color:var(--sub);font-size:14px;cursor:pointer;line-height:1.3;transition:color .2s,background .2s}
+.indice button:hover{color:var(--text);background:var(--chip)}
+.indice button[aria-current="true"]{color:var(--acento);font-weight:600;background:color-mix(in srgb,var(--acento) 12%,transparent)}
+.contenido{min-width:0;max-width:760px}
+.seccion{padding-bottom:56px;scroll-margin-top:76px}
+.anim .seccion{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.anim .seccion.visible{opacity:1;transform:none}
+.seccion h2{margin:0 0 22px;font-family:var(--titulo);font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:700;letter-spacing:-.02em;text-wrap:balance}
+.seccion h3{margin:30px 0 10px;font-size:22px;line-height:1.2;font-weight:600;letter-spacing:-.02em;color:var(--acento)}
+.seccion h4{margin:22px 0 8px;font-size:18px;font-weight:600}
+.seccion p,.seccion li{font-size:17px;line-height:1.6}
+.seccion p{margin:0 0 14px}
+.seccion p.lead{font-size:clamp(20px,2.4vw,23px);line-height:1.45;color:var(--sub);letter-spacing:-.01em;margin-bottom:26px}
+.seccion ul,.seccion ol{padding-left:22px;margin:0 0 16px}
+.seccion li{margin-bottom:6px}
+.seccion strong{font-weight:600}
+.seccion blockquote{margin:20px 0;padding:4px 0 4px 18px;border-left:3px solid var(--acento);color:var(--sub);font-style:italic}
+.seccion .bloque{margin:0 0 10px;font-size:16px;line-height:1.5}
+.tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:16px}
+.tarjeta{background:var(--card);border-radius:18px;box-shadow:var(--shadow);border-top:3px solid color-mix(in srgb,var(--acento) 70%,transparent);padding:20px 22px;margin:0 0 14px;font-size:16px;line-height:1.5}
+.tarjetas .tarjeta{margin:0}
+.tarjeta>*:first-child{margin-top:0}
+.tarjeta h3{margin-top:0}
+.tabla-wrap{overflow-x:auto;border-radius:16px;background:var(--card);box-shadow:var(--shadow);margin:8px 0 26px;-webkit-overflow-scrolling:touch}
+.seccion table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;min-width:460px}
+.seccion th,.seccion td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;transition:background .15s}
+.seccion th{position:sticky;top:0;background:var(--chip);font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--sub)}
+.seccion tbody tr:nth-child(even){background:var(--zebra)}
+.seccion tbody tr:hover td{background:color-mix(in srgb,var(--acento) 9%,transparent)}
+.seccion tbody tr:last-child td{border-bottom:0}
+.sec-tabla td:first-child{font-weight:700;color:var(--acento);font-variant-numeric:tabular-nums}
+.pie{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding:28px 0 56px}
+.pie a{color:var(--blue);font-size:15px;font-weight:500}
+.pie a[aria-disabled="true"]{color:var(--sub);pointer-events:none}
+.pie .ficha{color:var(--acento);font-weight:600}
+
+/* ——— Responsive ——— */
+/* ——— Lectura por partes ——— */
+.herr{position:sticky;top:70px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 32px;padding:6px;border-radius:999px;background:var(--nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:var(--shadow);width:max-content;max-width:100%}
+.herr button{border:0;background:var(--chip);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.herr button:hover{background:var(--text);color:var(--bg)}
+.herr .sep{width:1px;height:18px;background:var(--line);margin:0 4px}
+details.seccion>summary{list-style:none;cursor:pointer}
+details.seccion>summary::-webkit-details-marker{display:none}
+details.seccion>summary h2{display:flex;align-items:center;gap:14px}
+details.seccion>summary h2::after{content:"";flex:none;width:9px;height:9px;margin-left:auto;margin-right:6px;border-right:2px solid var(--acento);border-bottom:2px solid var(--acento);transform:rotate(45deg);transition:transform .3s}
+details.seccion[open]>summary h2::after{transform:rotate(-135deg)}
+details.seccion>summary:hover h2{color:var(--acento)}
+.resumen{display:block;margin:-12px 0 26px;color:var(--sub);font-size:16px;line-height:1.5}
+.cuerpo p,.cuerpo li,.cuerpo .bloque,.rasgo-cuerpo p,.rasgo-cuerpo li{font-size:var(--tam,17px)}
+.cuerpo p{max-width:68ch}
+.ficha-rapida{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:22px 24px;margin:0 0 36px;border-top:3px solid var(--acento)}
+.fr-titulo{margin:0 0 14px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acento)}
+.ficha-rapida dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 24px;margin:0}
+.ficha-rapida dt{font-size:12px;color:var(--sub);text-transform:uppercase;letter-spacing:.05em}
+.ficha-rapida dd{margin:4px 0 0;font-size:15px;line-height:1.4}
+.rasgo{background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin:0 0 12px;overflow:hidden}
+.rasgo>summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:16px 20px;cursor:pointer;list-style:none;font-weight:600;font-size:18px;letter-spacing:-.01em}
+.rasgo>summary::-webkit-details-marker{display:none}
+.rasgo-nv{background:var(--acento);color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.rasgo-tipo{margin-left:auto;font-size:13px;font-weight:500;color:var(--sub);white-space:nowrap}
+.rasgo-cuerpo{padding:0 20px 18px}
+.prog-wrap{margin:0 0 28px}
+.prog{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:0 0 16px}
+.prog li{aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:var(--chip);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--sub)}
+.prog li.hit{background:var(--acento);color:#fff}
+.prog-hitos{list-style:none;padding:0;margin:0;font-size:15px}
+.prog-hitos li{padding:7px 0;border-bottom:1px solid var(--line)}
+.prog-hitos b{color:var(--acento);margin-right:6px;font-variant-numeric:tabular-nums}
+@media (max-width:860px){
+  .vista{grid-template-columns:minmax(0,1fr);gap:24px}
+  .indice{position:static;flex-direction:row;overflow-x:auto;gap:6px;border:0;padding:0 0 4px;scrollbar-width:none}
+  .indice button{white-space:nowrap;background:var(--chip);color:var(--text);margin:0}
+  .indice button[aria-current="true"]{background:var(--acento);color:#fff}
+}
+@media (max-width:640px){
+  .barra strong{display:none}
+  .migas .sep,.migas span:last-child{display:none}
+  .buscar{width:100%}
+  .hero .wrap{grid-template-columns:minmax(0,1fr);text-align:left}
+  .hero-arte{width:min(180px,46vw);order:-1}
+  .tarjeta-clase{padding:22px}
+  .mono{font-size:60px}
+  .grupo-cab{grid-template-columns:minmax(0,1fr)}
+  .grupo-cab span{grid-row:auto;grid-column:1}
+}
+
+/* ——— Movimiento ——— */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .anim .seccion{opacity:1;transform:none}
+  .tarjeta-clase:hover{transform:none}
+}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.4s}
+
+/* ——— Impresión ——— */
+@media print{
+  .barra,.progreso,.indice,.pie,.buscar,.tema,.filtros,.recuento,.herr{display:none!important}
+  details{display:block}
+  body,html{background:#fff;color:#000}
+  .hero{background:none}
+  .hero-arte{display:none}
+  .seccion{break-inside:auto;padding-bottom:24px}
+  .anim .seccion{opacity:1;transform:none}
+  .tarjeta,.tabla-wrap{box-shadow:none;border:1px solid #ccc}
+  .seccion th{position:static}
+}
+</style>
+</head>
+<body>
+<nav class="barra">
+  <div class="wrap">
+    <strong id="marca">Compendio</strong>
+    <nav class="migas" id="migas" aria-label="Ruta" hidden></nav>
+    <input class="buscar" id="q" type="search" placeholder="Buscar clase, rol, lema o texto" aria-label="Buscar">
+    <button class="tema" id="tema" type="button"></button>
+  </div>
+</nav>
+<div class="progreso" id="progreso" hidden></div>
+
+<section id="inicio">
+  <header class="portada wrap">
+    <p class="eyebrow">Homebrew D&amp;D 5e · <span id="total"></span> clases</p>
+    <h1>Clases.<br><span>Siete mundos, un compendio.</span></h1>
+    <p class="lead-inicio">Cada ambientación tiene su propio tono. Filtra por rol o por mundo y lee cada clase completa, sin salir de la página.</p>
+  </header>
+  <section class="wrap filtros" aria-label="Filtros">
+    <div class="seg" id="roles"></div>
+    <div class="vols" id="vols"></div>
+    <p class="recuento" id="recuento"></p>
+  </section>
+  <main class="wrap" id="rejilla"></main>
+  <p class="vacio wrap" id="vacio" hidden>Ninguna clase coincide con la búsqueda.</p>
+</section>
+
+<article id="clase" hidden>
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-txt" id="c-hero"></div>
+      <div class="hero-arte" id="c-arte" aria-hidden="true"></div>
+    </div>
+  </header>
+  <div class="wrap vista">
+    <nav class="indice" id="c-indice" aria-label="Secciones"></nav>
+    <div class="contenido" id="c-contenido"></div>
+  </div>
+  <div class="wrap">
+    <div class="pie" id="c-pie"></div>
+  </div>
+</article>
+
+<script src="datos.js"></script>
+<script src="lector.js"></script>
+<script>
+const MAG=['Sin magia','Sobrenatural','Semilanzador','Lanzador'];
+const ROLES=['Todos','Marcial','Semilanzador','Lanzador','Invocador','Astucia','Apoyo'];
+const $=id=>document.getElementById(id);
+const volOf=id=>VOL.find(v=>v.id===id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sinTags=s=>s.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+const inicial=n=>(n.replace(/^(El|La|Los|Las)\s+/i,'').replace(/^\W+/,'').charAt(0)||'•').toUpperCase();
+const reducido=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let rol='Todos',vol='todos';
+
+/* ——— Emblemas: un motivo por ambientación, decorativo tras el monograma ——— */
+const pol=(n,r,rot=0)=>Array.from({length:n},(_,k)=>{const a=rot+k*2*Math.PI/n;return `${(100+r*Math.cos(a)).toFixed(1)},${(100+r*Math.sin(a)).toFixed(1)}`}).join(' ');
+const FORMAS={
+  rueda:`<circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="16"/>`+
+    Array.from({length:7},(_,k)=>{const a=k*2*Math.PI/7-Math.PI/2;return `<line x1="100" y1="100" x2="${(100+90*Math.cos(a)).toFixed(1)}" y2="${(100+90*Math.sin(a)).toFixed(1)}"/>`}).join(''),
+  castlevania:`<circle cx="100" cy="100" r="88"/><path d="M100 22V178M48 72H152"/>`,
+  cosmere:`<circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="66"/><circle cx="100" cy="100" r="42"/>`,
+  eberron:`<polygon points="${pol(6,90,-Math.PI/2)}"/><polygon points="${pol(6,60,-Math.PI/2)}"/>`,
+  bloodborne:`<path d="M124 20A82 82 0 1 0 180 142A66 66 0 1 1 124 20Z"/>`,
+  sueltas:`<path d="M100 14L170 100L100 186L30 100Z"/><path d="M100 14V186M30 100H170"/>`,
+  jjk:`<polygon points="${pol(6,90)}"/><path d="M100 10V190M10 100H190"/>`
+};
+const emblema=v=>`<svg class="emblema" viewBox="0 0 200 200" aria-hidden="true">${FORMAS[v.id]}</svg>`;
+
+/* ——— Inicio ——— */
+$('total').textContent=CLASES.length;
+$('roles').innerHTML=ROLES.map(r=>`<button data-rol="${r}" aria-pressed="${r==='Todos'}">${r}</button>`).join('');
+const COLOR={jjk:'#e0463a',castlevania:'#c2263a',rueda:'#c99a3a',cosmere:'#4f8fe8',eberron:'#b8891f',bloodborne:'#6b7a90',sueltas:'#b86f3f'};
+$('vols').innerHTML=[{id:'todos',nombre:'Todos'},...VOL].map(v=>`<button data-vol="${v.id}" aria-pressed="${v.id==='todos'}">${COLOR[v.id]?`<i style="background:${COLOR[v.id]}"></i>`:''}${esc(v.nombre)}</button>`).join('');
+
+function marcar(contenedor,attr,valor){
+  [...$(contenedor).children].forEach(b=>b.setAttribute('aria-pressed',b.dataset[attr]===valor));
+}
+
+function textoDe(c){
+  if(!c.texto)c.texto=[c.n,c.e,c.r,c.g,volOf(c.v).nombre,...c.secciones.map(s=>s.t+' '+sinTags(s.html))].join(' ').toLowerCase();
+  return c.texto;
+}
+
+function tarjeta(c,i){
+  const v=volOf(c.v);
+  return `<a class="tarjeta-clase" data-vol="${v.id}" style="--i:${i}" href="#/clase/${esc(c.f)}">
+    <span class="mono" aria-hidden="true">${esc(inicial(c.n))}</span>
+    <span class="etiqueta">${esc(v.nombre)}</span>
+    <h2>${esc(c.n)}</h2>
+    <p class="lema">${esc(c.e)}</p>
+    <p class="desc">${esc(c.g)}</p>
+    <span class="meta">${Lector.ROL_ICONO[c.r]||''} ${esc(c.r)} · dado ${esc(c.d)} · ${MAG[c.m]}</span>
+    <span class="abrir">Leer la clase →</span>
+  </a>`;
+}
+
+function pintarInicio(){
+  const q=$('q').value.trim().toLowerCase();
+  const lista=CLASES.filter(c=>
+    (rol==='Todos'||c.r===rol) &&
+    (vol==='todos'||c.v===vol) &&
+    (!q||textoDe(c).includes(q)));
+  const filtrado=q||rol!=='Todos'||vol!=='todos';
+  $('rejilla').innerHTML=filtrado
+    ? `<div class="grid">${lista.map(tarjeta).join('')}</div>`
+    : VOL.map(v=>{
+        const grupo=lista.filter(c=>c.v===v.id);
+        return `<section class="grupo" data-vol="${v.id}" aria-labelledby="g-${v.id}">
+          <header class="grupo-cab">
+            <h2 id="g-${v.id}">${v.marca?v.marca+' · ':''}${esc(v.nombre)}</h2>
+            <span>${grupo.length} clases</span>
+            <p>${esc(v.lema)}</p>
+          </header>
+          <div class="grid">${grupo.map(tarjeta).join('')}</div>
+        </section>`;}).join('');
+  $('vacio').hidden=lista.length>0;
+  $('recuento').textContent=`${lista.length} de ${CLASES.length} clases`;
+}
+
+$('roles').onclick=e=>{const b=e.target.closest('button');if(!b)return;rol=b.dataset.rol;marcar('roles','rol',rol);pintarInicio();};
+$('vols').onclick=e=>{const b=e.target.closest('button');if(!b)return;vol=b.dataset.vol;marcar('vols','vol',vol);pintarInicio();};
+$('q').oninput=()=>{ if(!$('inicio').hidden) pintarInicio(); };
+
+/* ——— Vista de clase ——— */
+let observador=null;
+
+function verClase(f){
+  const i=CLASES.findIndex(x=>x.f===f);
+  if(i<0){location.hash='#/';return;}
+  const c=CLASES[i], v=volOf(c.v);
+  document.title=`${c.n} · Compendio`;
+  $('clase').dataset.vol=v.id;
+  $('migas').innerHTML=`<a href="#/">Compendio</a><span class="sep">›</span><span>${esc(v.nombre)}</span><span class="sep">›</span><span>${esc(c.n)}</span>`;
+  $('c-hero').innerHTML=`
+    <p class="eyebrow">${v.marca?v.marca+' · ':''}${esc(v.nombre)}</p>
+    <h1>${esc(c.n)}</h1>
+    <p class="lema">${esc(c.e)}</p>
+    <div class="chips"><span>${esc(c.r)}</span><span>Dado ${esc(c.d)}</span><span>${MAG[c.m]}</span></div>`;
+  $('c-arte').innerHTML=`${emblema(v)}<span class="mono-grande">${esc(inicial(c.n))}</span>`;
+  $('c-contenido').innerHTML=`
+    <div class="herr" role="toolbar" aria-label="Opciones de lectura">
+      <button type="button" data-a="abrir">Desplegar todo</button>
+      <button type="button" data-a="cerrar">Plegar todo</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" data-a="menos" aria-label="Letra más pequeña">A−</button>
+      <button type="button" data-a="mas" aria-label="Letra más grande">A+</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" data-a="enlace">Copiar enlace</button>
+    </div>`+c.secciones.map((s,k)=>`
+    <details class="seccion sec-${s.tipo}" id="sec-${k}" data-k="${k}"${k===0||s.tipo==='tabla'?' open':''}>
+      <summary><h2>${esc(s.t)}</h2><span class="resumen"></span></summary>
+      <div class="cuerpo">${s.html.replace(/<table/g,'<div class="tabla-wrap"><table').replace(/<\/table>/g,'</table></div>')}</div>
+    </details>`).join('');
+  Lector.enriquecer(c,$('c-contenido'));
+  agruparTarjetas();
+  aplicarLetra();
+  const primero=$('c-contenido').querySelector('.cuerpo > p');
+  if(primero)primero.classList.add('lead');
+  $('c-indice').innerHTML=c.secciones.map((s,k)=>`<button data-k="${k}">${esc(s.t)}</button>`).join('');
+  const ant=CLASES[i-1], sig=CLASES[i+1];
+  $('c-pie').innerHTML=`
+    <a href="#/clase/${ant?esc(ant.f):''}" ${ant?'':'aria-disabled="true"'}>← ${ant?esc(ant.n):'Anterior'}</a>
+    <a class="ficha" href="../clases/${esc(c.f)}.html" target="_blank" rel="noopener">Ficha original completa ↗</a>
+    <a href="#/clase/${sig?esc(sig.f):''}" ${sig?'':'aria-disabled="true"'}>${sig?esc(sig.n):'Siguiente'} →</a>`;
+
+  $('inicio').hidden=true;
+  $('clase').hidden=false;
+  $('progreso').hidden=false;
+  $('marca').hidden=true;
+  $('migas').hidden=false;
+  $('q').hidden=true;
+  activarIndice();
+}
+
+/* Agrupa tarjetas consecutivas (subclases, rasgos) en una rejilla */
+function agruparTarjetas(){
+  document.querySelectorAll('#c-contenido .cuerpo').forEach(sec=>{
+    let grupo=null;
+    [...sec.children].forEach(el=>{
+      if(el.classList.contains('tarjeta')){
+        if(!grupo){grupo=document.createElement('div');grupo.className='tarjetas';el.before(grupo);}
+        grupo.appendChild(el);
+      } else grupo=null;
+    });
+  });
+}
+
+function activarIndice(){
+  if(observador){observador.forEach(o=>o.disconnect());}
+  const botones=[...$('c-indice').children];
+  const marcarBoton=k=>botones.forEach((b,j)=>b.setAttribute('aria-current',String(j===k)));
+  marcarBoton(0);
+  const secciones=[...document.querySelectorAll('#c-contenido details.seccion')];
+  /* Revelado: cada sección aparece al entrar en pantalla, con margen inferior */
+  const revelar=new IntersectionObserver(entradas=>entradas.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');revelar.unobserve(e.target);}
+  }),{rootMargin:'0px 0px -8% 0px'});
+  /* Activa: la sección que ocupa la franja de lectura marca el índice */
+  const activa=new IntersectionObserver(entradas=>{
+    const visibles=entradas.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(visibles.length)marcarBoton(+visibles[0].target.dataset.k);
+  },{rootMargin:'-20% 0px -70% 0px'});
+  secciones.forEach(s=>{revelar.observe(s);activa.observe(s);});
+  if(secciones[0])secciones[0].classList.add('visible');
+  if(reducido)secciones.forEach(s=>s.classList.add('visible'));
+  observador=[revelar,activa];
+}
+
+$('c-indice').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const sec=$('sec-'+b.dataset.k);
+  sec.open=true;
+  sec.scrollIntoView({behavior:reducido?'auto':'smooth',block:'start'});
+};
+
+/* ——— Opciones de lectura: desplegar, tamaño de letra, copiar enlace ——— */
+const TAMANOS=[15,17,19,21];
+let letra=1;
+try{letra=Math.min(3,Math.max(0,+localStorage.getItem('compendio-letra')||1));}catch(e){}
+function aplicarLetra(){ $('c-contenido').style.setProperty('--tam',TAMANOS[letra]+'px'); }
+function cambiarLetra(d){
+  letra=Math.min(3,Math.max(0,letra+d));
+  try{localStorage.setItem('compendio-letra',String(letra));}catch(e){}
+  aplicarLetra();
+}
+async function copiarEnlace(b){
+  try{await navigator.clipboard.writeText(location.href);b.textContent='¡Copiado!';}
+  catch(e){b.textContent='Copia la URL de la barra';}
+  setTimeout(()=>{b.textContent='Copiar enlace';},1800);
+}
+$('c-contenido').onclick=e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const secs=[...document.querySelectorAll('#c-contenido details.seccion')];
+  switch(b.dataset.a){
+    case 'abrir': secs.forEach(d=>{d.open=true;}); break;
+    case 'cerrar': secs.forEach(d=>{d.open=false;}); break;
+    case 'menos': cambiarLetra(-1); break;
+    case 'mas': cambiarLetra(1); break;
+    case 'enlace': copiarEnlace(b); break;
+  }
+};
+
+function verInicio(){
+  document.title='Compendio de Clases Homebrew';
+  $('clase').hidden=true;
+  $('inicio').hidden=false;
+  $('progreso').hidden=true;
+  $('marca').hidden=false;
+  $('migas').hidden=true;
+  $('q').hidden=false;
+  if(observador){observador.forEach(o=>o.disconnect());observador=null;}
+  pintarInicio();
+}
+
+/* Barra de progreso de lectura */
+let pendiente=false;
+function actualizarProgreso(){
+  pendiente=false;
+  const h=document.documentElement;
+  const max=h.scrollHeight-h.clientHeight;
+  $('progreso').style.transform=`scaleX(${max>0?Math.min(1,h.scrollTop/max):0})`;
+}
+addEventListener('scroll',()=>{ if(!pendiente){pendiente=true;requestAnimationFrame(actualizarProgreso);} },{passive:true});
+
+/* Cambio de vista con transición, si el navegador la soporta */
+function conTransicion(fn){
+  if(document.startViewTransition&&!reducido)document.startViewTransition(fn);
+  else fn();
+}
+function ruta(){
+  conTransicion(()=>{
+    const m=location.hash.match(/^#\/clase\/(.+)$/);
+    if(m)verClase(decodeURIComponent(m[1]));
+    else verInicio();
+  });
+  window.scrollTo({top:0,behavior:'auto'});
+}
+window.addEventListener('hashchange',ruta);
+
+/* ——— Tema claro/oscuro ——— */
+const mqOscuro=matchMedia('(prefers-color-scheme: dark)');
+function esOscuro(){
+  const t=document.documentElement.dataset.theme;
+  return t?t==='dark':mqOscuro.matches;
+}
+function aplicarTema(t){
+  if(t)document.documentElement.dataset.theme=t;
+  else delete document.documentElement.dataset.theme;
+  const oscuro=esOscuro();
+  const b=$('tema');
+  b.textContent=oscuro?'☀︎':'☾';
+  b.setAttribute('aria-label',oscuro?'Cambiar a tema claro':'Cambiar a tema oscuro');
+  document.querySelector('meta[name="theme-color"]').content=oscuro?'#000000':'#f5f5f7';
+}
+$('tema').onclick=()=>{
+  const nuevo=esOscuro()?'light':'dark';
+  try{localStorage.setItem('compendio-tema',nuevo);}catch(e){}
+  aplicarTema(nuevo);
+};
+let guardado=null;
+try{guardado=localStorage.getItem('compendio-tema');}catch(e){}
+aplicarTema(guardado);
+mqOscuro.addEventListener('change',()=>{ if(!document.documentElement.dataset.theme)aplicarTema(null); });
+
+document.body.classList.toggle('anim',!reducido);
+ruta();
+</script>
+</body>
+</html>
