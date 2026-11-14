@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya:wght@400;500;700&family=IM+Fell+English+SC&family=Shippori+Mincho+B1:wght@700;800&family=UnifrakturCook:wght@700&family=Cinzel:wght@600;700&display=swap">
-<title>Fichas de Personaje</title>
+<title>Personajes · Compendio</title>
 <style>
 /* ——— Tokens: los mismos que el compendio ——— */
 :root{
@@ -159,6 +159,37 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 .grupo-niv{margin:12px 0 2px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)}
 .monedas{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px}
 
+/* ——— Personajes: lista, asistente y ficha ——— */
+.eyebrow{margin:0 0 8px;color:var(--acento);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.aviso-flot{max-width:1240px;margin:8px auto 0;padding:0 clamp(16px,4vw,40px);color:var(--aviso);font-size:13px}
+.aviso-flot:empty{display:none}
+#v-lista[hidden],#v-ficha[hidden]{display:none!important}
+.lista-cab{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;padding:32px 0 22px}
+.lista-cab h1{margin:0;font-family:var(--titulo);font-size:clamp(32px,5vw,48px);letter-spacing:-.03em;line-height:1.05}
+.acc-lista{display:flex;flex-wrap:wrap;gap:8px}
+.rejilla-pj{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:16px;padding-bottom:40px}
+.tarj-pj{background:var(--card);border-radius:20px;box-shadow:var(--shadow);border-top:3px solid var(--acento);padding:18px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tarj-pj h3{margin:0;font-family:var(--titulo);font-size:22px;letter-spacing:-.01em}
+.tarj-pj p{margin:0;color:var(--sub);font-size:14px}
+.tarj-pj .acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tarj-pj .acc .btn{font-size:13px;padding:6px 11px}
+.vacio{grid-column:1/-1;padding:40px 0;color:var(--sub);text-align:center}
+.barra-hoja{display:flex;flex-wrap:wrap;gap:8px;padding-top:24px}
+#v-ficha{padding-bottom:24px}
+.pasos{position:sticky;top:52px;z-index:10;display:flex;gap:6px;overflow-x:auto;padding:12px 0;margin:12px 0 4px;background:var(--bg);scrollbar-width:none}
+.pasos::-webkit-scrollbar{display:none}
+.pasos button{flex:none;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;background:var(--chip);padding:6px 14px 6px 6px;font-size:14px;cursor:pointer;white-space:nowrap}
+.pasos button .n{width:24px;height:24px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:700}
+.pasos button.hecho .n{background:var(--acento);color:#fff}
+.pasos button[aria-current="step"]{background:var(--text);color:var(--bg)}
+.pasos button[aria-current="step"] .n{background:var(--bg);color:var(--text)}
+.pasos button:disabled{opacity:.4;cursor:default}
+.pie-paso{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px}
+.pie-paso .der-pie{display:flex;gap:8px;flex-wrap:wrap}
+body.asistente .hoja{display:block;max-width:880px;margin:0 auto}
+body.asistente .hoja>.panel{width:100%;margin-bottom:18px}
+body.asistente #hoja [data-paso]:not(.activo){display:none!important}
+
 /* ——— Responsive ——— */
 @media (max-width:980px){.p4,.p6,.p8{grid-column:span 12}}
 @media (max-width:860px){
@@ -170,7 +201,8 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
 }
 @media (max-width:640px){
   .cars{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .barra .titulo{display:none}
+  .barra .titulo,.barra .sep{display:none}
+  .barra .der{gap:6px}
   .monedas{grid-template-columns:repeat(3,minmax(0,1fr))}
   .buscador{grid-template-columns:minmax(0,1fr) auto}
   .buscador .btn{grid-column:1/-1}
@@ -192,90 +224,125 @@ textarea{resize:vertical;min-height:110px;line-height:1.5}
   <div class="wrap">
     <a href="index.html"><strong>Compendio</strong></a>
     <span class="sep">›</span>
-    <span class="titulo">Fichas de personaje</span>
+    <a class="titulo" href="#/">Personajes</a>
     <div class="der">
-      <button class="btn" id="imprimir" type="button">Imprimir</button>
-      <button class="tema" id="tema" type="button"></button>
+      <button class="btn no-print" id="imprimir" type="button">Imprimir</button>
+      <button class="tema no-print" id="tema" type="button"></button>
     </div>
   </div>
 </nav>
+<p class="aviso-flot no-print" id="aviso-guardado"></p>
 
-<div class="wrap app">
-  <aside class="lista" aria-label="Personajes">
-    <h2>Personajes</h2>
-    <div id="pjs" style="display:contents"></div>
-    <div class="acciones">
-      <button class="btn prim" type="button" data-a="nuevo">+ Nuevo</button>
-      <button class="btn" type="button" data-a="duplicar">Duplicar</button>
-      <button class="btn" type="button" data-a="exportar">Exportar</button>
-      <button class="btn" type="button" data-a="importar">Importar</button>
-      <button class="btn peligro" type="button" data-a="borrar">Borrar</button>
-      <input type="file" id="archivo" accept="application/json,.json" hidden>
+<div class="wrap">
+  <section id="v-lista" hidden>
+    <header class="lista-cab">
+      <div>
+        <p class="eyebrow">Compendio · Personajes</p>
+        <h1>Personajes</h1>
+      </div>
+      <div class="acc-lista">
+        <button class="btn prim" type="button" data-acc="crear">+ Crear personaje</button>
+        <button class="btn" type="button" data-acc="importar">Importar</button>
+        <button class="btn" type="button" data-acc="exportar">Exportar</button>
+      </div>
+    </header>
+    <div class="rejilla-pj" id="rejilla-pj"></div>
+    <input type="file" id="archivo" accept="application/json,.json" hidden>
+  </section>
+
+  <section id="v-ficha" hidden>
+    <div class="barra-hoja no-print" id="barra-hoja">
+      <button class="btn" type="button" data-acc="volver">← Personajes</button>
+      <button class="btn" type="button" data-acc="editar">Editar con el asistente</button>
     </div>
-    <p class="nota" id="aviso-guardado"></p>
-  </aside>
+    <nav class="pasos no-print" id="pasos" aria-label="Pasos de la ficha"></nav>
 
-  <main class="hoja" id="hoja">
-    <section class="panel" id="p-id">
-      <div class="cabecera">
-        <input class="nombre" id="f-nombre" data-k="nombre" placeholder="Nombre del personaje" aria-label="Nombre del personaje">
-        <span class="resumen" id="resumen"></span>
-      </div>
-      <div class="campos" style="margin-top:14px">
-        <label class="campo">Clase<select id="f-clase" data-k="clase" data-r="1"></select></label>
-        <label class="campo">Subclase<span id="c-subclase" style="display:contents"></span></label>
-        <label class="campo">Nivel<select id="f-nivel" data-k="nivel" data-r="1"></select></label>
-        <label class="campo">Raza<select id="f-raza" data-k="raza" data-r="1"></select></label>
-        <label class="campo" id="l-subraza">Subraza<select id="f-subraza" data-k="subraza" data-r="1"></select></label>
-        <label class="campo">Trasfondo<input data-k="trasfondo"></label>
-        <label class="campo">Alineamiento<input data-k="alineamiento" list="alineamientos"></label>
-        <label class="campo">Jugador<input data-k="jugador"></label>
-      </div>
-      <datalist id="alineamientos"><option>Legal bueno</option><option>Neutral bueno</option><option>Caótico bueno</option><option>Legal neutral</option><option>Neutral</option><option>Caótico neutral</option><option>Legal malvado</option><option>Neutral malvado</option><option>Caótico malvado</option></datalist>
-      <p class="nota" id="nota-clase"></p>
-    </section>
-
-    <section class="panel" id="p-car" aria-labelledby="h-car">
-      <h2 id="h-car">Características</h2>
-      <div class="metodos no-print" id="metodos" role="group" aria-label="Método"></div>
-      <div id="c-car"></div>
-    </section>
-
-    <section class="panel p4" id="p-combate"><h2>Combate</h2><div id="c-combate"></div></section>
-    <section class="panel p4" id="p-sal"><h2>Salvaciones</h2><div id="c-sal"></div></section>
-    <section class="panel p4" id="p-hab"><h2>Habilidades</h2><div id="c-hab"></div></section>
-
-    <section class="panel" id="p-rasgos"><h2>Rasgos</h2><div id="c-rasgos"></div></section>
-
-    <section class="panel" id="p-conj" hidden>
-      <h2>Conjuros</h2>
-      <div id="c-conj"></div>
-      <div class="no-print" id="c-buscar">
-        <h3>Añadir conjuros</h3>
-        <div class="buscador">
-          <input class="entrada" id="q-conj" type="search" placeholder="Buscar por nombre (español o inglés) o escuela" aria-label="Buscar conjuro">
-          <select class="entrada" id="q-lista" aria-label="Lista de conjuros"></select>
-          <button class="btn" id="conj-propio" type="button">+ Conjuro propio</button>
+    <main class="hoja" id="hoja">
+      <section class="panel" id="p-id">
+        <div class="cabecera">
+          <input class="nombre" id="f-nombre" data-k="nombre" placeholder="Nombre del personaje" aria-label="Nombre del personaje">
+          <span class="resumen" id="resumen"></span>
         </div>
-        <div class="resultados" id="resultados"></div>
-      </div>
-    </section>
+      </section>
 
-    <section class="panel p6"><h2>Equipo</h2>
-      <div class="monedas">
-        <label class="campo">pc<input type="number" min="0" data-k="mon.pc"></label>
-        <label class="campo">pp<input type="number" min="0" data-k="mon.pp"></label>
-        <label class="campo">pe<input type="number" min="0" data-k="mon.pe"></label>
-        <label class="campo">po<input type="number" min="0" data-k="mon.po"></label>
-        <label class="campo">ppt<input type="number" min="0" data-k="mon.ppt"></label>
+      <section class="panel p6" data-paso="1" id="p-raza">
+        <h2>Raza</h2>
+        <div class="campos">
+          <label class="campo">Raza<select id="f-raza" data-k="raza" data-r="1"></select></label>
+          <label class="campo" id="l-subraza">Subraza<select id="f-subraza" data-k="subraza" data-r="1"></select></label>
+        </div>
+        <p class="nota">Sus rasgos aparecen en el paso 7. Las mejoras de característica que elijas están en el paso 3.</p>
+      </section>
+
+      <section class="panel p6" data-paso="2" id="p-clase">
+        <h2>Clase</h2>
+        <div class="campos">
+          <label class="campo">Clase<select id="f-clase" data-k="clase" data-r="1"></select></label>
+          <label class="campo">Subclase<span id="c-subclase" style="display:contents"></span></label>
+          <label class="campo">Nivel<select id="f-nivel" data-k="nivel" data-r="1"></select></label>
+        </div>
+        <p class="nota" id="nota-clase"></p>
+      </section>
+
+      <section class="panel" data-paso="3" id="p-car" aria-labelledby="h-car">
+        <h2 id="h-car">Características</h2>
+        <div class="metodos no-print" id="metodos" role="group" aria-label="Método"></div>
+        <div id="c-car"></div>
+      </section>
+      <section class="panel p4" data-paso="3" id="p-combate"><h2>Combate</h2><div id="c-combate"></div></section>
+
+      <section class="panel p4" data-paso="4" id="p-sal"><h2>Salvaciones</h2><div id="c-sal"></div></section>
+      <section class="panel p4" data-paso="4" id="p-hab"><h2>Habilidades</h2><div id="c-hab"></div></section>
+
+      <section class="panel" data-paso="5" id="p-conj" hidden>
+        <h2>Conjuros</h2>
+        <div id="c-conj"></div>
+        <div class="no-print" id="c-buscar">
+          <h3>Añadir conjuros</h3>
+          <div class="buscador">
+            <input class="entrada" id="q-conj" type="search" placeholder="Buscar por nombre (español o inglés) o escuela" aria-label="Buscar conjuro">
+            <select class="entrada" id="q-lista" aria-label="Lista de conjuros"></select>
+            <button class="btn" id="conj-propio" type="button">+ Conjuro propio</button>
+          </div>
+          <div class="resultados" id="resultados"></div>
+        </div>
+      </section>
+
+      <section class="panel p6" data-paso="6" id="p-det">
+        <h2>Detalles</h2>
+        <div class="campos">
+          <label class="campo">Jugador<input data-k="jugador"></label>
+          <label class="campo">Trasfondo<input data-k="trasfondo"></label>
+          <label class="campo">Alineamiento<input data-k="alineamiento" list="alineamientos"></label>
+        </div>
+        <datalist id="alineamientos"><option>Legal bueno</option><option>Neutral bueno</option><option>Caótico bueno</option><option>Legal neutral</option><option>Neutral</option><option>Caótico neutral</option><option>Legal malvado</option><option>Neutral malvado</option><option>Caótico malvado</option></datalist>
+      </section>
+      <section class="panel p6" data-paso="6"><h2>Equipo</h2>
+        <div class="monedas">
+          <label class="campo">pc<input type="number" min="0" data-k="mon.pc"></label>
+          <label class="campo">pp<input type="number" min="0" data-k="mon.pp"></label>
+          <label class="campo">pe<input type="number" min="0" data-k="mon.pe"></label>
+          <label class="campo">po<input type="number" min="0" data-k="mon.po"></label>
+          <label class="campo">ppt<input type="number" min="0" data-k="mon.ppt"></label>
+        </div>
+        <label class="campo">Armas, armadura y objetos<textarea data-k="equipo" rows="8"></textarea></label>
+      </section>
+      <section class="panel p6" data-paso="6"><h2>Notas</h2>
+        <label class="campo">Rasgos de personalidad, ideales, vínculos y defectos<textarea data-k="personalidad" rows="4"></textarea></label>
+        <label class="campo" style="margin-top:12px">Historia y notas<textarea data-k="notas" rows="5"></textarea></label>
+      </section>
+
+      <section class="panel" data-paso="7" id="p-rasgos"><h2>Rasgos</h2><div id="c-rasgos"></div></section>
+    </main>
+
+    <div class="pie-paso no-print" id="pie-paso">
+      <button class="btn" type="button" data-acc="atras" id="btn-atras">← Personajes</button>
+      <div class="der-pie">
+        <button class="btn" type="button" data-acc="guardar">Guardar y salir</button>
+        <button class="btn prim" type="button" data-acc="siguiente" id="btn-sig">Siguiente →</button>
       </div>
-      <label class="campo">Armas, armadura y objetos<textarea data-k="equipo" rows="8"></textarea></label>
-    </section>
-    <section class="panel p6"><h2>Notas</h2>
-      <label class="campo">Rasgos de personalidad, ideales, vínculos y defectos<textarea data-k="personalidad" rows="4"></textarea></label>
-      <label class="campo" style="margin-top:12px">Historia y notas<textarea data-k="notas" rows="5"></textarea></label>
-    </section>
-  </main>
+    </div>
+  </section>
 </div>
 
 <script src="datos.js"></script>
@@ -427,9 +494,14 @@ function magiaOficial(m,nv){
 let datos={lista:[],activa:null},avisoGuardado='';
 try{const g=JSON.parse(localStorage.getItem(CLAVE)||'null');if(g&&Array.isArray(g.lista))datos=g;}
 catch(e){avisoGuardado='No se pudo leer lo guardado en este navegador.';}
-function guardar(){
+function persistir(){
   try{localStorage.setItem(CLAVE,JSON.stringify(datos));$('aviso-guardado').textContent='';}
   catch(e){$('aviso-guardado').textContent='No se puede guardar en este navegador: exporta la ficha para no perderla.';}
+}
+/* Un personaje del asistente entra en la lista en cuanto se cambia algo de él */
+function guardar(){
+  if(F&&F===borrador&&!datos.lista.some(x=>x.id===F.id))datos.lista.push(F);
+  persistir();
 }
 const nuevaId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function fichaNueva(clase){
@@ -437,7 +509,7 @@ function fichaNueva(clase){
     trasfondo:'',alineamiento:'',metodo:'compra',base:{FUE:8,DES:8,CON:8,INT:8,SAB:8,CAR:8},tiradas:[],elegidas:[],
     sal:null,hab:{},ca:'',pgMax:'',conjuros:[],usados:{},espManual:{},carConj:'',mon:{},equipo:'',personalidad:'',notas:''};
 }
-let F=null;
+let F=null,vista='lista',paso=1,borrador=null;
 const activa=()=>datos.lista.find(f=>f.id===datos.activa);
 
 /* ——— Datos derivados ——— */
@@ -464,10 +536,76 @@ function opcionesClase(){
 }
 
 function pintarLista(){
-  $('pjs').innerHTML=datos.lista.map(f=>{
-    const c=claseDe(f.clase);
-    return `<button class="pj" type="button" data-id="${f.id}" aria-current="${f.id===datos.activa}">${esc(f.nombre||'Sin nombre')}<small>${esc(c?c.n:'')} ${f.nivel}</small></button>`;
+  const cont=$('rejilla-pj');
+  if(!datos.lista.length){cont.innerHTML='<p class="vacio">Aún no hay personajes. Crea el primero con «+ Crear personaje».</p>';return;}
+  cont.innerHTML=datos.lista.map(f=>{
+    const c=claseDe(f.clase),r=RAZAS.find(x=>x.id===f.raza),v=c&&c.vol?volOf(c.vol):null;
+    return `<article class="tarj-pj"${v?` data-vol="${v.id}"`:''}>
+      <h3>${esc(f.nombre||'Sin nombre')}</h3>
+      <p>${esc([r&&r.n,c&&c.n,'nivel '+f.nivel].filter(Boolean).join(' · '))}</p>
+      <div class="acc">
+        <button class="btn prim" type="button" data-acc="abrir" data-id="${f.id}">Abrir</button>
+        <button class="btn" type="button" data-acc="duplicar" data-id="${f.id}">Duplicar</button>
+        <button class="btn peligro" type="button" data-acc="borrar" data-id="${f.id}">Borrar</button>
+      </div>
+    </article>`;
   }).join('');
+}
+
+/* ——— Vistas: lista, asistente paso a paso y ficha ——— */
+const PASOS=['Raza','Clase','Características','Habilidades','Conjuros','Detalles','Resumen'];
+function pasoValido(n){return n!==5||!$('p-conj').hidden;}
+function siguientePaso(p,dir){let n=p+dir;while(n>=1&&n<=7&&!pasoValido(n))n+=dir;return n;}
+function ir(h){if(location.hash===h)ruta();else location.hash=h;}
+function pintarPasos(){
+  const enFicha=vista==='hoja';
+  $('pasos').innerHTML=PASOS.map((nombre,i)=>{
+    const k=i+1,na=k===5&&$('p-conj').hidden;
+    if(enFicha&&na)return '';
+    const hecho=!enFicha&&k<paso&&!na,actual=!enFicha&&k===paso;
+    return `<button type="button" data-s="${k}"${actual?' aria-current="step"':''}${hecho?' class="hecho"':''}${na&&!enFicha?' disabled title="Esta clase no lanza conjuros"':''}><span class="n">${hecho?'✓':k}</span>${nombre}</button>`;
+  }).join('');
+}
+function mostrar(){
+  $('v-lista').hidden=vista!=='lista';
+  $('v-ficha').hidden=vista==='lista';
+  $('barra-hoja').hidden=vista!=='hoja';
+  $('pie-paso').hidden=vista!=='asistente';
+  document.body.classList.toggle('asistente',vista==='asistente');
+  document.querySelectorAll('#hoja [data-paso]').forEach(el=>el.classList.toggle('activo',+el.dataset.paso===paso));
+  if(vista==='asistente'){
+    const ant=siguientePaso(paso,-1),sig=siguientePaso(paso,1);
+    $('btn-atras').textContent=ant<1?'← Personajes':'← '+PASOS[ant-1];
+    $('btn-sig').textContent=paso===7?'Ver ficha ✓':'Siguiente: '+PASOS[sig-1]+' →';
+  }
+  pintarPasos();
+  document.title=(vista==='lista'?'Personajes':((F&&F.nombre)||'Nuevo personaje')+' · Personajes');
+  window.scrollTo(0,0);
+}
+function ruta(){
+  const h=decodeURIComponent(location.hash);
+  let m;
+  if((m=h.match(/^#clase=(.+)$/))){
+    /* Enlace desde el compendio: personaje nuevo con esa clase, en el paso 2 */
+    const id=m[1].includes(':')?m[1]:'h:'+m[1];
+    if(claseDe(id)){borrador=fichaNueva(id);location.replace('#/nuevo/2');}
+    else location.replace('#/');
+    return;
+  }
+  if((m=h.match(/^#\/pj\/([^/]+)$/))){
+    if(!datos.lista.some(x=>x.id===m[1])){location.replace('#/');return;}
+    vista='hoja';abrir(m[1]);
+  }else if((m=h.match(/^#\/nuevo(?:\/(\d))?$/))){
+    if(!borrador)borrador=fichaNueva();
+    F=borrador;datos.activa=F.id;
+    vista='asistente';paso=Math.min(7,Math.max(1,+(m[1]||1)));
+    pintar();
+    if(!pasoValido(paso))paso=siguientePaso(paso,-1);
+  }else{
+    vista='lista';pintarLista();
+  }
+  if(vista!=='lista')pintar();
+  mostrar();
 }
 
 /* Rellena los campos fijos al cambiar de ficha */
@@ -491,7 +629,6 @@ function pintarIdentidad(){
     $('c-subclase').innerHTML=`<select data-k="subclase" data-r="1"><option value="">— ${esc(c.subTitulo)} (nivel ${c.subNivel}) —</option>${c.subs.map(s=>`<option>${esc(s)}</option>`).join('')}</select>`;
   }else $('c-subclase').innerHTML=`<input data-k="subclase" placeholder="Senda, escuela…">`;
   $('c-subclase').firstElementChild.value=F.subclase||'';
-  document.body.dataset.vol=c&&c.vol?c.vol:'';
   $('hoja').dataset.vol=c&&c.vol?c.vol:'';
   const {s}=raza();
   $('resumen').textContent=[s&&s.n!==(r&&r.n)?s.n:r&&r.n,c&&c.n,'nivel '+F.nivel].filter(Boolean).join(' · ');
@@ -673,14 +810,15 @@ function pintarResultados(){
 /* ——— Pintado completo ——— */
 function pintar(){
   pintarLista();pintarIdentidad();pintarMetodos();pintarCaracteristicas();
-  pintarCombate();pintarSalHab();pintarRasgos();pintarConjuros();
+  pintarCombate();pintarSalHab();pintarRasgos();pintarConjuros();pintarPasos();
 }
 function abrir(id){
   datos.activa=id;F=activa();
   /* Compatibilidad con fichas antiguas o importadas a medias */
   const base=fichaNueva();Object.keys(base).forEach(k=>{if(F[k]===undefined)F[k]=base[k];});
-  cargarCampos();pintar();guardar();
+  cargarCampos();pintar();
 }
+function cambio(){guardar();pintar();}
 function cambio(){guardar();pintar();}
 
 /* ——— Eventos ——— */
@@ -769,25 +907,48 @@ hoja.addEventListener('click',e=>{
   }
 });
 
-/* Lista de personajes y archivo */
-document.querySelector('.lista').addEventListener('click',e=>{
-  const pj=e.target.closest('.pj');if(pj){abrir(pj.dataset.id);return;}
-  const b=e.target.closest('button[data-a]');if(!b)return;
-  switch(b.dataset.a){
-    case 'nuevo':{const f=fichaNueva(F&&F.clase);datos.lista.push(f);abrir(f.id);$('f-nombre').focus();break;}
-    case 'duplicar':{const f=JSON.parse(JSON.stringify(F));f.id=nuevaId();f.nombre=(F.nombre||'Sin nombre')+' (copia)';datos.lista.push(f);abrir(f.id);break;}
+/* ——— Menú de pasos: en el asistente cambia de paso; en la ficha hace scroll ——— */
+$('pasos').onclick=e=>{
+  const b=e.target.closest('button[data-s]');if(!b||b.disabled)return;
+  const k=+b.dataset.s;
+  if(vista==='hoja'){
+    const el=document.querySelector(`#hoja [data-paso="${k}"]:not([hidden])`);
+    if(el)el.scrollIntoView({behavior:reducido?'auto':'smooth',block:'start'});
+  }else ir('#/nuevo/'+k);
+};
+function terminar(){guardar();ir('#/pj/'+F.id);}
+function exportar(){
+  const blob=new Blob([JSON.stringify({version:1,fichas:datos.lista},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='personajes-compendio.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+/* Botones de la lista, de la ficha y del asistente */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-acc]');if(!b)return;
+  const id=b.dataset.id;
+  switch(b.dataset.acc){
+    case 'crear':borrador=null;ir('#/nuevo/1');break;
+    case 'abrir':ir('#/pj/'+id);break;
+    case 'duplicar':{
+      const orig=datos.lista.find(x=>x.id===id);if(!orig)break;
+      const f=JSON.parse(JSON.stringify(orig));f.id=nuevaId();f.nombre=(orig.nombre||'Sin nombre')+' (copia)';
+      datos.lista.push(f);persistir();pintarLista();break;}
     case 'borrar':{
-      if(!confirm(`¿Borrar «${F.nombre||'Sin nombre'}»? No se puede deshacer (salvo que la hayas exportado).`))return;
-      datos.lista=datos.lista.filter(f=>f.id!==F.id);
-      if(!datos.lista.length)datos.lista.push(fichaNueva());
-      abrir(datos.lista[0].id);break;}
-    case 'exportar':{
-      const blob=new Blob([JSON.stringify({version:1,fichas:datos.lista},null,2)],{type:'application/json'});
-      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fichas-compendio.json';a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),1000);break;}
+      const f=datos.lista.find(x=>x.id===id);if(!f)break;
+      if(!confirm(`¿Borrar «${f.nombre||'Sin nombre'}»? No se puede deshacer (salvo que la hayas exportado).`))break;
+      datos.lista=datos.lista.filter(x=>x.id!==id);
+      if(borrador&&borrador.id===id)borrador=null;
+      persistir();pintarLista();break;}
+    case 'exportar':exportar();break;
     case 'importar':$('archivo').click();break;
+    case 'volver':ir('#/');break;
+    case 'editar':borrador=F;ir('#/nuevo/1');break;
+    case 'atras':{const ant=siguientePaso(paso,-1);ir(ant<1?'#/':'#/nuevo/'+ant);break;}
+    case 'siguiente':{if(paso===7)terminar();else ir('#/nuevo/'+siguientePaso(paso,1));break;}
+    case 'guardar':guardar();ir('#/');break;
   }
 });
+
 $('archivo').addEventListener('change',async e=>{
   const file=e.target.files[0];if(!file)return;
   try{
@@ -795,7 +956,7 @@ $('archivo').addEventListener('change',async e=>{
     const nuevas=(Array.isArray(j)?j:j.fichas||[j]).filter(f=>f&&typeof f==='object'&&f.clase);
     if(!nuevas.length)throw new Error('sin fichas');
     nuevas.forEach(f=>{if(datos.lista.some(x=>x.id===f.id))f.id=nuevaId();datos.lista.push(f);});
-    abrir(nuevas[0].id);
+    persistir();pintarLista();ir('#/');
     $('aviso-guardado').textContent=`Importadas ${nuevas.length} ficha(s).`;
   }catch(err){$('aviso-guardado').textContent='Ese archivo no es una exportación de fichas válida.';}
   e.target.value='';
@@ -818,15 +979,8 @@ mqOscuro.addEventListener('change',()=>{if(!document.documentElement.dataset.the
 
 /* ——— Arranque: #clase=El_Pistolero (o o:mago) crea una ficha nueva con esa clase ——— */
 opcionesClase();
-const pedida=decodeURIComponent((location.hash.match(/clase=([^&]+)/)||[])[1]||'');
-if(pedida){
-  const id=pedida.includes(':')?pedida:'h:'+pedida;
-  if(claseDe(id)){const f=fichaNueva(id);datos.lista.push(f);datos.activa=f.id;}
-  history.replaceState(null,'',location.pathname);
-}
-if(!datos.lista.length){const f=fichaNueva();datos.lista.push(f);datos.activa=f.id;}
-if(!activa())datos.activa=datos.lista[0].id;
-abrir(datos.activa);
+window.addEventListener('hashchange',ruta);
+ruta();
 if(avisoGuardado)$('aviso-guardado').textContent=avisoGuardado;
 </script>
 </body>
