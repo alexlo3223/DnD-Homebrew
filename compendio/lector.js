@@ -99,31 +99,66 @@ window.Lector=(function(){
     });
   }
 
-  /* Línea de progresión 1–20 a partir de la tabla de niveles */
-  function progresion(cuerpo){
-    const tabla=cuerpo.querySelector('table');
-    if(!tabla)return;
-    const filas=[...tabla.querySelectorAll('tr')];
-    if(filas.length<6)return;
-    const cab=[...filas[0].children].map(c=>textoDe(c).toLowerCase());
-    const colNv=cab.findIndex(t=>/^nv|^nivel/.test(t));
-    if(colNv<0)return;
-    const colRas=cab.findIndex(t=>/caracter|rasgo|habilidad/.test(t));
-    const colTxt=colRas>=0?colRas:cab.length-1;
-    const niveles=[];
-    filas.slice(1).forEach(tr=>{
-      const celdas=[...tr.children];
-      const nv=parseInt(textoDe(celdas[colNv]||{textContent:''}),10);
-      if(!nv)return;
-      const txt=textoDe(celdas[colTxt]||{textContent:''});
-      niveles.push({nv,txt,hit:txt!==''&&txt!=='—'&&txt!=='-'});
+  /* Datos de clase sueltos en bloques ("Dado de golpe", "d8", "Salvaciones", …) → lista rótulo/valor */
+  const ROTULO=/^(Dado de golpe|Puntos de golpe(?: (?:a |al |por )?nivel(?: 1| superior| adicional)?)?|PG(?: (?:a |al |por )?nivel(?: 1| superior)?)?|CA|VEL|ATQ|Nº|Caract(?:erística|\.)\s+(?:principal|clave)|Característica de conjuración|Conjuración|Aptitud(?: de lanzamiento| primaria)?|Habilidad(?:es)? primarias?|Stat principal|(?:Tiradas de )?(?:salvación|sal\.)|Salvaciones|Armaduras?|Armas|Herramientas|Habilidades(?: \([^)]*\))?|Competencias(?: clave)?|Subclase|Arquetipo|Recurso|Rol en grupo|Tipo|Equipo inicial|Nivel \d+)(?=\s|:|$)\s*:?\s*/i;
+  const esBloque=n=>n.classList.contains('bloque');
+  const esRotulo=t=>t.length<40&&t.replace(ROTULO,'')==='';
+  /* Un bloque con rótulo y valor juntos: "<b>Rótulo:</b> valor", "Rótulo <b>valor</b>" o "Rótulo valor" */
+  function parDe(b){
+    const t=textoDe(b);
+    if(t.length>200)return null;
+    const neg=b.querySelector('b,strong');
+    if(neg){
+      const n=textoDe(neg);
+      if(t.startsWith(n)&&n.length<40&&t.length>n.length)return [n.replace(/:$/,''),t.slice(n.length).trim()];
+      if(t.endsWith(n)&&t.length>n.length)return [t.slice(0,-n.length).trim().replace(/:$/,''),n];
+    }
+    const m=t.match(ROTULO);
+    if(m&&t.length>m[0].length)return [m[0].trim().replace(/:$/,''),t.slice(m[0].length)];
+    return null;
+  }
+  const lista=pares=>`<dl class="ficha-datos">${pares.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v.replace(/^[—:–-]\s*/,''))}</dd></div>`).join('')}</dl>`;
+  function sustituir(nodos,html){nodos[0].insertAdjacentHTML('beforebegin',html);nodos.forEach(n=>n.remove());}
+  function convertirTanda(run){
+    /* 1. Tramos de 3+ bloques "rótulo valor"; lo que no encaja (p. ej. el nombre de un shikigami) los separa */
+    let hecho=false,tramo=[];
+    const cerrar=()=>{if(tramo.length>=3){sustituir(tramo.map(x=>x.b),lista(tramo.map(x=>x.par)));hecho=true;}tramo=[];};
+    run.forEach(b=>{const par=parDe(b);if(par)tramo.push({b,par});else cerrar();});
+    cerrar();
+    if(hecho)return;
+    /* 2. Rótulo y valor en bloques alternos, desde el primer rótulo */
+    const s=run.findIndex(b=>esRotulo(textoDe(b)));
+    if(s>=0){
+      const pares=[];let k=s;
+      for(;k+1<run.length&&esRotulo(textoDe(run[k]));k+=2)pares.push([textoDe(run[k]),textoDe(run[k+1])]);
+      if(pares.length>=2){sustituir(run.slice(s,k),lista(pares));return;}
+    }
+    /* 3. "Nombre — descripción" → lista */
+    if(run.length>=3&&run.every(b=>/^[^—.]{2,40} — /.test(textoDe(b))))
+      sustituir(run,`<ul>${run.map(b=>{const t=textoDe(b),k=t.indexOf(' — ');return `<li><strong>${esc(t.slice(0,k))}</strong> — ${esc(t.slice(k+3))}</li>`;}).join('')}</ul>`);
+    /* 4. Objetos de equipo inicial, uno por bloque → lista */
+    else if(equipo&&run.length>=2)
+      sustituir(run,`<ul>${run.map(b=>`<li>${(b.firstElementChild||b).innerHTML}</li>`).join('')}</ul>`);
+  }
+  let equipo=false;
+  function fichaDatos(cuerpo){
+    equipo=!!cuerpo.closest('.sec-equipo');
+    const hijos=[...cuerpo.children];
+    for(let i=0;i<hijos.length;){
+      if(!esBloque(hijos[i])){i++;continue;}
+      let j=i;while(j<hijos.length&&esBloque(hijos[j]))j++;
+      convertirTanda(hijos.slice(i,j));
+      i=j;
+    }
+    /* Bloques sueltos que hacen de título: "Nivel 3 — Rito de Expulsión", o un nombre corto seguido de su descripción */
+    [...cuerpo.children].filter(esBloque).forEach(b=>{
+      const t=textoDe(b),sig=b.nextElementSibling;
+      if(/^Nivel \d+\s*[—–-]\s*\S/.test(t))b.outerHTML=`<h4>${esc(t)}</h4>`;
+      else if(t.length<45&&!/[.:]$/.test(t)&&sig&&esBloque(sig)&&textoDe(sig).length>100){
+        b.outerHTML=`<h3>${esc(t)}</h3>`;
+        sig.outerHTML=`<p>${esc(textoDe(sig))}</p>`;
+      }
     });
-    if(niveles.length<5)return;
-    const html=`<div class="prog-wrap" aria-label="Progresión por nivel">
-      <ol class="prog">${niveles.map(x=>`<li class="${x.hit?'hit':''}" title="${esc(x.txt)}">${x.nv}</li>`).join('')}</ol>
-      <ul class="prog-hitos">${niveles.filter(x=>x.hit).map(x=>`<li><b>Nv ${x.nv}</b> ${esc(x.txt)}</li>`).join('')}</ul>
-    </div>`;
-    tabla.closest('.tabla-wrap').insertAdjacentHTML('beforebegin',html);
   }
 
   /* Frase de resumen para la cabecera plegable */
@@ -136,18 +171,24 @@ window.Lector=(function(){
 
   /* Aplica todo a la vista ya renderizada de una clase */
   function enriquecer(c,contenedor){
-    const ficha=fichaRapida(c);
-    const barra=contenedor.querySelector('.herr');
-    if(ficha&&barra)barra.insertAdjacentHTML('afterend',ficha);
-    else if(ficha)contenedor.insertAdjacentHTML('afterbegin',ficha);
     contenedor.querySelectorAll('details.seccion').forEach(det=>{
       const cuerpo=det.querySelector('.cuerpo');
       const tipo=det.className.match(/sec-(\w+)/)[1];
       const res=det.querySelector('.resumen');
       if(res)res.textContent=resumenDe(cuerpo);
-      if(tipo==='tabla')progresion(cuerpo);
+      fichaDatos(cuerpo);
       if(tipo==='rasgos'||tipo==='subclases')agruparRasgos(cuerpo);
     });
+    /* Si la clase ya trae su ficha (dado de golpe, salvaciones…), no se repite: solo se le añade el recurso */
+    const propia=[...contenedor.querySelectorAll('.ficha-datos')].find(dl=>/dado de golpe/i.test(dl.textContent));
+    if(propia){
+      if(c.rec&&![...propia.querySelectorAll('dt')].some(dt=>/^recurso/i.test(dt.textContent)))propia.insertAdjacentHTML('beforeend',`<div><dt>Recurso</dt><dd>${esc(decodificar(c.rec))}</dd></div>`);
+      return;
+    }
+    const ficha=fichaRapida(c);
+    const barra=contenedor.querySelector('.herr');
+    if(ficha&&barra)barra.insertAdjacentHTML('afterend',ficha);
+    else if(ficha)contenedor.insertAdjacentHTML('afterbegin',ficha);
   }
 
   return {enriquecer,ROL_ICONO};
