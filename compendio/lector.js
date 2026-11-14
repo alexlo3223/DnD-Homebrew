@@ -179,6 +179,8 @@ window.Lector=(function(){
       fichaDatos(cuerpo);
       if(tipo==='rasgos'||tipo==='subclases')agruparRasgos(cuerpo);
     });
+    /* Las <dl> propias (Bloodborne) ya son pares rótulo/valor: mismo estilo que la ficha */
+    contenedor.querySelectorAll('.cuerpo dl').forEach(dl=>dl.classList.add('ficha-datos'));
     /* Si la clase ya trae su ficha (dado de golpe, salvaciones…), no se repite: solo se le añade el recurso */
     const propia=[...contenedor.querySelectorAll('.ficha-datos')].find(dl=>/dado de golpe/i.test(dl.textContent));
     if(propia){
