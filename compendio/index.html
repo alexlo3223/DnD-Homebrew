@@ -162,6 +162,117 @@ a{text-decoration:none}
 .pie a[aria-disabled="true"]{color:var(--sub);pointer-events:none}
 .pie .ficha{color:var(--acento);font-weight:600}
 
+/* ——— Iconos ——— */
+.ico{width:1.1em;height:1.1em;vertical-align:-.18em;flex:none}
+
+/* ——— Menú lateral ——— */
+.barra .wrap{max-width:none}
+.menu-btn{flex:none;width:34px;height:34px;border:0;border-radius:10px;background:var(--chip);cursor:pointer;display:grid;place-items:center;font-size:18px}
+.secciones{display:flex;gap:4px;min-width:0}
+.secciones a{padding:6px 11px;border-radius:999px;font-size:14px;color:var(--sub);white-space:nowrap}
+.secciones a:hover{color:var(--text);background:var(--chip)}
+.secciones a[aria-current="true"]{color:var(--text);background:var(--chip);font-weight:600}
+.menu{position:fixed;top:53px;bottom:0;left:0;z-index:10;width:288px;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-right:1px solid var(--line);padding:14px 12px 48px;transition:transform .3s cubic-bezier(.2,.7,.2,1);font-size:14px}
+.m-buscar{width:100%;height:36px;border:0;border-radius:10px;background:var(--chip);padding:0 12px;margin-bottom:12px;outline:none}
+.menu a{display:block}
+/* Nivel 1: Lobby, apartados y Personajes, alineados con su icono */
+.menu .m-raiz,.m-sec>summary{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-weight:600;font-size:15px;color:var(--text)}
+.m-raiz .ico,.m-sec>summary .ico{width:18px;height:18px;color:var(--sub)}
+.m-raiz:hover,.m-sec>summary:hover{background:var(--chip)}
+.m-raiz[aria-current="true"]{background:var(--chip)}
+.m-sec{margin:2px 0}
+.menu details>summary{list-style:none;cursor:pointer}
+.menu details>summary::-webkit-details-marker{display:none}
+.menu details>summary>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu details>summary small{color:var(--sub);font-size:12px;font-weight:500;font-variant-numeric:tabular-nums}
+.menu details>summary::after{content:"";flex:none;width:6px;height:6px;margin:0 4px 0 2px;border-right:1.5px solid var(--sub);border-bottom:1.5px solid var(--sub);transform:rotate(-45deg);transition:transform .2s}
+.menu details[open]>summary::after{transform:rotate(45deg)}
+/* Nivel 2 y 3: una línea guía por nivel y la misma sangría siempre */
+.m-hijos{margin:2px 0 8px 19px;padding-left:10px;border-left:1px solid var(--line)}
+.m-todo{padding:6px 8px;border-radius:8px;font-size:13px;color:var(--blue)}
+.m-todo:hover{background:var(--chip)}
+.m-vol>summary{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;color:var(--text)}
+.m-vol>summary:hover{background:var(--chip)}
+.m-vol>summary i{width:8px;height:8px;border-radius:50%;flex:none}
+.m-vol>ul{margin:2px 0 6px 12px;padding-left:10px;border-left:1px solid var(--line)}
+.m-hijos>ul{margin:2px 0 6px;padding:0}
+.menu ul{list-style:none}
+.menu li{display:flex;align-items:center;gap:2px}
+.menu li a{flex:1;min-width:0;padding:5px 8px;border-radius:8px;color:var(--sub);line-height:1.3;cursor:grab;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none}
+.menu li a:hover{background:var(--chip);color:var(--text)}
+.menu li a[aria-current="true"]{color:var(--blue);font-weight:600}
+.m-fijar{flex:none;width:26px;height:26px;border:0;border-radius:8px;background:none;color:var(--sub);cursor:pointer;display:grid;place-items:center;opacity:.55}
+.menu li:hover .m-fijar,.m-fijar:focus-visible,.m-fijar[aria-pressed="true"]{opacity:1}
+.m-fijar:hover{background:var(--chip);color:var(--text)}
+.m-fijar[aria-pressed="true"]{color:var(--blue)}
+.velo{position:fixed;inset:53px 0 0 0;z-index:9;background:rgba(0,0,0,.35)}
+@media (min-width:981px){
+  .principal{margin-left:288px;transition:margin-left .3s cubic-bezier(.2,.7,.2,1)}
+  body.menu-cerrado .principal{margin-left:0}
+  body.menu-cerrado .menu{transform:translateX(-100%)}
+  .velo{display:none}
+}
+@media (max-width:980px){
+  .menu{transform:translateX(-100%);width:min(300px,86vw);box-shadow:var(--shadow)}
+  body.menu-abierto .menu{transform:none}
+}
+@media (max-width:1180px){.secciones{display:none}}
+
+/* ——— Lobby ——— */
+.accesos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(190px,100%),1fr));gap:14px;padding-bottom:40px}
+.acceso{position:relative;display:flex;flex-direction:column;gap:4px;border-radius:18px;background:var(--card);box-shadow:var(--shadow);padding:18px 20px;transition:transform .25s}
+.acceso:hover{transform:translateY(-2px)}
+.acceso-ico{position:absolute;right:18px;top:18px;color:var(--blue)}
+.acceso-ico .ico{width:22px;height:22px}
+.acceso b{font-size:30px;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.acceso span{font-weight:600}
+.acceso small{color:var(--sub);font-size:13px;line-height:1.35}
+.mesa-zona{padding-bottom:64px}
+.mesa-cab{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px;padding-top:8px;border-top:2px solid var(--text)}
+.mesa-cab h2{margin:0;font-size:clamp(26px,3.6vw,36px);letter-spacing:-.02em}
+.mesa-cab span{color:var(--sub);font-size:14px}
+.mesa-cab button{margin-left:auto;border:0;border-radius:999px;background:var(--chip);padding:7px 14px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mesa{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:18px;align-items:start;min-height:240px;padding:16px;border-radius:24px;border:2px dashed var(--line);transition:border-color .2s,background .2s}
+body.arrastrando-algo .mesa{border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
+.mesa.recibe{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 7%,transparent)}
+.mesa-vacia{grid-column:1/-1;margin:0;padding:64px 16px;text-align:center;color:var(--sub)}
+.pin{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;border-radius:20px;background:var(--card);box-shadow:var(--shadow);padding:20px 22px;border-top:3px solid var(--acento);transition:box-shadow .2s,opacity .2s;cursor:grab}
+.pin.con-img{padding-top:0;border-top:0;overflow:hidden}
+.pin-img{display:block;width:calc(100% + 44px);margin:0 -22px 6px;height:150px;object-fit:cover;background:var(--chip)}
+.pin.abierto{grid-column:1/-1;cursor:default}
+.pin.abierto .pin-img{height:220px}
+.pin.arrastrando{opacity:.35}
+.pin.hueco-antes::before,.pin.hueco-despues::after{content:"";position:absolute;top:10px;bottom:10px;width:4px;border-radius:4px;background:var(--blue)}
+.pin.hueco-antes::before{left:-11px}
+.pin.hueco-despues::after{right:-11px}
+.pin header{display:flex;align-items:center;gap:8px}
+.asa{margin-left:auto;border:0;background:none;color:var(--sub);cursor:grab;padding:4px;border-radius:8px;touch-action:none;display:grid;place-items:center}
+.asa:hover{background:var(--chip);color:var(--text)}
+.pin h3{margin:0;font-family:var(--titulo);font-size:22px;line-height:1.15;letter-spacing:-.02em}
+.pin .meta{margin-top:0;padding-top:0}
+.pin-acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pin-acc a,.pin-acc button{border:0;border-radius:999px;background:var(--chip);padding:6px 12px;font-size:13px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.pin-acc a{color:var(--acento);font-weight:600}
+.pin-acc button:hover{background:var(--text);color:var(--bg)}
+.pin-cuerpo{display:grid;gap:8px;margin-top:6px;cursor:auto}
+.pin-cuerpo>details{border-radius:14px;background:var(--bg);padding:10px 16px}
+.pin-cuerpo>details>summary{cursor:pointer;font-weight:600;padding:2px 0}
+.anim .pin-cuerpo .seccion,.pin-cuerpo .seccion{opacity:1;transform:none;padding:8px 0 4px}
+.pin-cuerpo .seccion h3{font-size:18px;margin:18px 0 6px}
+.pin-cuerpo .seccion p,.pin-cuerpo .seccion li{font-size:15px}
+.fantasma{position:fixed;left:0;top:0;z-index:50;pointer-events:none;display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;background:var(--text);color:var(--bg);font-size:14px;font-weight:600;box-shadow:0 12px 32px rgba(0,0,0,.3);white-space:nowrap}
+body.arrastrando-algo,body.arrastrando-algo *{user-select:none;cursor:grabbing!important}
+
+/* ——— Imágenes de los libros (solo si existen en img/) ——— */
+.hero-arte.con-img{width:clamp(220px,32vw,420px);aspect-ratio:4/3}
+.hero-arte .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:24px;box-shadow:0 20px 50px color-mix(in srgb,var(--acento) 25%,rgba(0,0,0,.25))}
+.tarjeta-clase.con-img{padding-top:0}
+.tarjeta-clase .tc-img{display:block;width:calc(100% + 52px);margin:0 -26px 6px;height:150px;object-fit:cover;background:var(--chip)}
+.lamina{margin:6px 0 26px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);background:var(--card)}
+.lamina img{display:block;width:100%;max-height:420px;object-fit:cover}
+.lamina figcaption{padding:8px 14px;font-size:13px;color:var(--sub)}
+.sub-img{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:14px;margin:4px 0 12px}
+
 /* ——— Responsive ——— */
 /* ——— Lectura por partes ——— */
 .herr{position:sticky;top:70px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 32px;padding:6px;border-radius:999px;background:var(--nav);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:var(--shadow);width:max-content;max-width:100%}
@@ -234,32 +345,60 @@ details.seccion[open] .resumen{display:none}
 <body>
 <nav class="barra">
   <div class="wrap">
+    <button class="menu-btn" id="menu-btn" type="button" aria-label="Mostrar u ocultar el menú" aria-controls="menu" aria-expanded="true"></button>
     <strong id="marca">Compendio</strong>
     <nav class="migas" id="migas" aria-label="Ruta" hidden></nav>
-    <input class="buscar" id="q" type="search" placeholder="Buscar clase, rol, lema o texto" aria-label="Buscar">
+    <nav class="secciones" id="secciones" aria-label="Apartados"></nav>
+    <input class="buscar" id="q" type="search" placeholder="Buscar clase, raza, objeto o texto" aria-label="Buscar">
     <a class="crear" href="ficha.html">Personajes</a>
     <button class="tema" id="tema" type="button"></button>
   </div>
 </nav>
 <div class="progreso" id="progreso" hidden></div>
 
-<section id="inicio">
+<aside class="menu" id="menu" aria-label="Menú del compendio">
+  <input class="m-buscar" id="m-q" type="search" placeholder="Filtrar el menú" aria-label="Filtrar el menú">
+  <div id="m-lista"></div>
+</aside>
+<div class="velo" id="velo" hidden></div>
+
+<div class="principal">
+<section id="lobby" hidden>
   <header class="portada wrap">
-    <p class="eyebrow">Homebrew D&amp;D 5e · <span id="total"></span> clases</p>
-    <h1>Clases.<br><span>Siete mundos, un compendio.</span></h1>
-    <p class="lead-inicio">Cada ambientación tiene su propio tono. Filtra por rol o por mundo y lee cada clase completa, sin salir de la página.</p>
+    <p class="eyebrow">Compendio D&amp;D 5e</p>
+    <h1>Lobby.<br><span>Tu mesa de juego.</span></h1>
+    <p class="lead-inicio">Arrastra clases, razas, objetos o ambientaciones desde el menú de la izquierda y colócalos en la mesa para tenerlos a la vista.</p>
+  </header>
+  <nav class="wrap accesos" id="accesos" aria-label="Apartados del compendio"></nav>
+  <section class="wrap mesa-zona" aria-labelledby="mesa-tit">
+    <div class="mesa-cab">
+      <h2 id="mesa-tit">La mesa</h2>
+      <span id="mesa-n"></span>
+      <button type="button" id="vaciar">Vaciar mesa</button>
+    </div>
+    <div class="mesa" id="mesa"></div>
+  </section>
+</section>
+
+<section id="inicio" hidden>
+  <header class="portada wrap">
+    <p class="eyebrow" id="p-eyebrow"></p>
+    <h1 id="p-titulo"></h1>
+    <p class="lead-inicio" id="p-lead"></p>
   </header>
   <section class="wrap filtros" aria-label="Filtros">
     <div class="seg pestanas" id="pestanas" role="tablist" aria-label="Qué mostrar">
       <button type="button" role="tab" data-p="clases" aria-selected="true" aria-pressed="true">Clases</button>
       <button type="button" role="tab" data-p="razas" aria-selected="false" aria-pressed="false">Razas</button>
+      <button type="button" role="tab" data-p="objetos" aria-selected="false" aria-pressed="false">Objetos</button>
+      <button type="button" role="tab" data-p="ambientaciones" aria-selected="false" aria-pressed="false">Ambientaciones</button>
     </div>
     <div class="seg" id="roles"></div>
     <div class="vols" id="vols"></div>
     <p class="recuento" id="recuento"></p>
   </section>
   <main class="wrap" id="rejilla"></main>
-  <p class="vacio wrap" id="vacio" hidden>Ninguna clase coincide con la búsqueda.</p>
+  <p class="vacio wrap" id="vacio" hidden>Nada coincide con la búsqueda.</p>
 </section>
 
 <article id="clase" hidden>
@@ -277,10 +416,31 @@ details.seccion[open] .resumen{display:none}
     <div class="pie" id="c-pie"></div>
   </div>
 </article>
+</div>
 
 <script src="datos.js"></script>
 <script src="oficial.js"></script>
+<script src="libros/base.js"></script>
+<script src="libros/phb2024.js"></script>
+<script src="libros/xanathar.js"></script>
+<script src="libros/tasha.js"></script>
+<script src="libros/volo.js"></script>
+<script src="libros/costa.js"></script>
+<script src="libros/eberron.js"></script>
+<script src="libros/spelljammer.js"></script>
+<script src="libros/taldorei.js"></script>
+<script src="libros/grimhollow.js"></script>
+<script src="libros/obojima.js"></script>
+<script src="libros/familias.js"></script>
+<script src="libros/mundos/faerun.js"></script>
+<script src="libros/mundos/khorvaire.js"></script>
+<script src="libros/mundos/espacio.js"></script>
+<script src="libros/mundos/taldorei.js"></script>
+<script src="libros/mundos/etharis.js"></script>
+<script src="libros/mundos/obojima.js"></script>
 <script src="manual.js"></script>
+<script src="iconos.js"></script>
+<script src="img/imagenes.js"></script>
 <script src="lector.js"></script>
 <script>
 const MAG=['Sin magia','Sobrenatural','Semilanzador','Lanzador'];
@@ -308,24 +468,43 @@ const FORMAS={
 const emblema=v=>`<svg class="emblema" viewBox="0 0 200 200" aria-hidden="true">${FORMAS[v.id]}</svg>`;
 
 /* ——— Inicio ——— */
-$('total').textContent=CLASES.filter(c=>!c.oficial&&!c.raza).length;
 $('roles').innerHTML=ROLES.map(r=>`<button data-rol="${r}" aria-pressed="${r==='Todos'}">${r}</button>`).join('');
 const COLOR={jjk:'#e0463a',castlevania:'#c2263a',rueda:'#c99a3a',cosmere:'#4f8fe8',eberron:'#b8891f',bloodborne:'#6b7a90',sueltas:'#b86f3f',manual:'#4d7c5a',razas:'#7a5fb0'};
-/* Pestañas: «Clases» (homebrew y Manual) y «Razas» (solo razas del Manual) */
+/* Pestañas: «Clases» (homebrew y oficiales), «Razas», «Objetos» y «Ambientaciones»; cada volumen dice en qué pestaña va (p) */
 let pestana='clases';
-const enPestana=c=>pestana==='razas'?!!c.raza:!c.raza;
-const volesDePestana=()=>VOL.filter(v=>pestana==='razas'?v.id==='razas':v.id!=='razas');
+const pestanaDe=c=>c.raza?'razas':c.obj?'objetos':c.amb?'ambientaciones':'clases';
+const enPestana=c=>pestanaDe(c)===pestana;
+const volesDePestana=()=>VOL.filter(v=>(v.p||'clases')===pestana);
+const NOMBRE_P={clases:'clases',razas:'razas',objetos:'libros con objetos',ambientaciones:'ambientaciones'};
 function pintarVols(){
   $('vols').innerHTML=[{id:'todos',nombre:'Todos'},...volesDePestana()].map(v=>`<button data-vol="${v.id}" aria-pressed="${v.id==='todos'}">${COLOR[v.id]?`<i style="background:${COLOR[v.id]}"></i>`:''}${esc(v.nombre)}</button>`).join('');
 }
 pintarVols();
 $('pestanas').onclick=e=>{
   const b=e.target.closest('button');if(!b||b.dataset.p===pestana)return;
-  pestana=b.dataset.p;vol='todos';rol='Todos';
-  [...$('pestanas').children].forEach(x=>{const on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-selected',on);});
-  $('roles').hidden=pestana==='razas';
-  marcar('roles','rol',rol);pintarVols();pintarInicio();
+  location.hash='#/seccion/'+b.dataset.p;
 };
+const APARTADOS=[
+  ['clases','Clases','espadas','Homebrew, del Manual y de los suplementos, con todas sus subclases.'],
+  ['razas','Razas','gente','Pueblos jugables de todos los libros.'],
+  ['objetos','Objetos','gema','Objetos mágicos, libro a libro.'],
+  ['ambientaciones','Ambientaciones','mapa','Mundos: historia, regiones, facciones y aventuras.']];
+const PORTADA={
+  clases:['Clases.','Todos los mundos, un compendio.','Filtra por rol o por mundo y lee cada clase completa, sin salir de la página.'],
+  razas:['Razas.','Pueblos de todos los libros.','Su origen, sus mejoras y sus rasgos, agrupados por libro.'],
+  objetos:['Objetos.','Tesoros de cada libro.','Rareza, sintonización y qué hace cada objeto mágico.'],
+  ambientaciones:['Ambientaciones.','Los mundos de juego.','Historia, regiones, facciones, religión y aventuras de cada mundo.']};
+function elegirPestana(p){
+  if(!PORTADA[p])p='clases';
+  if(p!==pestana){pestana=p;vol='todos';rol='Todos';}
+  [...$('pestanas').children].forEach(x=>{const on=x.dataset.p===p;x.setAttribute('aria-pressed',on);x.setAttribute('aria-selected',on);});
+  $('roles').hidden=p!=='clases';
+  const [t,sub,lead]=PORTADA[p];
+  $('p-eyebrow').textContent=`Compendio D&D 5e · ${CLASES.filter(enPestana).length} ${NOMBRE_P[p]}`;
+  $('p-titulo').innerHTML=`${esc(t)}<br><span>${esc(sub)}</span>`;
+  $('p-lead').textContent=lead;
+  marcar('roles','rol',rol);pintarVols();marcar('vols','vol',vol);
+}
 
 function marcar(contenedor,attr,valor){
   [...$(contenedor).children].forEach(b=>b.setAttribute('aria-pressed',b.dataset[attr]===valor));
@@ -336,16 +515,21 @@ function textoDe(c){
   return c.texto;
 }
 
+function metaDe(c){
+  return c.meta?esc(c.meta):`${Lector.ROL_ICONO[c.r]||''} ${esc(c.r)}${c.raza?` · tamaño ${esc(c.tam)}`:` · dado ${esc(c.d)}${MAG[c.m]!==c.r?' · '+MAG[c.m]:''}`}`;
+}
+
 function tarjeta(c,i){
   const v=volOf(c.v);
-  return `<a class="tarjeta-clase" data-vol="${v.id}" style="--i:${i}" href="#/clase/${esc(c.f)}">
-    <span class="mono" aria-hidden="true">${esc(inicial(c.n))}</span>
+  const img=imgDe(c.f);
+  return `<a class="tarjeta-clase${img?' con-img':''}" data-vol="${v.id}" style="--i:${i}" href="#/clase/${esc(c.f)}">
+    ${img?`<img class="tc-img" src="${esc(img)}" alt="" loading="lazy" onerror="this.remove()">`:`<span class="mono" aria-hidden="true">${esc(inicial(c.n))}</span>`}
     <span class="etiqueta">${esc(v.nombre)}</span>
     <h2>${esc(c.n)}</h2>
     <p class="lema">${esc(c.e)}</p>
     <p class="desc">${esc(c.g)}</p>
-    <span class="meta">${Lector.ROL_ICONO[c.r]||''} ${esc(c.r)}${c.raza?` · tamaño ${esc(c.tam)}`:` · dado ${esc(c.d)}${MAG[c.m]!==c.r?' · '+MAG[c.m]:''}`}</span>
-    <span class="abrir">Leer la clase →</span>
+    <span class="meta">${metaDe(c)}</span>
+    <span class="abrir">${pestanaDe(c)==='clases'?'Leer la clase':'Abrir'} →</span>
   </a>`;
 }
 
@@ -364,21 +548,229 @@ function pintarInicio(){
         return `<section class="grupo" data-vol="${v.id}" aria-labelledby="g-${v.id}">
           <header class="grupo-cab">
             <h2 id="g-${v.id}">${v.marca?v.marca+' · ':''}${esc(v.nombre)}</h2>
-            <span>${grupo.length} ${pestana==='razas'?'razas':'clases'}</span>
+            <span>${grupo.length} ${NOMBRE_P[pestana]}</span>
             <p>${esc(v.lema)}</p>
           </header>
           <div class="grid">${grupo.map(tarjeta).join('')}</div>
         </section>`;}).join('');
   $('vacio').hidden=lista.length>0;
-  $('recuento').textContent=`${lista.length} de ${CLASES.filter(enPestana).length} ${pestana==='razas'?'razas':'clases'}`;
+  $('recuento').textContent=`${lista.length} de ${CLASES.filter(enPestana).length} ${NOMBRE_P[pestana]}`;
 }
 
 $('roles').onclick=e=>{const b=e.target.closest('button');if(!b)return;rol=b.dataset.rol;marcar('roles','rol',rol);pintarInicio();};
 $('vols').onclick=e=>{const b=e.target.closest('button');if(!b)return;vol=b.dataset.vol;marcar('vols','vol',vol);pintarInicio();};
-$('q').oninput=()=>{ if(!$('inicio').hidden) pintarInicio(); };
+$('q').oninput=()=>{
+  if(!$('inicio').hidden)pintarInicio();
+  else if(!$('lobby').hidden&&$('q').value.trim())location.hash='#/seccion/'+pestana;
+};
+
+/* ——— Menú lateral: todo el compendio por apartado y grupo ——— */
+const imgDe=f=>(window.IMAGENES||{})[f];
+function pintarMenu(){
+  const item=c=>`<li><a href="#/clase/${esc(c.f)}" draggable="false" data-f="${esc(c.f)}">${esc(c.n)}</a><button type="button" class="m-fijar" data-fijar="${esc(c.f)}" aria-pressed="false" aria-label="Poner ${esc(c.n)} en la mesa" title="Poner en la mesa">${icono('mas')}</button></li>`;
+  $('m-lista').innerHTML=`<a class="m-raiz" href="#/">${icono('tablero')}<span>Lobby</span></a>`+APARTADOS.map(([p,nombre,ic])=>{
+    const grupos=VOL.filter(v=>(v.p||'clases')===p).map(v=>[v,CLASES.filter(c=>c.v===v.id)]).filter(([,es])=>es.length);
+    /* Un apartado con un solo grupo muestra sus entradas directamente */
+    const hijos=grupos.length===1?`<ul>${grupos[0][1].map(item).join('')}</ul>`
+      :grupos.map(([v,es])=>`<details class="m-vol"><summary>${COLOR[v.id]?`<i style="background:${COLOR[v.id]}"></i>`:''}<span>${esc(v.nombre)}</span><small>${es.length}</small></summary><ul>${es.map(item).join('')}</ul></details>`).join('');
+    return `<details class="m-sec" data-p="${p}"><summary>${icono(ic)}<span>${esc(nombre)}</span><small>${CLASES.filter(c=>pestanaDe(c)===p).length}</small></summary>
+      <div class="m-hijos"><a class="m-todo" href="#/seccion/${p}">Ver el apartado completo</a>${hijos}</div></details>`;}).join('')
+    +`<a class="m-raiz" href="ficha.html">${icono('pergamino')}<span>Personajes</span></a>`;
+  $('secciones').innerHTML=`<a href="#/">Lobby</a>`+APARTADOS.map(([p,n])=>`<a href="#/seccion/${p}">${esc(n)}</a>`).join('');
+}
+pintarMenu();
+/* Marca dónde estás en el menú y en la barra, y abre su grupo */
+function marcarMenu(){
+  const h=decodeURIComponent(location.hash||'#/');
+  const c=h.startsWith('#/clase/')?CLASES.find(x=>x.f===h.slice(8)):null;
+  const sec=c?'#/seccion/'+pestanaDe(c):h;
+  document.querySelectorAll('#m-lista a').forEach(a=>a.setAttribute('aria-current',decodeURIComponent(a.getAttribute('href'))===h));
+  document.querySelectorAll('#secciones a').forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')===sec));
+  const actual=document.querySelector(`#m-lista details a[aria-current="true"]`);
+  if(actual&&!$('m-q').value)for(let d=actual.closest('details');d;d=d.parentElement.closest('details'))d.open=true;
+}
+$('m-q').oninput=()=>{
+  const q=$('m-q').value.trim().toLowerCase();
+  document.querySelectorAll('#m-lista li').forEach(li=>{li.hidden=!!q&&!li.textContent.toLowerCase().includes(q);});
+  document.querySelectorAll('#m-lista details').forEach(d=>{
+    const hay=[...d.querySelectorAll('li')].some(li=>!li.hidden);
+    d.hidden=!!q&&!hay;
+    if(q)d.open=hay;
+  });
+};
+const anchoEscritorio=matchMedia('(min-width:981px)');
+function menuAbierto(){return anchoEscritorio.matches?!document.body.classList.contains('menu-cerrado'):document.body.classList.contains('menu-abierto');}
+function ponerMenu(abrir){
+  if(anchoEscritorio.matches){
+    document.body.classList.toggle('menu-cerrado',!abrir);
+    try{localStorage.setItem('compendio-menu',abrir?'1':'0');}catch(e){}
+  } else {
+    document.body.classList.toggle('menu-abierto',abrir);
+    $('velo').hidden=!abrir;
+  }
+  $('menu-btn').setAttribute('aria-expanded',abrir);
+}
+try{if(localStorage.getItem('compendio-menu')==='0')document.body.classList.add('menu-cerrado');}catch(e){}
+$('menu-btn').innerHTML=icono('menu');
+$('menu-btn').setAttribute('aria-expanded',menuAbierto());
+$('menu-btn').onclick=()=>ponerMenu(!menuAbierto());
+$('velo').onclick=()=>ponerMenu(false);
+anchoEscritorio.addEventListener('change',()=>{document.body.classList.remove('menu-abierto');$('velo').hidden=true;$('menu-btn').setAttribute('aria-expanded',menuAbierto());});
+
+/* ——— Lobby: accesos y mesa ——— */
+$('accesos').innerHTML=APARTADOS.map(([p,n,ic,d])=>`<a class="acceso" href="#/seccion/${p}"><span class="acceso-ico">${icono(ic)}</span><b>${CLASES.filter(c=>pestanaDe(c)===p).length}</b><span>${esc(n)}</span><small>${esc(d)}</small></a>`).join('')
+  +`<a class="acceso" href="ficha.html"><span class="acceso-ico">${icono('pergamino')}</span><b>Fichas</b><span>Personajes</span><small>Crea y guarda fichas paso a paso.</small></a>`;
+
+const CLAVE_MESA='compendio-mesa';
+const existe=f=>CLASES.some(c=>c.f===f);
+let mesa=[];
+try{const g=JSON.parse(localStorage.getItem(CLAVE_MESA)||'[]');if(Array.isArray(g))mesa=g.filter(f=>typeof f==='string'&&existe(f));}catch(e){}
+const expuestas=new Set();
+function guardarMesa(){try{localStorage.setItem(CLAVE_MESA,JSON.stringify(mesa));}catch(e){}}
+function cambiarMesa(){guardarMesa();pintarMesa();marcarFijadas();}
+/* Pone f en la posición pos (o al final); si ya estaba, lo mueve */
+function ponerEnMesa(f,pos){
+  if(!existe(f))return;
+  const i=mesa.indexOf(f);
+  if(i>=0){mesa.splice(i,1);if(pos!=null&&pos>i)pos--;}
+  mesa.splice(pos==null?mesa.length:Math.max(0,Math.min(pos,mesa.length)),0,f);
+  cambiarMesa();
+}
+function quitarDeMesa(f){mesa=mesa.filter(x=>x!==f);expuestas.delete(f);cambiarMesa();}
+function marcarFijadas(){
+  document.querySelectorAll('[data-fijar]').forEach(b=>{const on=mesa.includes(b.dataset.fijar);b.setAttribute('aria-pressed',on);b.innerHTML=icono(on?'hecho':'mas');});
+  const b=document.querySelector('#c-contenido [data-a="fijar"]');
+  if(b)b.innerHTML=mesa.includes(b.dataset.f)?`${icono('hecho')} En la mesa`:`${icono('mas')} A la mesa`;
+}
+const conTablas=h=>h.replace(/<table/g,'<div class="tabla-wrap"><table').replace(/<\/table>/g,'</table></div>');
+function pin(c){
+  const v=volOf(c.v),ab=expuestas.has(c.f),img=imgDe(c.f);
+  return `<article class="pin${ab?' abierto':''}${img?' con-img':''}" data-vol="${v.id}" data-f="${esc(c.f)}" aria-label="${esc(c.n)}">
+    ${img?`<img class="pin-img" src="${esc(img)}" alt="" loading="lazy" draggable="false" onerror="this.remove()">`:''}
+    <header><span class="etiqueta">${esc(v.nombre)}</span><button type="button" class="asa" aria-label="Arrastra para mover ${esc(c.n)}" title="Arrastra para mover">${icono('asa')}</button></header>
+    <h3>${esc(c.n)}</h3>
+    <p class="lema">${esc(c.e)}</p>
+    <p class="desc">${esc(c.g)}</p>
+    <span class="meta">${metaDe(c)}</span>
+    ${ab?`<div class="pin-cuerpo">${c.secciones.map((s,k)=>`<details${k===0?' open':''}><summary>${esc(s.t)}</summary><div class="seccion pin-sec">${conTablas(s.html)}</div></details>`).join('')}</div>`:''}
+    <div class="pin-acc">
+      <a href="#/clase/${esc(c.f)}" draggable="false">${icono('libro')} Abrir</a>
+      <button type="button" data-acc="ver" aria-expanded="${ab}">${icono(ab?'recoger':'expandir')} ${ab?'Recoger':'Exponer'}</button>
+      <button type="button" data-acc="antes" aria-label="Mover antes" title="Mover antes">${icono('izquierda')}</button>
+      <button type="button" data-acc="despues" aria-label="Mover después" title="Mover después">${icono('derecha')}</button>
+      <button type="button" data-acc="quitar" aria-label="Quitar ${esc(c.n)} de la mesa" title="Quitar de la mesa">${icono('cerrar')}</button>
+    </div>
+  </article>`;
+}
+function pintarMesa(){
+  const cs=mesa.map(f=>CLASES.find(c=>c.f===f));
+  $('mesa').innerHTML=cs.length?cs.map(pin).join('')
+    :`<p class="mesa-vacia">Arrastra aquí desde el menú de la izquierda lo que quieras tener a la vista, o pulsa ${icono('mas')} junto a cualquier nombre.</p>`;
+  $('mesa-n').textContent=cs.length?`${cs.length} en la mesa`:'';
+  $('vaciar').hidden=!cs.length;
+}
+$('vaciar').innerHTML=`${icono('papelera')} Vaciar mesa`;
+$('vaciar').onclick=()=>{mesa=[];expuestas.clear();cambiarMesa();};
+$('mesa').onclick=e=>{
+  const b=e.target.closest('button[data-acc]');if(!b)return;
+  const f=b.closest('.pin').dataset.f,i=mesa.indexOf(f);
+  if(b.dataset.acc==='ver'){expuestas.has(f)?expuestas.delete(f):expuestas.add(f);pintarMesa();}
+  else if(b.dataset.acc==='quitar')quitarDeMesa(f);
+  else if(b.dataset.acc==='antes'&&i>0)ponerEnMesa(f,i-1);
+  else if(b.dataset.acc==='despues'&&i<mesa.length-1)ponerEnMesa(f,i+2);
+  const otra=$('mesa').querySelector(`.pin[data-f="${CSS.escape(f)}"] [data-acc="${b.dataset.acc}"]`);
+  if(otra)otra.focus();
+};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-fijar]');if(!b)return;
+  const f=b.dataset.fijar;mesa.includes(f)?quitarDeMesa(f):ponerEnMesa(f);
+});
+
+/* ——— Arrastrar con el puntero ———
+   Ratón: desde un nombre del menú o desde cualquier parte libre de una ficha de la mesa.
+   Dedo o lápiz: desde el asa de la ficha (en el menú se usa el botón +). */
+let arr=null,anularEn=null;
+function posicionEn(x,y){
+  for(const p of $('mesa').querySelectorAll('.pin')){
+    const r=p.getBoundingClientRect();
+    if(y<r.top||(y<=r.bottom&&x<r.left+r.width/2))return mesa.indexOf(p.dataset.f);
+  }
+  return mesa.length;
+}
+function marcarHueco(pos){
+  $('mesa').querySelectorAll('.hueco-antes,.hueco-despues').forEach(x=>x.classList.remove('hueco-antes','hueco-despues'));
+  if(pos==null)return;
+  const pins=$('mesa').querySelectorAll('.pin');
+  if(pos<pins.length)pins[pos].classList.add('hueco-antes');
+  else if(pins.length)pins[pins.length-1].classList.add('hueco-despues');
+}
+const sobreMesa=(x,y)=>{if($('lobby').hidden)return false;const r=$('mesa').getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;};
+document.addEventListener('pointerdown',e=>{
+  if(e.button!==0||arr)return;
+  const enAsa=e.target.closest('#mesa .asa');
+  const menu=e.target.closest('#m-lista li a[data-f]');
+  const p=e.target.closest('#mesa .pin');
+  let f=null,el=null;
+  if(menu&&e.pointerType==='mouse'){f=menu.dataset.f;el=menu;}
+  else if(p&&(enAsa||(e.pointerType==='mouse'&&!e.target.closest('a,button,summary,input,.pin-cuerpo')))){f=p.dataset.f;el=p;}
+  if(!f)return;
+  if(enAsa)e.preventDefault();
+  arr={f,el,id:e.pointerId,x:e.clientX,y:e.clientY,activo:false,fantasma:null};
+});
+document.addEventListener('pointermove',e=>{
+  if(!arr||e.pointerId!==arr.id)return;
+  if(!arr.activo){
+    if(Math.hypot(e.clientX-arr.x,e.clientY-arr.y)<6)return;
+    arr.activo=true;
+    const c=CLASES.find(x=>x.f===arr.f);
+    arr.fantasma=document.createElement('div');
+    arr.fantasma.className='fantasma';
+    arr.fantasma.innerHTML=`${icono('asa')}<span>${esc(c.n)}</span>`;
+    document.body.append(arr.fantasma);
+    document.body.classList.add('arrastrando-algo');
+    arr.el.classList.add('arrastrando');
+    getSelection().removeAllRanges();
+  }
+  e.preventDefault();
+  arr.fantasma.style.transform=`translate(${e.clientX+14}px,${e.clientY+14}px)`;
+  const dentro=sobreMesa(e.clientX,e.clientY);
+  $('mesa').classList.toggle('recibe',dentro);
+  marcarHueco(dentro?posicionEn(e.clientX,e.clientY):null);
+  if(e.clientY<90)scrollBy(0,-16);else if(e.clientY>innerHeight-50)scrollBy(0,16);
+},{passive:false});
+function soltar(e){
+  if(!arr||e.pointerId!==arr.id)return;
+  const a=arr;arr=null;
+  if(!a.activo)return;
+  anularEn=a.el;setTimeout(()=>{anularEn=null;},0);
+  a.fantasma.remove();a.el.classList.remove('arrastrando');
+  document.body.classList.remove('arrastrando-algo');$('mesa').classList.remove('recibe');marcarHueco(null);
+  if(e.type==='pointerup'&&sobreMesa(e.clientX,e.clientY))ponerEnMesa(a.f,posicionEn(e.clientX,e.clientY));
+}
+document.addEventListener('pointerup',soltar);
+document.addEventListener('pointercancel',soltar);
+/* Tras arrastrar, el clic que sigue no abre el enlace */
+document.addEventListener('click',e=>{if(anularEn&&anularEn.contains(e.target)){e.preventDefault();e.stopPropagation();anularEn=null;}},true);
+document.addEventListener('dragstart',e=>{if(e.target.closest&&e.target.closest('#m-lista,#mesa'))e.preventDefault();});
 
 /* ——— Vista de clase ——— */
 let observador=null;
+
+/* Ilustraciones de los libros dentro de la página: una por subclase y una galería repartida en las ambientaciones */
+function decorar(c){
+  const figura=(src,pie)=>{const f=document.createElement('figure');f.className='lamina';f.innerHTML=`<img src="${esc(src)}" alt="" loading="lazy" onerror="this.parentNode.remove()">${pie?`<figcaption>${esc(pie)}</figcaption>`:''}`;return f;};
+  document.querySelectorAll('#c-contenido .sec-subclases .rasgo').forEach(r=>{
+    const t=r.querySelector('.rasgo-tit'),src=t&&imgDe('s:'+t.textContent.trim());
+    if(!src)return;
+    const im=document.createElement('img');im.className='sub-img';im.src=src;im.alt='';im.loading='lazy';im.onerror=()=>im.remove();
+    r.querySelector('.rasgo-cuerpo').prepend(im);
+  });
+  if(c.amb){
+    const gal=imgDe('g:'+c.f.slice(2))||[];
+    const cuerpos=[...document.querySelectorAll('#c-contenido details.seccion .cuerpo')].slice(1);
+    gal.forEach((src,k)=>{const cu=cuerpos[Math.round((k+1)*cuerpos.length/(gal.length+1))-1];if(cu)cu.prepend(figura(src,''));});
+  }
+}
 
 function verClase(f){
   const i=CLASES.findIndex(x=>x.f===f);
@@ -386,13 +778,16 @@ function verClase(f){
   const c=CLASES[i], v=volOf(c.v);
   document.title=`${c.n} · Compendio`;
   $('clase').dataset.vol=v.id;
-  $('migas').innerHTML=`<a href="#/">Compendio</a><span class="sep">›</span><span>${esc(v.nombre)}</span><span class="sep">›</span><span>${esc(c.n)}</span>`;
+  $('migas').innerHTML=`<a href="#/">Lobby</a><span class="sep">›</span><a href="#/seccion/${pestanaDe(c)}">${esc(v.nombre)}</a><span class="sep">›</span><span>${esc(c.n)}</span>`;
   $('c-hero').innerHTML=`
     <p class="eyebrow">${v.marca?v.marca+' · ':''}${esc(v.nombre)}</p>
     <h1>${esc(c.n)}</h1>
     <p class="lema">${esc(c.e)}</p>
-    <div class="chips"><span>${esc(c.r)}</span>${c.raza?`<span>Tamaño ${esc(c.tam)}</span>`:`<span>Dado ${esc(c.d)}</span>${MAG[c.m]!==c.r?`<span>${MAG[c.m]}</span>`:''}`}</div>`;
-  $('c-arte').innerHTML=`${emblema(v)}<span class="mono-grande">${esc(inicial(c.n))}</span>`;
+    <div class="chips"><span>${esc(c.r)}</span>${c.meta?`<span>${esc(c.meta)}</span>`:c.raza?`<span>Tamaño ${esc(c.tam)}</span>`:`<span>Dado ${esc(c.d)}</span>${MAG[c.m]!==c.r?`<span>${MAG[c.m]}</span>`:''}`}</div>`;
+  const portada=imgDe(c.f);
+  $('c-arte').classList.toggle('con-img',!!portada);
+  $('c-arte').innerHTML=portada?`<img class="hero-img" src="${esc(portada)}" alt="" onerror="this.parentNode.classList.remove('con-img');this.remove()">`
+    :`${emblema(v)}<span class="mono-grande">${esc(inicial(c.n))}</span>`;
   $('c-contenido').innerHTML=`
     <div class="herr" role="toolbar" aria-label="Opciones de lectura">
       <button type="button" data-a="abrir">Desplegar todo</button>
@@ -402,12 +797,15 @@ function verClase(f){
       <button type="button" data-a="mas" aria-label="Letra más grande">A+</button>
       <span class="sep" aria-hidden="true"></span>
       <button type="button" data-a="enlace">Copiar enlace</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button type="button" data-a="fijar" data-f="${esc(c.f)}">${icono('mas')} A la mesa</button>
     </div>`+c.secciones.map((s,k)=>`
     <details class="seccion sec-${s.tipo}" id="sec-${k}" data-k="${k}" open>
       <summary><h2>${esc(s.t)}</h2><span class="resumen"></span></summary>
       <div class="cuerpo">${s.html.replace(/<table/g,'<div class="tabla-wrap"><table').replace(/<\/table>/g,'</table></div>')}</div>
     </details>`).join('');
   Lector.enriquecer(c,$('c-contenido'));
+  decorar(c);
   agruparTarjetas();
   aplicarLetra();
   const primero=$('c-contenido').querySelector('.cuerpo > p');
@@ -416,11 +814,12 @@ function verClase(f){
   const ant=CLASES[i-1], sig=CLASES[i+1];
   $('c-pie').innerHTML=`
     <a href="#/clase/${ant?esc(ant.f):''}" ${ant?'':'aria-disabled="true"'}>← ${ant?esc(ant.n):'Anterior'}</a>
-    ${c.raza?'':`<a class="ficha" href="ficha.html#clase=${encodeURIComponent(c.f)}">Crear personaje con esta clase →</a>`}
-    ${c.oficial||c.raza?'':`<a class="ficha" href="../clases/${esc(c.f)}.html" target="_blank" rel="noopener">Ficha original completa ↗</a>`}
+    ${pestanaDe(c)!=='clases'?'':`<a class="ficha" href="ficha.html#clase=${encodeURIComponent(c.f)}">Crear personaje con esta clase →</a>`}
+    ${c.oficial||pestanaDe(c)!=='clases'?'':`<a class="ficha" href="../clases/${esc(c.f)}.html" target="_blank" rel="noopener">Ficha original completa ↗</a>`}
     <a href="#/clase/${sig?esc(sig.f):''}" ${sig?'':'aria-disabled="true"'}>${sig?esc(sig.n):'Siguiente'} →</a>`;
 
   $('inicio').hidden=true;
+  $('lobby').hidden=true;
   $('clase').hidden=false;
   $('progreso').hidden=false;
   $('marca').hidden=true;
@@ -494,12 +893,21 @@ $('c-contenido').onclick=e=>{
     case 'menos': cambiarLetra(-1); break;
     case 'mas': cambiarLetra(1); break;
     case 'enlace': copiarEnlace(b); break;
+    case 'fijar': mesa.includes(b.dataset.f)?quitarDeMesa(b.dataset.f):ponerEnMesa(b.dataset.f); break;
   }
 };
 
-function verInicio(){
-  document.title='Compendio de Clases Homebrew';
-  $('clase').hidden=true;
+function verLobby(){
+  document.title='Lobby · Compendio';
+  $('clase').hidden=true;$('inicio').hidden=true;$('lobby').hidden=false;
+  $('progreso').hidden=true;$('marca').hidden=false;$('migas').hidden=true;$('q').hidden=false;
+  if(observador){observador.forEach(o=>o.disconnect());observador=null;}
+  pintarMesa();marcarFijadas();
+}
+function verInicio(p){
+  elegirPestana(p);
+  document.title=`${PORTADA[pestana][0].replace('.','')} · Compendio`;
+  $('clase').hidden=true;$('lobby').hidden=true;
   $('inicio').hidden=false;
   $('progreso').hidden=true;
   $('marca').hidden=false;
@@ -526,9 +934,12 @@ function conTransicion(fn){
 }
 function ruta(){
   conTransicion(()=>{
-    const m=location.hash.match(/^#\/clase\/(.+)$/);
+    const m=location.hash.match(/^#\/clase\/(.+)$/),s=location.hash.match(/^#\/seccion\/(\w+)$/);
     if(m)verClase(decodeURIComponent(m[1]));
-    else verInicio();
+    else if(s)verInicio(s[1]);
+    else verLobby();
+    marcarMenu();marcarFijadas();
+    if(!anchoEscritorio.matches)ponerMenu(false);
   });
   window.scrollTo({top:0,behavior:'auto'});
 }
@@ -545,7 +956,7 @@ function aplicarTema(t){
   else delete document.documentElement.dataset.theme;
   const oscuro=esOscuro();
   const b=$('tema');
-  b.textContent=oscuro?'☀︎':'☾';
+  b.innerHTML=icono(oscuro?'sol':'luna');
   b.setAttribute('aria-label',oscuro?'Cambiar a tema claro':'Cambiar a tema oscuro');
   document.querySelector('meta[name="theme-color"]').content=oscuro?'#000000':'#f5f5f7';
 }

@@ -1,0 +1,47 @@
+/* Tal'Dorei (Exandria) — resumen propio, ampliado */
+ambientacion({id:'taldorei',n:"Tal'Dorei (Exandria)",src:'tdr',
+  lema:'El continente de Critical Role: dioses tras una puerta, ciudades que se reconstruyen y héroes legendarios.',
+  resumen:'Un continente de alta fantasía que se recupera de invasiones de dragones y de la amenaza de un dios nuevo.',
+  secciones:[
+  ['Un continente de héroes','Tal\'Dorei es el escenario de la primera campaña de Critical Role. Es alta fantasía clásica con un toque moderno: ciudades cosmopolitas, gremios poderosos, magia que se estudia en academias y héroes cuyas hazañas se cantan en las tabernas. El libro está pensado para que cada grupo escriba su propia leyenda sobre un mundo vivo.'],
+  ['Historia',[
+    ['La creación','Los Dioses Primordiales llegaron a Exandria y crearon a los mortales. Los Primigenios, fuerzas elementales previas, lucharon contra ellos en la Fundación y fueron encerrados.'],
+    ['La Era del Arcanum','Una época de magia inmensa: ciudades flotantes y magos que se creían dioses. Su orgullo llevó a liberar a los dioses traidores.'],
+    ['La Calamidad','La guerra entre los Dioses Primos y los Traidores casi destruye Exandria. Terminó con la Puerta Divina, una barrera que separa a los dioses del mundo: siguen dando poder, pero ya no caminan entre los mortales. El calendario cuenta los años desde entonces (P.D., «post-divergencia»).'],
+    ['La era moderna','Tal\'Dorei se fundó tras la caída del tirano Trist Drassig. En los últimos años sufrió la invasión del Conclave Cromático (cinco dragones que arrasaron Emon), el ascenso del liche Vecna como dios y la amenaza de los Remanentes. Las ciudades se reconstruyen.']]],
+  ['El panteón',[
+    ['Dioses primos','El Padre del Alba (sol), la Siempreluz (redención y curación), el Dragón de Platino (justicia), la Madre Salvaje (naturaleza), el Señor de la Tormenta (fuerza y tempestad), la Matrona de los Cuervos (muerte y destino), la Señora del Saber (conocimiento), la Portadora del Cambio (libertad y viajes), el Martillo de Todo (forja y enanos), la Portadora de la Ley (civilización), la Tejedora de Lunas (noche e ilusión) y el Corazón Arcano (arte, magia y elfos).'],
+    ['Dioses traidores','El Señor de los Nueve Infiernos, el Emperador de la Discordia, el Arruinador, la Reina Araña, el Olvido Encadenado, la Tirana Escamada y el Rey Reptante: siguen buscando cómo romper la Puerta Divina.'],
+    ['Ídolos menores','Seres poderosos que no son dioses pero reciben culto: archihadas, señores elementales o el propio Vecna.']]],
+  ['Facciones',[
+    ['El Consejo de Tal\'Dorei','El gobierno del continente, con sede en Emon.'],
+    ['Arcana Pansophical','La gran sociedad de magos.'],
+    ['Los Ashari','Cuatro tribus que vigilan las fisuras elementales: Pyrah (fuego), Vesrah (agua), Terrah (tierra) y Zephrah (aire), en lo alto de las Cumbres.'],
+    ['La Liga de Peleadores','Combates de puños por toda la costa.'],
+    ['La Cámara de Whitestone','El gobierno de la ciudad de Whitestone, liberada de los Briarwood.'],
+    ['Las Órdenes Clarete','Cazadores de vampiros… y vampiros.'],
+    ['El Clasp','El gran gremio de ladrones.'],
+    ['La Sonrisa Dorada','Una compañía de bardos y artistas.'],
+    ['Casas de Kraghammer','Los clanes enanos.'],
+    ['La Liga de los Milagros','Sanadores y benefactores.'],
+    ['La Biblioteca del Alma de Cobalto','Monjes buscadores de la verdad.'],
+    ['La Miríada','Una red criminal en las sombras.'],
+    ['Los Remanentes','Restos de antiguas amenazas.'],
+    ['Los Guardianes de Syngorn','Los protectores de la ciudad élfica.']]],
+  ['Geografía',[
+    ['La Costa Lucidiana','Emon, la capital, con sus distritos y su castillo; Stilben, ciudad de vicios; y la costa oeste.'],
+    ['Las Sierras de Alabastro y el río Mooren','Montañas blancas y el gran río que cruza el centro.'],
+    ['Las Llanuras Divididas','Praderas inmensas: Westruun, Kymal, los goliats de la manada Rivermaw y los restos del ataque de los dragones.'],
+    ['Las montañas Cliffkeep','Kraghammer, la ciudad enana bajo la montaña, y Whitestone, con su árbol sagrado y su piedra blanca.'],
+    ['Las montañas Stormcrest','Cumbres azotadas por tormentas.'],
+    ['La península de Rifenmist','Selvas donde la Autoridad de Hierro oprimía a los suyos.'],
+    ['La Expansión Verdeante','Bosques sin fin: Syngorn, la ciudad élfica que se oculta en el plano feérico, y Vesrah.'],
+    ['Otras tierras','Wildemount, Marquet (con Ank\'Harel) e Issylra, escenarios de otras campañas.']]],
+  ['El cosmos y el calendario','Exandria tiene dos lunas: Catha, plateada y benévola, y Ruidus, la luna roja de mal agüero. El año tiene once meses. Los planos incluyen el Feywild, el Shadowfell y los Reinos Exteriores, de donde vienen horrores como los de la daga Susurro.'],
+  ['Reglas propias',[
+    ['Hemocracia','La magia de sangre como disciplina: el mago de sangre y el clérigo de la sangre beben de ella.'],
+    ['Tocado por el destino','Una bendición sobrenatural para personajes señalados.'],
+    ['Trasfondos','Ashari, miembro del Clasp, erudito del Liceo, sectario reformado y fusilero de Whitestone.'],
+    ['Vestigios de la Divergencia','Armas y objetos legendarios de la Calamidad que crecen con su portador: latente, despierto y exaltado.'],
+    ['Herramientas de los Ashari','Objetos elementales como la tabla de tierra o la velaceleste.']]],
+  ['Ganchos de aventura',['Recuperar un vestigio de la Divergencia antes de que lo encuentren los Remanentes.','Mediar entre los ashari y una ciudad que quiere explotar una fisura elemental.','Investigar una red de la Miríada en los muelles de Emon.','Escoltar a un erudito del Alma de Cobalto a las ruinas de una ciudad flotante caída.']]]});

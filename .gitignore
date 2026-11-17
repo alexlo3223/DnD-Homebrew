@@ -1,1 +1,5 @@
 *.pdf
+
+# Ilustraciones extraídas de los PDF: solo en local
+compendio/img/
+*.epub

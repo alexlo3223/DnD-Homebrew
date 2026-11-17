@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Agente de Campo — Clase Homebrew D&D 5e</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+SC:wght@400;700;800&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="light">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f1e9e7; --card:#ece2df; --panel:#e9dedb; --border:#d6c5c1;
+  --acc:#8a2a1c; --acc-strong:#7a2316; --on-acc:#fbf1ee; --tint:#f0dcd6; --rule:#d2aea6; --edge:#ebe0dd;
+  --ink:#241a18; --ink-dim:#5a4a46; --ink-strong:#17100f; --steel:#2f4a5c;
+  --display:'Alegreya SC','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --serif:'Alegreya','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:'Alegreya Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:4.5rem;background:var(--edge);-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:19px;line-height:1.55;font-kerning:normal;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;overflow-x:clip}
+*,*::before,*::after{text-shadow:none!important;box-shadow:none!important}
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;height:52px;overflow-x:auto}
+nav a{color:var(--ink-dim);text-decoration:none;font-family:var(--sans);font-size:.85rem;font-weight:700;padding:0 .9rem;height:52px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap}
+nav a:hover{color:var(--acc);border-bottom-color:var(--acc)}
+nav .brand{color:var(--acc);font-family:var(--display);font-size:1rem;font-weight:800;margin-right:.8rem;padding-right:1rem;border-right:1px solid var(--border);white-space:nowrap}
+.wrapper{max-width:940px;margin:0 auto;padding:0 1.5rem 5rem}
+.hero{text-align:center;padding:4rem 1rem 3rem}
+.hero svg{width:110px;height:110px;margin:0 auto 1.5rem;display:block}
+.hero .sub{font-family:var(--sans);font-size:.9rem;font-weight:700;color:var(--steel);margin-bottom:.4rem}
+.hero h1{font-family:var(--display);font-size:clamp(2.6rem,7vw,4.6rem);font-weight:800;color:var(--ink-strong);line-height:1.02}
+.hero p.desc{max-width:600px;margin:1.2rem auto 0;font-style:italic;color:var(--ink-dim)}
+.hero .rule{margin:2rem auto 0;width:240px;height:2px;background:var(--acc)}
+section{margin-top:3.2rem}
+.label{font-family:var(--sans);font-size:.8rem;font-weight:700;color:var(--steel);margin-bottom:.2rem}
+h2{font-family:var(--display);font-size:clamp(1.7rem,3.2vw,2.2rem);font-weight:700;color:var(--acc);line-height:1.1;padding-bottom:.25em;border-bottom:1px solid var(--rule);margin-bottom:1.1rem}
+h3{display:block;font-family:var(--display);background:var(--acc-strong);color:var(--on-acc);font-size:1.12rem;line-height:1.2;padding:.28rem 1.7rem .3rem .75rem;margin:1.4rem 0 .6rem;clip-path:polygon(0 0,100% 0,calc(100% - .65rem) 50%,100% 100%,0 100%)}
+p{margin-bottom:.85rem;text-wrap:pretty}
+p:last-child{margin-bottom:0}
+em{color:var(--acc);font-style:italic}
+strong{color:var(--ink-strong);font-weight:700}
+ul{margin:.4rem 0 .8rem 1.4rem}
+li{margin-bottom:.3rem}
+.quote{margin:1.6rem 0;padding:1.1rem 1.5rem;background:var(--panel);border-left:3px solid var(--acc);font-style:italic;color:var(--ink-dim)}
+.quote cite{display:block;margin-top:.4rem;font-style:normal;font-family:var(--sans);font-size:.85rem}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin:1.4rem 0}
+.info-cell{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:.8rem 1rem}
+.info-cell .k{display:block;font-family:var(--sans);font-size:.78rem;color:var(--ink-dim)}
+.info-cell .v{font-weight:700;color:var(--acc)}
+.card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--acc);border-radius:4px;padding:1.1rem 1.3rem;margin-bottom:1rem}
+.card.steel{border-left-color:var(--steel)}
+.card .head{display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin-bottom:.5rem}
+.card .name{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--ink-strong)}
+.card .lvl{font-family:var(--sans);font-size:.8rem;color:var(--ink-dim)}
+.cost{font-family:var(--sans);font-size:.78rem;font-weight:700;padding:.1rem .55rem;border-radius:4px;background:var(--acc-strong);color:var(--on-acc);margin-left:auto}
+.cost.steel{background:var(--steel)}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:4px}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:.92rem;font-variant-numeric:lining-nums tabular-nums}
+thead th{background:var(--acc-strong);color:var(--on-acc);font-family:var(--display);padding:.6rem .8rem;text-align:left;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--tint)}
+td{padding:.5rem .8rem;border-bottom:1px solid var(--border)}
+td:first-child{font-weight:700;color:var(--acc);text-align:center}
+td.f{white-space:normal;min-width:220px}
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin:1rem 0 1.4rem}
+.sub-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--acc);border-radius:4px;padding:1.1rem}
+.sub-card.steel{border-top-color:var(--steel)}
+.sub-card .n{font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--ink-strong)}
+.sub-card .t{font-family:var(--sans);font-size:.82rem;color:var(--ink-dim);margin:.2rem 0 .6rem}
+.sub-card p{font-size:.92rem}
+.tracker{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;margin:1.2rem 0}
+.tracker .row{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:.6rem 0}
+.pip{width:30px;height:30px;border-radius:50%;border:2px solid var(--acc);background:var(--tint);cursor:pointer;position:relative}
+.pip.empty{border-color:var(--border);background:transparent}
+.pip::after{content:'';position:absolute;top:50%;left:50%;width:10px;height:10px;transform:translate(-50%,-50%);background:var(--acc)}
+.pip.empty::after{background:var(--border);width:6px;height:6px}
+.tracker label{font-family:var(--sans);font-weight:700;font-size:.9rem}
+.tracker select,.tracker button{font-family:var(--sans);font-size:.95rem;padding:.35rem .8rem;border:1px solid var(--acc-strong);background:var(--card);color:var(--ink);border-radius:4px}
+.tracker button{background:var(--acc-strong);color:var(--on-acc);font-weight:700}
+.tracker button.alt{background:var(--card);color:var(--acc-strong)}
+.state{font-family:var(--sans);font-weight:700;color:var(--acc);min-width:60px}
+.note{font-family:var(--sans);font-size:.88rem;color:var(--ink-dim)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media (max-width:700px){table{display:block;max-width:100%;overflow-x:auto}}
+@media (min-width:900px){.cols{column-width:23rem;column-gap:2.6rem;column-rule:1px solid var(--rule)}.cols>*{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">El Agente de Campo</span>
+  <a href="#resumen">Resumen</a>
+  <a href="#nucleo">Núcleo</a>
+  <a href="#suministros">Suministros</a>
+  <a href="#tabla">Progresión</a>
+  <a href="#rasgos">Rasgos</a>
+  <a href="#sendas">Sendas</a>
+  <a href="#notas">Notas</a>
+</nav>
+
+<div class="wrapper">
+
+<header class="hero">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="60" cy="60" r="56" fill="#8a2a1c"/>
+    <circle cx="60" cy="60" r="38" fill="none" stroke="#fbf1ee" stroke-width="4"/>
+    <circle cx="60" cy="60" r="6" fill="#fbf1ee"/>
+    <rect x="57" y="8" width="6" height="30" fill="#fbf1ee"/>
+    <rect x="57" y="82" width="6" height="30" fill="#fbf1ee"/>
+    <rect x="8" y="57" width="30" height="6" fill="#fbf1ee"/>
+    <rect x="82" y="57" width="30" height="6" fill="#fbf1ee"/>
+  </svg>
+  <p class="sub">Clase marcial · Homebrew D&amp;D 5e</p>
+  <h1>El Agente de Campo</h1>
+  <p class="desc">Un tiro abre la guardia. Una patada la cierra. Lo demás es no morir.</p>
+  <div class="rule"></div>
+</header>
+
+<section id="resumen">
+  <p class="label">Introducción</p>
+  <h2>¿Quién es el Agente de Campo?</h2>
+  <div class="quote">Cuando todo el mundo corre hacia la puerta, alguien tiene que quedarse mirando qué viene detrás.<cite>— Informe de campo, expediente sin firmar</cite></div>
+  <p>El Agente de Campo es un profesional del peor trabajo del mundo: entrar donde todo ha salido mal y salir con vida, y con suerte con quien tenía que sacar. No es el más fuerte ni el más rápido. Es el que <em>lee el combate</em>: abre una brecha en la guardia del enemigo con un disparo o un tajo, entra al cuerpo a cuerpo o recupera distancia, y remata antes de que el otro se recomponga.</p>
+  <p>Vive de lo que recoge en el camino y de su sangre fría. Cuando alguien lo agarra, se zafa y devuelve el golpe. Cuando tiene a alguien a su cargo, se interpone. Y cuando los monstruos son demasiado grandes, sabe dónde duelen.</p>
+
+  <div class="info-grid">
+    <div class="info-cell"><span class="k">Dado de golpe</span><span class="v">d10</span></div>
+    <div class="info-cell"><span class="k">Características</span><span class="v">DES principal · SAB</span></div>
+    <div class="info-cell"><span class="k">Salvaciones</span><span class="v">Destreza · Sabiduría</span></div>
+    <div class="info-cell"><span class="k">Armaduras</span><span class="v">Ligeras y medias</span></div>
+    <div class="info-cell"><span class="k">Recurso</span><span class="v">Suministros</span></div>
+    <div class="info-cell"><span class="k">Rol</span><span class="v">Daño · Control · Escolta</span></div>
+  </div>
+
+  <h3>Rasgos de clase básicos</h3>
+  <div class="card">
+    <p><strong>Puntos de golpe.</strong> 1d10 por nivel de Agente. Nivel 1: 10 + mod. CON. Niveles posteriores: 1d10 (o 6) + mod. CON.</p>
+    <p><strong>Armaduras:</strong> ligeras y medias. <strong>Armas:</strong> armas simples, armas marciales a distancia y armas marciales con la propiedad Ligera o Sutil. Los ataques desarmados cuentan como ataques cuerpo a cuerpo. <strong>Herramientas:</strong> kit de herbolario.</p>
+    <p><strong>Salvaciones:</strong> Destreza y Sabiduría. <strong>Habilidades:</strong> elige 3 entre Acrobacias, Atletismo, Intuición, Investigación, Medicina, Percepción, Persuasión, Sigilo y Supervivencia.</p>
+    <p><strong>Equipo:</strong> un arma a distancia a tu elección y una daga o arma ligera; armadura de cuero tachonado; paquete de explorador; kit de herbolario.</p>
+    <p><strong>Multiclase:</strong> DES 13 y SAB 13. Obtienes armadura ligera, una habilidad de la lista y las armas simples.</p>
+  </div>
+
+  <div class="card steel">
+    <div class="head"><span class="name">Los dos registros</span></div>
+    <p>La clase no obliga a usar ningún arma concreta. Todo se organiza en dos <strong>registros</strong> de ataque: <strong>a distancia</strong> (arco, ballesta, arma de fuego, arma arrojadiza) y <strong>cuerpo a cuerpo</strong> (cualquier arma o ataque desarmado). Alternar entre los dos es el corazón de la clase.</p>
+  </div>
+</section>
+
+<section id="nucleo">
+  <p class="label">Mecánica central</p>
+  <h2>Brecha y Remate</h2>
+
+  <div class="card">
+    <div class="head"><span class="name">Brecha</span><span class="lvl">Nivel 1</span></div>
+    <p>Una vez por turno, cuando impactas con un ataque a una criatura de tamaño Grande o menor, puedes abrirle una <strong>Brecha</strong>. Anota si el ataque fue a distancia o cuerpo a cuerpo.</p>
+    <ul>
+      <li>La criatura <strong>no puede usar reacciones</strong> y su Velocidad se reduce <strong>10 pies</strong>.</li>
+      <li>Dura hasta el final de tu siguiente turno, o hasta que la consumas con un Remate.</li>
+      <li>Una criatura solo puede tener una Brecha a la vez.</li>
+      <li>Al abrir o rematar una Brecha, tu movimiento no provoca ataques de oportunidad de esa criatura hasta el final del turno.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Remate</span><span class="lvl">Nivel 1</span></div>
+    <p>Una vez por turno, cuando impactas a una criatura en Brecha con un ataque del <strong>otro registro</strong> (a distancia tras cuerpo a cuerpo, o al revés), consumes la Brecha y rematas. El ataque inflige daño adicional igual a los <strong>dados de Remate</strong> de la tabla (d8) y aplicas <strong>un efecto</strong> a tu elección. La CD es 8 + tu bonificador de competencia + tu mod. de DES.</p>
+    <ul>
+      <li><strong>Patada.</strong> Salvación de FUE: si falla, la criatura cae derribada o es empujada 10 pies, a tu elección.</li>
+      <li><strong>Desarme.</strong> Salvación de DES: si falla, suelta un objeto que sostenga.</li>
+      <li><strong>Zancadilla.</strong> Su Velocidad pasa a 0 hasta el final de su siguiente turno.</li>
+      <li><strong>Llave.</strong> La criatura queda derribada y agarrada por ti (sin tirada).</li>
+    </ul>
+    <p class="note">Las reacciones y los ataques de oportunidad también pueden abrir y rematar Brechas.</p>
+  </div>
+</section>
+
+<section id="suministros">
+  <p class="label">Recurso</p>
+  <h2>Suministros</h2>
+  <p>Los Suministros son tu único recurso: munición, vendas, granadas y lo que hayas rapiñado. Se ganan peleando.</p>
+
+  <div class="tracker">
+    <div class="row">
+      <label for="lvl">Nivel de Agente</label>
+      <select id="lvl"></select>
+      <span class="note" id="info"></span>
+    </div>
+    <div class="row" id="pips"></div>
+    <div class="row">
+      <span class="state" id="count"></span>
+      <button type="button" id="btn-botin">+1 Botín</button>
+      <button type="button" class="alt" id="btn-gasto">−1 Gasto</button>
+      <button type="button" class="alt" id="btn-corto">Descanso corto (+1)</button>
+      <button type="button" class="alt" id="btn-largo">Descanso largo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Suministros y Botín</span><span class="lvl">Nivel 2</span></div>
+    <ul>
+      <li>Tu máximo es el de la columna de la tabla.</li>
+      <li>Si tiras iniciativa con 0 Suministros, ganas 1 (equipo reglamentario).</li>
+      <li><strong>Botín:</strong> una vez por turno, ganas 1 Suministro al rematar con éxito o al reducir a una criatura hostil a 0 PG.</li>
+      <li>Recuperas 1 en un descanso corto y todos en un descanso largo.</li>
+    </ul>
+  </div>
+
+  <div class="card steel">
+    <div class="head"><span class="name">Equipo Táctico</span><span class="lvl">Nivel 2</span><span class="cost steel">1 Suministro</span></div>
+    <p>Gastas 1 Suministro por uso. La CD es 8 + BOP + mod. DES. <strong>X</strong> es tus dados de Remate más 1, en d6 (2d6 al nivel 2, 3d6 al 5, 4d6 al 11, 5d6 al 17).</p>
+    <ul>
+      <li><strong>Granada cegadora</strong> (acción adicional). La lanzas a 60 pies, radio de 10 pies. Salvación de CON o queda cegada hasta el final de su siguiente turno.</li>
+      <li><strong>Granada incendiaria</strong> (acción adicional). La lanzas a 60 pies, radio de 10 pies. Salvación de DES, Xd6 de fuego, la mitad si la supera.</li>
+      <li><strong>Spray curativo</strong> (acción adicional). Tocas a una criatura y recupera tus dados de Remate en d8 + mod. SAB PG.</li>
+      <li><strong>Trampa</strong> (acción). Colocas una trampa oculta en una casilla de 5 pies durante 1 minuto. La primera criatura hostil que entre hace una salvación de DES. Si falla, recibe Xd6 perforante, su Velocidad pasa a 0 y <strong>queda en Brecha</strong>.</li>
+      <li><strong>Gancho</strong> (acción adicional). Te mueves hasta 30 pies en línea recta a un punto que veas, sin provocar. O arrastras 15 pies a una criatura Mediana o menor (salvación de FUE).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="tabla">
+  <p class="label">Progresión</p>
+  <h2>Tabla de la clase</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nv.</th><th>BOP</th><th>Remate</th><th>Suministros</th><th>Rasgos</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>+2</td><td>1d8</td><td>—</td><td class="f">Brecha, Remate</td></tr>
+        <tr><td>2</td><td>+2</td><td>1d8</td><td>2</td><td class="f">Suministros, Equipo Táctico</td></tr>
+        <tr><td>3</td><td>+2</td><td>1d8</td><td>2</td><td class="f">Senda, Zafarse</td></tr>
+        <tr><td>4</td><td>+2</td><td>1d8</td><td>2</td><td class="f">Mejora de característica, Sangre Fría</td></tr>
+        <tr><td>5</td><td>+3</td><td>2d8</td><td>3</td><td class="f">Ataque Extra</td></tr>
+        <tr><td>6</td><td>+3</td><td>2d8</td><td>5</td><td class="f">Rasgo de Senda, Equipo Veterano</td></tr>
+        <tr><td>7</td><td>+3</td><td>2d8</td><td>5</td><td class="f">Rodar a Cubierto</td></tr>
+        <tr><td>8</td><td>+3</td><td>2d8</td><td>5</td><td class="f">Mejora de característica</td></tr>
+        <tr><td>9</td><td>+4</td><td>2d8</td><td>6</td><td class="f">Remate Magistral</td></tr>
+        <tr><td>10</td><td>+4</td><td>2d8</td><td>6</td><td class="f">Rasgo de Senda</td></tr>
+        <tr><td>11</td><td>+4</td><td>3d8</td><td>6</td><td class="f">Remate Encadenado</td></tr>
+        <tr><td>12</td><td>+4</td><td>3d8</td><td>6</td><td class="f">Mejora de característica</td></tr>
+        <tr><td>13</td><td>+5</td><td>3d8</td><td>7</td><td class="f">Aguantar el Golpe</td></tr>
+        <tr><td>14</td><td>+5</td><td>3d8</td><td>7</td><td class="f">Rasgo de Senda</td></tr>
+        <tr><td>15</td><td>+5</td><td>3d8</td><td>7</td><td class="f">Siempre Preparado</td></tr>
+        <tr><td>16</td><td>+5</td><td>3d8</td><td>7</td><td class="f">Mejora de característica</td></tr>
+        <tr><td>17</td><td>+6</td><td>4d8</td><td>8</td><td class="f">Remate Libre</td></tr>
+        <tr><td>18</td><td>+6</td><td>4d8</td><td>8</td><td class="f">Rasgo de Senda</td></tr>
+        <tr><td>19</td><td>+6</td><td>4d8</td><td>8</td><td class="f">Mejora de característica</td></tr>
+        <tr><td>20</td><td>+6</td><td>4d8</td><td>8</td><td class="f">Agente Legendario</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="rasgos">
+  <p class="label">Rasgos</p>
+  <h2>Rasgos de clase</h2>
+
+  <div class="card">
+    <div class="head"><span class="name">Zafarse</span><span class="lvl">Nivel 3</span><span class="cost">Reacción</span></div>
+    <p>Una vez por ronda, cuando una criatura intente agarrarte, inmovilizarte o tragarte, o ya lo haya hecho, te libras. Te mueves hasta 10 pies sin provocar ataques de oportunidad y haces un ataque contra esa criatura. Ese ataque puede abrir o rematar una Brecha.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Sangre Fría</span><span class="lvl">Nivel 4</span><span class="cost">1 Suministro</span></div>
+    <p>Tienes ventaja en las salvaciones contra el miedo. Cuando falles cualquier salvación, puedes gastar 1 Suministro y sumar tu mod. de SAB (mínimo +1) al resultado.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Ataque Extra</span><span class="lvl">Nivel 5</span></div>
+    <p>Atacas dos veces cuando realizas la acción de Atacar. En la práctica, un turno es “abre y remata”.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Equipo Veterano</span><span class="lvl">Nivel 6</span></div>
+    <p>Tu máximo de Suministros aumenta en 2.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Rodar a Cubierto</span><span class="lvl">Nivel 7</span><span class="cost">Reacción · 1 Suministro</span></div>
+    <p>Cuando una tirada de ataque te tenga como objetivo, sumas tu BOP a tu CA contra ese ataque. Después te mueves hasta 10 pies sin provocar.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Remate Magistral</span><span class="lvl">Nivel 9</span></div>
+    <p>Al rematar aplicas <strong>dos</strong> efectos distintos de la lista.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Remate Encadenado</span><span class="lvl">Nivel 11</span></div>
+    <p>Cuando un Remate reduce a una criatura a 0 PG, abres una Brecha en otra criatura que veas a 30 pies o menos, sin tirada de ataque.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Aguantar el Golpe</span><span class="lvl">Nivel 13</span><span class="cost">Reacción · 1 Suministro</span></div>
+    <p>Cuando recibas daño, lo reduces en 1d10 por dado de Remate + tu mod. de SAB.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Siempre Preparado</span><span class="lvl">Nivel 15</span></div>
+    <p>Tienes ventaja en las tiradas de iniciativa. Al tirarla, ganas Suministros hasta tener al menos 3.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Remate Libre</span><span class="lvl">Nivel 17</span></div>
+    <p>Tu Remate ya no exige cambiar de registro: basta con impactar a una criatura en Brecha.</p>
+  </div>
+
+  <div class="card">
+    <div class="head"><span class="name">Agente Legendario</span><span class="lvl">Nivel 20</span></div>
+    <p>Puedes abrir una Brecha en cada criatura que impactes, sin el límite de una por turno. Puedes rematar <strong>dos veces</strong> por turno. Ganas 1 Suministro adicional por Botín.</p>
+  </div>
+</section>
+
+<section id="sendas">
+  <p class="label">Subclases · nivel 3</p>
+  <h2>Sendas del Agente</h2>
+  <p>En el nivel 3 eliges la etapa de tu carrera que te define. Recibes rasgos en los niveles 3, 6, 10, 14 y 18.</p>
+
+  <div class="sub-grid">
+    <div class="sub-card">
+      <div class="n">Senda del Superviviente</div>
+      <div class="t">La noche de Raccoon City</div>
+      <p>Improvisas y cubres a alguien más débil. Tu Custodiado es la razón por la que sigues en pie.</p>
+    </div>
+    <div class="sub-card steel">
+      <div class="n">Senda del Agente Federal</div>
+      <div class="t">La misión de rescate</div>
+      <p>Eres la parte táctica del equipo. Tu Brecha es la señal para que todos ataquen.</p>
+    </div>
+    <div class="sub-card">
+      <div class="n">Senda del Cazador de Bioarmas</div>
+      <div class="t">Lo que no debería existir</div>
+      <p>Especialista en monstruos enormes y mutantes. Conoces el punto débil de cada uno.</p>
+    </div>
+  </div>
+
+  <h3>Senda del Superviviente</h3>
+  <div class="card"><div class="head"><span class="name">Custodiado</span><span class="lvl">Nivel 3</span><span class="cost">Reacción</span></div>
+    <p>Elige a una criatura voluntaria como tu <strong>Custodiado</strong>. Puedes cambiarla en un descanso largo. Cuando una criatura ataque a tu Custodiado a 15 pies o menos de ti, puedes usar tu reacción para ponerte en su camino: el ataque te tiene a ti como objetivo y ganas 1 Suministro. Además, cuando rematas, tu Custodiado gana PG temporales iguales a tu BOP + mod. SAB.</p></div>
+  <div class="card"><div class="head"><span class="name">Improvisar</span><span class="lvl">Nivel 6</span></div>
+    <p>Una vez por ronda, usas gratis un Táctico aprovechando el entorno (un barril, una lámpara, un mueble). Las armas improvisadas cuentan como marciales y pueden abrir y rematar Brechas.</p></div>
+  <div class="card"><div class="head"><span class="name">Nadie se Queda Atrás</span><span class="lvl">Nivel 10</span><span class="cost">Reacción · 1 Suministro</span></div>
+    <p>Cuando tu Custodiado llegue a 0 PG, aplicas Spray curativo a distancia (30 pies) y se levanta.</p></div>
+  <div class="card"><div class="head"><span class="name">Muro de Carne y Determinación</span><span class="lvl">Nivel 14</span></div>
+    <p>Tras Cubrir, tienes resistencia al daño de ese ataque.</p></div>
+  <div class="card"><div class="head"><span class="name">Contra las Cuerdas</span><span class="lvl">Nivel 18</span></div>
+    <p>Una vez por descanso largo, cuando tú o tu Custodiado lleguéis a 0 PG, os quedáis con 1 PG. Además abres una Brecha en todas las criaturas hostiles a 30 pies.</p></div>
+
+  <h3>Senda del Agente Federal</h3>
+  <div class="card steel"><div class="head"><span class="name">Protocolo de Equipo</span><span class="lvl">Nivel 3</span></div>
+    <p>Cuando abres una Brecha, un aliado a 30 pies que te vea puede usar su reacción para hacer un ataque contra esa criatura. Tu Gancho no cuesta Suministro (una vez por ronda).</p></div>
+  <div class="card steel"><div class="head"><span class="name">Coordinación</span><span class="lvl">Nivel 6</span></div>
+    <p>El primer impacto de un aliado contra una criatura en Brecha cada ronda inflige tu BOP en daño adicional.</p></div>
+  <div class="card steel"><div class="head"><span class="name">Línea de Fuego</span><span class="lvl">Nivel 10</span></div>
+    <p>Tu Remate también golpea a una segunda criatura a 10 pies de la primera, con la mitad de los dados.</p></div>
+  <div class="card steel"><div class="head"><span class="name">Retirada Táctica</span><span class="lvl">Nivel 14</span><span class="cost steel">Acción adicional</span></div>
+    <p>Una vez por descanso corto, tú y hasta BOP aliados a 30 pies os movéis la mitad de vuestra Velocidad sin provocar.</p></div>
+  <div class="card steel"><div class="head"><span class="name">Agente Condecorado</span><span class="lvl">Nivel 18</span></div>
+    <p>Cuando abres una Brecha, puedes abrirla también en una segunda criatura a 10 pies de la primera.</p></div>
+
+  <h3>Senda del Cazador de Bioarmas</h3>
+  <p>Los <strong>Mutantes</strong> son aberraciones, monstruosidades, cienos, plantas y bestias.</p>
+  <div class="card"><div class="head"><span class="name">Puntos Débiles</span><span class="lvl">Nivel 3</span></div>
+    <p>Puedes abrir Brecha en criaturas Enormes y Gargantuescas. Al abrirla, sabes el tipo de criatura y sus resistencias o vulnerabilidades, si tiene.</p></div>
+  <div class="card"><div class="head"><span class="name">Golpe al Punto Débil</span><span class="lvl">Nivel 6</span></div>
+    <p>Contra criaturas en Brecha, tus ataques son críticos con 19-20. Tus Remates contra Mutantes ignoran la resistencia al daño.</p></div>
+  <div class="card"><div class="head"><span class="name">Cuerpo Curtido</span><span class="lvl">Nivel 10</span></div>
+    <p>Tienes ventaja en salvaciones contra enfermedad, veneno y parásitos, resistencia al daño de veneno e inmunidad a las enfermedades.</p></div>
+  <div class="card"><div class="head"><span class="name">Extirpar</span><span class="lvl">Nivel 14</span></div>
+    <p>Una vez por turno, el Remate duplica sus dados contra una criatura con la mitad o menos de sus PG.</p></div>
+  <div class="card"><div class="head"><span class="name">Cacería Perfecta</span><span class="lvl">Nivel 18</span></div>
+    <p>Una vez por descanso largo, tu Remate contra un Mutante es un crítico automático.</p></div>
+</section>
+
+<section id="notas">
+  <p class="label">Diseño</p>
+  <h2>Notas de diseño y equilibrio</h2>
+  <div class="card">
+    <ul>
+      <li><strong>Frente al Pistolero:</strong> sin Cilindros, sin azar ni Carisma y sin dependencia de las armas de fuego. Funciona con arco, espada, pistola o puños.</li>
+      <li><strong>Frente a las oficiales:</strong> no hay dados de maniobra (Maestro de Batalla), ni ataque furtivo (Pícaro), ni marca de presa (Explorador), ni aturdimiento (Monje). La mecánica es un estado en el enemigo y un cambio de registro.</li>
+      <li><strong>Sin penalizaciones pasivas:</strong> todo se activa al jugar bien. Los Suministros se ganan peleando y empiezas cada combate con al menos 1.</li>
+      <li><strong>Daño:</strong> el Remate de 4d8 en nivel 17 queda por debajo del ataque furtivo de un Pícaro. Lo compensan los efectos (dos desde el nivel 9) y los Tácticos.</li>
+      <li><strong>Monstruos enormes:</strong> la Brecha no funciona contra criaturas Enormes o mayores, salvo en la Senda del Cazador de Bioarmas.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var MAXES={2:2,3:2,4:2,5:3,6:5,7:5,8:5,9:6,10:6,11:6,12:6,13:7,14:7,15:7,16:7,17:8,18:8,19:8,20:8};
+  var sel=document.getElementById('lvl'),pips=document.getElementById('pips'),count=document.getElementById('count'),info=document.getElementById('info');
+  var cur=0,max=2;
+  for(var l=2;l<=20;l++){var o=document.createElement('option');o.value=l;o.textContent=l;sel.appendChild(o);}
+  function render(){
+    pips.innerHTML='';
+    for(var i=1;i<=max;i++){
+      var p=document.createElement('div');
+      p.className='pip'+(i<=cur?'':' empty');
+      p.setAttribute('role','button');p.tabIndex=0;p.setAttribute('aria-label','Suministro '+i);
+      (function(n){
+        function t(){cur=(n===cur)?n-1:n;render();}
+        p.addEventListener('click',t);
+        p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});
+      })(i);
+      pips.appendChild(p);
+    }
+    count.textContent=cur+' / '+max;
+    info.textContent='Máximo: '+max+' Suministros';
+  }
+  function setLevel(){var lv=parseInt(sel.value,10);max=MAXES[lv];if(cur>max)cur=max;render();}
+  sel.addEventListener('change',setLevel);
+  document.getElementById('btn-botin').addEventListener('click',function(){if(cur<max){cur++;render();}});
+  document.getElementById('btn-gasto').addEventListener('click',function(){if(cur>0){cur--;render();}});
+  document.getElementById('btn-corto').addEventListener('click',function(){if(cur<max){cur++;render();}});
+  document.getElementById('btn-largo').addEventListener('click',function(){cur=max;render();});
+  cur=max;setLevel();
+})();
+</script>
+</body>
+</html>

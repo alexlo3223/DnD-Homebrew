@@ -2,13 +2,13 @@
    Trabaja sobre el HTML ya extraído (datos.js). Si una heurística no reconoce
    un patrón, la sección se queda tal cual. */
 window.Lector=(function(){
-  const ROL_ICONO={Marcial:'⚔️',Lanzador:'✨',Semilanzador:'🔮',Invocador:'👁️',Astucia:'🎲',Apoyo:'🤝'};
+  const ROL_ICONO={Marcial:icono('espadas'),Lanzador:icono('chispas'),Semilanzador:icono('varita'),Invocador:icono('ojo'),Astucia:icono('dado'),Apoyo:icono('mano')};
   const TIPOS=[
-    [/\bSin acción\b/i,'Sin acción','○'],
-    [/\bAcción adicional\b/i,'Acción adicional','➕'],
-    [/\bReacción\b/i,'Reacción','↩️'],
-    [/\bAcción\b/i,'Acción','⚡'],
-    [/\bPasiva\b/i,'Pasiva','◎']
+    [/\bSin acción\b/i,'Sin acción',icono('circulo')],
+    [/\bAcción adicional\b/i,'Acción adicional',icono('mas')],
+    [/\bReacción\b/i,'Reacción',icono('reaccion')],
+    [/\bAcción\b/i,'Acción',icono('rayo')],
+    [/\bPasiva\b/i,'Pasiva',icono('diana')]
   ];
   const ETIQUETAS=/^(Salvaciones|Armas|Armaduras|Herramientas|Habilidades|Competencias)\s*:?\s*(.+)$/i;
 
